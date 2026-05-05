@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1 · UX 5層架構與 AI 設計流程導論</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent2: #0071e3;
+  --accent3: #4094ff;
+  --surface: #f5f5f7;
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --px: clamp(48px, 7vw, 112px);
+  --py: 52px;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Progress bar ──────────────────────── */
+#prog {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.55s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+  border-radius: 0 1px 1px 0;
+}
+
+/* ── Slide base ────────────────────────── */
+#deck { position: relative; width: 100%; height: 100vh; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s .5s;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s 0s;
+}
+
+/* ── Layout regions ──────────────────────── */
+.slide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+/* ── Header elements ─────────────────────── */
+.unit-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+.slide-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--border);
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Footer elements ─────────────────────── */
+.course-label {
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: .02em;
+}
+
+/* Dot nav */
+.dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.dot.on {
+  background: var(--accent);
+  width: 16px;
+  border-radius: 2.5px;
+}
+
+/* ── Typography ─────────────────────────── */
+.overline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.divider {
+  width: 40px; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 26px;
+  margin-top: 4px;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+h2 {
+  font-size: clamp(.9rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  margin-top: 14px;
+}
+
+/* ── Cover slide ────────────────────────── */
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.cover-title {
+  font-size: clamp(2.4rem, 5.2vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -.055em;
+  line-height: 1.04;
+  color: var(--dark);
+  margin-bottom: 22px;
+}
+
+.cover-sub {
+  font-size: clamp(.9rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.6;
+  letter-spacing: -.01em;
+  margin-bottom: 48px;
+}
+
+.cover-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+/* ── Agenda cards ────────────────────────── */
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.agenda-card {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid transparent;
+  transition: border-color .2s;
+}
+.agenda-card:hover { border-color: var(--border); }
+
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.a-time {
+  font-size: clamp(.85rem, 1.25vw, 1.1rem);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.35;
+}
+
+.a-desc {
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 2px;
+}
+
+/* ── Bullet list ─────────────────────────── */
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.blist li {
+  font-size: clamp(.88rem, 1.3vw, 1.15rem);
+  color: var(--dark);
+  line-height: 1.65;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-radius: 12px;
+  transition: background .2s;
+}
+.blist li:hover { background: var(--card); }
+
+.blist li::before {
+  content: attr(data-n);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+
+/* Simple bullet (no numbering) */
+.blist.plain li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: .55em;
+  padding: 0;
+}
+
+.blist .hl {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Background number ───────────────────── */
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(140px, 21vw, 260px);
+  font-weight: 800;
+  color: var(--surface);
+  letter-spacing: -.1em;
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
+
+/* ── Layer badge ─────────────────────────── */
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+
+/* ── UX Pyramid ──────────────────────────── */
+.pyr-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.pyr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.pyr-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 10px;
+  height: 50px;
+  font-size: clamp(.68rem, 1vw, .9rem);
+  font-weight: 500;
+  padding: 0 16px;
+  cursor: default;
+  transition: transform .25s ease;
+}
+.pyr-row:hover { transform: scaleX(1.018); }
+.pyr-row b { font-weight: 600; white-space: nowrap; font-size: 1.02em; }
+.pyr-row span { opacity: .76; font-size: .88em; }
+
+.p5 { background: #0066cc; color: #fff; width: 58%; }
+.p4 { background: #0071e3; color: #fff; width: 68%; }
+.p3 { background: #4094ff; color: #fff; width: 78%; }
+.p2 { background: var(--card); color: var(--dark); width: 88%; }
+.p1 { background: var(--surface); color: var(--dark); width: 100%; border: 1px solid var(--border); }
+
+.pyr-legend {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.pyr-legend p b { color: var(--dark); font-weight: 600; display: block; }
+
+/* ── Controls ────────────────────────────── */
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+
+#ctrls button {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
+#ctrls button:active { transform: scale(.94); }
+
+/* ── Dark slide variant ──────────────────── */
+.slide.dark { background: #1d1d1f; }
+.slide.dark h1 { color: #f5f5f7; }
+.slide.dark h2 { color: #86868b; }
+.slide.dark .overline { color: #4094ff; }
+.slide.dark .divider { background: #4094ff; }
+.slide.dark .layer-badge { background: rgba(64,148,255,.12); color: #4094ff; }
+.slide.dark .bg-n { color: #2c2c2e; }
+.slide.dark .blist li { background: rgba(255,255,255,.05); color: #f5f5f7; }
+.slide.dark .blist li:hover { background: rgba(255,255,255,.09); }
+.slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
+.slide.dark .slide-num { color: #48484a; }
+.slide.dark .course-label { color: #3a3a3c; }
+.slide.dark .dot { background: #3a3a3c; }
+.slide.dark .dot.on { background: #4094ff; }
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<div id="deck">
+
+  <!-- ─── Slide 1 · Cover ─────────────────── -->
+  <div class="slide active">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">01 / 12</span>
+    </div>
+    <div class="slide-body">
+      <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
+      <h1 class="cover-title">UX 5層架構<br>與 AI 設計流程</h1>
+      <p class="cover-sub">Figma × UX 原則 · 初學者導論</p>
+      <div class="cover-meta">
+        <span>3 小時</span>
+        <span class="meta-dot"></span>
+        <span>12 張投影片</span>
+        <span class="meta-dot"></span>
+        <span>含實作練習</span>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots" id="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 2 · 課程大綱 ──────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">02 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Agenda</p>
+      <h1>課程大綱</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="a-step">第 1 小時</span>
+          <span class="a-time">UX 5層架構<br>觀念與 Figma 示範</span>
+          <span class="a-desc">從策略層到表現層的完整設計思維架構</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">第 2 小時</span>
+          <span class="a-time">課堂實作<br>App 拆解</span>
+          <span class="a-desc">選定常用 App，以 5 層架構逐層分析</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">第 3 小時</span>
+          <span class="a-time">討論與點評</span>
+          <span class="a-desc">分享成果，探討 AI 輔助設計的可能性</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 3 · UX 5層架構 ────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">03 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">UX Framework</p>
+      <h1>什麼是 UX 5層架構？</h1>
+      <h2>Jesse James Garrett 提出的由下而上設計思維</h2>
+      <div class="pyr-wrap">
+        <div class="pyr">
+          <div class="pyr-row p5"><b>5. 表現層 Surface</b><span>視覺設計 · 感知呈現</span></div>
+          <div class="pyr-row p4"><b>4. 骨架層 Skeleton</b><span>介面 · 導覽 · Wireframe</span></div>
+          <div class="pyr-row p3"><b>3. 結構層 Structure</b><span>互動設計 · 資訊架構</span></div>
+          <div class="pyr-row p2"><b>2. 範圍層 Scope</b><span>功能規格 · 內容需求</span></div>
+          <div class="pyr-row p1"><b>1. 策略層 Strategy</b><span>使用者需求 · 商業目標</span></div>
+        </div>
+        <div class="pyr-legend">
+          <p><b>具體 Concrete</b>視覺細節、最終呈現</p>
+          <p style="margin-top:auto"><b>抽象 Abstract</b>概念定義、核心目標</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 4 · 策略層 ─────────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">1</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">04 / 12</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Layer 1 · Strategy</span>
+      <h1>策略層</h1>
+      <div class="divider"></div>
+      <h2>為何而做？為誰而做？</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>商業目標 Business Goals</li>
+        <li>使用者需求 User Needs</li>
+        <li><span class="hl">定義產品存在的核心價值</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 5 · 範圍層 ─────────────────── -->
+  <div class="slide">
+    <div class="bg-n">2</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">05 / 12</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Layer 2 · Scope</span>
+      <h1>範圍層</h1>
+      <div class="divider"></div>
+      <h2>要做什麼？不做什麼？</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>功能規格 Functional Specifications</li>
+        <li>內容需求 Content Requirements</li>
+        <li><span class="hl">確立產品的邊界與守備範圍</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 6 · 結構層 ─────────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">3</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">06 / 12</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Layer 3 · Structure</span>
+      <h1>結構層</h1>
+      <div class="divider"></div>
+      <h2>使用者如何操作與導覽？</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>互動設計 Interaction Design</li>
+        <li>資訊架構 Information Architecture</li>
+        <li><span class="hl">規劃 User Flow 與介面邏輯</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 7 · 骨架層 ─────────────────── -->
+  <div class="slide">
+    <div class="bg-n">4</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">07 / 12</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Layer 4 · Skeleton</span>
+      <h1>骨架層</h1>
+      <div class="divider"></div>
+      <h2>介面的具體佈局？</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>介面設計 Interface Design</li>
+        <li>導覽設計 Navigation Design</li>
+        <li>資訊設計 Information Design</li>
+        <li><span class="hl">Wireframe 的主要產出階段</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 8 · 表現層 ─────────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">5</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">08 / 12</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Layer 5 · Surface</span>
+      <h1>表現層</h1>
+      <div class="divider"></div>
+      <h2>視覺與感官的最終呈現</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>視覺設計 Visual Design</li>
+        <li>排版、色彩、字體系統</li>
+        <li><span class="hl">高保真 UI（High-Fidelity）的最終樣貌</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 9 · Figma 示範 ─────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">09 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Live Demo</p>
+      <h1>Figma 核心觀念示範</h1>
+      <h2>講師實機操作</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01">介面導覽與基礎工具介紹</li>
+        <li data-n="02">圖層面板與畫布管理</li>
+        <li data-n="03">基礎形狀、文字建立與樣式設定</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 10 · AI 輔助設計 ──────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">10 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">AI-Assisted Design</p>
+      <h1>AI 輔助設計流程</h1>
+      <h2>讓 AI 成為你的設計助理</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01">使用 Gemini、ChatGPT 加速前期分析</li>
+        <li data-n="02">AI 生成 Persona（人物誌）草稿</li>
+        <li data-n="03">痛點分析與使用者需求梳理</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 11 · 課堂實作 ──────────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">11 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Workshop</p>
+      <h1>課堂實作<br>App 拆解</h1>
+      <div class="divider"></div>
+      <h2>運用 5 層架構檢視產品</h2>
+      <ul class="blist plain" style="margin-top:24px">
+        <li>選定常用 App，逐層分析策略、範圍、架構、骨架與表現</li>
+        <li>使用 AI 生成需求摘要與流程草圖</li>
+        <li>提出 3–5 個具體的 UX 改進建議</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 12 · 討論與點評 ────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">12 / 12</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Review &amp; Reflection</p>
+      <h1>討論與點評</h1>
+      <h2>交流成果，反思設計</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01">上台分享你拆解的 App 與發現</li>
+        <li data-n="02">探討好用或難用背後的 UX 原因</li>
+        <li data-n="03">反思 AI 建議的合理性與局限性</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- Controls -->
+<div id="ctrls">
+  <button id="prev" aria-label="上一頁">&#8592;</button>
+  <button id="next" aria-label="下一頁">&#8594;</button>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const prog   = document.getElementById('prog');
+  const dotContainers = Array.from(document.querySelectorAll('.dots'));
+  let cur = 0;
+
+  // Build dots in every footer
+  dotContainers.forEach(container => {
+    slides.forEach((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' on' : '');
+      d.addEventListener('click', () => go(i));
+      container.appendChild(d);
+    });
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+
+    // Progress bar
+    prog.style.width = ((cur + 1) / total * 100) + '%';
+
+    // Dots
+    dotContainers.forEach(container => {
+      Array.from(container.children).forEach((d, i) => {
+        d.classList.toggle('on', i === cur);
+      });
+    });
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft')              { e.preventDefault(); go(cur - 1); }
+  });
+
+  // Init progress bar
+  prog.style.width = (1 / total * 100) + '%';
+})();
+</script>
+</body>
+</html>

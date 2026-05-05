@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_figma__create_new_file",
+      "mcp__claude_ai_figma__get_screenshot"
+    ]
+  }
+}
