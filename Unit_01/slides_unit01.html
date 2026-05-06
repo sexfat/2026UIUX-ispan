@@ -431,6 +431,69 @@ h2 {
 #ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
 #ctrls button:active { transform: scale(.94); }
 
+/* ── Comparison table ───────────────────── */
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+}
+.cmp-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table th:first-child { color: var(--muted); background: transparent; }
+.cmp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.6;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: .88em;
+  white-space: nowrap;
+}
+
+/* ── External link pill ─────────────────── */
+.ext-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, transform .15s;
+  margin-top: 16px;
+  width: fit-content;
+}
+.ext-link:hover {
+  background: rgba(0,102,204,.14);
+  border-color: rgba(0,102,204,.35);
+  transform: translateY(-1px);
+}
+.ext-link::after {
+  content: '↗';
+  font-size: 11px;
+  opacity: .8;
+}
+
 /* ── Dark slide variant ──────────────────── */
 .slide.dark { background: #1d1d1f; }
 .slide.dark h1 { color: #f5f5f7; }
@@ -458,7 +521,7 @@ h2 {
   <div class="slide active">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">01 / 12</span>
+      <span class="slide-num">01 / 17</span>
     </div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
@@ -467,7 +530,7 @@ h2 {
       <div class="cover-meta">
         <span>3 小時</span>
         <span class="meta-dot"></span>
-        <span>12 張投影片</span>
+        <span>17 張投影片</span>
         <span class="meta-dot"></span>
         <span>含實作練習</span>
       </div>
@@ -482,7 +545,7 @@ h2 {
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">02 / 12</span>
+      <span class="slide-num">02 / 17</span>
     </div>
     <div class="slide-body">
       <p class="overline">Agenda</p>
@@ -490,18 +553,18 @@ h2 {
       <div class="agenda-grid">
         <div class="agenda-card">
           <span class="a-step">第 1 小時</span>
-          <span class="a-time">UX 5層架構<br>觀念與 Figma 示範</span>
+          <span class="a-time">UX 5層架構<br>觀念</span>
           <span class="a-desc">從策略層到表現層的完整設計思維架構</span>
         </div>
         <div class="agenda-card">
           <span class="a-step">第 2 小時</span>
-          <span class="a-time">課堂實作<br>App 拆解</span>
-          <span class="a-desc">選定常用 App，以 5 層架構逐層分析</span>
+          <span class="a-time">講解與實作<br>Persona / Functional Map 建立</span>
+          <span class="a-desc">利用 AI 工具輔助，建立 Persona 與 Functional Map</span>
         </div>
         <div class="agenda-card">
           <span class="a-step">第 3 小時</span>
-          <span class="a-time">討論與點評</span>
-          <span class="a-desc">分享成果，探討 AI 輔助設計的可能性</span>
+          <span class="a-time">課後作業練習 (Homework)</span>
+          <span class="a-desc">探討 AI 輔助設計的可能性</span>
         </div>
       </div>
     </div>
@@ -515,7 +578,7 @@ h2 {
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">03 / 12</span>
+      <span class="slide-num">03 / 17</span>
     </div>
     <div class="slide-body">
       <p class="overline">UX Framework</p>
@@ -546,7 +609,7 @@ h2 {
     <div class="bg-n">1</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">04 / 12</span>
+      <span class="slide-num">04 / 17</span>
     </div>
     <div class="slide-body">
       <span class="layer-badge">Layer 1 · Strategy</span>
@@ -570,7 +633,7 @@ h2 {
     <div class="bg-n">2</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">05 / 12</span>
+      <span class="slide-num">05 / 17</span>
     </div>
     <div class="slide-body">
       <span class="layer-badge">Layer 2 · Scope</span>
@@ -594,7 +657,7 @@ h2 {
     <div class="bg-n">3</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">06 / 12</span>
+      <span class="slide-num">06 / 17</span>
     </div>
     <div class="slide-body">
       <span class="layer-badge">Layer 3 · Structure</span>
@@ -618,7 +681,7 @@ h2 {
     <div class="bg-n">4</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">07 / 12</span>
+      <span class="slide-num">07 / 17</span>
     </div>
     <div class="slide-body">
       <span class="layer-badge">Layer 4 · Skeleton</span>
@@ -643,7 +706,7 @@ h2 {
     <div class="bg-n">5</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">08 / 12</span>
+      <span class="slide-num">08 / 17</span>
     </div>
     <div class="slide-body">
       <span class="layer-badge">Layer 5 · Surface</span>
@@ -666,12 +729,12 @@ h2 {
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">09 / 12</span>
+      <span class="slide-num">09 / 17</span>
     </div>
     <div class="slide-body">
       <p class="overline">Live Demo</p>
-      <h1>Figma 核心觀念示範</h1>
-      <h2>講師實機操作</h2>
+      <h1>Persona / Functional Map 建立</h1>
+      <h2>講師講解</h2>
       <ul class="blist" style="margin-top:8px">
         <li data-n="01">介面導覽與基礎工具介紹</li>
         <li data-n="02">圖層面板與畫布管理</li>
@@ -688,7 +751,7 @@ h2 {
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">10 / 12</span>
+      <span class="slide-num">10 / 17</span>
     </div>
     <div class="slide-body">
       <p class="overline">AI-Assisted Design</p>
@@ -706,21 +769,46 @@ h2 {
     </div>
   </div>
 
-  <!-- ─── Slide 11 · 課堂實作 ──────────────── -->
+  <!-- ─── Slide 11 · Persona 定義 ─────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">11 / 17</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Persona</p>
+      <h1>Persona 不只是<br>使用者畫像</h1>
+      <h2>一套行為模擬系統</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>傳統定義：年齡、職業、興趣的靜態描述</li>
+        <li>進階定義：Goals、Mental Model、Context 的動態系統</li>
+        <li>核心目的：錨定設計決策基準，讓全團隊對「使用者」有共同認知</li>
+        <li><span class="hl">沒有 Persona，每個人心中的「使用者」都不同</span></li>
+      </ul>
+      <a class="ext-link" href="persona-prompt.html" target="_blank" rel="noopener noreferrer">Persona 提示詞建立流程</a>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 12 · 彈性使用者陷阱 ───────── -->
   <div class="slide dark">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">11 / 12</span>
+      <span class="slide-num">12 / 17</span>
     </div>
     <div class="slide-body">
-      <p class="overline">Workshop</p>
-      <h1>課堂實作<br>App 拆解</h1>
+      <span class="layer-badge">Anti-Pattern</span>
+      <h1>彈性使用者陷阱</h1>
       <div class="divider"></div>
-      <h2>運用 5 層架構檢視產品</h2>
-      <ul class="blist plain" style="margin-top:24px">
-        <li>選定常用 App，逐層分析策略、範圍、架構、骨架與表現</li>
-        <li>使用 AI 生成需求摘要與流程草圖</li>
-        <li>提出 3–5 個具體的 UX 改進建議</li>
+      <h2>沒有 Persona 時，誰是使用者？</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>開發者：「使用者跟我一樣懂技術」</li>
+        <li>行銷：「使用者有無窮的耐心與預算」</li>
+        <li>PM：「使用者願意學習任何功能」</li>
+        <li><span class="hl">Persona 的存在，是為了錨定決策基準</span></li>
       </ul>
     </div>
     <div class="slide-foot">
@@ -729,20 +817,136 @@ h2 {
     </div>
   </div>
 
-  <!-- ─── Slide 12 · 討論與點評 ────────────── -->
+  <!-- ─── Slide 13 · Persona 深層構成 ──────── -->
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 01</span>
-      <span class="slide-num">12 / 12</span>
+      <span class="slide-num">13 / 17</span>
     </div>
     <div class="slide-body">
-      <p class="overline">Review &amp; Reflection</p>
-      <h1>討論與點評</h1>
-      <h2>交流成果，反思設計</h2>
-      <ul class="blist" style="margin-top:8px">
-        <li data-n="01">上台分享你拆解的 App 與發現</li>
-        <li data-n="02">探討好用或難用背後的 UX 原因</li>
-        <li data-n="03">反思 AI 建議的合理性與局限性</li>
+      <span class="layer-badge">Persona · Structure</span>
+      <h1>Persona 深層構成</h1>
+      <div class="divider"></div>
+      <h2>三個核心維度</h2>
+      <ul class="blist" style="margin-top:20px">
+        <li data-n="Goals">目標驅動力：他們為什麼在這裡？<br><small style="opacity:.65">例：追求效率 vs. 追求探索</small></li>
+        <li data-n="Mental Model">心智模型：他們習慣如何思考？<br><small style="opacity:.65">例：習慣實體目錄的人，可能不習慣漢堡選單</small></li>
+        <li data-n="Context">環境脈絡：他們在哪裡使用？<br><small style="opacity:.65">例：吵雜的捷運 vs. 靜謐的辦公室，需求截然不同</small></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 14 · Functional Map ────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">14 / 17</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Functional Map</span>
+      <h1>功能地圖</h1>
+      <div class="divider"></div>
+      <h2>將「需求」映射為「系統邊界」</h2>
+      <ul class="blist" style="margin-top:20px">
+        <li data-n="Critical Path">核心路徑：支援 Persona 達成首要目標的必要功能</li>
+        <li data-n="Edge Cases">邊緣案例：處理例外狀況（密碼錯誤、網路斷線、權限不足）</li>
+        <li data-n="Hierarchy">資訊層級：哪些功能放第一層？依 Persona 的使用頻率決定</li>
+      </ul>
+      <p style="margin-top:20px;font-size:.9rem;color:#86868b"><span style="color:#4094ff;font-weight:600">目標：</span>最精簡的功能組合，而非列出所有可能</p>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 15 · 對比表 ─────────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">15 / 17</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Comparison</p>
+      <h1>Persona vs Functional Map</h1>
+      <h2>感性發散 → 理性收斂</h2>
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>比較維度</th>
+            <th>Persona（人物誌）</th>
+            <th>Functional Map（功能地圖）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>屬性</td>
+            <td>感性、行為導向、發散</td>
+            <td>理性、邏輯導向、收斂</td>
+          </tr>
+          <tr>
+            <td>解決問題</td>
+            <td>「誰」在用？「為什麼」用？</td>
+            <td>產品「能做什麼」？</td>
+          </tr>
+          <tr>
+            <td>產出價值</td>
+            <td>建立同理心與設計方向</td>
+            <td>定義開發範圍與資訊架構</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 16 · 閉環工作流 ────────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">16 / 17</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Workflow</p>
+      <h1>從發散到收斂<br>的設計閉環</h1>
+      <div class="divider"></div>
+      <h2>四個階段反覆迭代</h2>
+      <ul class="blist" style="margin-top:20px">
+        <li data-n="發散">Empathy：用 Persona 挖掘潛在痛點，盡可能發散各種可能性</li>
+        <li data-n="映射">Translation：將痛點轉化為功能需求<br><small style="opacity:.65">因為 Persona「容易分心」→ 功能需要「草稿自動儲存」</small></li>
+        <li data-n="收斂">Architecture：用 Functional Map 梳理邏輯，剔除冗餘功能</li>
+        <li data-n="驗證">Validation：每個功能都能對應 Persona 的某個痛點嗎？</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 17 · 回家作業 ──────────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 01</span>
+      <span class="slide-num">17 / 17</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Workshop</p>
+      <h1>回家作業<br>跨領域產品定義練習</h1>
+      <div class="divider"></div>
+      <h2>運用 persona 與 Functional Map</h2>
+      <ul class="blist plain" style="margin-top:24px">
+        <li>選擇一個領域：（如：永續餐飲、二手車交易、寵物行為矯正）。</li>
+        <li>Persona 產出： 利用 AI 輔助，建立一個具有「矛盾需求」的 Persona（例如：想省錢但追求高品質的租屋族）。</li>
+        <li>功能地圖： 針對該 Persona，列出產品的 Functional Map。必須標註出「哪三個功能」是直接對應 Persona 的核心痛點。</li>
+        <li>AI 溝通紀錄： 附上你與 AI 協作的 Prompt 截圖或文字，並說明你如何修改 AI 給你的初版建議。</li>
       </ul>
     </div>
     <div class="slide-foot">
