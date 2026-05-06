@@ -509,6 +509,22 @@ h2 {
 .slide.dark .course-label { color: #3a3a3c; }
 .slide.dark .dot { background: #3a3a3c; }
 .slide.dark .dot.on { background: #4094ff; }
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding-top: 8px; padding-bottom: 8px; }
+  .course-label { display: none; }
+  .agenda-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .pyr-wrap { grid-template-columns: 1fr; gap: 20px; margin-top: 16px; }
+  .pyr-legend { height: auto; gap: 12px; }
+  .cmp-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .cover-sub { margin-bottom: 20px; }
+  .bg-n { display: none; }
+  #ctrls { bottom: 16px; right: 16px; }
+}
 </style>
 </head>
 <body>
