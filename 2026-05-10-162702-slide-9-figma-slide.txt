@@ -1,0 +1,58 @@
+ ▐▛███▜▌   Claude Code v2.1.85
+▝▜█████▛▘  Sonnet 4.6 · Claude Pro
+  ▘▘ ▝▝    ~/Documents/2026class/2026UIUX-Class
+
+❯ Slide 9 · Figma 示範  這個slide  主題跟內容不對 幫我修改跟主題相同的內容      
+  ⎿  ⧉ Selected 1 lines from Unit_01/slides_unit01.html in Visual Studio Code
+
+⏺ 先讀取 Slide 9 的內容。
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ 目前 Slide 9 的問題很清楚：
+
+  標題主題：Persona / Functional Map 建立
+  現有內容（三項清單）卻是 Figma 基礎操作：
+  - 介面導覽與基礎工具介紹
+  - 圖層面板與畫布管理
+  - 基礎形狀、文字建立與樣式設定
+
+  這三項應屬於「Figma 介面入門」，和標題完全不符。
+
+  ---
+  建議改成符合「Persona / Functional Map 建立」主題的內容：
+
+  ┌─────┬──────────────────────────────┬────────────────────────────────────┐
+  │  #  │             原本             │              建議修改              │
+  ├─────┼──────────────────────────────┼────────────────────────────────────┤
+  │ 01  │ 介面導覽與基礎工具介紹       │ 在 Figma 建立 Persona 卡片模板     │
+  ├─────┼──────────────────────────────┼────────────────────────────────────┤
+  │ 02  │ 圖層面板與畫布管理           │ 填入使用者行為、目標與痛點         │
+  ├─────┼──────────────────────────────┼────────────────────────────────────┤
+  │ 03  │ 基礎形狀、文字建立與樣式設定 │ 用 Functional Map 整理產品功能架構 │
+  └─────┴──────────────────────────────┴────────────────────────────────────┘
+
+  也可考慮調整 h2 副標題「講師講解」是否要保留或修改。
+
+  請問這樣的方向 OK 嗎？還是你有想放入的具體內容？
+
+❯ ok                                                                            
+
+⏺ Update(Unit_01/slides_unit01.html)
+  ⎿  Added 3 lines, removed 3 lines
+      752        <h1>Persona / Functional Map 建立</h1>
+      753        <h2>講師講解</h2>
+      754        <ul class="blist" style="margin-top:8px">
+      755 -        <li data-n="01">介面導覽與基礎工具介紹</li>           
+      756 -        <li data-n="02">圖層面板與畫布管理</li>               
+      757 -        <li data-n="03">基礎形狀、文字建立與樣式設定</li>     
+      755 +        <li data-n="01">在 Figma 建立 Persona 卡片模板</li>   
+      756 +        <li data-n="02">填入使用者行為、目標與痛點</li>       
+      757 +        <li data-n="03">用 Functional Map 整理產品功能架構</li
+          +>                                                             
+      758        </ul>
+      759      </div>
+      760      <div class="slide-foot">
+
+⏺ 完成。Slide 9 的三項內容已更新為符合「Persona / Functional Map
+  建立」主題的內容。
