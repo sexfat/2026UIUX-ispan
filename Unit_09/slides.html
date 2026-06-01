@@ -1,47 +1,1482 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>單元 9：完形心理學與介面設計規則（Laws of UX）</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f4f4f4; color: #222; }
-    .slide { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px 80px; border-bottom: 2px solid #ddd; background: #fff; }
-    .slide:nth-child(even) { background: #f9f9f9; }
-    .slide-number { font-size: 12px; color: #aaa; margin-bottom: 16px; align-self: flex-start; }
-    h1 { font-size: 48px; font-weight: 700; color: #111; margin-bottom: 16px; text-align: center; }
-    h2 { font-size: 32px; font-weight: 600; color: #333; margin-bottom: 24px; }
-    p { font-size: 18px; line-height: 1.8; color: #555; max-width: 720px; text-align: center; }
-    ul { font-size: 18px; line-height: 2; color: #444; max-width: 680px; padding-left: 24px; align-self: flex-start; }
-    .tag { font-size: 13px; background: #222; color: #fff; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 9 · 完形心理學與 Laws of UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent2: #0071e3;
+  --accent3: #4094ff;
+  --surface: #f5f5f7;
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --px: clamp(48px, 7vw, 112px);
+  --py: 52px;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Progress bar ──────────────────────── */
+#prog {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.55s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+  border-radius: 0 1px 1px 0;
+}
+
+/* ── Slide base ────────────────────────── */
+#deck { position: relative; width: 100%; height: 100vh; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s .5s;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s 0s;
+}
+
+/* ── Layout regions ──────────────────────── */
+.slide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+/* ── Header elements ─────────────────────── */
+.unit-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+.slide-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--border);
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Footer elements ─────────────────────── */
+.course-label {
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: .02em;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.dot.on {
+  background: var(--accent);
+  width: 16px;
+  border-radius: 2.5px;
+}
+
+/* ── Typography ─────────────────────────── */
+.overline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.divider {
+  width: 40px; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 26px;
+  margin-top: 4px;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+h2 {
+  font-size: clamp(.9rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  margin-top: 14px;
+}
+
+/* ── Cover slide ────────────────────────── */
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.cover-title {
+  font-size: clamp(2.4rem, 5.2vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -.055em;
+  line-height: 1.04;
+  color: var(--dark);
+  margin-bottom: 22px;
+}
+
+.cover-sub {
+  font-size: clamp(.9rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.6;
+  letter-spacing: -.01em;
+  margin-bottom: 48px;
+}
+
+.cover-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+/* ── Agenda cards ────────────────────────── */
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.agenda-card {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid transparent;
+  transition: border-color .2s;
+}
+.agenda-card:hover { border-color: var(--border); }
+
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.a-time {
+  font-size: clamp(.85rem, 1.25vw, 1.1rem);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.35;
+}
+
+.a-desc {
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 2px;
+}
+
+/* ── Bullet list ─────────────────────────── */
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.blist li {
+  font-size: clamp(.88rem, 1.3vw, 1.15rem);
+  color: var(--dark);
+  line-height: 1.65;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-radius: 12px;
+  transition: background .2s;
+}
+.blist li:hover { background: var(--card); }
+
+.blist li::before {
+  content: attr(data-n);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+
+.blist.plain li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: .55em;
+  padding: 0;
+}
+
+.blist .hl {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Background number ───────────────────── */
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(140px, 21vw, 260px);
+  font-weight: 800;
+  color: var(--surface);
+  letter-spacing: -.1em;
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
+
+/* ── Layer badge ─────────────────────────── */
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+
+/* ── Controls ────────────────────────────── */
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+
+#ctrls button {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
+#ctrls button:active { transform: scale(.94); }
+
+/* ── Quote block ─────────────────────────── */
+.quote-block {
+  border-left: 3px solid var(--accent);
+  padding: 16px 22px;
+  background: rgba(0,102,204,.05);
+  border-radius: 0 12px 12px 0;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-size: clamp(.88rem, 1.25vw, 1.1rem);
+  line-height: 1.7;
+  color: var(--dark);
+}
+
+/* ── Two-column layout ───────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+/* ── Principle card grid ─────────────────── */
+.principle-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.p-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 18px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid transparent;
+  transition: border-color .2s, transform .2s;
+}
+.p-card:hover { border-color: var(--border); transform: translateY(-2px); }
+
+.p-card-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.p-card-title {
+  font-size: clamp(.82rem, 1.1vw, 1rem);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.3;
+}
+
+.p-card-desc {
+  font-size: clamp(.72rem, .95vw, .88rem);
+  color: var(--muted);
+  line-height: 1.55;
+  margin-top: 4px;
+}
+
+/* ── Law demo visualization ──────────────── */
+.demo-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.demo-box {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+/* Proximity demo */
+.prox-demo { gap: 20px; }
+.dot-group { display: flex; gap: 4px; flex-direction: row; }
+.dot-group span {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent);
+  display: block;
+}
+.dot-single {
+  display: flex; flex-direction: column; gap: 4px; align-items: center;
+}
+.dot-single span {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--muted);
+  display: block;
+}
+
+/* Closure demo */
+.circle-open {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 4px solid var(--accent);
+  border-right-color: transparent;
+}
+
+/* Figure-ground demo */
+.fg-box {
+  width: 80px; height: 60px;
+  background: var(--dark);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.fg-box::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+/* Fitts demo */
+.btn-small {
+  background: var(--muted); color: #fff;
+  border-radius: 6px; padding: 6px 10px;
+  font-size: 11px; font-weight: 600;
+}
+.btn-large {
+  background: var(--accent); color: #fff;
+  border-radius: 10px; padding: 14px 28px;
+  font-size: 14px; font-weight: 600;
+}
+
+/* Progress bar demo */
+.progress-demo {
+  width: 220px;
+}
+.progress-track {
+  height: 8px;
+  background: var(--card);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+.progress-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* ── Dark slide variant ──────────────────── */
+.slide.dark { background: #1d1d1f; }
+.slide.dark h1 { color: #f5f5f7; }
+.slide.dark h2 { color: #86868b; }
+.slide.dark .overline { color: #4094ff; }
+.slide.dark .divider { background: #4094ff; }
+.slide.dark .layer-badge { background: rgba(64,148,255,.12); color: #4094ff; }
+.slide.dark .bg-n { color: #2c2c2e; }
+.slide.dark .blist li { background: rgba(255,255,255,.05); color: #f5f5f7; }
+.slide.dark .blist li:hover { background: rgba(255,255,255,.09); }
+.slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
+.slide.dark .slide-num { color: #48484a; }
+.slide.dark .course-label { color: #3a3a3c; }
+.slide.dark .dot { background: #3a3a3c; }
+.slide.dark .dot.on { background: #4094ff; }
+.slide.dark .quote-block { background: rgba(64,148,255,.08); border-color: #4094ff; color: #f5f5f7; }
+.slide.dark .p-card { background: rgba(255,255,255,.05); }
+.slide.dark .p-card:hover { border-color: #48484a; }
+.slide.dark .p-card-title { color: #f5f5f7; }
+.slide.dark .cover-eyebrow { color: #86868b; }
+.slide.dark .cover-title { color: #f5f5f7; }
+.slide.dark .cover-sub { color: #86868b; }
+.slide.dark .cover-meta { color: #86868b; }
+.slide.dark .meta-dot { background: #48484a; }
+.slide.dark .agenda-card { background: rgba(255,255,255,.05); }
+.slide.dark .a-time { color: #f5f5f7; }
+
+/* ── Checklist ───────────────────────────── */
+.checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist li {
+  font-size: clamp(.8rem, 1.15vw, 1rem);
+  color: var(--dark);
+  line-height: 1.55;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  user-select: none;
+}
+
+.checklist li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  background: #fff;
+  margin-top: 1px;
+  transition: background .15s, border-color .15s;
+}
+
+.checklist li.checked {
+  background: rgba(0,102,204,.06);
+  border-color: rgba(0,102,204,.3);
+  color: var(--muted);
+}
+
+.checklist li.checked::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='%23fff' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px;
+}
+
+/* ── Image layout (text + image side by side) ── */
+.img-layout {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 40px;
+  align-items: center;
+  flex: 1;
+}
+
+.img-layout .text-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-img {
+  max-height: 320px;
+  max-width: 500px;
+  width: 500px;
+  object-fit: contain;
+  border-radius: 14px;
+  background: transparent;
+}
+
+.slide-img.on-dark {
+  border-radius: 14px;
+  filter: brightness(.95);
+}
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 24px; }
+
+  /* 手機版 slide 可上下捲動 */
+  html, body { overflow: auto; height: auto; }
+  #deck { height: auto; }
+  .slide {
+    position: relative;
+    inset: unset;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: none !important;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+  .slide.active {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .slide-body { justify-content: flex-start; padding-top: 12px; padding-bottom: 16px; }
+  .course-label { display: none; }
+
+  /* 封面 */
+  .cover-title { font-size: 2.2rem; }
+  .cover-sub { font-size: .9rem; margin-bottom: 20px; }
+  .cover-meta { font-size: 11px; gap: 10px; }
+
+  /* 標題縮小 */
+  h1 { font-size: clamp(1.5rem, 6vw, 2.2rem); }
+  h2 { font-size: clamp(.85rem, 3.5vw, 1.1rem); margin-top: 10px; }
+
+  /* 大綱 */
+  .agenda-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .agenda-card { padding: 18px 16px 20px; }
+
+  /* 原則卡片 */
+  .principle-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 16px; }
+  .p-card { padding: 14px 12px 16px; }
+
+  /* 圖文版面：圖在下、文在上 */
+  .img-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .slide-img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 220px;
+    order: 2;
+  }
+  .img-layout .text-col { order: 1; }
+
+  /* 列表 */
+  .blist { margin-top: 14px; gap: 8px; }
+  .blist li { font-size: .9rem; padding: 10px 14px; }
+
+  /* 雙欄變單欄 */
+  .two-col { grid-template-columns: 1fr; gap: 16px; }
+
+  /* 引言 */
+  .quote-block { font-size: .9rem; padding: 12px 16px; margin-top: 14px; }
+
+  /* 背景大字隱藏 */
+  .bg-n { display: none; }
+
+  /* 控制按鈕 */
+  #ctrls { bottom: 16px; right: 16px; gap: 6px; }
+  #ctrls button { width: 36px; height: 36px; font-size: 13px; }
+
+  /* dots 縮小 */
+  .dot { width: 4px; height: 4px; }
+  .dot.on { width: 12px; }
+}
+</style>
 </head>
 <body>
-  <section class="slide">
-    <span class="tag">單元 9</span>
-    <h1>完形心理學與介面設計規則（Laws of UX）</h1>
-    <p>UI 設計實作課程｜Figma × UX 原則 × AI 整合</p>
-  </section>
-  <section class="slide">
-    <span class="slide-number">02</span>
-    <h2>本堂課目標</h2>
-    <p>（內容待補充）</p>
-  </section>
-  <section class="slide">
-    <span class="slide-number">03</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
-  </section>
-  <section class="slide">
-    <span class="slide-number">04</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
-  </section>
-  <section class="slide">
-    <span class="slide-number">05</span>
-    <h2>本堂小結</h2>
-    <p>（內容待補充）</p>
-  </section>
+
+<div id="prog"></div>
+
+<div id="deck">
+
+  <!-- ─── Slide 1 · Cover ─────────────────── -->
+  <div class="slide active">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">01 / 21</span>
+    </div>
+    <div class="slide-body">
+      <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
+      <h1 class="cover-title">完形心理學<br>與 Laws of UX</h1>
+      <p class="cover-sub">人類如何感知介面 · 心理學驅動的設計決策</p>
+      <div class="cover-meta">
+        <span>3 小時</span>
+        <span class="meta-dot"></span>
+        <span>21 張投影片</span>
+        <span class="meta-dot"></span>
+        <span>含實作練習</span>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots" id="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 2 · 課程大綱 ──────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">02 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Agenda</p>
+      <h1>課程大綱</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="a-step">第 1 小時</span>
+          <span class="a-time">完形心理學<br>8 大核心原則</span>
+          <span class="a-desc">人類如何自動組織視覺資訊，以及如何用於分組、引導與層次設計</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">第 2 小時</span>
+          <span class="a-time">Laws of UX<br>7 個設計法則</span>
+          <span class="a-desc">從認知心理學與行為科學提煉出的介面設計定律，含 Hick、Fitts、Miller 等</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">第 3 小時</span>
+          <span class="a-time">案例分析<br>＆ 作業練習</span>
+          <span class="a-desc">在現有介面中找出法則的具體應用，並在自己的設計稿中實踐</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 3 · 完形心理學導論 ─────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">03 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Part 1 · Gestalt Psychology</p>
+      <h1>完形心理學<br>是什麼？</h1>
+      <div class="divider"></div>
+      <h2>研究人類大腦如何將零散視覺元素組合成「整體」的心理學</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>人眼感知整體優先於個別元素</li>
+        <li>大腦會主動補全不完整的圖案、尋找規律</li>
+        <li>視覺感知不是被動接收，而是主動建構</li>
+        <li><span class="hl">掌握這些規律，設計師就能精準引導使用者的注意力</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 4 · 8大原則總覽 ───────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">04 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Gestalt · Overview</p>
+      <h1>8 大完形原則</h1>
+      <div class="principle-grid">
+        <div class="p-card">
+          <span class="p-card-num">01</span>
+          <span class="p-card-title">接近性<br>Proximity</span>
+          <span class="p-card-desc">距離近的元素被視為同一群組</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">02</span>
+          <span class="p-card-title">相似性<br>Similarity</span>
+          <span class="p-card-desc">視覺特徵相似的元素被視為同類</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">03</span>
+          <span class="p-card-title">封閉性<br>Closure</span>
+          <span class="p-card-desc">大腦自動補全不完整的圖形</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">04</span>
+          <span class="p-card-title">連續性<br>Continuation</span>
+          <span class="p-card-desc">視線自然沿連續方向流動</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">05</span>
+          <span class="p-card-title">圖形與背景<br>Figure/Ground</span>
+          <span class="p-card-desc">自動區分前景焦點與背景</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">06</span>
+          <span class="p-card-title">共通命運<br>Common Fate</span>
+          <span class="p-card-desc">同時移動的元素被視為相關</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">07</span>
+          <span class="p-card-title">簡單性<br>Simplicity</span>
+          <span class="p-card-desc">偏好最簡單的視覺解讀</span>
+        </div>
+        <div class="p-card">
+          <span class="p-card-num">08</span>
+          <span class="p-card-title">突出性<br>Emergence</span>
+          <span class="p-card-desc">整體形狀優先於個別元素</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 5 · 接近性 ─────────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">1</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">05 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 01 · Proximity</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>接近性</h1>
+          <div class="divider"></div>
+          <h2>物理距離較近的元素，使用者會自動視為同一群組</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>表單設計：將 Label 與 Input 緊靠排列，距離下一欄位較遠</li>
+            <li>電商卡片：圖片、名稱、價格聚合在一起，與相鄰商品明顯分隔</li>
+            <li><span class="hl">用「空白」而非「線條」來分組，視覺更乾淨</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://media.nngroup.com/media/editor/2020/07/02/form-whitespacegroupings.png" alt="Proximity – form fields grouped by whitespace" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 6 · 相似性 ─────────────────── -->
+  <div class="slide">
+    <div class="bg-n">2</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">06 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 02 · Similarity</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>相似性</h1>
+          <div class="divider"></div>
+          <h2>視覺特徵相似（顏色、形狀、大小）的元素，被認為具有相同功能或屬性</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>一致的按鈕樣式：所有「主要行動」按鈕使用相同顏色</li>
+            <li>層次區分：主要按鈕用實色背景，次要按鈕用線框樣式</li>
+            <li>Google Material Design 以相似色彩表達同一操作層級</li>
+            <li><span class="hl">打破相似性 = 強調差異、創造視覺焦點</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://media.nngroup.com/media/editor/2020/08/17/similarity_buttonsallsamecolor-synchrony_bordered.png" alt="Similarity – consistent button colors in Synchrony Bank" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 7 · 封閉性 ─────────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">3</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">07 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 03 · Closure</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>封閉性</h1>
+          <div class="divider"></div>
+          <h2>即使圖形不完整，大腦也會自動「補全」成完整形狀</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>載入動畫：旋轉的缺口圓形讓使用者感知「進行中」</li>
+            <li>進度條：填色未滿的長條表示「尚未完成」，引發繼續的衝動</li>
+            <li>圖示設計：輪廓不完整的 icon 也能被清楚識別</li>
+            <li><span class="hl">用未完成感製造心理張力，驅動使用者繼續操作</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://uxmisfit.com/wp-content/uploads/2019/04/closure_sample-1.jpg" alt="Closure – UI loading spinner and progress bar" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 8 · 連續性 ─────────────────── -->
+  <div class="slide">
+    <div class="bg-n">4</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">08 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 04 · Continuation</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>連續性</h1>
+          <div class="divider"></div>
+          <h2>視覺上連續排列的元素，使用者視線會自然沿著方向流動</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>多步驟導覽：箭頭、進度指標引導使用者看下一步</li>
+            <li>水平捲軸：右側露出一部分的卡片暗示「還有更多」</li>
+            <li>文字對齊：良好的行距與對齊讓眼睛流暢掃描</li>
+            <li><span class="hl">連續性是設計「視覺流」（Visual Flow）的核心工具</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://uxmisfit.com/wp-content/uploads/2019/04/continuation_sample.jpg" alt="Continuation – UI step indicator and horizontal scroll" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 9 · 圖形與背景 ────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">5</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">09 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 05 · Figure / Ground</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>圖形與背景</h1>
+          <div class="divider"></div>
+          <h2>大腦自動將畫面分為「前景焦點」與「背景」，並優先關注前景</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>Modal 彈窗：背景變暗，將注意力集中到窗口內容</li>
+            <li>色彩對比：用高對比色讓重要按鈕從背景中「跳出」</li>
+            <li>卡片投影：陰影創造層次感，強化前景感知</li>
+            <li><span class="hl">設計焦點 = 讓「圖形」脫離「背景」的噪音</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://uxmisfit.com/wp-content/uploads/2019/04/figure_ground_sample.jpg" alt="Figure-Ground – modal overlay darkening background" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 10 · 共通命運 ──────────────── -->
+  <div class="slide">
+    <div class="bg-n">6</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">10 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Gestalt 06 · Common Fate</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>共通命運</h1>
+          <div class="divider"></div>
+          <h2>同時移動或改變的元素，使用者會認為它們具有關聯性</h2>
+          <ul class="blist plain" style="margin-top:20px">
+            <li>圖片輪播：圖片與分頁指示器（Dots）同步變化，強化連結</li>
+            <li>側邊欄展開：多個選單項目同時收合，使用者知道它們是同一組</li>
+            <li>拖拉功能：多選後拖動，所有選中項目一起移動確認歸屬</li>
+            <li><span class="hl">動畫與過渡效果是表達「共通命運」最直接的工具</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://uxmisfit.com/wp-content/uploads/2019/04/common_fate_sample.jpg" alt="Common Fate – carousel dots syncing with slides" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 11 · 簡單性＋突出性 ─────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">11 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Gestalt 07 + 08</p>
+      <h1>簡單性 ＆ 突出性</h1>
+      <div class="divider"></div>
+      <div class="img-layout" style="flex:unset;margin-top:16px">
+        <div class="two-col" style="margin-top:0">
+          <div>
+            <div class="layer-badge" style="margin-bottom:12px">Simplicity · Prägnanz</div>
+            <p style="font-size:clamp(.82rem,1.2vw,1rem);color:#86868b;line-height:1.7">使用者偏好最簡單的視覺解讀，大腦會將複雜畫面化簡為易理解的圖案。<br><br>→ iOS 圖標用基本幾何形狀<br>→ 避免過多裝飾分散注意力</p>
+          </div>
+          <div>
+            <div class="layer-badge" style="margin-bottom:12px">Emergence</div>
+            <p style="font-size:clamp(.82rem,1.2vw,1rem);color:#86868b;line-height:1.7">人眼優先識別整體形狀而非個別元素。先確立整體視覺輪廓，再填入細節。<br><br>→ 儀表板整體布局傳達全局<br>→ 卡片群組框架強化分區</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <img class="slide-img on-dark" src="https://uxmisfit.com/wp-content/uploads/2019/04/common_region_sample.jpg" alt="Simplicity – clean card grouping UI" loading="lazy" style="max-height:120px">
+          <img class="slide-img on-dark" src="https://uxmisfit.com/wp-content/uploads/2019/04/gestalt_emergence.png" alt="Emergence – whole recognised before parts" loading="lazy" style="max-height:120px">
+        </div>
+      </div>
+      <div class="quote-block" style="margin-top:16px">
+        <strong style="color:#4094ff">設計的本質：</strong> 減少視覺噪音，讓重要資訊自然浮現。
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 12 · 完形心理學總結 ─────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">12 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Gestalt · Summary</p>
+      <h1>完形心理學<br>對介面設計的影響</h1>
+      <ul class="blist" style="margin-top:28px">
+        <li data-n="可用性">提升可用性：運用分組、層次與連續性，讓介面更直觀</li>
+        <li data-n="認知">減少認知負擔：組織視覺資訊，降低使用者理解介面的難度</li>
+        <li data-n="引導">引導使用者行為：視覺連續性與共通命運引導完成操作流程</li>
+        <li data-n="體驗">創造愉悅體驗：符合人類自然感知習慣的介面讓人感到舒適高效</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 13 · Laws of UX 導論 ──────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">13 / 21</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Part 2 · Laws of UX</p>
+      <h1>使用者體驗<br>介面定律</h1>
+      <div class="divider"></div>
+      <h2>從認知心理學與行為科學中提煉出的設計準則，幫助設計師做出有依據的決策</h2>
+      <ul class="blist plain" style="margin-top:24px">
+        <li>每條定律都有心理學或認知科學的實驗基礎</li>
+        <li>不是「風格偏好」，而是人腦運作的客觀規律</li>
+        <li><a href="https://lawsofux.com" target="_blank" rel="noopener noreferrer" style="color:#4094ff;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(64,148,255,.4);padding-bottom:1px">lawsofux.com ↗</a> — 本課程參考來源</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 14 · Hick's Law ────────────── -->
+  <div class="slide">
+    <div class="bg-n">1</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">14 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 01 · Hick's Law</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>希克定律</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            做出決定所需的時間，隨著選擇的<strong>數量與複雜度</strong>增加而增加。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>選項越多，使用者越難決定 → 降低轉換率</li>
+            <li>將複雜任務拆解成較小步驟，逐步引導</li>
+            <li><span class="hl">設計師的工作 = 盡可能降低使用者的「認知負荷」</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://digitalsynopsis.com/wp-content/uploads/2019/08/ux-design-laws-2a.jpg" alt="Hick's Law illustration" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 15 · Doherty Threshold ──────── -->
+  <div class="slide dark">
+    <div class="bg-n">2</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">15 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 02 · Doherty Threshold</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>多爾蒂閾值</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            當系統回應速度低於 <strong>400 毫秒</strong>時，使用者生產力與專注度大幅提升。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>400ms 內提供反饋 → 使用者感覺「即時回應」</li>
+            <li>動畫是後台載入時保持注意力的有效手段</li>
+            <li><span class="hl">感知速度 ≠ 實際速度；設計可讓等待「感覺更快」</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://i.imgur.com/O1whwTn.gif" alt="Doherty Threshold animation" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 16 · Fitts's Law ───────────── -->
+  <div class="slide">
+    <div class="bg-n">3</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">16 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 03 · Fitts's Law</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>菲茨定律</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            到達目標的時間取決於<strong>距離</strong>與<strong>目標大小</strong>。按鈕越大，越容易觸及。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>主要 CTA 按鈕應盡可能大，放置在容易觸及的位置</li>
+            <li>游標在螢幕邊緣自動停止 → 角落元素更易點擊</li>
+            <li><span class="hl">可點擊區域（Touch Target）最小 44×44px</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://digitalsynopsis.com/wp-content/uploads/2019/08/ux-design-laws-3.jpg" alt="Fitts's Law illustration" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 17 · Aesthetic-Usability Effect ── -->
+  <div class="slide dark">
+    <div class="bg-n">4</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">17 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 04 · Aesthetic-Usability Effect</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>美即是好效應</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            美觀的設計讓使用者<strong>感覺更好用</strong>，甚至能在一定程度上掩蓋可用性問題。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>外觀精美的手機被評為「更好用」，即使功能完全相同</li>
+            <li>使用者對美觀介面的錯誤容忍度更高</li>
+            <li><span class="hl">美感不是裝飾，是降低心理摩擦的工具</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://blog.logrocket.com/wp-content/uploads/2024/11/mcdonalds-ui-aesthetic-usability-effect.png" alt="Aesthetic-Usability – McDonald's UI comparison" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 18 · Goal-Gradient Effect ─────── -->
+  <div class="slide">
+    <div class="bg-n">5</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">18 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 05 · Goal-Gradient Effect</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>目標漸近效應</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            當目標即將達成時，人們會<strong>更積極地投入</strong>以完成目標。
+          </div>
+          <ul class="blist" style="margin-top:12px">
+            <li data-n="進度">進度可視化：顯示「你已完成 80%」比「還剩 20%」更有驅動力</li>
+            <li data-n="集點">遊戲化：集點、徽章、連續登入 → 激勵使用者持續回來</li>
+            <li data-n="提醒">Uber、Duolingo 都以此設計驅動使用者行為</li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://i.imgur.com/yY6qU8V.jpg" alt="Goal-Gradient Effect illustration" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 19 · Jakob's Law ──────────────── -->
+  <div class="slide dark">
+    <div class="bg-n">6</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">19 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 06 · Jakob's Law</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>雅各布法則</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            使用者把大部分時間花在<strong>其他網站</strong>上，所以他們希望你的網站跟他們熟悉的一樣。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>使用者已建立心智模型：漢堡選單、購物車都有約定俗成的位置</li>
+            <li>Facebook 大改版引發強烈反彈 → 一致性的重要性</li>
+            <li><span class="hl">在熟悉框架內創新，才不會迷失使用者</span></li>
+          </ul>
+        </div>
+        <img class="slide-img on-dark" src="https://lawsofux.com/jakobs-law/youtube_hufe57137c97096f36348632c7859da15d_805439_1200x0_resize_q75_box.jpg" alt="Jakob's Law – YouTube familiar controls" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 20 · Miller's Law ────────────── -->
+  <div class="slide">
+    <div class="bg-n">7</div>
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">20 / 21</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Law 07 · Miller's Law</span>
+      <div class="img-layout">
+        <div class="text-col">
+          <h1>米勒定律</h1>
+          <div class="divider"></div>
+          <div class="quote-block" style="margin-top:12px">
+            一般人在工作短期記憶中只能保留 <strong>7（±2）</strong> 個資訊單元。
+          </div>
+          <ul class="blist plain" style="margin-top:12px">
+            <li>導覽選項、分類項目控制在 5–9 個之間</li>
+            <li>多步驟表單：每步只問最關鍵資訊，不要一次呈現所有欄位</li>
+            <li><span class="hl">將資訊「分塊（Chunking）」是對抗記憶限制的核心技巧</span></li>
+          </ul>
+        </div>
+        <img class="slide-img" src="https://cdn.prod.website-files.com/5fb39592cb1bfc03c9f9b6d2/60c9d14a88b4930c3e4b4580_Foto1.jpg" alt="Miller's Law – chunking contact info into groups" loading="lazy">
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 21 · 本堂小結＆作業 ─────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">21 / 22</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Workshop · Homework</p>
+      <h1>本堂小結<br>＆ 作業</h1>
+      <div class="divider"></div>
+      <h2>用完形心理學 ＆ Laws of UX 審視你的設計稿</h2>
+      <ul class="blist plain" style="margin-top:20px">
+        <li><strong style="color:#f5f5f7">案例找出練習：</strong>在 Dribbble 或任意 App 截圖中，標出 3 個以上完形原則的實際應用位置</li>
+        <li><strong style="color:#f5f5f7">法則違反偵測：</strong>找到一個你認為違反 Hick's Law 或 Miller's Law 的介面，說明原因與改善方向</li>
+        <li><strong style="color:#f5f5f7">自我設計審查：</strong>回顧你目前的 Figma 設計稿，列出至少 2 個可用完形原則改進的地方並實際修改</li>
+        <li><strong style="color:#4094ff">提交方式：</strong>截圖 + 文字說明，上傳至課程共用資料夾</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 22 · 學習檢核表 ──────────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">22 / 22</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Self-Check · 學習檢核表</p>
+      <h1>本單元學會了嗎？</h1>
+      <div class="two-col" style="margin-top:24px;align-items:start">
+        <div>
+          <div class="layer-badge" style="margin-bottom:14px">Part 1 · 完形心理學</div>
+          <ul class="checklist">
+            <li>我能說明「接近性」並舉出表單設計的例子</li>
+            <li>我知道「相似性」如何決定按鈕的一致性規則</li>
+            <li>我能解釋「封閉性」與 loading 動畫的關係</li>
+            <li>我理解「連續性」如何引導使用者視線流動</li>
+            <li>我能舉例說明「圖形與背景」在 Modal 中的應用</li>
+            <li>我知道「共通命運」與動畫互動的關係</li>
+            <li>我能區分「簡單性」與「突出性」的差異</li>
+          </ul>
+        </div>
+        <div>
+          <div class="layer-badge" style="margin-bottom:14px">Part 2 · Laws of UX</div>
+          <ul class="checklist">
+            <li>我能說明希克定律並舉出導航選項數量的設計建議</li>
+            <li>我知道多爾蒂閾值（400ms）對介面反饋的影響</li>
+            <li>我理解菲茨定律與按鈕大小、位置的關係</li>
+            <li>我能解釋「美即是好效應」對使用者信任的影響</li>
+            <li>我知道如何用目標漸近效應設計進度可視化</li>
+            <li>我理解雅各布法則與使用者心智模型的關係</li>
+            <li>我能說明米勒定律並舉出分塊（Chunking）設計案例</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+</div><!-- /#deck -->
+
+<!-- Controls -->
+<div id="ctrls">
+  <button id="prev" aria-label="上一頁">&#8592;</button>
+  <button id="next" aria-label="下一頁">&#8594;</button>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const prog   = document.getElementById('prog');
+  const dotContainers = Array.from(document.querySelectorAll('.dots'));
+  let cur = 0;
+
+  dotContainers.forEach(container => {
+    slides.forEach((_, i) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' on' : '');
+      d.addEventListener('click', () => go(i));
+      container.appendChild(d);
+    });
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+
+    prog.style.width = ((cur + 1) / total * 100) + '%';
+
+    dotContainers.forEach(container => {
+      Array.from(container.children).forEach((d, i) => {
+        d.classList.toggle('on', i === cur);
+      });
+    });
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft')              { e.preventDefault(); go(cur - 1); }
+  });
+
+  // Checklist toggle
+  document.querySelectorAll('.checklist li').forEach(li => {
+    li.addEventListener('click', () => li.classList.toggle('checked'));
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx < 0 ? go(cur + 1) : go(cur - 1);
+    }
+  }, { passive: true });
+
+  prog.style.width = (1 / total * 100) + '%';
+})();
+</script>
 </body>
 </html>
