@@ -142,57 +142,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* ── Code block ──────────────────────────── */
-.prompt-block {
-  background: var(--code-bg);
-  border-radius: 14px;
-  padding: 28px 32px;
-  position: relative;
-}
-
-.prompt-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: #4094ff;
-  margin-bottom: 14px;
-  display: block;
-}
-
-.prompt-block pre {
-  font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
-  font-size: .82rem;
-  line-height: 1.75;
-  color: #e8e8ed;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.prompt-block pre em {
-  color: #86868b;
-  font-style: italic;
-}
-
-/* Copy button */
-.copy-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .04em;
-  color: #86868b;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 8px;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: background .2s, color .2s;
-}
-.copy-btn:hover { background: rgba(255,255,255,.13); color: #e8e8ed; }
-.copy-btn.copied { color: #4094ff; }
-
 /* ── Figma link card ─────────────────────── */
 .figma-card {
   max-width: var(--max-w);
@@ -283,6 +232,72 @@ body {
   flex-shrink: 0;
   margin-top: .52em;
 }
+
+/* ── Element list (12 要素) ───────────────── */
+.elements {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.element {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.element-num {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  font-size: .82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.element-body { flex: 1; padding-top: 2px; }
+
+.element-name {
+  font-size: .98rem;
+  font-weight: 600;
+  color: var(--dark);
+  letter-spacing: -.02em;
+}
+
+.element-en {
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 8px;
+  letter-spacing: 0;
+}
+
+.element-desc {
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+.element-new {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  background: rgba(64,148,255,.12);
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
 </style>
 </head>
 <body>
@@ -295,9 +310,9 @@ body {
 
 <!-- Hero -->
 <div class="hero">
-  <p class="overline">Prompt Engineering</p>
-  <h1>Persona 提示詞<br>建立流程</h1>
-  <p>漸進式角色建模（Progressive Character Modeling）——將提示詞拆解為四個階段，逐步建立具有行為深度的 Persona。</p>
+  <p class="overline">User Research</p>
+  <h1>Persona 的<br>四大核心結構</h1>
+  <p>人物誌不是憑空捏造的虛構故事，而是把真實使用者的特徵、行為與動機結構化歸納的「虛擬靈魂」。一份標準且完整的 Persona，包含四大核心結構、12 個關鍵要素。</p>
 </div>
 
 <a class="figma-card" href="https://www.figma.com/board/IVczanGPzdi3HMEFaeQ1WC/%E6%8E%A2%E7%B4%A2%E4%BA%BA%E7%89%A9%E8%AA%8C?node-id=0-1&t=SGfznO3HIpVUDfoS-1" target="_blank" rel="noopener noreferrer">
@@ -315,92 +330,136 @@ body {
   <span class="figma-card-arrow">↗</span>
 </a>
 
-<!-- Stage 1 -->
+<!-- 核心一 -->
 <div class="stage">
-  <span class="stage-label">階段一</span>
-  <h2>設定背景與 AI 的專家身分<br><span style="font-weight:400;color:var(--muted)">The Persona Architect</span></h2>
-  <p class="stage-sub">賦予 AI 一個專業的「大腦」，確保它產出的內容具有研究品質。</p>
-  <div class="prompt-block">
-    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
-    <span class="prompt-label">Prompt</span>
-    <pre>你現在是一位擁有 10 年經驗的資深 UX 研究員。
-我們正在開發一個 <em>[請輸入產品名稱，例如：專為獨居長者設計的預約掛號系統]</em>。
-請根據市場研究與常見的使用者樣態，為我列出三個具代表性的潛在使用者類型。</pre>
-  </div>
+  <span class="stage-label">核心一</span>
+  <h2>基本背景資訊<br><span style="font-weight:400;color:var(--muted)">形塑真實感 · Background</span></h2>
+  <p class="stage-sub">讓開發與設計團隊溝通時，腦海中能有具體的畫面，避免雞同鴨講。</p>
+  <ul class="elements">
+    <li class="element">
+      <span class="element-num">1</span>
+      <div class="element-body">
+        <div><span class="element-name">照片與名字</span><span class="element-en">Name &amp; Photo</span></div>
+        <p class="element-desc">使用一張符合特徵、自然的真人照片（現多用 AI 生成符合情境的容貌），並給予一個常見的名字。</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">2</span>
+      <div class="element-body">
+        <div><span class="element-name">標籤／一句話核心宣告</span><span class="element-en">Archetype / Quote</span></div>
+        <p class="element-desc">用一句話講出他的核心生活態度，例如：「我不在乎功能多酷，我只希望它 3 秒內幫我搞定。」</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">3</span>
+      <div class="element-body">
+        <div><span class="element-name">人口統計學特徵</span><span class="element-en">Demographics</span></div>
+        <p class="element-desc">年齡、職業、數位能力、年收入、居住地等可定位族群的基本資料。</p>
+      </div>
+    </li>
+  </ul>
 </div>
 
-<!-- Stage 2 -->
+<!-- 核心二 -->
 <div class="stage">
-  <span class="stage-label">階段二</span>
-  <h2>挑選並深度定義角色<br><span style="font-weight:400;color:var(--muted)">The Deep Dive</span></h2>
-  <p class="stage-sub">從 AI 給出的三個類型中挑選一個，開始填肉——賦予名字、性格，以及最重要的「心智模型」。</p>
-  <div class="prompt-block">
-    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
-    <span class="prompt-label">Prompt</span>
-    <pre>我選擇「對科技感到不安的退休長者」作為核心 Persona。
-請為他取一個名字，並詳細描述：
-1. 生活背景與科技使用習慣。
-2. 他在使用現有醫療服務時，最讓他感到挫折的 3 個痛點 (Pains)。
-3. 他使用這個系統後，最希望達成的 3 個理想目標 (Gains)。
-4. 請用第一人稱寫出一句他的「生活金句」。</pre>
-  </div>
+  <span class="stage-label">核心二</span>
+  <h2>既有行為與使用情境<br><span style="font-weight:400;color:var(--muted)">探討行為模式 · Behavior</span></h2>
+  <p class="stage-sub">UX Persona 中最重要的一塊。數據告訴你他「做了什麼」，這裡要呈現「他是怎麼做的」。</p>
+  <ul class="elements">
+    <li class="element">
+      <span class="element-num">4</span>
+      <div class="element-body">
+        <div><span class="element-name">日常工作流／生活情境</span><span class="element-en">Context / Scenario</span></div>
+        <p class="element-desc">他在什麼時間、什麼地點、什麼狀態下會遇到這個問題？</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">5</span>
+      <div class="element-body">
+        <div><span class="element-name">現有工具與解決方案</span><span class="element-en">Current Tools</span></div>
+        <p class="element-desc">在沒有你的產品之前，他用什麼方法（不論多笨）滿足需求？例如用 LINE 記帳、用 Excel 手動對帳。</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">6</span>
+      <div class="element-body">
+        <div><span class="element-name">科技／工具偏好</span><span class="element-en">Technology / Brands</span></div>
+        <p class="element-desc">他日常依賴哪些產品？例如重度 Mac 終端機用戶，或是只會滑手機的數位小白。</p>
+      </div>
+    </li>
+  </ul>
 </div>
 
-<!-- Stage 3 -->
+<!-- 核心三 -->
 <div class="stage">
-  <span class="stage-label">階段三</span>
-  <h2>啟動「情境模擬」訪談<br><span style="font-weight:400;color:var(--muted)">The Virtual Interview</span></h2>
-  <p class="stage-sub">讓 Persona「活」起來，直接與之對話，取代靜態的人物誌文件。</p>
-  <div class="prompt-block">
-    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
-    <span class="prompt-label">Prompt</span>
-    <pre>現在，請你進入角色設定，你就是 <em>[名字]</em>。
-我會以設計師的身分對你進行深度訪談。
-請以 <em>[名字]</em> 的語氣、用詞習慣（例如：夾雜台語、語句較長）來回答。
-如果你準備好了，請先簡短地向我打個招呼，並說說你今天的心情。</pre>
-  </div>
+  <span class="stage-label">核心三</span>
+  <h2>動機與痛點<br><span style="font-weight:400;color:var(--muted)">深挖 Why · Motivation</span></h2>
+  <p class="stage-sub">產品能不能賣，取決於這兩點有沒有對齊。</p>
+  <ul class="elements">
+    <li class="element">
+      <span class="element-num">7</span>
+      <div class="element-body">
+        <div><span class="element-name">目標與動機</span><span class="element-en">Goals &amp; Motivations</span></div>
+        <p class="element-desc">他最終想達成什麼目的？例如希望下班後有更多時間追劇、希望自動化發文提升影響力。</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">8</span>
+      <div class="element-body">
+        <div><span class="element-name">痛點與挫折</span><span class="element-en">Pain Points &amp; Frustrations</span></div>
+        <p class="element-desc">他在現有流程中，最讓他抓狂、卡關、覺得反人類的事情是什麼？例如每次都要手動跨平台複製貼上。</p>
+      </div>
+    </li>
+  </ul>
 </div>
 
-<!-- Stage 4 -->
+<!-- 核心四 -->
 <div class="stage">
-  <span class="stage-label">階段四</span>
-  <h2>挖掘隱藏功能需求<br><span style="font-weight:400;color:var(--muted)">Mapping to Features</span></h2>
-  <p class="stage-sub">將感性的對話轉化為理性的功能點，對應到 Functional Map。</p>
-  <div class="prompt-block">
-    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
-    <span class="prompt-label">Prompt</span>
-    <pre>切換回 UX 研究員的身分。
-根據剛才與 <em>[名字]</em> 的對話，請分析：
-1. 哪些是他在操作流程中必備的「功能路徑」？
-2. 針對他的焦慮，我們應該在 Functional Map 中加入哪些「情緒緩解」的設計
-   （例如：大圖示、真人語音引導）？</pre>
-  </div>
+  <span class="stage-label">核心四</span>
+  <h2>衍生心理與信任機制<br><span style="font-weight:400;color:var(--muted)">2026 產品專屬 · Trust</span></h2>
+  <p class="stage-sub">隨著產品走向 AI 化（如 AI Agents 協作），現代 Persona 必須加入心理防線的考量。</p>
+  <ul class="elements">
+    <li class="element">
+      <span class="element-num">9</span>
+      <div class="element-body">
+        <div><span class="element-name">隱私與安全敏感度</span><span class="element-en">Privacy &amp; Security Anxiety</span></div>
+        <p class="element-desc">他對資料外流、地端或雲端、權限被掌控的焦慮程度有多高？</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">10</span>
+      <div class="element-body">
+        <div><span class="element-name">認知負荷耐受度</span><span class="element-en">Cognitive Load Tolerance</span></div>
+        <p class="element-desc">遇到軟體 Bug 時，他會耐著性子 Debug，還是 1 秒內直接解除安裝、罵它是垃圾？</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">11</span>
+      <div class="element-body">
+        <div><span class="element-name">AI 信任與授權邊界</span><span class="element-en">Trust &amp; Delegation Boundary</span><span class="element-new">新增</span></div>
+        <p class="element-desc">他願意把多少決策權交給 AI？喜歡 AI 自動執行到底，還是每一個關鍵步驟都要先經過他確認？</p>
+      </div>
+    </li>
+    <li class="element">
+      <span class="element-num">12</span>
+      <div class="element-body">
+        <div><span class="element-name">人機協作溝通風格</span><span class="element-en">Interaction &amp; Tone Preference</span><span class="element-new">新增</span></div>
+        <p class="element-desc">他偏好 AI 用什麼語氣與互動方式？簡潔的指令式、陪伴的對話式，還是專業的顧問式？</p>
+      </div>
+    </li>
+  </ul>
 </div>
 
 <!-- Outcome -->
 <div class="outcome">
-  <h3>這套流程，你開始能夠</h3>
+  <h3>重點提醒</h3>
   <ul>
-    <li>如何下精確的指令（Prompt Engineering）</li>
-    <li>如何從感性對話中提煉理性需求</li>
-    <li>理解 UX 的核心——「功能是為了解決人的問題」</li>
+    <li>辨識一份完整 Persona 的必備要素，不再只憑感覺描述使用者</li>
+    <li>區分「背景／行為／動機／信任」四個層次，知道每個資訊放在哪裡</li>
+    <li>理解 2026 AI 產品為何要加入信任與協作風格等心理防線要素</li>
   </ul>
 
 </div>
 
-<script>
-function copyPrompt(btn) {
-  const pre = btn.closest('.prompt-block').querySelector('pre');
-  const text = pre.innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '已複製 ✓';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = '複製';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
-}
-</script>
 </body>
 </html>

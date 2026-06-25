@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資展國際 UI/UX 網頁設計師養成班 · 課程總覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent3: #4094ff;
+  --surface: #f5f5f7;
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --max-w:   1080px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 100px;
+}
+
+/* ── Hero ────────────────────────────────── */
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 72px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.overline {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.08;
+  color: var(--dark);
+  margin-bottom: 18px;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  letter-spacing: -.01em;
+  max-width: 640px;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.meta-chip {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--dark);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 20px;
+}
+.meta-chip b { color: var(--accent); font-weight: 700; }
+
+/* ── Section heading ─────────────────────── */
+.section-head {
+  max-width: var(--max-w);
+  margin: 56px auto 24px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.section-head h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--dark);
+}
+.section-head span {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Unit grid ───────────────────────────── */
+.grid {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 24px 20px;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+  overflow: hidden;
+}
+.unit:hover {
+  border-color: rgba(0,102,204,.3);
+  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  transform: translateY(-2px);
+}
+
+.unit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.unit-no {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+.unit-date {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.unit h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.4;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.unit-desc {
+  font-size: .86rem;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.unit-foot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  text-decoration: none;
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: background .2s, color .2s, opacity .2s;
+}
+.btn-primary {
+  color: #fff;
+  background: var(--accent);
+}
+.btn-primary:hover { background: #0052a8; }
+.btn-primary::after { content: '↗'; font-size: 12px; }
+
+.btn-ghost {
+  color: var(--accent);
+  background: rgba(0,102,204,.07);
+}
+.btn-ghost:hover { background: rgba(0,102,204,.13); }
+
+.btn-soon {
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  cursor: default;
+}
+
+/* ── Footer note ─────────────────────────── */
+.foot {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.foot a { color: var(--accent); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 880px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .hero { padding: 48px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <p class="overline">資展國際 · Institute for Information Industry</p>
+  <h1>UI/UX 網頁設計師<br>養成班 · 課程總覽</h1>
+  <p>從使用者研究到可交付作品集，走完一套完整的 UI/UX 設計流程，並融入 AI 工具輔助。本頁依資展實務授課時程整理 12 個單元。</p>
+  <div class="meta-row">
+    <span class="meta-chip"><b>12</b> 個實務單元</span>
+    <span class="meta-chip">每單元 <b>3</b> 小時</span>
+    <span class="meta-chip">2026/06/26 – 08/19</span>
+    <span class="meta-chip">對象：UI/UX 初學者・轉職者</span>
+  </div>
+</header>
+
+<!-- Units -->
+<div class="section-head">
+  <h2>課程單元</h2>
+  <span>依資展實務授課時程排列</span>
+</div>
+
+<main class="grid">
+
+  <!-- Unit 01 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 01</span>
+      <span class="unit-date">06/26 上午</span>
+    </div>
+    <h3>業界觀念建立與職能定位</h3>
+    <p class="unit-desc">UI/UX 產業分工、科技團隊協作角色、UX 流程總覽，以及 AI 在設計流程中的輔助位置。</p>
+    <div class="unit-foot">
+      <a class="btn btn-primary" href="Unit_01/slides_unit01.html">簡報</a>
+      <a class="btn btn-ghost" href="Unit_01/persona-prompt.html">Persona 輔助頁</a>
+    </div>
+  </article>
+
+  <!-- Unit 02 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 02</span>
+      <span class="unit-date">06/30 上午</span>
+    </div>
+    <h3>設計思考與用戶輪廓分析</h3>
+    <p class="unit-desc">設計思考、訪談大綱設計、資料搜集</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 03 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 03</span>
+      <span class="unit-date">07/08 全天</span>
+    </div>
+    <h3>用戶研究 ①：競品分析與 Persona</h3>
+    <p class="unit-desc">競品分析、案例搜集與表格化，並用 FigJam 建立第一批 Persona 與設計假設。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 04 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 04</span>
+      <span class="unit-date">07/28 全天</span>
+    </div>
+    <h3>用戶研究 ②：用戶旅程地圖與設計目標</h3>
+    <p class="unit-desc">用旅程地圖整理峰值體驗、甜點與痛點，把研究觀察收斂成明確的設計目標。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 05 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 05</span>
+      <span class="unit-date">08/03 上午</span>
+    </div>
+    <h3>用戶研究 ③：產品結構與資訊架構</h3>
+    <p class="unit-desc">把研究洞察整理成產品結構、功能清單與資訊架構圖（Figma）。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 06 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 06</span>
+      <span class="unit-date">08/03 下午</span>
+    </div>
+    <h3>介面設計流程（上）：Flowchart 到 Wireframe</h3>
+    <p class="unit-desc">市場研究、Flowchart、UI Flow，再轉入低保真 Wireframe 的設計流程。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 07 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 07</span>
+      <span class="unit-date">08/06 上午</span>
+    </div>
+    <h3>介面設計流程（下）：Wireframe 實作延伸</h3>
+    <p class="unit-desc">延伸 Wireframe 實作，透過檢核補齊流程、資訊與操作上的缺口。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 08 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 08</span>
+      <span class="unit-date">08/06 下午</span>
+    </div>
+    <h3>風格發想與建立</h3>
+    <p class="unit-desc">設計風格故事化、市場風格分析，整合視覺基礎、完形心理學與 Laws of UX 建立風格板。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 09 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 09</span>
+      <span class="unit-date">08/10 上午</span>
+    </div>
+    <h3>Web 設計規範與網頁結構</h3>
+    <p class="unit-desc">網頁結構知識與 RWD 規範，規劃多斷點的 Wireframe 與版面。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 10 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 10</span>
+      <span class="unit-date">08/10 下午</span>
+    </div>
+    <h3>UI 設計精度提升（上）：Mockup 細節</h3>
+    <p class="unit-desc">將 Wireframe 升級為高保真 Mockup，補強元件、樣式與十大易用性細節。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 11 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 11</span>
+      <span class="unit-date">08/14 全天</span>
+    </div>
+    <h3>UI 精度提升（下）與 APP 設計規範</h3>
+    <p class="unit-desc">補齊狀態頁與 APP 介面，導入 iOS / Android 設計規範意識。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+  <!-- Unit 12 -->
+  <article class="unit">
+    <div class="unit-top">
+      <span class="unit-no">Unit 12</span>
+      <span class="unit-date">08/19 全天</span>
+    </div>
+    <h3>提案作品集與產業 QA</h3>
+    <p class="unit-desc">整理專題素材為作品集敘事，準備提案與產業 Q&amp;A。</p>
+    <div class="unit-foot">
+      <span class="btn btn-soon">簡報準備中</span>
+    </div>
+  </article>
+
+</main>
+
+<footer class="foot">
+  完整課程大綱與授課時程，請參考 <a href="資展課程大綱.md">資展課程大綱</a>。各單元簡報將陸續上線，目前僅單元 1 提供簡報連結。
+</footer>
+
+</body>
+</html>
