@@ -298,6 +298,56 @@ body {
   margin-left: 8px;
   vertical-align: middle;
 }
+
+/* ── Code block ──────────────────────────── */
+.prompt-block {
+  background: var(--code-bg);
+  border-radius: 14px;
+  padding: 28px 32px;
+  position: relative;
+}
+
+.prompt-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #4094ff;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.prompt-block pre {
+  font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+  font-size: .82rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.prompt-block pre em {
+  color: #86868b;
+  font-style: italic;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: #86868b;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.copy-btn:hover { background: rgba(255,255,255,.13); color: #e8e8ed; }
+.copy-btn.copied { color: #4094ff; }
 </style>
 </head>
 <body>
@@ -450,6 +500,75 @@ body {
   </ul>
 </div>
 
+<!-- Prompt 建立流程 divider -->
+<div class="stage">
+  <p class="overline" style="margin-bottom:10px">Prompt Engineering</p>
+  <h2>Persona 提示詞建立流程</h2>
+  <p class="stage-sub">漸進式角色建模（Progressive Character Modeling）——將提示詞拆解為四個階段，逐步建立具有行為深度的 Persona。</p>
+</div>
+
+<!-- 階段一 -->
+<div class="stage">
+  <span class="stage-label">階段一</span>
+  <h2>設定背景與 AI 的專家身分<br><span style="font-weight:400;color:var(--muted)">The Persona Architect</span></h2>
+  <p class="stage-sub">賦予 AI 一個專業的「大腦」，確保它產出的內容具有研究品質。</p>
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+    <span class="prompt-label">Prompt</span>
+    <pre>你現在是一位擁有 10 年經驗的資深 UX 研究員。
+我們正在開發一個 <em>[請輸入產品名稱，例如：專為獨居長者設計的預約掛號系統]</em>。
+請根據市場研究與常見的使用者樣態，為我列出三個具代表性的潛在使用者類型。</pre>
+  </div>
+</div>
+
+<!-- 階段二 -->
+<div class="stage">
+  <span class="stage-label">階段二</span>
+  <h2>挑選並深度定義角色<br><span style="font-weight:400;color:var(--muted)">The Deep Dive</span></h2>
+  <p class="stage-sub">從 AI 給出的三個類型中挑選一個，開始填肉——賦予名字、性格，以及最重要的「心智模型」。</p>
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+    <span class="prompt-label">Prompt</span>
+    <pre>我選擇「對科技感到不安的退休長者」作為核心 Persona。
+請為他取一個名字，並詳細描述：
+1. 生活背景與科技使用習慣。
+2. 他在使用現有醫療服務時，最讓他感到挫折的 3 個痛點 (Pains)。
+3. 他使用這個系統後，最希望達成的 3 個理想目標 (Gains)。
+4. 請用第一人稱寫出一句他的「生活金句」。</pre>
+  </div>
+</div>
+
+<!-- 階段三 -->
+<div class="stage">
+  <span class="stage-label">階段三</span>
+  <h2>啟動「情境模擬」訪談<br><span style="font-weight:400;color:var(--muted)">The Virtual Interview</span></h2>
+  <p class="stage-sub">讓 Persona「活」起來，直接與之對話，取代靜態的人物誌文件。</p>
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+    <span class="prompt-label">Prompt</span>
+    <pre>現在，請你進入角色設定，你就是 <em>[名字]</em>。
+我會以設計師的身分對你進行深度訪談。
+請以 <em>[名字]</em> 的語氣、用詞習慣（例如：夾雜台語、語句較長）來回答。
+如果你準備好了，請先簡短地向我打個招呼，並說說你今天的心情。</pre>
+  </div>
+</div>
+
+<!-- 階段四 -->
+<div class="stage">
+  <span class="stage-label">階段四</span>
+  <h2>挖掘隱藏功能需求<br><span style="font-weight:400;color:var(--muted)">Mapping to Features</span></h2>
+  <p class="stage-sub">將感性的對話轉化為理性的功能點，對應到 Functional Map。</p>
+  <div class="prompt-block">
+    <button class="copy-btn" onclick="copyPrompt(this)">複製</button>
+    <span class="prompt-label">Prompt</span>
+    <pre>切換回 UX 研究員的身分。
+根據剛才與 <em>[名字]</em> 的對話，請分析：
+1. 哪些是他在操作流程中必備的「功能路徑」？
+2. 針對他的焦慮，我們應該在 Functional Map 中加入哪些「情緒緩解」的設計
+   （例如：大圖示、真人語音引導）？</pre>
+  </div>
+</div>
+
 <!-- Outcome -->
 <div class="outcome">
   <h3>重點提醒</h3>
@@ -461,5 +580,16 @@ body {
 
 </div>
 
+
+<script>
+function copyPrompt(btn) {
+  const pre = btn.closest('.prompt-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '已複製 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
 </body>
 </html>
