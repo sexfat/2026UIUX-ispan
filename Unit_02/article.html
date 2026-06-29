@@ -312,6 +312,17 @@ tr:last-child td { border-bottom: none; }
   padding: 12px 16px; border-radius: 0 10px 10px 0; line-height: 1.7;
 }
 
+/* ── Screener example extras ─────────────── */
+.screener .opt {
+  font-size: .9rem; color: #3a3a3c; line-height: 1.7;
+  padding-left: 18px; margin: 4px 0 2px;
+}
+.logic {
+  display: inline-block; font-size: .8rem; font-weight: 600;
+  color: var(--accent); background: rgba(0,102,204,.08);
+  padding: 4px 11px; border-radius: 7px; margin-top: 10px; line-height: 1.5;
+}
+
 /* ── Prompt code ─────────────────────────── */
 .prompt {
   position: relative; background: var(--code-bg);
@@ -573,6 +584,56 @@ tr:last-child td { border-bottom: none; }
         </tbody>
       </table>
     </div>
+    <h3>篩選問卷範例（以外送 App 為例）</h3>
+    <p>把上面的結構填成具體題目，就是一份可直接發布的篩選問卷。括號 <em>[ ]</em> 內可依你的研究替換。</p>
+    <div class="guide screener">
+      <div class="guide-seg">
+        <div class="seg-label">歡迎語</div>
+        <p class="say">「感謝您撥空參與本次研究的資格篩選，約需 3 分鐘。我們想邀請符合條件的人參加一場線上訪談（約 45 分鐘，備有禮金）。以下問題沒有對錯，請依實際情況填答即可。」</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q1 · 行業排他</div>
+        <p class="q">請問您或您的家人，是否任職於以下產業？</p>
+        <p class="opt">(A) 廣告／行銷　(B) 軟體／網頁／UX 設計　(C) 餐飲外送平台或相關產業　(D) 以上皆非</p>
+        <span class="logic">選 A／B／C → 結束（淘汰）；選 D → 繼續</span>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q2 · 核心行為頻率</div>
+        <p class="q">過去 1 個月，您透過手機 App 叫外送的次數為？</p>
+        <p class="opt">(A) 0 次　(B) 1–2 次　(C) 3–5 次　(D) 6 次以上</p>
+        <span class="logic">選 A → 淘汰；選 B／C／D → 繼續</span>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q3 · 平台使用（隱藏意圖複選）</div>
+        <p class="q">過去 1 個月，您使用過以下哪些 App？（可複選）</p>
+        <p class="opt">[ ] foodpanda　[ ] Uber Eats　[ ] 各餐廳自有 App　[ ] 蝦皮店到店　[ ] 以上皆無</p>
+        <span class="logic">未勾選任何外送 App 者 → 淘汰（把想要的條件埋在干擾選項中，避免被猜中）</span>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q4 · 認真度驗證（簡答）</div>
+        <p class="q">請用 1–2 句話分享：您最近一次叫外送是什麼情境、為什麼選擇叫外送？</p>
+        <span class="logic">字數過少、語意不通、AI 腔或寫「無／不知道」 → 人工淘汰</span>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q5 · 基本資料</div>
+        <p class="q">您的年齡區間與居住縣市？</p>
+        <p class="opt">年齡：(A) 18–24　(B) 25–34　(C) 35–44　(D) 45 以上　｜　居住縣市：<em>[ ]</em></p>
+        <span class="logic">依研究的目標配額（Quota）挑選，確保樣本分布不偏</span>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">Q6 · 聯絡與時間</div>
+        <p class="q">若入選，方便聯繫您的稱呼與電話嗎？並請勾選可參與線上訪談的時段。</p>
+        <p class="opt">稱呼：<em>[ ]</em>　電話：<em>[ ]</em>　可訪談時段：[ ] 平日白天　[ ] 平日晚上　[ ] 週末</p>
+        <span class="logic">填寫完整 → 進入待選名單，後續電話二次確認</span>
+      </div>
+    </div>
+
     <div class="callout">回收問卷後、正式發出訪談邀請前，建議先撥一通<b>約 5 分鐘的電話或簡訊二次確認</b>，簡單聊兩句，就能確保對方不是機器人，且口條與態度適合你們的質化研究。</div>
   </section>
 
