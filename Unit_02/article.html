@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使用者訪談與訪綱製作 · 完整教材 · Unit 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent3: #4094ff;
+  --surface: #f5f5f7;
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --code-bg: #1d1d1f;
+  --good:    #1a7f37;
+  --good-bg: #eaf6ec;
+  --bad:     #c4314b;
+  --bad-bg:  #fdecef;
+  --max-w:   720px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 100px;
+  line-height: 1.75;
+}
+
+/* ── Reading progress ────────────────────── */
+#prog {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0;
+  background: var(--accent);
+  z-index: 200;
+  transition: width .1s linear;
+}
+
+/* ── Top bar ─────────────────────────────── */
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); text-decoration: none;
+  letter-spacing: .04em; transition: opacity .2s;
+}
+.back-link:hover { opacity: .7; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--accent); background: rgba(0,102,204,.09);
+  padding: 4px 11px; border-radius: 20px;
+}
+
+/* ── Hero ────────────────────────────────── */
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800; letter-spacing: -.045em;
+  line-height: 1.1; color: var(--dark);
+  margin-bottom: 18px;
+}
+.hero .lead {
+  font-size: 1.08rem; color: var(--muted);
+  line-height: 1.75; letter-spacing: -.01em;
+}
+.hero .meta {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-top: 24px; font-size: 12px; color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+/* ── TOC ─────────────────────────────────── */
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.toc h2 {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a {
+  font-size: .92rem; color: var(--dark);
+  text-decoration: none; display: flex; gap: 10px;
+  transition: color .2s;
+}
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem; font-weight: 700; color: var(--accent);
+  font-variant-numeric: tabular-nums; padding-top: 3px;
+}
+
+/* ── Article body ────────────────────────── */
+article { max-width: var(--max-w); margin: 0 auto; }
+
+section { padding-top: 56px; }
+
+.sec-num {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800; letter-spacing: -.04em;
+  line-height: 1.2; color: var(--dark);
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  font-weight: 700; letter-spacing: -.02em;
+  color: var(--dark); margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+p .hl { color: var(--accent); font-weight: 600; }
+strong { font-weight: 700; color: var(--dark); }
+em { font-style: normal; background: rgba(0,102,204,.09); color: var(--accent);
+     padding: 1px 6px; border-radius: 5px; font-weight: 500; }
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li {
+  font-size: 1rem; color: #2c2c2e; line-height: 1.7;
+  margin-bottom: 12px; padding-left: 26px; position: relative;
+}
+ul.bullets li::before {
+  content: ''; position: absolute; left: 6px; top: .65em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 1px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(0,102,204,.1); color: var(--accent);
+  font-size: .78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Callout ─────────────────────────────── */
+.callout {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin: 24px 0; padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-radius: 14px;
+  font-size: .95rem; line-height: 1.7; color: var(--dark);
+}
+.callout::before { content: '💡'; flex-shrink: 0; font-size: 1.1rem; }
+.callout.warn { background: #fff8e6; border-color: #f2d98a; }
+.callout.warn::before { content: '⚠️'; }
+.callout b { color: var(--accent); }
+
+/* ── Cross-reference link ────────────────── */
+.xref {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  border-bottom: 1px dashed rgba(0,102,204,.55);
+  transition: border-bottom-style .15s, background .15s;
+}
+.xref:hover { border-bottom-style: solid; background: rgba(0,102,204,.07); border-radius: 3px; }
+#eval-effect { scroll-margin-top: 24px; }
+#eval-effect:target { background: rgba(0,102,204,.16); border-radius: 4px; padding: 1px 5px; }
+
+/* ── Term / definition box ───────────────── */
+.term { scroll-margin-top: 24px; }
+.term:target { animation: xref-flash 1.5s ease; }
+@keyframes xref-flash {
+  0%   { box-shadow: 0 0 0 3px rgba(0,102,204,.4); }
+  100% { box-shadow: 0 0 0 3px rgba(0,102,204,0); }
+}
+.term {
+  margin: 24px 0;
+  padding: 22px 24px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+}
+.term .term-tag {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.term h4 { font-size: 1.08rem; font-weight: 700; color: var(--dark); margin-bottom: 10px; letter-spacing: -.02em; }
+.term p { font-size: .94rem; margin-bottom: 12px; }
+.term p:last-child { margin-bottom: 0; }
+.term ol.steps { margin: 4px 0 14px; }
+.term ol.steps li { font-size: .94rem; margin-bottom: 8px; }
+
+/* ── Comparison table ────────────────────── */
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: .94rem; min-width: 480px;
+}
+th {
+  text-align: left; padding: 12px 16px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent); background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px; border-bottom: 1px solid var(--border);
+  color: #2c2c2e; line-height: 1.6; vertical-align: top;
+}
+td:first-child { font-weight: 600; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+/* ── Do / Don't ──────────────────────────── */
+.dd { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.dd-box { padding: 16px 18px; border-radius: 14px; font-size: .92rem; line-height: 1.6; }
+.dd-bad  { background: var(--bad-bg);  border: 1px solid #f3c2cb; }
+.dd-good { background: var(--good-bg); border: 1px solid #bfe3c6; }
+.dd-tag { font-size: 11px; font-weight: 700; letter-spacing: .04em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.dd-bad  .dd-tag { color: var(--bad); }
+.dd-good .dd-tag { color: var(--good); }
+.dd-box p { margin: 0; color: #2c2c2e; font-size: .92rem; }
+
+/* ── Mistake card ────────────────────────── */
+.mistake {
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 22px 24px;
+  margin: 18px 0; background: #fff;
+}
+.mistake-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.mistake-n {
+  flex-shrink: 0; font-size: .8rem; font-weight: 800;
+  color: var(--accent); background: rgba(0,102,204,.1);
+  padding: 3px 10px; border-radius: 8px;
+}
+.mistake-head h3 { margin: 0; font-size: 1.1rem; }
+.mistake p { margin: 8px 0 0; font-size: .94rem; }
+.mistake p .lab { font-weight: 700; color: var(--dark); }
+
+/* ── Tabs (訪綱範例切換) ──────────────────── */
+.tabs {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  margin: 24px 0 0; border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  font-size: .92rem; font-weight: 600; color: var(--muted);
+  background: none; border: none; cursor: pointer;
+  padding: 11px 16px; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: color .2s, border-color .2s;
+  font-family: inherit;
+}
+.tab-btn:hover { color: var(--dark); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Sample guide ────────────────────────── */
+.guide {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 8px 0;
+  margin: 24px 0;
+}
+.guide-seg { padding: 22px 28px; border-top: 1px solid var(--border); }
+.guide-seg:first-child { border-top: none; }
+.guide-seg .seg-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+}
+.guide-seg h4 { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+.guide-seg .q { font-size: .95rem; color: #2c2c2e; margin: 10px 0 4px; font-weight: 500; }
+.guide-seg .fu { font-size: .88rem; color: var(--muted); padding-left: 18px; position: relative; margin-bottom: 4px; }
+.guide-seg .fu::before { content: '↳'; position: absolute; left: 0; color: var(--accent3); }
+.guide-seg .say {
+  font-size: .92rem; color: #3a3a3c; font-style: italic;
+  background: #fff; border-left: 3px solid var(--accent3);
+  padding: 12px 16px; border-radius: 0 10px 10px 0; line-height: 1.7;
+}
+
+/* ── Prompt code ─────────────────────────── */
+.prompt {
+  position: relative; background: var(--code-bg);
+  border-radius: 14px; padding: 22px 22px 24px; margin: 18px 0;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem; line-height: 1.75; color: #e8e8ed;
+  white-space: pre-wrap; word-break: break-word;
+}
+.prompt .ph { color: #4094ff; font-weight: 600; }
+.prompt .cm { color: #6e6e73; }
+.copy-btn {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 11px; font-weight: 600; color: #c7c7cc;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.4); }
+
+/* ── References ──────────────────────────── */
+.refs { max-width: var(--max-w); margin: 64px auto 0; padding-top: 32px; border-top: 1px solid var(--border); }
+.refs h2 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.refs ul { list-style: none; }
+.refs li { font-size: .9rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; padding-left: 18px; position: relative; }
+.refs li::before { content: '—'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+/* ── Footer nav ──────────────────────────── */
+.foot-nav { max-width: var(--max-w); margin: 48px auto 0; display: flex; gap: 12px; flex-wrap: wrap; }
+.foot-nav a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--accent);
+  background: rgba(0,102,204,.08); border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px; border-radius: 12px; text-decoration: none;
+  transition: background .2s, transform .15s;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); transform: translateY(-1px); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+@media (max-width: 768px) {
+  .toc ol { columns: 1; }
+  .dd { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+  .guide-seg { padding: 18px 18px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <a class="back-link" href="slides_unit02.html">回到投影片</a>
+  <span class="unit-pill">Unit 02</span>
+</div>
+
+<!-- Hero -->
+<header class="hero">
+  <p class="overline">User Research · 完整教材</p>
+  <h1>使用者訪談與訪綱製作</h1>
+  <p class="lead">怎麼問，才能問出真實的洞察？這篇教材從研究方法的全局談起，一步步帶你搞懂訪談的定位、訪綱的四段結構、提問的常見地雷，以及訪談後如何用 AI 協助整理資料——最後附上一份可以直接套用的訪綱範例。</p>
+  <div class="meta">
+    <span>閱讀時間約 18 分鐘</span><span class="d"></span>
+    <span>整理自 Nielsen Norman Group</span><span class="d"></span>
+    <span>搭配 slides_unit02</span>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">研究方法的兩種取向：質化與量化</a></li>
+    <li><a href="#s2">什麼是使用者訪談？</a></li>
+    <li><a href="#s3">訪談 vs 可用性測試</a></li>
+    <li><a href="#s4">執行訪談的 6 個步驟</a></li>
+    <li><a href="#s5">訪綱的四段結構</a></li>
+    <li><a href="#s6">篩選對的受訪者（Screener）</a></li>
+    <li><a href="#s7">到底該訪幾個人？</a></li>
+    <li><a href="#s8">撰寫問題的 6 個常見錯誤</a></li>
+    <li><a href="#s9">訪談的局限性</a></li>
+    <li><a href="#s10">訪談後：用 AI 協作整理資料</a></li>
+    <li><a href="#s11">附錄：訪綱範例模板</a></li>
+  </ol>
+</nav>
+
+<article>
+
+  <!-- 1 -->
+  <section id="s1">
+    <p class="sec-num">SECTION 01</p>
+    <h2 class="sec-title">研究方法的兩種取向：質化與量化</h2>
+    <p>在學怎麼做訪談之前，先把它放回更大的研究地圖。使用者研究大致分成兩種取向：<strong>質化（Qualitative）</strong>回答「<span class="hl">為什麼</span>、怎麼修」，<strong>量化（Quantitative）</strong>回答「<span class="hl">有多少</span>、多嚴重」。使用者訪談，就是質化方法裡最常用的一種。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>面向</th><th>質化研究 Qualitative</th><th>量化研究 Quantitative</th></tr></thead>
+        <tbody>
+          <tr><td>核心問題</td><td>為什麼？如何修？</td><td>有多少？多嚴重？</td></tr>
+          <tr><td>樣本數</td><td>少量（約 5–8 人）</td><td>大量（通常 30+ 人）</td></tr>
+          <tr><td>角色</td><td>形成性（Formative），引導設計方向</td><td>總結性（Summative）／基準測試，評估成效</td></tr>
+          <tr><td>產出</td><td>痛點清單、洞察（依嚴重度排序）</td><td>統計指標、顯著性、誤差範圍</td></tr>
+          <tr><td>代表方法</td><td>使用者訪談、可用性測試</td><td>大樣本問卷、A/B 測試、可用性基準</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>質化的限制：</strong>結果是研究員依經驗解讀的估計值，不同人可能看出不同問題（稱為「<span id="eval-effect">評估者效應</span>」Evaluator's Effect）；少量樣本也可能無法代表整體使用者。<strong>量化的價值：</strong>足夠樣本搭配統計，結論不靠運氣（有統計顯著性與誤差範圍），適合說服管理層、追蹤改版前後的成效。</p>
+    <div class="callout">最厲害的洞察往往來自<b>三角驗證（Triangulation）</b>：用質化找出問題的根源，用量化驗證問題的影響範圍，兩者互補，避免單一方法的盲點。</div>
+
+    <div class="term" id="term-triangulation">
+      <div class="term-tag">名詞解釋</div>
+      <h4>什麼是三角驗證（Triangulation）？</h4>
+      <p>三角驗證是指「從多個不同的角度或方法研究同一個問題，以提高結果的準確性與可信度」。概念源自<strong>航海定位</strong>：要確定船在海上的精確位置，不能只靠單一地標，而要用至少三個不同方向的地標交叉比對。任何單一研究方法都有盲點，三角驗證能避免「瞎子摸象」的窘境。社會科學家 Norman Denzin 提出四種經典類型：</p>
+      <ol class="steps">
+        <li><strong>方法三角驗證（最常見）：</strong>結合不同研究方法，最經典是質化＋量化。例如量化顯示購物車流失率高達 70%，訪談則發現是「結帳時才看到高額運費、感覺被欺騙」——既知道現象的嚴重程度，又知道背後的原因。</li>
+        <li><strong>研究者三角驗證：</strong>讓多位研究員各自分析同一份資料（例如各自做<a class="xref" href="#term-affinity">親和分群</a>），再交叉比對找出彼此重疊一致的洞察，剔除過於主觀的見解，抵銷<a class="xref" href="#eval-effect">評估者效應</a>。</li>
+        <li><strong>資料源三角驗證：</strong>在不同時間、地點或對象收集資料。例如研究數位學習平台時，不只訪談學生（使用者），也訪談老師（內容提供者）與家長（付款者），湊齊全貌。</li>
+        <li><strong>理論三角驗證：</strong>用不同理論或框架解讀同一組資料，例如同時從「認知心理學（介面是否太複雜）」與「行為經濟學（誘因是否不夠）」兩種視角剖析用戶行為。</li>
+      </ol>
+      <p>它的價值在於：<strong>提高可信度</strong>（不同方法、不同人都指向同一結論時，說服力大增）、<strong>消除偏見</strong>（彌補單一研究員或單一工具的局限），以及看清問題的 3D 全貌，而不是 2D 的斷章取義。</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <p class="sec-num">SECTION 02</p>
+    <h2 class="sec-title">什麼是使用者訪談？</h2>
+    <p>使用者訪談是一種研究方法：研究員向參與者提問、聆聽回答，並順著回答<strong>追問</strong>，藉此深入了解使用者是誰、他們的經驗、痛點與真正的需求。它通常用在設計流程最前面的<em>探索階段（Discovery）</em>，也就是設計思考的「同理（Empathize）」階段。</p>
+    <p>透過訪談，你可以了解：</p>
+    <ul class="bullets">
+      <li>使用者的經驗是什麼樣子、哪些片段讓他印象深刻、為什麼</li>
+      <li>他們在某段經驗中的痛點與卡關</li>
+      <li>他們對某個主題的想法與感受、在意什麼</li>
+      <li>他們的心智模型（Mental Model）、動機與渴望</li>
+    </ul>
+    <p>這些資料可以直接拿來建立 <span class="hl">Persona、同理心地圖、使用者旅程地圖、使用者需求陳述</span>等設計產物。最關鍵的一句話：<strong>把訪談當成一場研究，而不是聊天，也不是推銷。</strong></p>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <p class="sec-num">SECTION 03</p>
+    <h2 class="sec-title">訪談 vs 可用性測試</h2>
+    <p>這兩個方法都常是一對一進行，因此很容易被搞混，但它們的目的與本質完全不同。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>維度</th><th>使用者訪談</th><th>可用性測試</th></tr></thead>
+        <tbody>
+          <tr><td>目的</td><td>產生對使用者的新知識與同理心</td><td>評估設計好不好用、哪裡卡住、為什麼</td></tr>
+          <tr><td>研究類型</td><td>態度型：蒐集陳述的想法、感受</td><td>行為型：直接觀察操作行為</td></tr>
+          <tr><td>有無設計</td><td>沒有，不看也不試任何設計</td><td>有，受試者實際操作原型或產品</td></tr>
+          <tr><td>使用時機</td><td>同理／探索階段</td><td>測試階段、產品 alpha/beta</td></tr>
+          <tr><td>互動氛圍</td><td>較自然、溫暖，常有眼神接觸</td><td>較中性，避免過度友善影響結果</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>簡單記：<strong>訪談問的是「想法」，可用性測試看的是「行為」</strong>。兩者可以混搭——例如可用性測試前先做一段簡短訪談，但要注意訪談的問題不要「劇透」、引導受試者特別注意設計裡的某些東西。</p>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <p class="sec-num">SECTION 04</p>
+    <h2 class="sec-title">執行訪談的 6 個步驟</h2>
+    <ol class="steps">
+      <li><strong>明確研究目標。</strong>訪談是研究，要先有研究目標。太寬的目標（例如「了解使用者」）會做出問不出洞察的訪談。好的目標很具體，例如「<span class="hl">是什麼原因讓使用者放棄這個產品？</span>」研究目標會直接決定你要問哪些問題。</li>
+      <li><strong>準備訪綱。</strong>訪綱用來引導對話、回答你的研究目標，由幾個設計良好的開放式問題組成，並在主問題底下嵌套追問。（四段結構詳見下一節。）</li>
+      <li><strong>進行預訪（Pilot）。</strong>正式開訪前，先找 1–2 人測試訪綱，確認沒有聽不懂、會造成困惑、或根本問不出東西的問題，也檢查問題順序順不順。</li>
+      <li><strong>輕鬆的開場。</strong>先說明訪談目的、會問哪類問題、資料怎麼用，並放慢語速（放慢有安撫效果）。從簡單、不具批判性的問題開始，例如「平常休閒時間喜歡做什麼？」。</li>
+      <li><strong>建立信賴（Rapport）。</strong>用「我理解」「嗯」等語言回應，加上點頭、眼神接觸等非語言訊號，讓受試者放鬆。注意：信賴不等於交朋友，保持客觀。</li>
+      <li><strong>追問與探底（Probe）。</strong>當受試者講到關鍵點，用「可以多聊聊那部分嗎？」「為什麼那對你很重要？」深入挖掘動機與心智模型。探底問句通常臨場使用，可以先寫在訪綱最上方提醒自己。</li>
+    </ol>
+    <div class="callout">把訪綱想成「<b>有結構但有彈性</b>」的劇本：可以跳題、可以在某題停久一點、也可以問訪綱上沒有的問題。它是地圖，不是鐵軌。</div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <p class="sec-num">SECTION 05</p>
+    <h2 class="sec-title">訪綱的四段結構</h2>
+    <p>一份 45–60 分鐘的訪綱，通常可以拆成四段。時間配比只是參考，重點是「先暖身、再進核心、深入動機、最後收尾」的節奏。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>段落</th><th>目標</th><th>建議時間</th></tr></thead>
+        <tbody>
+          <tr><td>暖身破冰</td><td>說明目的、建立信賴、讓受試者放鬆開口</td><td>約 5 分鐘</td></tr>
+          <tr><td>核心情境探索</td><td>引導回憶「最近一次」的具體經驗</td><td>約 20 分鐘</td></tr>
+          <tr><td>深入動機探底</td><td>挖掘價值觀、心智模型與情感</td><td>約 25 分鐘</td></tr>
+          <tr><td>結尾致謝</td><td>補遺、致謝、收尾</td><td>約 5 分鐘</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>開放式問題怎麼寫？</h3>
+    <p>核心問題要用<strong>開放式問句</strong>，並引導受試者回憶<strong>具體事件</strong>，而不是抽象通則。問特定事件能喚起記憶，受試者才講得出有意義的細節。</p>
+    <ul class="bullets">
+      <li>「跟我聊聊你<span class="hl">上次</span>⋯⋯的經驗。」</li>
+      <li>「<span class="hl">帶我走一遍</span>你平常的一天。」</li>
+      <li>「跟我說一個你曾經⋯⋯的時候。」</li>
+    </ul>
+    <p>主問題底下再準備追問，把細節補齊：「當時是什麼時候發生的？」「花了你多久？」「當下你有什麼感覺？」</p>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <p class="sec-num">SECTION 06</p>
+    <h2 class="sec-title">篩選對的受訪者（Screener）</h2>
+    <p>找錯人，再好的訪綱也問不出有用的東西。<strong>篩選問卷（Screener Questionnaire）</strong>是一組用來確認潛在參與者是否符合條件的問題。它能確保相關性、提升資料品質、節省時間與金錢，也能減少樣本偏差（招募平台常塞滿 IT／科技愛好者，不具一般大眾代表性）。</p>
+    <h3>四個最佳實踐</h3>
+    <ol class="steps">
+      <li><strong>明確納入／排除標準。</strong>最重要的是行為特徵（共同的行為、興趣、消費習慣）；人口統計次之。通常排除從事 UX／行銷／IT 的人，以及靠車馬費維生的「專業測試員」。</li>
+      <li><strong>專注過去行為，而非未來預測。</strong>人非常不擅長預測自己的未來，篩選時要問過去或現在的真實抉擇與頻率。</li>
+      <li><strong>避免引導性與二選一問題。</strong>專業測試員會猜你想聽什麼。把真正想要的條件「埋」進多選清單，讓人猜不出正確答案。</li>
+      <li><strong>先做預測試。</strong>正式發布前找幾個人測一下，確保沒有語意模糊或術語造成誤解。</li>
+    </ol>
+    <div class="dd">
+      <div class="dd-box dd-bad">
+        <div class="dd-tag">✕ 容易被猜中</div>
+        <p>「你經常使用網銀嗎？（是／否）」</p>
+      </div>
+      <div class="dd-box dd-good">
+        <div class="dd-tag">✓ 把條件埋進清單</div>
+        <p>「過去一個月你使用過以下哪些金融服務？」並列出網銀、臨櫃、ATM、行動支付等。</p>
+      </div>
+    </div>
+
+    <h3>製作篩選問卷的 5 大關鍵步驟</h3>
+    <p>一份好的篩選問卷要像一個<strong>漏斗</strong>：把最能刷掉人的問題放最前面，由廣入深逐步篩選，避免浪費彼此的時間。</p>
+    <ol class="steps">
+      <li><strong>定義目標用戶輪廓：</strong>先列出你需要什麼樣的人（納入條件，如「過去一個月用手機 App 買過機票至少 1 次」），以及絕對不要什麼樣的人（排除條件，如「本身是 UX、PM 或航空業從業者」，因為同業帶有專業偏見，無法代表一般用戶）。</li>
+      <li><strong>倒金字塔式排序（由廣入深）：</strong>基本排他題（行業別）→ 核心行為篩選題 → 細節確認題（硬體／頻率／情境）→ 人口統計（年齡、居住地放後面，較不具侵入性）→ 聯絡資訊與可訪談時間。</li>
+      <li><strong>用「行為與頻率」題，而非主觀認定：</strong>不要問主觀判斷，要問具體的過去行為（見下方對照）。</li>
+      <li><strong>避免「露底牌」：</strong>別讓人一眼看出選哪個才能入選，把意圖藏進複選題。</li>
+      <li><strong>加認真度驗證、防機器人：</strong>放 1–2 題簡答題，過濾 AI 機器人與刷車馬費的人。</li>
+    </ol>
+    <div class="dd">
+      <div class="dd-box dd-bad"><div class="dd-tag">✕ 主觀模糊</div><p>「你經常在網路上買衣服嗎？（是／否）」——每個人對「經常」定義不同。</p></div>
+      <div class="dd-box dd-good"><div class="dd-tag">✓ 具體頻率</div><p>「過去 3 個月你在網路上下單買衣服幾次？（0／1–2／3–5／5 次以上）」</p></div>
+    </div>
+
+    <h3>撰寫題目的兩大禁忌</h3>
+    <p><strong>禁忌一 · 不要露底牌（引導性問題）。</strong>如果題目讓受訪者一眼看出「選哪個才能去面試」，有些人就會說謊。把篩選條件藏進複選題：</p>
+    <div class="dd">
+      <div class="dd-box dd-bad"><div class="dd-tag">✕ 露底牌</div><p>「我們正在找有在用 Netflix 的人。你過去一週有看 Netflix 嗎？」</p></div>
+      <div class="dd-box dd-good"><div class="dd-tag">✓ 隱藏意圖複選</div><p>「過去一週你用過以下哪些影音平台？（可複選）Disney+／YouTube／Netflix／愛奇藝／以上皆無」——暗中淘汰沒勾 Netflix 的人。</p></div>
+    </div>
+    <p><strong>禁忌二 · 警惕機器人與刷單帳號。</strong>線上問卷越來越多 AI 機器人與專門刷車馬費的人（NN/g 的研究〈Kick the Bots Out of Your Survey Data〉）。解法是加 1–2 題<strong>簡答題</strong>，例如「請用 1–2 句話分享你最喜歡的一部影集與原因」。若回答是複製貼上、語意不通的 AI 腔、或寫「無／不知道」，一律淘汰——這比選擇題更能看出受訪者未來在訪談中願不願意開口。</p>
+
+    <h3>篩選問卷範本結構</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>區塊</th><th>題目範例</th><th>篩選邏輯</th></tr></thead>
+        <tbody>
+          <tr><td>1. 歡迎語</td><td>感謝參與本研究篩選（告知約需 3 分鐘，先不透露具體研究主題）</td><td>無</td></tr>
+          <tr><td>2. 行業排他</td><td>您或家人是否任職於：(A) 廣告／行銷 (B) 軟體／網頁設計 (C) 本研究相關產業 (D) 以上皆非</td><td>選 A／B／C → 淘汰；選 D → 繼續</td></tr>
+          <tr><td>3. 行為篩選（核心）</td><td>上次使用行動支付是什麼時候？(A) 過去一週 (B) 過去一個月 (C) 半年前 (D) 從未</td><td>選 A／B → 繼續；選 C／D → 淘汰</td></tr>
+          <tr><td>4. 認真度驗證</td><td>請分享你最常使用行動支付的一個生活場景（簡答）</td><td>字數過少、語意不清、AI 感重 → 人工淘汰</td></tr>
+          <tr><td>5. 聯絡與時間</td><td>留下稱呼、電話，勾選可參與線上訪談的時間</td><td>送出 → 進入待選名單</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">回收問卷後、正式發出訪談邀請前，建議先撥一通<b>約 5 分鐘的電話或簡訊二次確認</b>，簡單聊兩句，就能確保對方不是機器人，且口條與態度適合你們的質化研究。</div>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <p class="sec-num">SECTION 07</p>
+    <h2 class="sec-title">到底該訪幾個人？</h2>
+    <p>很多人以為可用性測試的「5 人定律」也適用於訪談——但對探索性訪談來說，<strong>5 個人通常遠遠不夠</strong>。訪談是質化研究，目的是深入理解體驗與需求，而不是計算百分比，所以出發前無法精算出硬性的樣本數。</p>
+    <h3>由「飽和點」決定</h3>
+    <p>質化研究的樣本量通常由<strong>飽和點（Saturation）</strong>決定：當你再多訪一個人，卻提供不了新見解、產生不了新主題時，就代表達到飽和（收益遞減）。訪談的飽和點通常比可用性測試高，因為訪談探索的是個人經驗與動機，資訊多樣性更高。</p>
+    <ul class="bullets">
+      <li>過去研究指出，小範圍專題通常進行 <span class="hl">6–12 次訪談</span>就能抓到絕大多數核心主題。</li>
+      <li>實務上<strong>先訪 5–6 人</strong>，邊訪邊分析（滾動式）。若每訪一個都還有全新收穫就繼續；若連續兩三個講的都大同小異，就可以收工。</li>
+      <li>研究範圍越廣、受眾越多元，需要的樣本越多（例如「一般人就醫體驗」可能要 20–30 人；縮小到「第二型糖尿病患者就醫體驗」也許 5 人就夠）。</li>
+      <li>若主管要一個死數字，給一個<strong>範圍</strong>（如 8–12 人），並說明「提早達到飽和就提前停止以節省成本」。</li>
+    </ul>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <p class="sec-num">SECTION 08</p>
+    <h2 class="sec-title">撰寫問題的 6 個常見錯誤</h2>
+    <p>適合問卷的問題，不一定適合面對面訪談。糟糕的問題會讓受試者困惑，或給出不準確的想法，產生無效的洞察。以下六個是最常見的地雷。</p>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">01</span><h3>一開場就問封閉式問題</h3></div>
+      <p><span class="lab">問題：</span>封閉式問題（只有少數固定答案）會限制受試者分享故事、阻礙建立信賴，你也聽不到「沒預料到」的珍貴資訊。</p>
+      <p><span class="lab">改善：</span>把事實點數放進前置的 Screener；開場改用開放式問題，例如「跟我聊聊你上次自己下廚的經驗」。</p>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">02</span><h3>只詢問「通常／典型」的行為</h3></div>
+      <p><span class="lab">問題：</span>人「以為自己通常會做的事」和「實際上做的事」往往有落差，通則性問題會漏掉受情境影響的關鍵行為。</p>
+      <p><span class="lab">改善：</span>開場可用一個「大局導覽問題」建立背景（「跟我聊聊你們家通常一整天怎麼過？」），其餘核心問題盡量要求<strong>具體、特定的實例</strong>。</p>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">03</span><h3>詢問「假設性」的問題</h3></div>
+      <p><span class="lab">問題：</span>人非常不擅長預測自己未來的行為。他們會給你一個聽起來很棒的答案，但那不是真的。</p>
+      <p><span class="lab">改善：</span>問<strong>過去或現在的真實經驗與抉擇</strong>，不要問想像中的未來。這也代表你得在前期就招募到「有過該經驗」的對的人。</p>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">04</span><h3>在追問中加入自己的「詮釋」</h3></div>
+      <p><span class="lab">問題：</span>當受試者說「下班後很累」，研究員追問「所以你很討厭下廚對吧？」——這帶有誘導性，把你的假設強加給對方，他往往會順著你點頭。</p>
+      <div class="dd">
+        <div class="dd-box dd-bad"><div class="dd-tag">✕ 誘導</div><p>「所以你很討厭下廚對吧？」</p></div>
+        <div class="dd-box dd-good"><div class="dd-tag">✓ 中立追問</div><p>「你說的『很累』是什麼意思？那會怎麼影響你準備晚餐？」</p></div>
+      </div>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">05</span><h3>連續拋出「複合式問題」</h3></div>
+      <p><span class="lab">問題：</span>一個提問塞進多個問題（「你上次用那個 App 是什麼時候？做了什麼？覺得好用嗎？」），受試者通常只回答最後一個，或漏掉最關鍵的細節。</p>
+      <p><span class="lab">改善：</span><strong>一次只問一個問題</strong>，等他答完再根據回答逐步追問。</p>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake-head"><span class="mistake-n">06</span><h3>使用模糊、不具體的詞彙</h3></div>
+      <p><span class="lab">問題：</span>每個人對「安全」「常」的定義不同，會導致蒐集到的資料無法互相對照。</p>
+      <div class="dd">
+        <div class="dd-box dd-bad"><div class="dd-tag">✕ 模糊</div><p>「你很『常』網購嗎？」</p></div>
+        <div class="dd-box dd-good"><div class="dd-tag">✓ 具體可量化</div><p>「你過去一個月在網路上買過幾次東西？」</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section id="s9">
+    <p class="sec-num">SECTION 09</p>
+    <h2 class="sec-title">訪談的局限性</h2>
+    <p>訪談是<strong>態度型</strong>方法，蒐集的是受試者「自我陳述」的行為，而非觀察到的行為。要留意三個限制：</p>
+    <ul class="bullets">
+      <li><strong>記憶模糊：</strong>人的記憶有缺陷，越久遠的事越記不準。</li>
+      <li><strong>遺漏細節：</strong>受試者不知道哪些對研究員重要，常漏掉關鍵資訊。</li>
+      <li><strong>社會期許偏差：</strong>有些人很在意自己被怎麼看，會隱瞞或美化。</li>
+    </ul>
+    <p>因此，若想知道使用者「實際上做什麼」，需要結合<strong>觀察型研究</strong>（田野調查、數據分析）。此外，資料品質也高度依賴訪談者的技巧——問太多誘導性問題，資料的有效性就會被破壞。這也呼應了第一節的<a class="xref" href="#term-triangulation">三角驗證</a>：別把所有結論都壓在單一方法上。</p>
+  </section>
+
+  <!-- 10 -->
+  <section id="s10">
+    <p class="sec-num">SECTION 10</p>
+    <h2 class="sec-title">訪談後：用 AI 協作整理資料</h2>
+    <p>訪談結束後，最花時間的是把一堆逐字稿變成可用的洞察。AI 可以加速這一步，但要記得：<strong>AI 負責加速整理，研究判斷仍在你身上</strong>。下面這段提示詞的最後一行「限制句」是關鍵，它要求 AI 不腦補、資料不足就明說，避免你把 AI 編出來的東西當成真實洞察。</p>
+    <div class="prompt">
+      <button class="copy-btn">複製</button>
+<pre>以下是 <span class="ph">[N]</span> 場使用者訪談的逐字稿／筆記（已標註受訪者編號）：
+<span class="ph">[貼上內容]</span>
+
+請以 UX 研究員的角度協助我整理：
+1. 逐位萃取每位受訪者提到的痛點、需求與動機，並標註出自哪一位（P1、P2…）。
+2. 將相似的痛點歸納成 3–5 個主題（Affinity 分群），為每個主題命名並一句話說明。
+3. 標出哪些主題在多位受訪者間重複出現（高頻訊號），哪些只出現一次。
+4. 以「使用者需求陳述（User-need statement）」格式產出 3 條核心洞察。
+<span class="cm">限制：只根據逐字稿內容歸納，不要加入推測或腦補；若某結論的資料不足，請直接說明。</span></pre>
+    </div>
+    <div class="term" id="term-affinity">
+      <div class="term-tag">名詞解釋</div>
+      <h4>什麼是 Affinity 分群？</h4>
+      <p>上面提示詞第 2 步的「Affinity 分群」，正式名稱是<strong>親和圖法（Affinity Diagramming）</strong>，實務上也常直譯為「親和分群」。它是一種把大量混亂的資訊，依照<strong>親疏關係（相似性）</strong>進行分類歸納的方法，也是質化資料分析的黃金標準工具。想像你訪談完手上有 200 張寫滿用戶碎碎念的便利貼（實體或 Miro／FigJam）——親和圖法就是把它整理成洞察的解藥。它的運作分三步：</p>
+      <ol class="steps">
+        <li><strong>自下而上（Bottom-Up）歸納：</strong>不預設任何框架或既有分類。</li>
+        <li><strong>尋找親和力（Affinity）：</strong>把「講到類似事情、有相似情緒、或行為相近」的便利貼移到同一區塊。</li>
+        <li><strong>命名群組（Labeling）：</strong>當便利貼自然聚成幾個「聚落」後，為每個聚落起一個標題，例如「對付費流程感到焦慮」「希望有深色模式」。</li>
+      </ol>
+      <p>在 UX 研究中，它主要用於<strong>分析訪談與易用性測試資料</strong>（把散落的觀點聚成清晰的洞察）、<strong>腦力激盪後的點子分類</strong>，以及<strong>定義問題</strong>——它是從「觀察到的現象（Data）」走向「定義真正的問題（Problem）」的核心橋樑，常作為建立 Persona 或使用者旅程地圖的前置步驟。若由多位研究員各自分群、再交叉比對，本身也是一種<a class="xref" href="#term-triangulation">三角驗證</a>（研究者三角驗證）。</p>
+    </div>
+
+    <p>訪談「前」的 AI 協作（生成訪綱、檢查問題、模擬預訪）整理在另一頁，可一鍵複製：</p>
+    <div class="foot-nav" style="margin-top:16px">
+      <a href="interview-prompt.html" target="_blank" rel="noopener">AI 協作提示詞流程</a>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section id="s11">
+    <p class="sec-num">APPENDIX</p>
+    <h2 class="sec-title">附錄：訪綱範例模板</h2>
+    <p>以下提供三份不同領域的訪綱範例，結構相同——研究時可直接替換括號 <em>[ ]</em> 內的內容，套用到你自己的專題。</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="ex1">範例一 · 自助旅行規劃</button>
+      <button class="tab-btn" data-tab="ex2">範例二 · 外送 App</button>
+      <button class="tab-btn" data-tab="ex3">範例三 · 線上學習平台</button>
+    </div>
+
+    <div class="tab-panel active" id="ex1">
+    <div class="guide">
+      <div class="guide-seg">
+        <div class="seg-label">基本資訊</div>
+        <h4>研究專案與目標</h4>
+        <p class="q">研究目標 1：了解使用者在 <em>[規劃自助旅行]</em> 時的主要痛點與動機。</p>
+        <p class="q">研究目標 2：探索使用者目前使用 <em>[現有工具／競品]</em> 的行為與心智模型。</p>
+        <p class="q" style="color:var(--muted)">訪談時間：約 45–60 分鐘。</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">一、暖身破冰 · 約 5 分鐘</div>
+        <h4>開場與簡單問題</h4>
+        <p class="say">「你好，謝謝你今天抽空。我們想聊聊你平常在 <em>[安排旅遊]</em> 方面的經驗。這不是測試，答案沒有對錯，你最真實的想法對我們最重要。過程會錄音作為內部研究使用，不會外流，方便嗎？」</p>
+        <p class="q">可以先簡單介紹一下自己嗎？（職業、平常的休閒興趣）</p>
+        <p class="q">你平常一天裡，通常什麼時候會用手機處理 <em>[生活大小事]</em>？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">二、核心情境探索 · 約 20 分鐘</div>
+        <h4>引導回憶具體事件</h4>
+        <p class="q">跟我聊聊你<strong>最近一次</strong>嘗試 <em>[在網路上規劃自助旅行]</em> 的完整過程。</p>
+        <p class="fu">當時是什麼原因讓你想做這件事？</p>
+        <p class="fu">開始之前，你第一個想到的工具或步驟是什麼？</p>
+        <p class="q">那次經驗中，哪一個環節讓你覺得最挫折或最花時間？</p>
+        <p class="fu">當時發生了什麼事？（請他具體描述）</p>
+        <p class="fu">你後來是怎麼解決的？</p>
+        <p class="q">過去這段時間，你主要用什麼工具或 App 來幫你 <em>[完成任務]</em>？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">三、深入動機探底 · 約 25 分鐘</div>
+        <h4>挖掘心智模型與價值觀</h4>
+        <p class="q">你剛提到常用 <em>[某款工具]</em>，你最喜歡它哪一點？為什麼？</p>
+        <p class="fu">如果這個功能明天突然消失，對你的生活會有什麼影響？</p>
+        <p class="q">對你來說，在 <em>[挑選方案]</em> 時，最看重的三個要素是什麼？</p>
+        <p class="fu">為什麼 <em>[要素 A]</em> 對你這麼重要？可以舉個例子嗎？</p>
+        <p class="q">想像一下，如果有一個你心目中「最完美」的 <em>[產品／服務]</em>，它應該要能幫你做到什麼？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">四、結尾致謝 · 約 5 分鐘</div>
+        <h4>補遺與致謝</h4>
+        <p class="q">今天很謝謝你分享這麼多。結束前，關於 <em>[今天的主題]</em>，有沒有什麼是你覺得很重要、但我剛剛沒問到的？</p>
+        <p class="say">「再次感謝你的時間，祝你今天順心！」</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">給研究員的隨身小筆記</div>
+        <h4>現場提醒</h4>
+        <p class="q"><strong>多聽少說：</strong>讓受試者說 80%，你只說 20%。</p>
+        <p class="q"><strong>擁抱沉默：</strong>他停頓思考時別急著接話，給幾秒鐘組織記憶。</p>
+        <div class="dd" style="margin-top:8px">
+          <div class="dd-box dd-bad"><div class="dd-tag">✕ 誘導</div><p>「你覺得這個功能是不是很好用？」</p></div>
+          <div class="dd-box dd-good"><div class="dd-tag">✓ 中立</div><p>「你對這個功能有什麼看法？」</p></div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /ex1 -->
+
+    <div class="tab-panel" id="ex2">
+    <div class="guide">
+      <div class="guide-seg">
+        <div class="seg-label">基本資訊</div>
+        <h4>研究專案與目標</h4>
+        <p class="q">研究目標 1：了解使用者在 <em>[臨時決定叫外送]</em> 情境下的決策流程與痛點。</p>
+        <p class="q">研究目標 2：探索使用者對現有外送 App（選店、配送、付款）的行為與不滿。</p>
+        <p class="q" style="color:var(--muted)">訪談時間：約 45 分鐘。</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">一、暖身破冰 · 約 5 分鐘</div>
+        <h4>開場與簡單問題</h4>
+        <p class="say">「你好，謝謝你抽空。今天想聊聊你平常叫外送的經驗，沒有對錯，你最真實的想法最重要。過程會錄音作為內部研究使用，不會外流，方便嗎？」</p>
+        <p class="q">可以先簡單介紹一下自己嗎？（職業、平常的飲食習慣）</p>
+        <p class="q">你大概多久會叫一次外送？通常都是什麼情況下會想叫？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">二、核心情境探索 · 約 18 分鐘</div>
+        <h4>引導回憶具體事件</h4>
+        <p class="q">跟我聊聊你<strong>最近一次</strong>叫外送的完整過程，從打開 App 到拿到餐點。</p>
+        <p class="fu">當時為什麼決定叫外送，而不是出門買或自己煮？</p>
+        <p class="fu">你是怎麼決定要點哪一家、哪道餐的？</p>
+        <p class="q">那次經驗裡，有沒有哪個環節讓你覺得最煩、或最不放心？</p>
+        <p class="fu">當時發生了什麼事？</p>
+        <p class="fu">你後來是怎麼處理的？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">三、深入動機探底 · 約 17 分鐘</div>
+        <h4>挖掘心智模型與價值觀</h4>
+        <p class="q">挑選一家外送餐廳時，你最看重的三件事是什麼？</p>
+        <p class="fu">為什麼 <em>[要素 A]</em> 對你這麼重要？可以舉個例子嗎？</p>
+        <p class="q">你最近一次對外送體驗感到失望是什麼時候？發生了什麼？</p>
+        <p class="q">想像一個你心目中「最理想」的外送服務，它應該幫你解決什麼？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">四、結尾致謝 · 約 5 分鐘</div>
+        <h4>補遺與致謝</h4>
+        <p class="q">關於叫外送這件事，有沒有什麼是你覺得重要、但我剛剛沒問到的？</p>
+        <p class="say">「謝謝你的分享，祝你今天順心！」</p>
+      </div>
+    </div>
+    </div><!-- /ex2 -->
+
+    <div class="tab-panel" id="ex3">
+    <div class="guide">
+      <div class="guide-seg">
+        <div class="seg-label">基本資訊</div>
+        <h4>研究專案與目標</h4>
+        <p class="q">研究目標 1：了解自學者在 <em>[報名線上課程後]</em> 的學習行為，以及中途放棄的原因。</p>
+        <p class="q">研究目標 2：探索使用者挑選課程、安排學習時間的心智模型。</p>
+        <p class="q" style="color:var(--muted)">訪談時間：約 45 分鐘。</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">一、暖身破冰 · 約 5 分鐘</div>
+        <h4>開場與簡單問題</h4>
+        <p class="say">「你好，謝謝你抽空。今天想聊聊你上線上課程的經驗，這不是測試，你最真實的想法對我們最重要。過程會錄音作為內部研究使用，不會外流，方便嗎？」</p>
+        <p class="q">可以先簡單介紹一下自己嗎？最近在學什麼？</p>
+        <p class="q">你通常都在什麼時間、什麼地點上線上課程？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">二、核心情境探索 · 約 18 分鐘</div>
+        <h4>引導回憶具體事件</h4>
+        <p class="q">跟我聊聊你<strong>最近一次</strong>報名線上課程，從看到課程到開始上課的過程。</p>
+        <p class="fu">當時是什麼原因讓你想報這門課？</p>
+        <p class="fu">你怎麼判斷這門課值不值得買？</p>
+        <p class="q">那門課你後來上完了嗎？跟我說說中間發生的事。</p>
+        <p class="fu">（若中斷）是什麼時候、什麼原因停下來的？</p>
+        <p class="fu">有什麼會讓你想再回去把它上完？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">三、深入動機探底 · 約 17 分鐘</div>
+        <h4>挖掘心智模型與價值觀</h4>
+        <p class="q">對你來說，一門「上得下去」的線上課程，最關鍵的三個要素是什麼？</p>
+        <p class="fu">為什麼 <em>[要素 A]</em> 對你這麼重要？可以舉個例子嗎？</p>
+        <p class="q">你之前有沒有買了卻幾乎沒上的課？當時是什麼讓你停下來的？</p>
+        <p class="q">想像一個最理想的學習平台，它應該怎麼幫你堅持學完？</p>
+      </div>
+
+      <div class="guide-seg">
+        <div class="seg-label">四、結尾致謝 · 約 5 分鐘</div>
+        <h4>補遺與致謝</h4>
+        <p class="q">關於線上學習，有沒有什麼是你覺得重要、但我剛剛沒問到的？</p>
+        <p class="say">「謝謝你今天的分享，祝你學習順利！」</p>
+      </div>
+    </div>
+    </div><!-- /ex3 -->
+  </section>
+
+</article>
+
+<!-- References（暫時註解隱藏，需要時移除註解即可）-->
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li>Maria Rosala &amp; Kara Pernice, <a href="https://www.nngroup.com/articles/user-interviews/" target="_blank" rel="noopener">User Interviews 101</a>, Nielsen Norman Group.</li>
+    <li><a href="https://www.nngroup.com/articles/interview-questions-mistakes/" target="_blank" rel="noopener">6 Common Mistakes in Writing Interview Questions</a>, Nielsen Norman Group.</li>
+    <li><a href="https://www.nngroup.com/articles/screening-participants/" target="_blank" rel="noopener">Screening Research Participants</a>, Nielsen Norman Group.</li>
+    <li><a href="https://www.nngroup.com/articles/interview-sample-size/" target="_blank" rel="noopener">How Many Participants for a UX Interview Study?</a>, Nielsen Norman Group.</li>
+    <li><a href="https://www.nngroup.com/articles/quant-vs-qual/" target="_blank" rel="noopener">Quantitative vs. Qualitative Research</a>, Nielsen Norman Group.</li>
+  </ul>
+</div>
+
+
+<!-- Footer nav -->
+<div class="foot-nav">
+  <a href="slides_unit02.html">回到投影片</a>
+  <a href="interview-prompt.html" target="_blank" rel="noopener">AI 協作提示詞流程</a>
+</div>
+
+<script>
+// reading progress
+const prog = document.getElementById('prog');
+document.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  prog.style.width = (scrolled * 100) + '%';
+}, { passive: true });
+
+// tabs (訪綱範例切換)
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const id = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === id));
+  });
+});
+
+// copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('pre').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '已複製';
+      btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('done'); }, 1600);
+    });
+  });
+});
+</script>
+</body>
+</html>

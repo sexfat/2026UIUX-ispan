@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>訪綱製作提示詞流程 · Unit 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent3: #4094ff;
+  --surface: #f5f5f7;
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w:   760px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 80px;
+}
+
+/* ── Top bar ─────────────────────────────── */
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 28px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+  transition: opacity .2s;
+}
+.back-link:hover { opacity: .7; }
+.back-link::before { content: '←'; }
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+/* ── Hero ────────────────────────────────── */
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 52px 0 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.overline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  color: var(--dark);
+  margin-bottom: 14px;
+}
+
+.hero p {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  letter-spacing: -.01em;
+}
+
+/* ── Flow chips ──────────────────────────── */
+.flow {
+  max-width: var(--max-w);
+  margin: 32px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.flow-chip {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 6px 13px;
+  border-radius: 20px;
+  letter-spacing: -.01em;
+}
+.flow-arrow { color: var(--muted); font-size: 12px; }
+
+/* ── Stage section ───────────────────────── */
+.stage {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 44px 0 0;
+}
+
+.stage + .stage {
+  border-top: 1px solid var(--border);
+  margin-top: 44px;
+}
+
+.stage-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+
+.stage h2 {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--dark);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.stage-sub {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* ── Code block (prompt) ─────────────────── */
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 16px;
+  padding: 24px 24px 26px;
+  margin-top: 8px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.prompt .ph { color: #4094ff; font-weight: 600; }
+.prompt .cm { color: #6e6e73; }
+
+.copy-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.4); }
+
+/* ── Tip callout ─────────────────────────── */
+.tip {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-radius: 12px;
+  font-size: .88rem;
+  color: var(--dark);
+  line-height: 1.65;
+}
+.tip::before { content: '💡'; flex-shrink: 0; }
+.tip b { color: var(--accent); font-weight: 600; }
+
+/* ── Outcome section ─────────────────────── */
+.outcome {
+  max-width: var(--max-w);
+  margin: 52px auto 0;
+  padding: 36px 40px;
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.outcome h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 18px;
+  letter-spacing: -.02em;
+}
+
+.outcome ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.outcome li {
+  font-size: .92rem;
+  color: var(--dark);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.outcome li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: .52em;
+}
+
+@media (max-width: 768px) {
+  .prompt pre { font-size: .76rem; }
+  .outcome { padding: 28px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <a class="back-link" href="slides_unit02.html">回到投影片</a>
+  <span class="unit-pill">Unit 02</span>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <p class="overline">AI-Assisted Interview</p>
+  <h1>訪綱製作的<br>AI 協作提示詞</h1>
+  <p>使用者訪談是質化研究的一種，AI 可以加速訪綱的草擬、檢查與預演，訪談後也能協助整理逐字稿。但 AI 的回覆只是草稿與假設——要訪誰、哪些回答值得追問、最後的洞察成不成立，仍由你判斷。使用前請替換每段提示詞裡 <span style="color:var(--accent);font-weight:600">[ ]</span> 的內容。</p>
+</div>
+
+<!-- Flow -->
+<div class="flow">
+  <span class="flow-chip">① 生成訪綱</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-chip">② 檢查踩雷</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-chip">③ 模擬預訪</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-chip">④ 整理逐字稿</span>
+</div>
+
+<!-- 階段一 -->
+<div class="stage">
+  <span class="stage-label">階段一 · 訪談前</span>
+  <h2>生成訪綱草稿</h2>
+  <p class="stage-sub">給 AI 明確的研究目標與受訪者條件，讓它一次產出符合四段結構的訪綱初版。</p>
+  <div class="prompt">
+    <button class="copy-btn">複製</button>
+<pre>你是一位資深的 UX 研究員。我正在為 <span class="ph">[產品／主題]</span> 進行探索階段的使用者訪談。
+研究目標：
+1. <span class="ph">[目標一，例如：了解使用者在規劃自助旅行時的主要痛點與動機]</span>
+2. <span class="ph">[目標二]</span>
+目標受訪者：<span class="ph">[用「過去行為」描述，例如：過去三個月內曾自行在網路上規劃並完成一趟自助旅行的人]</span>
+
+請幫我產出一份 45–60 分鐘的半結構化訪綱，包含：
+1. 開場導言（說明訪談目的、徵求錄音同意、強調沒有標準答案）。
+2. 暖身破冰問題 2 題（簡單、不具批判性）。
+3. 核心情境探索 3 題：每題引導受訪者回憶「最近一次」的具體經驗，各附 2 個追問。
+4. 深入動機探底 3 題：挖掘價值觀與心理模型，各附 1 個探底問句（如「為什麼那對你很重要？」）。
+5. 結尾問題與致謝。
+全程使用開放式問句，避免誘導性、假設性與複合式問題。</pre>
+  </div>
+  <div class="tip">產出後請<b>自己讀一遍</b>，把不像你會講的話改成自然口語，並確認每一題都對得上你的研究目標。</div>
+</div>
+
+<!-- 階段二 -->
+<div class="stage">
+  <span class="stage-label">階段二 · 訪談前</span>
+  <h2>檢查問題是否踩雷</h2>
+  <p class="stage-sub">把寫好的問題丟回去，請 AI 對照六個常見錯誤逐題體檢並改寫。</p>
+  <div class="prompt">
+    <button class="copy-btn">複製</button>
+<pre>以下是我寫的訪談問題：
+<span class="ph">[貼上你的問題清單]</span>
+
+請以 UX 研究員的角度逐題檢查，指出是否犯了下列任一錯誤，並提供中立的改寫版本：
+（1）一開場就問封閉式篩選問題（2）只問「通常／典型」行為而非具體事件
+（3）假設性／預測未來的問題（4）追問時加入研究員自己的詮釋（誘導）
+（5）一次塞多個問題的複合式問題（6）使用「安全」「常」等模糊詞彙。</pre>
+  </div>
+</div>
+
+<!-- 階段三 -->
+<div class="stage">
+  <span class="stage-label">階段三 · 訪談前</span>
+  <h2>用 AI 模擬受訪者做預訪（Pilot）</h2>
+  <p class="stage-sub">讓 AI 扮演一位受訪者，先跑一次訪談，提前發現聽不懂或誘導的問題。</p>
+  <div class="prompt">
+    <button class="copy-btn">複製</button>
+<pre>你現在是一位受訪者：<span class="ph">[年齡／職業／情境，例如：32 歲、有兩個小孩、平日很忙的上班族]</span>。
+我要對你進行一場使用者訪談的預訪，主題是 <span class="ph">[主題]</span>。
+請依你的角色設定，真實、簡短地回答我接下來的每一個問題；
+如果某個問題你聽不懂、覺得被誘導、或同時問了太多事，請直接告訴我。
+準備好後，我會開始提問。</pre>
+  </div>
+  <div class="tip">預訪能修問題，但<b>不能取代真人</b>——AI 不會有真實的記憶與情緒。正式訪談仍要找 1–2 位目標使用者再跑一次。</div>
+</div>
+
+<!-- 階段四 -->
+<div class="stage">
+  <span class="stage-label">階段四 · 訪談後</span>
+  <h2>用 AI 協作整理資料</h2>
+  <p class="stage-sub">把逐字稿交給 AI 萃取痛點、做主題分群、整理成可用的洞察。</p>
+  <div class="prompt">
+    <button class="copy-btn">複製</button>
+<pre>以下是 <span class="ph">[N]</span> 場使用者訪談的逐字稿／筆記（已標註受訪者編號）：
+<span class="ph">[貼上內容]</span>
+
+請以 UX 研究員的角度協助我整理：
+1. 逐位萃取每位受訪者提到的痛點、需求與動機，並標註出自哪一位（P1、P2…）。
+2. 將相似的痛點歸納成 3–5 個主題（Affinity 分群），為每個主題命名並一句話說明。
+3. 標出哪些主題在多位受訪者間重複出現（高頻訊號），哪些只出現一次。
+4. 以「使用者需求陳述（User-need statement）」格式產出 3 條核心洞察。
+<span class="cm">限制：只根據逐字稿內容歸納，不要加入推測或腦補；若某結論的資料不足，請直接說明。</span></pre>
+  </div>
+  <div class="tip">最後一行的<b>限制句</b>很關鍵：它要求 AI 不要腦補、資料不足就明說，避免你把 AI 編出來的結論當成真實洞察。</div>
+</div>
+
+<!-- Outcome -->
+<div class="outcome">
+  <h3>重點提醒</h3>
+  <ul>
+    <li>AI 負責加速「擴張與整理」，研究判斷（訪誰、追問什麼、洞察成不成立）仍在你身上</li>
+    <li>訪綱草稿一定要自己讀過、改成自然口語，並逐題對齊研究目標</li>
+    <li>AI 預訪能修問題，但不能取代真人，正式前仍要找目標使用者跑一次</li>
+    <li>整理逐字稿時務必加上「不腦補、資料不足要說明」的限制，避免假洞察</li>
+  </ul>
+</div>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.parentElement.querySelector('pre').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '已複製';
+      btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('done'); }, 1600);
+    });
+  });
+});
+</script>
+</body>
+</html>

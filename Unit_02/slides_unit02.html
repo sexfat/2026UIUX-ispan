@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 02 · 設計思考與 AI 在設計與開發流程中的協作</title>
+<title>Unit 2 · 使用者訪談、訪綱製作與研究方法取向</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
   --bg:      #fbfbfd;
   --dark:    #1d1d1f;
@@ -22,53 +23,532 @@
   --px: clamp(48px, 7vw, 112px);
   --py: 52px;
 }
+
 html, body { height: 100%; overflow: hidden; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; }
-#prog { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); transition: width 0.55s cubic-bezier(.4,0,.2,1); z-index: 200; border-radius: 0 1px 1px 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Progress bar ──────────────────────── */
+#prog {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.55s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+  border-radius: 0 1px 1px 0;
+}
+
+/* ── Slide base ────────────────────────── */
 #deck { position: relative; width: 100%; height: 100vh; }
-.slide { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--py) var(--px); opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s .5s; overflow: hidden; }
-.slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
-.slide-head { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.slide-foot { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.unit-pill { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 20px; }
-.slide-num { font-size: 12px; font-weight: 500; color: var(--border); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
-.course-label { font-size: 11px; color: var(--border); letter-spacing: .02em; }
-.dots { display: flex; gap: 5px; align-items: center; }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: all .3s cubic-bezier(.4,0,.2,1); cursor: pointer; }
-.dot.on { background: var(--accent); width: 16px; border-radius: 2.5px; }
-.overline { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
-.divider { width: 40px; height: 3px; background: var(--accent); border-radius: 2px; margin-bottom: 26px; margin-top: 4px; }
-h1 { font-size: clamp(1.9rem, 3.8vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; color: var(--dark); }
-h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--muted); line-height: 1.65; letter-spacing: -.01em; margin-top: 14px; }
-.cover-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 28px; }
-.cover-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
-.cover-title { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -.055em; line-height: 1.04; color: var(--dark); margin-bottom: 22px; }
-.cover-sub { font-size: clamp(.9rem, 1.5vw, 1.25rem); font-weight: 400; color: var(--muted); line-height: 1.6; letter-spacing: -.01em; margin-bottom: 48px; }
-.cover-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted); }
-.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-.agenda-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
-.agenda-card { background: rgba(255,255,255,.05); border-radius: 18px; padding: 28px 24px 32px; display: flex; flex-direction: column; gap: 10px; border: 1px solid transparent; transition: border-color .2s; }
-.slide:not(.dark) .agenda-card { background: var(--surface); }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s .5s;
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s 0s;
+}
+
+/* ── Layout regions ──────────────────────── */
+.slide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+}
+
+/* ── Header elements ─────────────────────── */
+.unit-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+.slide-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--border);
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Footer elements ─────────────────────── */
+.course-label {
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: .02em;
+}
+
+/* Dot nav */
+.dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.dot.on {
+  background: var(--accent);
+  width: 16px;
+  border-radius: 2.5px;
+}
+
+/* ── Typography ─────────────────────────── */
+.overline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.divider {
+  width: 40px; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 26px;
+  margin-top: 4px;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+h2 {
+  font-size: clamp(.9rem, 1.5vw, 1.3rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: -.01em;
+  margin-top: 14px;
+}
+
+/* ── Cover slide ────────────────────────── */
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.cover-title {
+  font-size: clamp(2.4rem, 5.2vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -.055em;
+  line-height: 1.04;
+  color: var(--dark);
+  margin-bottom: 22px;
+}
+
+.cover-sub {
+  font-size: clamp(.9rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.6;
+  letter-spacing: -.01em;
+  margin-bottom: 48px;
+}
+
+.cover-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+/* ── Agenda cards ────────────────────────── */
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.agenda-card {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid transparent;
+  transition: border-color .2s;
+}
 .agenda-card:hover { border-color: var(--border); }
-.a-step { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent3); }
-.slide:not(.dark) .a-step { color: var(--accent); }
-.a-time { font-size: clamp(.85rem, 1.25vw, 1.1rem); font-weight: 600; color: var(--dark); line-height: 1.35; }
-.slide.dark .a-time { color: #f5f5f7; }
-.a-desc { font-size: clamp(.78rem, 1.05vw, .95rem); color: var(--muted); line-height: 1.6; margin-top: 2px; }
-.blist { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 36px; }
-.blist li { font-size: clamp(.88rem, 1.3vw, 1.15rem); color: var(--dark); line-height: 1.65; display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; background: var(--surface); border-radius: 12px; transition: background .2s; }
+
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.a-time {
+  font-size: clamp(.85rem, 1.25vw, 1.1rem);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.35;
+}
+
+.a-desc {
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 2px;
+}
+
+/* ── Bullet list ─────────────────────────── */
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.blist li {
+  font-size: clamp(.88rem, 1.3vw, 1.15rem);
+  color: var(--dark);
+  line-height: 1.65;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-radius: 12px;
+  transition: background .2s;
+}
 .blist li:hover { background: var(--card); }
-.blist li::before { content: attr(data-n); font-size: 10px; font-weight: 700; color: var(--accent); background: rgba(0,102,204,.1); padding: 2px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: .04em; }
-.blist.plain li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: .55em; padding: 0; }
-.blist .hl { color: var(--accent); font-weight: 600; }
-.bg-n { position: absolute; right: calc(var(--px) - 16px); top: 50%; transform: translateY(-52%); font-size: clamp(140px, 21vw, 260px); font-weight: 800; color: var(--surface); letter-spacing: -.1em; line-height: 1; z-index: 0; user-select: none; pointer-events: none; }
+
+.blist li::before {
+  content: attr(data-n);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+
+/* Simple bullet (no numbering) */
+.blist.plain li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: .55em;
+  padding: 0;
+}
+
+.blist .hl {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Compact bullet list (for denser slides) */
+.blist.compact { gap: 10px; margin-top: 22px; }
+.blist.compact li { padding: 11px 16px; font-size: clamp(.82rem, 1.15vw, 1.02rem); }
+
+/* ── Background number ───────────────────── */
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(140px, 21vw, 260px);
+  font-weight: 800;
+  color: var(--surface);
+  letter-spacing: -.1em;
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
 .slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
-.layer-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; width: fit-content; }
-#ctrls { position: fixed; bottom: 28px; right: clamp(36px, 5vw, 80px); display: flex; gap: 8px; z-index: 100; }
-#ctrls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(29,29,31,.06); color: var(--dark); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; }
+
+/* ── Layer badge ─────────────────────────── */
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+
+/* ── Stat row (big numbers) ──────────────── */
+.stat-row {
+  display: flex;
+  gap: 48px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+.stat b {
+  display: block;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat span {
+  display: block;
+  margin-top: 8px;
+  font-size: clamp(.8rem, 1.1vw, .95rem);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Controls ────────────────────────────── */
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+
+#ctrls button {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .15s;
+}
 #ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
 #ctrls button:active { transform: scale(.94); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+#ctrls.on-dark button:hover { background: rgba(255,255,255,.28); }
+
+/* ── Comparison table ───────────────────── */
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
+}
+.cmp-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table th:first-child { color: var(--muted); background: transparent; }
+.cmp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.6;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: .88em;
+  white-space: nowrap;
+}
+
+/* ── External link pill ─────────────────── */
+.ext-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, transform .15s;
+  margin-top: 16px;
+  width: fit-content;
+}
+.ext-link:hover {
+  background: rgba(0,102,204,.14);
+  border-color: rgba(0,102,204,.35);
+  transform: translateY(-1px);
+}
+.ext-link::after {
+  content: '↗';
+  font-size: 11px;
+  opacity: .8;
+}
+
+/* ── Footnote / note ─────────────────────── */
+.note {
+  margin-top: 20px;
+  font-size: clamp(.72rem, .95vw, .86rem);
+  color: var(--muted);
+  line-height: 1.65;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent3);
+  border-radius: 0 10px 10px 0;
+}
+.note b { color: var(--accent); font-weight: 700; }
+.note[data-modal] { cursor: pointer; transition: background .2s, transform .15s; }
+.note[data-modal]:hover { transform: translateY(-1px); }
+.note .more { display: inline-block; margin-left: 6px; color: var(--accent); font-weight: 700; white-space: nowrap; }
+.note .more::after { content: ' ↗'; }
+.slide.dark .note { background: rgba(255,255,255,.05); color: #a1a1a6; border-left-color: #4094ff; }
+.slide.dark .note b { color: #4094ff; }
+.slide.dark .note .more { color: #4094ff; }
+
+/* ── Modal (備註詳細彈窗) ─────────────────── */
+#modal-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,.55);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility 0s .25s;
+}
+#modal-overlay.open { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+.modal {
+  background: #fff; border-radius: 22px;
+  max-width: 640px; width: 100%; max-height: 84vh; overflow-y: auto;
+  padding: 42px 46px; position: relative;
+  transform: translateY(14px) scale(.98);
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,.3);
+}
+#modal-overlay.open .modal { transform: none; }
+.modal-close {
+  position: absolute; top: 18px; right: 18px;
+  width: 34px; height: 34px; border: none; border-radius: 50%;
+  background: var(--surface); color: var(--dark);
+  font-size: 18px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.modal-close:hover { background: var(--card); }
+.modal .m-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.modal h3 {
+  font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800;
+  letter-spacing: -.03em; line-height: 1.2; color: var(--dark); margin-bottom: 16px;
+}
+.modal p { font-size: .95rem; line-height: 1.75; color: #2c2c2e; margin-bottom: 14px; }
+.modal p:last-child { margin-bottom: 0; }
+.modal strong { font-weight: 700; color: var(--dark); }
+.modal em {
+  background: rgba(0,102,204,.09); color: var(--accent);
+  padding: 1px 6px; border-radius: 5px; font-style: normal; font-weight: 500;
+}
+.modal ol { margin: 4px 0 16px; padding-left: 0; list-style: none; counter-reset: m; }
+.modal ol li {
+  counter-increment: m; position: relative;
+  padding-left: 36px; margin-bottom: 12px;
+  font-size: .93rem; line-height: 1.7; color: #2c2c2e;
+}
+.modal ol li::before {
+  content: counter(m); position: absolute; left: 0; top: 0;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(0,102,204,.1); color: var(--accent);
+  font-size: .78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Dark slide variant ──────────────────── */
 .slide.dark { background: #1d1d1f; }
 .slide.dark h1 { color: #f5f5f7; }
 .slide.dark h2 { color: #86868b; }
@@ -78,92 +558,30 @@ h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--mute
 .slide.dark .bg-n { color: #2c2c2e; }
 .slide.dark .blist li { background: rgba(255,255,255,.05); color: #f5f5f7; }
 .slide.dark .blist li:hover { background: rgba(255,255,255,.09); }
+.slide.dark .blist li::before { color: #4094ff; background: rgba(64,148,255,.15); }
+.slide.dark .blist .hl { color: #4094ff; }
 .slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
 .slide.dark .slide-num { color: #48484a; }
 .slide.dark .course-label { color: #3a3a3c; }
 .slide.dark .dot { background: #3a3a3c; }
 .slide.dark .dot.on { background: #4094ff; }
-.slide.dark .blist li::before { color: #4094ff; background: rgba(64,148,255,.15); }
-.slide.dark .blist.plain li::before { background: #4094ff; }
-.slide.dark .blist .hl { color: #4094ff; }
+.slide.dark .stat b { color: #4094ff; }
+.slide.dark .ext-link { background: rgba(64,148,255,.12); border-color: rgba(64,148,255,.3); color: #4094ff; }
 
-/* 外連結按鈕 */
-.ext-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #4094ff; background: rgba(64,148,255,.12); border: 1px solid rgba(64,148,255,.2); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: background .2s, border-color .2s, transform .15s; margin-top: 20px; width: fit-content; }
-.ext-link:hover { background: rgba(64,148,255,.2); border-color: rgba(64,148,255,.4); transform: translateY(-1px); }
-.ext-link::after { content: '↗'; font-size: 11px; opacity: .8; }
-
-/* 什麼是設計思考 */
-.def-box { margin-top: 24px; padding: 18px 22px; background: var(--surface); border-radius: 14px; border-left: 4px solid var(--accent); }
-.def-box p { font-size: clamp(.88rem, 1.2vw, 1.05rem); color: var(--dark); line-height: 1.7; }
-.thinking-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
-.thinking-card { background: var(--surface); border-radius: 14px; padding: 20px 18px; }
-.thinking-tag { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
-.thinking-title { font-size: clamp(.9rem, 1.2vw, 1.05rem); font-weight: 600; color: var(--dark); margin-bottom: 6px; }
-.thinking-desc { font-size: clamp(.78rem, 1vw, .9rem); color: var(--muted); line-height: 1.6; }
-
-/* 雙鑽石模型 */
-.diamond-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
-.diamond-col { background: rgba(255,255,255,.05); border-radius: 16px; padding: 20px 18px; }
-.diamond-col-title { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #4094ff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.diamond-col-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.08); }
-.diamond-phase { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
-.diamond-phase:last-child { border-bottom: none; padding-bottom: 0; }
-.phase-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 3px; letter-spacing: .06em; text-transform: uppercase; }
-.phase-badge.expand { background: rgba(64,148,255,.2); color: #4094ff; }
-.phase-badge.converge { background: rgba(52,199,89,.15); color: #34c759; }
-.phase-content { display: flex; flex-direction: column; }
-.phase-name { font-size: clamp(.88rem, 1.15vw, 1rem); font-weight: 600; color: #f5f5f7; display: block; }
-.phase-desc { font-size: clamp(.75rem, .95vw, .85rem); color: #86868b; margin-top: 3px; line-height: 1.5; }
-.quote-bar { margin-top: 20px; padding: 12px 16px; background: rgba(64,148,255,.08); border-left: 3px solid rgba(64,148,255,.5); border-radius: 0 8px 8px 0; font-size: clamp(.76rem, .95vw, .85rem); color: #86868b; font-style: italic; line-height: 1.6; }
-
-/* HMW 互動示例 */
-.hmw-example { display: flex; align-items: center; gap: 14px; margin-top: 22px; padding: 16px 20px; background: var(--surface); border-radius: 14px; flex-wrap: wrap; }
-.hmw-block { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 180px; }
-.hmw-tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; width: fit-content; }
-.hmw-tag.complaint { background: rgba(255,59,48,.1); color: #ff3b30; }
-.hmw-tag.opportunity { background: rgba(0,102,204,.1); color: var(--accent); }
-.hmw-text { font-size: clamp(.82rem, 1.05vw, .95rem); color: var(--dark); line-height: 1.5; }
-.hmw-arrow { font-size: 1.4rem; color: var(--border); flex-shrink: 0; }
-
-/* AI 角色 */
-.role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 32px; }
-.role-card { background: var(--surface); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; transition: background .2s; }
-.role-card:hover { background: var(--card); }
-.role-icon { font-size: 1.6rem; margin-bottom: 4px; }
-.role-en { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-.role-zh { font-size: clamp(.95rem, 1.3vw, 1.1rem); font-weight: 600; color: var(--dark); }
-.role-desc { font-size: clamp(.78rem, 1vw, .9rem); color: var(--muted); line-height: 1.6; margin-top: 2px; }
-
-/* 討論守則 */
-.rule-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
-.rule-list li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; background: rgba(255,255,255,.05); border-radius: 12px; transition: background .2s; }
-.rule-list li:hover { background: rgba(255,255,255,.08); }
-.rule-num { font-size: 10px; font-weight: 700; color: #4094ff; background: rgba(64,148,255,.15); padding: 2px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: .04em; }
-.rule-content { display: flex; flex-direction: column; }
-.rule-title { font-size: clamp(.88rem, 1.2vw, 1.05rem); font-weight: 600; color: #f5f5f7; display: block; }
-.rule-sub { font-size: clamp(.76rem, .95vw, .88rem); color: #86868b; margin-top: 3px; line-height: 1.5; }
-
-/* 可點擊的註解觸發 */
-.annotated { cursor: pointer; border-bottom: 1px dashed rgba(64,148,255,.5); transition: border-color .2s; }
-.annotated:hover { border-color: #4094ff; }
-.annotated::after { content: ' ⓘ'; font-size: .75em; opacity: .6; vertical-align: super; }
-
-/* Modal */
-#modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s cubic-bezier(.4,0,.2,1); }
-#modal-overlay.open { opacity: 1; pointer-events: all; }
-#modal { background: #1d1d1f; border: 1px solid rgba(255,255,255,.1); border-radius: 22px; padding: 36px 40px 40px; max-width: 520px; width: 90%; transform: translateY(18px) scale(.97); transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
-#modal-overlay.open #modal { transform: translateY(0) scale(1); }
-#modal-close { float: right; background: rgba(255,255,255,.08); border: none; color: #f5f5f7; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .2s; margin: -6px -6px 0 0; }
-#modal-close:hover { background: rgba(255,255,255,.15); }
-#modal-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #4094ff; margin-bottom: 10px; }
-#modal-title { font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 700; letter-spacing: -.04em; color: #f5f5f7; margin-bottom: 18px; line-height: 1.15; }
-#modal-body { font-size: clamp(.85rem, 1.1vw, .95rem); color: #adadb8; line-height: 1.75; }
-#modal-body strong { color: #f5f5f7; font-weight: 600; }
-.modal-steps { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
-.modal-steps li { display: flex; gap: 12px; align-items: flex-start; }
-.modal-step-n { font-size: 10px; font-weight: 700; color: #4094ff; background: rgba(64,148,255,.15); padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
-.modal-step-text { font-size: clamp(.82rem, 1vw, .9rem); color: #adadb8; line-height: 1.6; }
-.modal-step-text strong { color: #f5f5f7; }
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding-top: 8px; padding-bottom: 8px; }
+  .course-label { display: none; }
+  .agenda-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .cmp-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 18px; }
+  .cover-sub { margin-bottom: 20px; }
+  .bg-n { display: none; }
+  #ctrls { bottom: 16px; right: 16px; }
+}
 </style>
 </head>
 <body>
@@ -172,482 +590,555 @@ h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--mute
 
 <div id="deck">
 
-  <!-- Slide 1 · Cover -->
+  <!-- ─── Slide 1 · Cover ─────────────────── -->
   <div class="slide active">
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">01 / 15</span>
+      <span class="slide-num">01 / 18</span>
     </div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
-      <h1 class="cover-title">設計思考<br>與 AI 協作</h1>
-      <p class="cover-sub">Design Thinking × AI-Assisted Workflow</p>
+      <h1 class="cover-title">使用者訪談<br>與訪綱製作</h1>
+      <p class="cover-sub">研究方法取向（質化／量化）× 訪綱設計 × AI 協作</p>
       <div class="cover-meta">
         <span>3 小時</span>
         <span class="meta-dot"></span>
-        <span>15 張</span>
+        <span>18 張投影片</span>
         <span class="meta-dot"></span>
-        <span>含 Workshop 討論</span>
+        <span>含訪綱實作</span>
       </div>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots" id="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 2 · Agenda -->
-  <div class="slide dark">
+  <!-- ─── Slide 2 · Agenda ─────────────────── -->
+  <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">02 / 15</span>
+      <span class="slide-num">02 / 18</span>
     </div>
     <div class="slide-body">
       <p class="overline">Agenda</p>
       <h1>課程大綱</h1>
       <div class="agenda-grid">
         <div class="agenda-card">
-          <span class="a-step">第 1 小時</span>
-          <span class="a-time">設計思考框架解說</span>
-          <span class="a-desc">雙鑽石模型 + 5 個階段 + AI 協作角色</span>
+          <span class="a-step">第 1 部分</span>
+          <span class="a-time">研究方法取向<br>質化 vs 量化</span>
+          <span class="a-desc">釐清訪談在研究地圖裡的位置，什麼時候該用質化、什麼時候該用量化。</span>
         </div>
         <div class="agenda-card">
-          <span class="a-step">第 2 小時</span>
-          <span class="a-time">Workshop 討論（上）</span>
-          <span class="a-desc">同理、定義、發想實作演練</span>
+          <span class="a-step">第 2 部分</span>
+          <span class="a-time">訪綱製作<br>四段結構與提問</span>
+          <span class="a-desc">訂研究目標、篩選受訪者、搭出四段訪綱，並避開 6 個提問錯誤。</span>
         </div>
         <div class="agenda-card">
-          <span class="a-step">第 3 小時</span>
-          <span class="a-time">Workshop 討論（下）</span>
-          <span class="a-desc">原型產出、團隊發表與點評</span>
+          <span class="a-step">第 3 部分</span>
+          <span class="a-time">AI 協作<br>與課堂產出</span>
+          <span class="a-desc">用 AI 生成訪綱、檢查問題、模擬預訪，並整理訪談後的逐字稿。</span>
         </div>
       </div>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 3 · 什麼是設計思考 -->
+  <!-- ─── Slide 3 · 為什麼做使用者訪談 ─────── -->
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">03 / 15</span>
+      <span class="slide-num">03 / 18</span>
     </div>
     <div class="slide-body">
-      <p class="overline">Design Thinking</p>
-      <h1>什麼是設計思考？</h1>
-      <div class="def-box">
-        <p>一套「以人為本」的解決問題方法論，核心在於透過<strong>同理心</strong>深入理解需求，並透過<strong>反覆實驗</strong>找到解答。</p>
-      </div>
-      <div class="thinking-grid">
-        <div class="thinking-card">
-          <span class="thinking-tag">Key 1</span>
-          <div class="thinking-title">非線性流程</div>
-          <div class="thinking-desc">可以隨時跳回前一步，不是做完 1 才能做 2。</div>
-        </div>
-        <div class="thinking-card">
-          <span class="thinking-tag">Key 2</span>
-          <div class="thinking-title">擁抱失敗</div>
-          <div class="thinking-desc">快速失敗（Fail Fast），是為了更便宜地找到正確路徑。</div>
-        </div>
-        <div class="thinking-card">
-          <span class="thinking-tag">Key 3</span>
-          <div class="thinking-title">問題導向</div>
-          <div class="thinking-desc">不要先想「做什麼產品」，要先想「解決什麼問題」。</div>
-        </div>
-      </div>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 4 · 雙鑽石模型 -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">04 / 15</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Double Diamond</p>
-      <h1>雙鑽石模型</h1>
-      <h2>發散與收斂的節奏感</h2>
-      <div class="diamond-row">
-        <div class="diamond-col">
-          <div class="diamond-col-title">第一顆鑽石：做正確的事</div>
-          <div class="diamond-phase">
-            <span class="phase-badge expand">發散</span>
-            <div class="phase-content">
-              <span class="phase-name">Discover 發現</span>
-              <span class="phase-desc">走入現場，觀察使用者（利用 Persona 模擬情境）</span>
-            </div>
-          </div>
-          <div class="diamond-phase">
-            <span class="phase-badge converge">收斂</span>
-            <div class="phase-content">
-              <span class="phase-name">Define 定義</span>
-              <span class="phase-desc">找出核心痛點，產出 HMW（How Might We）</span>
-            </div>
-          </div>
-        </div>
-        <div class="diamond-col">
-          <div class="diamond-col-title">第二顆鑽石：把事做正確</div>
-          <div class="diamond-phase">
-            <span class="phase-badge expand">發散</span>
-            <div class="phase-content">
-              <span class="phase-name">Develop 發展</span>
-              <span class="phase-desc">針對問題發散各種解決方案</span>
-            </div>
-          </div>
-          <div class="diamond-phase">
-            <span class="phase-badge converge">收斂</span>
-            <div class="phase-content">
-              <span class="phase-name">Deliver 交付</span>
-              <span class="phase-desc">轉化為 Functional Map，產出原型</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="quote-bar">「大部分的專案失敗，是因為他們在還沒搞清楚第一顆鑽石時，就急著衝進第二顆鑽石。」</div>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 5 · 設計思考五階段 -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">05 / 15</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Design Thinking</p>
-      <h1>設計思考五階段</h1>
-      <h2>以人為本的問題解決框架</h2>
-      <ul class="blist">
-        <li data-n="01">同理 Empathize</li>
-        <li data-n="02">定義 Define</li>
-        <li data-n="03">發想 Ideate</li>
-        <li data-n="04">原型 Prototype</li>
-        <li data-n="05">測試 Test</li>
+      <p class="overline">Why Interview</p>
+      <h1>為什麼做使用者訪談？</h1>
+      <h2>探索階段（Discovery）最常用的態度型研究，目的是建立同理心。</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01">了解使用者<span class="hl">是誰</span>、他們的經驗與生活情境</li>
+        <li data-n="02">挖掘他們的<span class="hl">痛點、動機與心智模型</span></li>
+        <li data-n="03">產出可轉化為 Persona、同理心地圖、使用者旅程的素材</li>
+        <li data-n="04">訪談是<span class="hl">研究</span>，不是聊天，也不是推銷</li>
       </ul>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 6 · Stage 1 Empathize -->
+  <!-- ─── Slide 4 · 訪談 vs 可用性測試 ─────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">04 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Comparison</p>
+      <h1>訪談 vs 可用性測試</h1>
+      <h2>兩者常被混淆，但目的與本質完全不同。</h2>
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>比較維度</th>
+            <th>使用者訪談</th>
+            <th>可用性測試</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>目的</td>
+            <td>產生對使用者的新知識與同理心</td>
+            <td>評估設計好不好用、哪裡卡住</td>
+          </tr>
+          <tr>
+            <td>研究類型</td>
+            <td>態度型：問想法、感受、回憶</td>
+            <td>行為型：直接觀察操作</td>
+          </tr>
+          <tr>
+            <td>有無設計產物</td>
+            <td>沒有，不看也不試任何設計</td>
+            <td>有，受試者實際操作原型／產品</td>
+          </tr>
+          <tr>
+            <td>設計思考階段</td>
+            <td>同理（Empathize）／探索</td>
+            <td>測試（Test）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 5 · 質化 vs 量化 ──────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">05 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Research Methods</p>
+      <h1>質化 vs 量化研究</h1>
+      <h2>訪談是質化方法的一種；先看懂兩者分工，才知道何時該用誰。</h2>
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>面向</th>
+            <th>質化研究 Qualitative</th>
+            <th>量化研究 Quantitative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>核心問題</td>
+            <td>為什麼？如何修？</td>
+            <td>有多少？多嚴重？</td>
+          </tr>
+          <tr>
+            <td>樣本數</td>
+            <td>少量（約 5–8 人）</td>
+            <td>大量（通常 30+ 人）</td>
+          </tr>
+          <tr>
+            <td>角色</td>
+            <td>形成性，引導設計方向</td>
+            <td>總結性／基準測試，評估成效</td>
+          </tr>
+          <tr>
+            <td>產出</td>
+            <td>痛點、洞察（依嚴重度排序）</td>
+            <td>統計指標、顯著性、誤差範圍</td>
+          </tr>
+          <tr>
+            <td>代表方法</td>
+            <td>使用者訪談、可用性測試</td>
+            <td>大樣本問卷、A/B 測試</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 6 · 三角驗證 ──────────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">06 / 18</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Triangulation</span>
+      <h1>三角驗證</h1>
+      <div class="divider"></div>
+      <h2>最厲害的洞察，來自質化與量化互補。</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>用<span class="hl">質化</span>找出問題的根源（為什麼會發生）</li>
+        <li>用<span class="hl">量化</span>驗證問題的影響範圍（有多少人受影響）</li>
+        <li><span class="hl">避免單一方法的盲點</span>，讓結論更可信</li>
+      </ul>
+      <p class="note" data-modal="m-triangulation"><b>備註｜三角驗證（Triangulation）</b>　源自航海定位：要靠至少三個方向的地標交叉比對才能精準定位。研究上指用多種方法、多位研究員或多種資料源交叉驗證同一問題，避免「瞎子摸象」的單一視角盲點。<span class="more">看詳細</span></p>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 7 · 訪談 6 步驟 ───────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">07 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Process</p>
+      <h1>使用者訪談的 6 步驟</h1>
+      <ul class="blist compact" style="margin-top:18px">
+        <li data-n="01"><span class="hl">明確研究目標</span>：訪談是研究，目標要具體可回答</li>
+        <li data-n="02"><span class="hl">準備訪綱</span>：幾個開放式問題＋嵌套追問</li>
+        <li data-n="03"><span class="hl">進行預訪</span>：先找 1–2 人測試訪綱</li>
+        <li data-n="04"><span class="hl">輕鬆開場</span>：說明目的、放慢語速、從簡單問題開始</li>
+        <li data-n="05"><span class="hl">建立信賴</span>：用點頭、回應讓受試者放鬆</li>
+        <li data-n="06"><span class="hl">追問與探底</span>：在關鍵處挖掘深層動機</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 8 · 步驟一 訂目標 ─────────── -->
   <div class="slide dark">
     <div class="bg-n">1</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">06 / 15</span>
+      <span class="slide-num">08 / 18</span>
     </div>
     <div class="slide-body">
-      <span class="layer-badge">Stage 1 · Empathize</span>
-      <h1>同理</h1>
+      <span class="layer-badge">Step 1 · Goals</span>
+      <h1>先訂研究目標</h1>
       <div class="divider"></div>
-      <h2>站在使用者的鞋子裡</h2>
-      <ul class="blist plain">
-        <li>使用者訪談 User Interview</li>
-        <li>觀察法 Observation</li>
-        <li>同理心矩陣 Empathy Map</li>
-        <li><span class="hl">目標：找出真正的問題，而非表面症狀</span></li>
+      <h2>把模糊的好奇心，收斂成具體、可被回答的問題。</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>太寬：「想了解使用者」 → 問不出可行動的洞察</li>
+        <li>具體：「<span class="hl">是什麼原因讓使用者放棄這個產品？</span>」</li>
+        <li>研究目標會直接決定你要問哪些問題</li>
       </ul>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 7 · Stage 2 Define -->
+  <!-- ─── Slide 9 · 篩選受訪者 ────────────── -->
   <div class="slide">
     <div class="bg-n">2</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">07 / 15</span>
+      <span class="slide-num">09 / 18</span>
     </div>
     <div class="slide-body">
-      <span class="layer-badge">Stage 2 · Define</span>
-      <h1>定義</h1>
+      <span class="layer-badge">Step 2 · Screener</span>
+      <h1>篩選對的受訪者</h1>
       <div class="divider"></div>
-      <h2>將雜亂的資訊結構化，找出核心痛點</h2>
-      <ul class="blist plain">
-        <li><span class="annotated" data-modal="hmw">HMW 問題陳述（How Might We？）</span></li>
-        <li>使用者旅程圖 User Journey</li>
-        <li><span class="hl">目標：清楚說明「我們要為誰解決什麼問題」</span></li>
+      <h2>找錯人，再好的訪綱也問不出有用的東西。</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>用<span class="hl">篩選問卷（Screener）</span>確認是否符合條件</li>
+        <li>聚焦<span class="hl">過去行為</span>，而非「未來會不會用」</li>
+        <li>把條件「埋」進多選清單，避免受試者猜答案</li>
+        <li>排除 UX／行銷／IT 與專業測試員，減少偏差</li>
       </ul>
-      <div class="hmw-example">
-        <div class="hmw-block">
-          <span class="hmw-tag complaint">抱怨</span>
-          <span class="hmw-text">「這咖啡好難喝！」</span>
-        </div>
-        <span class="hmw-arrow">→</span>
-        <div class="hmw-block">
-          <span class="hmw-tag opportunity">HMW 機會</span>
-          <span class="hmw-text">「我們可以如何提供更多元的口味選擇？」</span>
-        </div>
-      </div>
+      <p class="note" data-modal="m-screener"><b>備註｜篩選問卷怎麼做</b>　像漏斗：行業排他 → 核心行為 → 細節 → 人口統計 → 聯絡。用行為頻率題、別露底牌、加簡答題防機器人。<span class="more">看詳細</span></p>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 8 · Stage 3 Ideate -->
+  <!-- ─── Slide 10 · 該訪幾個人 ───────────── -->
   <div class="slide dark">
     <div class="bg-n">3</div>
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">08 / 15</span>
+      <span class="slide-num">10 / 18</span>
     </div>
     <div class="slide-body">
-      <span class="layer-badge">Stage 3 · Ideate</span>
-      <h1>發想</h1>
+      <span class="layer-badge">Step 3 · Sample Size</span>
+      <h1>該訪幾個人？</h1>
       <div class="divider"></div>
-      <h2>推翻直覺，尋找「不合理但有效」的點子</h2>
-      <ul class="blist plain">
-        <li>腦力激盪 Brainstorming</li>
-        <li><span class="annotated" data-modal="crazy8">Crazy 8 快速草圖</span></li>
-        <li>心智圖 Mind Map</li>
-        <li><span class="hl">目標：產出多元解法，再篩選最有潛力的方向</span></li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 9 · Stage 4 Prototype -->
-  <div class="slide">
-    <div class="bg-n">4</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">09 / 15</span>
-    </div>
-    <div class="slide-body">
-      <span class="layer-badge">Stage 4 · Prototype</span>
-      <h1>原型</h1>
-      <div class="divider"></div>
-      <h2>將想法具現化，快速製作可測試的版本</h2>
-      <ul class="blist plain">
-        <li>Functional Map 功能地圖</li>
-        <li>低保真 Wireframe</li>
-        <li>Figma 互動稿</li>
-        <li><span class="hl">目標：用最低成本驗證設計假設</span></li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 10 · Stage 5 Test -->
-  <div class="slide dark">
-    <div class="bg-n">5</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">10 / 15</span>
-    </div>
-    <div class="slide-body">
-      <span class="layer-badge">Stage 5 · Test</span>
-      <h1>測試</h1>
-      <div class="divider"></div>
-      <h2>驗證假設，從真實使用者身上學習</h2>
-      <ul class="blist plain">
-        <li>使用者測試 Usability Testing</li>
-        <li>AI 壓力測試</li>
-        <li>觀察、記錄與迭代改進</li>
-        <li><span class="hl">目標：回到同理，不斷優化</span></li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 11 · AI 的三種角色 -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">11 / 15</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">AI × Design Thinking</p>
-      <h1>AI 的三種角色</h1>
-      <h2>把 AI 視為「團隊中的第 N 個成員」</h2>
-      <div class="role-grid">
-        <div class="role-card">
-          <div class="role-icon">🔍</div>
-          <span class="role-en">Researcher</span>
-          <div class="role-zh">研究員</div>
-          <div class="role-desc">從訪談筆記中快速分類痛點，整理 HMW 清單</div>
-        </div>
-        <div class="role-card">
-          <div class="role-icon">💡</div>
-          <span class="role-en">Catalyst</span>
-          <div class="role-zh">創意催化劑</div>
-          <div class="role-desc">當團隊卡住時，提供 20 個「壞點子」打破僵局</div>
-        </div>
-        <div class="role-card">
-          <div class="role-icon">😈</div>
-          <span class="role-en">Adversary</span>
-          <div class="role-zh">魔鬼代言人</div>
-          <div class="role-desc">扮演最機車的使用者，挑戰你們的功能地圖邏輯</div>
-        </div>
+      <h2>由「飽和點」決定——再訪也問不出新主題時就可收工。</h2>
+      <div class="stat-row">
+        <div class="stat"><b>6–12</b><span>小範圍專題通常<br>能抓到多數核心主題</span></div>
+        <div class="stat"><b>5–6</b><span>先從這裡開始<br>邊訪邊分析</span></div>
+        <div class="stat"><b>8–12</b><span>需要對主管報數字時<br>給一個範圍</span></div>
       </div>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 12 · 討論守則 -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">12 / 15</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Workshop Rules</p>
-      <h1>討論守則</h1>
-      <h2>讓討論發揮最大效益的四條規則</h2>
-      <ul class="rule-list">
-        <li>
-          <span class="rule-num">01</span>
-          <div class="rule-content">
-            <span class="rule-title">暫時放下評判</span>
-            <span class="rule-sub">發散階段不說「這不可能」、「這沒用」</span>
-          </div>
-        </li>
-        <li>
-          <span class="rule-num">02</span>
-          <div class="rule-content">
-            <span class="rule-title">建立在他人想法之上</span>
-            <span class="rule-sub">說「對，而且⋯（Yes, and...）」而不是「但是⋯（But...）」</span>
-          </div>
-        </li>
-        <li>
-          <span class="rule-num">03</span>
-          <div class="rule-content">
-            <span class="rule-title">AI 不是真理</span>
-            <span class="rule-sub">AI 提供的只是「假設」，最終的判斷權在團隊手中</span>
-          </div>
-        </li>
-        <li>
-          <span class="rule-num">04</span>
-          <div class="rule-content">
-            <span class="rule-title">視覺化思考</span>
-            <span class="rule-sub">善用便利貼與草圖，不要只用說的</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 13 · User Flow 與 Wireframe 入門 -->
+  <!-- ─── Slide 11 · 訪綱四段結構 ─────────── -->
   <div class="slide">
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">13 / 15</span>
+      <span class="slide-num">11 / 18</span>
     </div>
     <div class="slide-body">
-      <p class="overline">Workshop Prep</p>
-      <h1>User Flow 與<br>Wireframe 入門</h1>
-      <div class="divider"></div>
-      <h2>設計前先規劃路徑</h2>
-      <ul class="blist plain">
-        <li>User Flow：使用者完成一個任務的完整路徑</li>
-        <li>Wireframe：頁面版面的骨架草圖</li>
-        <li>工具：Figma / FigJam / 紙筆皆可</li>
-        <li><span class="hl">本單元實作：選一個功能，畫出 Flow 與 3 個畫面</span></li>
+      <p class="overline">Interview Guide</p>
+      <h1>訪綱的四段結構</h1>
+      <h2>一份 45–60 分鐘訪綱的標準骨架。</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="暖身 5'"><span class="hl">開場與破冰</span>：說明目的、徵求錄音同意、從簡單生活問題開始</li>
+        <li data-n="核心 20'"><span class="hl">核心情境探索</span>：引導回憶「最近一次」的具體經驗</li>
+        <li data-n="深入 25'"><span class="hl">深入動機探底</span>：挖掘價值觀、心智模型與情感</li>
+        <li data-n="收尾 5'"><span class="hl">結尾與致謝</span>：「有沒有我沒問到、但你覺得重要的事？」</li>
       </ul>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
-  <!-- Slide 14 · 課堂實作 -->
+  <!-- ─── Slide 12 · 開放式問題 ───────────── -->
   <div class="slide dark">
     <div class="slide-head">
       <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">14 / 15</span>
+      <span class="slide-num">12 / 18</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">Open Questions</span>
+      <h1>好問題怎麼寫？</h1>
+      <div class="divider"></div>
+      <h2>用開放式問句喚起「具體事件」，而不是抽象通則。</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li>「跟我聊聊你<span class="hl">上次</span>⋯⋯的經驗」</li>
+        <li>「<span class="hl">帶我走一遍</span>你平常的一天」</li>
+        <li>追問：「當時是什麼原因？」「後來怎麼解決？」</li>
+        <li>探底：「可以多聊聊那部分嗎？」「為什麼那對你很重要？」</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 13 · 6 個提問錯誤 ─────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">13 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Common Mistakes</p>
+      <h1>撰寫問題的 6 個常見錯誤</h1>
+      <ul class="blist compact" style="margin-top:18px">
+        <li data-n="01"><span class="hl">封閉式開場</span>：把事實題留到 Screener，開場用開放式</li>
+        <li data-n="02"><span class="hl">只問通常／典型</span>：改問具體、特定的實例</li>
+        <li data-n="03"><span class="hl">假設性問題</span>：問過去真實經驗，別問想像中的未來</li>
+        <li data-n="04"><span class="hl">加詮釋的誘導</span>：用受試者自己的詞中立追問</li>
+        <li data-n="05"><span class="hl">複合式問題</span>：一次只問一個問題</li>
+        <li data-n="06"><span class="hl">模糊詞彙</span>：把「常」「安全」換成可量化的描述</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 14 · 現場技巧 ─────────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">14 / 18</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">On Site</span>
+      <h1>訪談現場技巧</h1>
+      <div class="divider"></div>
+      <h2>訪綱寫得好，還要現場帶得好。</h2>
+      <ul class="blist plain" style="margin-top:28px">
+        <li><span class="hl">多聽少說</span>：讓受試者說 80%，你只說 20%</li>
+        <li><span class="hl">擁抱沉默</span>：停頓時別急著接話，給他組織記憶的時間</li>
+        <li><span class="hl">建立信賴</span>：點頭、眼神、「我理解」，但保持客觀</li>
+        <li><span class="hl">中立追問</span>：別把自己的假設塞進問題裡</li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 15 · 預訪 Pilot ───────────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">15 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">Pilot</p>
+      <h1>正式訪談前，先預訪</h1>
+      <h2>再好的訪綱，第一次訪完往往都需要微調。</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01">找 1–2 位朋友或目標使用者測試訪綱</li>
+        <li data-n="02">檢查有沒有<span class="hl">聽不懂或被誤解</span>的問題</li>
+        <li data-n="03">確認問題順序是否<span class="hl">自然流暢</span></li>
+        <li data-n="04">可微調問題，但<span class="hl">不要中途改研究目標</span></li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 16 · AI 協作（訪談前）─────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">16 / 18</span>
+    </div>
+    <div class="slide-body">
+      <span class="layer-badge">AI · Before</span>
+      <h1>AI 協作：訪談前</h1>
+      <div class="divider"></div>
+      <h2>AI 是訪綱的協作者，但要訪誰、怎麼追問仍由你判斷。</h2>
+      <ul class="blist plain" style="margin-top:24px">
+        <li><span class="hl">生成訪綱草稿</span>：依研究目標與受訪者條件產出四段問題</li>
+        <li><span class="hl">檢查問題踩雷</span>：對照 6 個常見錯誤逐題檢查與改寫</li>
+        <li><span class="hl">模擬受訪者預訪</span>：讓 AI 扮演受訪者，預演訪談節奏</li>
+      </ul>
+      <a class="ext-link" href="interview-prompt.html" target="_blank" rel="noopener noreferrer">AI 協作提示詞流程</a>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 17 · AI 協作（訪談後）─────── -->
+  <div class="slide">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">17 / 18</span>
+    </div>
+    <div class="slide-body">
+      <p class="overline">AI · After</p>
+      <h1>AI 協作：訪談後</h1>
+      <h2>把逐字稿交給 AI 加速整理，但結論仍要回到資料本身。</h2>
+      <ul class="blist" style="margin-top:8px">
+        <li data-n="01"><span class="hl">萃取痛點</span>：逐位整理痛點、需求與動機，標註出自誰</li>
+        <li data-n="02"><span class="hl">主題分群</span>：把相似痛點歸納成 3–5 個 Affinity 主題</li>
+        <li data-n="03"><span class="hl">辨識高頻訊號</span>：哪些主題重複出現、哪些只出現一次</li>
+        <li data-n="04"><span class="hl">產出洞察</span>：整理成「使用者需求陳述」，不腦補、資料不足就說明</li>
+      </ul>
+      <p class="note" data-modal="m-affinity"><b>備註｜Affinity 分群（親和圖法）</b>　質化分析的黃金標準。做法是自下而上、不預設框架：把「講到類似事情、情緒或行為相近」的便利貼聚成群，再為每群命名（如「對付費流程感到焦慮」）。是從現象走向「定義問題」的橋樑，常作為 Persona 與旅程地圖的前置步驟。<span class="more">看詳細</span></p>
+      <a class="ext-link" href="interview-prompt.html" target="_blank" rel="noopener noreferrer">AI 協作提示詞流程</a>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <!-- ─── Slide 18 · 本單元產出 ───────────── -->
+  <div class="slide dark">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 02</span>
+      <span class="slide-num">18 / 18</span>
     </div>
     <div class="slide-body">
       <p class="overline">Workshop</p>
-      <h1>課堂實作</h1>
-      <h2>設計思考 × User Flow</h2>
-      <ul class="blist plain">
-        <li>選定一個生活場景（訂餐、報名、購票⋯）</li>
-        <li>用 HMW 陳述使用者問題</li>
-        <li>畫出 User Flow，標出主要決策點</li>
-        <li>讓 AI 扮演魔鬼代言人，挑戰你的設計</li>
-      </ul>
-      <a class="ext-link" href="prompt-guide.html" target="_blank" rel="noopener noreferrer">設計思考提示詞協作指南</a>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 15 · 討論與點評 -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 02</span>
-      <span class="slide-num">15 / 15</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Review</p>
-      <h1>討論與點評</h1>
-      <h2>分享你的 Flow 與設計思考過程</h2>
-      <ul class="blist">
-        <li data-n="01">說明你選的場景與使用者問題</li>
-        <li data-n="02">展示你的 User Flow</li>
-        <li data-n="03">AI 幫了什麼？哪裡還需要人的判斷？</li>
+      <h1>本單元產出<br>做出一份可執行訪綱</h1>
+      <div class="divider"></div>
+      <h2>針對你的自選專題，把訪談「準備」到可以開訪的程度。</h2>
+      <ul class="blist" style="margin-top:24px">
+        <li data-n="01"><span class="hl">研究目標 + Screener</span>：寫出 2 個具體研究目標，及篩選受訪者的條件清單。</li>
+        <li data-n="02"><span class="hl">四段訪綱</span>：完成暖身、核心情境、深入探底、結尾四段問題，並附追問。</li>
+        <li data-n="03"><span class="hl">AI 協作紀錄</span>：附上用 AI 生成／檢查訪綱的 Prompt，並說明你如何修改初版。</li>
       </ul>
     </div>
     <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
+      <span class="course-label">使用者研究：使用者訪談與訪綱製作 × AI 協作</span>
       <div class="dots"></div>
     </div>
   </div>
 
 </div><!-- /#deck -->
 
-<!-- Modal -->
-<div id="modal-overlay">
-  <div id="modal" role="dialog" aria-modal="true">
-    <button id="modal-close" aria-label="關閉">✕</button>
-    <div id="modal-eyebrow"></div>
-    <div id="modal-title"></div>
-    <div id="modal-body"></div>
-  </div>
-</div>
-
+<!-- Controls -->
 <div id="ctrls">
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
 </div>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" aria-label="關閉">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- 備註詳細內容（隱藏，供彈窗載入） -->
+<div id="m-affinity" hidden>
+  <div class="m-tag">名詞解釋</div>
+  <h3>Affinity 分群（親和圖法）</h3>
+  <p>正式名稱是<strong>親和圖法（Affinity Diagramming）</strong>，實務上常直譯為「親和分群」。它是一種把大量混亂的資訊，依照<strong>親疏關係（相似性）</strong>進行分類歸納的方法，也是質化資料分析的黃金標準工具。想像你訪談完手上有 200 張寫滿用戶碎碎念的便利貼（實體或 Miro／FigJam）——親和圖法就是把它整理成洞察的解藥。它的運作分三步：</p>
+  <ol>
+    <li><strong>自下而上（Bottom-Up）歸納：</strong>不預設任何框架或既有分類。</li>
+    <li><strong>尋找親和力（Affinity）：</strong>把「講到類似事情、有相似情緒、或行為相近」的便利貼移到同一區塊。</li>
+    <li><strong>命名群組（Labeling）：</strong>當便利貼自然聚成幾個「聚落」後，為每個聚落起一個標題，例如<em>對付費流程感到焦慮</em>、<em>希望有深色模式</em>。</li>
+  </ol>
+  <p>在 UX 研究中，它主要用於<strong>分析訪談與易用性測試資料</strong>、<strong>腦力激盪後的點子分類</strong>，以及<strong>定義問題</strong>——它是從「觀察到的現象（Data）」走向「定義真正的問題（Problem）」的核心橋樑，常作為建立 Persona 或使用者旅程地圖的前置步驟。</p>
+</div>
+
+<div id="m-triangulation" hidden>
+  <div class="m-tag">名詞解釋</div>
+  <h3>三角驗證（Triangulation）</h3>
+  <p>指「從多個不同的角度或方法研究同一個問題，以提高結果的準確性與可信度」。概念源自<strong>航海定位</strong>：要確定船在海上的精確位置，不能只靠單一地標，而要用至少三個不同方向的地標交叉比對。任何單一研究方法都有盲點，三角驗證能避免「瞎子摸象」的窘境。社會科學家 Norman Denzin 提出四種經典類型：</p>
+  <ol>
+    <li><strong>方法三角驗證（最常見）：</strong>結合不同研究方法，最經典是質化＋量化。例如量化顯示購物車流失率高達 70%，訪談則發現是「結帳時才看到高額運費、感覺被欺騙」——既知道現象的嚴重程度，又知道背後的原因。</li>
+    <li><strong>研究者三角驗證：</strong>讓多位研究員各自分析同一份資料（例如各自做親和分群），再交叉比對找出重疊一致的洞察，剔除過於主觀的見解，抵銷評估者效應。</li>
+    <li><strong>資料源三角驗證：</strong>在不同時間、地點或對象收集資料。例如研究數位學習平台時，不只訪談學生（使用者），也訪談老師（內容提供者）與家長（付款者），湊齊全貌。</li>
+    <li><strong>理論三角驗證：</strong>用不同理論或框架解讀同一組資料，例如同時從「認知心理學」與「行為經濟學」兩種視角剖析用戶行為。</li>
+  </ol>
+  <p>它的價值在於：<strong>提高可信度</strong>（不同方法、不同人都指向同一結論時，說服力大增）、<strong>消除偏見</strong>，以及看清問題的 3D 全貌，而不是 2D 的斷章取義。</p>
+</div>
+
+<div id="m-screener" hidden>
+  <div class="m-tag">名詞解釋</div>
+  <h3>篩選問卷（Screener）怎麼做？</h3>
+  <p>目的是為質化訪談「精準找到對的受訪者、淘汰不符合條件的人」。一份好問卷要像<strong>漏斗</strong>：把最能刷掉人的問題放最前面，由廣入深。</p>
+  <ol>
+    <li><strong>定義目標輪廓：</strong>列出納入條件（如「過去一個月用 App 買過機票」）與排除條件（如同業 UX／PM／該產業，帶專業偏見）。</li>
+    <li><strong>倒金字塔排序：</strong>行業排他 → 核心行為 → 細節確認 → 人口統計 → 聯絡與時間。</li>
+    <li><strong>用行為頻率題：</strong>別問「你常網購嗎？」，改問「過去 3 個月下單幾次？（0／1–2／3–5／5+）」。</li>
+    <li><strong>別露底牌：</strong>把篩選條件藏進複選題，避免受訪者猜到答案而說謊。</li>
+    <li><strong>防機器人：</strong>加 1–2 題簡答題，AI 腔／複製貼上／寫「無」者一律淘汰。</li>
+  </ol>
+  <p><strong>最後一步：</strong>正式邀訪前先撥約 5 分鐘電話或簡訊二次確認，確保對方不是機器人、口條也適合訪談。</p>
+</div>
+
 <script>
 (function () {
   const slides = Array.from(document.querySelectorAll('.slide'));
@@ -655,6 +1146,14 @@ h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--mute
   const prog   = document.getElementById('prog');
   const dotContainers = Array.from(document.querySelectorAll('.dots'));
   let cur = 0;
+
+  // Auto-number every slide (NN / total) so numbers stay correct when slides are added/removed
+  slides.forEach((s, i) => {
+    const num = s.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
+  // Build dots in every footer
   dotContainers.forEach(container => {
     slides.forEach((_, i) => {
       const d = document.createElement('span');
@@ -663,82 +1162,64 @@ h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--mute
       container.appendChild(d);
     });
   });
+
   function go(n) {
     slides[cur].classList.remove('active');
     cur = (n + total) % total;
     slides[cur].classList.add('active');
+
+    // Progress bar
     prog.style.width = ((cur + 1) / total * 100) + '%';
+
+    // Nav buttons turn white on dark slides
+    document.getElementById('ctrls').classList.toggle('on-dark', slides[cur].classList.contains('dark'));
+
+    // Dots
     dotContainers.forEach(container => {
       Array.from(container.children).forEach((d, i) => {
         d.classList.toggle('on', i === cur);
       });
     });
   }
+
   document.getElementById('prev').addEventListener('click', () => go(cur - 1));
   document.getElementById('next').addEventListener('click', () => go(cur + 1));
+
   document.addEventListener('keydown', e => {
+    // 彈窗開啟時，不要用方向鍵翻頁
+    if (document.getElementById('modal-overlay').classList.contains('open')) return;
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'ArrowLeft')              { e.preventDefault(); go(cur - 1); }
   });
+
+  // Init progress bar
   prog.style.width = (1 / total * 100) + '%';
+  document.getElementById('ctrls').classList.toggle('on-dark', slides[0].classList.contains('dark'));
 })();
 
-// Modal
+// ── 備註彈窗 ───────────────────────────────
 (function () {
-  const overlay  = document.getElementById('modal-overlay');
-  const closeBtn = document.getElementById('modal-close');
-  const elEyebrow = document.getElementById('modal-eyebrow');
-  const elTitle   = document.getElementById('modal-title');
-  const elBody    = document.getElementById('modal-body');
+  const overlay = document.getElementById('modal-overlay');
+  const body    = document.getElementById('modal-body');
 
-  const contents = {
-    crazy8: {
-      eyebrow: 'Ideate Tool · Crazy 8s',
-      title:   'Crazy 8s<br>快速草圖法',
-      body: `
-        <p>把一張紙對折三次，展開後得到 <strong>8 個方格</strong>。每個方格限時 <strong>1 分鐘</strong>，強迫自己畫出 8 個不同的點子——共 8 分鐘。</p>
-        <ul class="modal-steps">
-          <li><span class="modal-step-n">目的</span><span class="modal-step-text">打破完美主義。速度逼得你來不及自我審查，<strong>壞點子也要畫出來</strong>。</span></li>
-          <li><span class="modal-step-n">規則</span><span class="modal-step-text">每格只有 1 分鐘；時間到強制換格；<strong>不能重複前一格的想法</strong>。</span></li>
-          <li><span class="modal-step-n">產出</span><span class="modal-step-text">8 張草圖完成後，小組各自分享，從中<strong>票選 1–2 個最有潛力的方向</strong>繼續深化。</span></li>
-          <li><span class="modal-step-n">AI 應用</span><span class="modal-step-text">卡住時，請 AI 擔任「創意催化劑」：<strong>「給我 8 個解決這個問題的瘋狂點子」</strong>，用來打破僵局。</span></li>
-        </ul>`
-    },
-    hmw: {
-      eyebrow: 'Define Tool · HMW',
-      title:   'How Might We？<br>我們可以如何⋯',
-      body: `
-        <p>HMW 是把「抱怨或問題」重新框架成「設計機會」的句型，幫助團隊從<strong>批評者的角度</strong>轉換到<strong>解題者的角度</strong>。</p>
-        <ul class="modal-steps">
-          <li><span class="modal-step-n">句型</span><span class="modal-step-text"><strong>「我們可以如何（為 ___）讓 ___ 變得更 ___？」</strong></span></li>
-          <li><span class="modal-step-n">原則</span><span class="modal-step-text">範圍不能太大（「改善世界」），也不能太小（「換一個按鈕顏色」）——<strong>剛好能激發多個解法</strong>最理想。</span></li>
-          <li><span class="modal-step-n">範例</span><span class="modal-step-text">抱怨：「這咖啡好難喝！」→ HMW：<strong>「我們可以如何提供更多元的口味選擇？」</strong></span></li>
-          <li><span class="modal-step-n">AI 應用</span><span class="modal-step-text">把訪談筆記丟給 AI，請它擔任「研究員」：<strong>「從這段逐字稿提取 5 個 HMW 問題陳述」</strong>。</span></li>
-        </ul>`
-    }
-  };
-
-  function openModal(key) {
-    const c = contents[key];
-    if (!c) return;
-    elEyebrow.innerHTML = c.eyebrow;
-    elTitle.innerHTML   = c.title;
-    elBody.innerHTML    = c.body;
+  function open(id) {
+    const src = document.getElementById(id);
+    if (!src) return;
+    body.innerHTML = src.innerHTML;
     overlay.classList.add('open');
-    closeBtn.focus();
   }
-  function closeModal() {
+  function close() {
     overlay.classList.remove('open');
+    body.innerHTML = '';
   }
 
-  document.querySelectorAll('[data-modal]').forEach(el => {
-    el.addEventListener('click', e => { e.stopPropagation(); openModal(el.dataset.modal); });
+  document.querySelectorAll('.note[data-modal]').forEach(n => {
+    n.addEventListener('click', () => open(n.dataset.modal));
   });
-
-  closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.querySelector('.modal-close').addEventListener('click', close);
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    if (e.key === 'Escape' && overlay.classList.contains('open')) close();
   });
 })();
 </script>

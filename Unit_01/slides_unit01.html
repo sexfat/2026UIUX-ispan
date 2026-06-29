@@ -430,6 +430,8 @@ h2 {
 }
 #ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
 #ctrls button:active { transform: scale(.94); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+#ctrls.on-dark button:hover { background: rgba(255,255,255,.28); }
 
 /* ── Comparison table ───────────────────── */
 .cmp-table {
@@ -1105,6 +1107,9 @@ h2 {
     // Progress bar
     prog.style.width = ((cur + 1) / total * 100) + '%';
 
+    // Nav buttons turn white on dark slides
+    document.getElementById('ctrls').classList.toggle('on-dark', slides[cur].classList.contains('dark'));
+
     // Dots
     dotContainers.forEach(container => {
       Array.from(container.children).forEach((d, i) => {
@@ -1123,6 +1128,7 @@ h2 {
 
   // Init progress bar
   prog.style.width = (1 / total * 100) + '%';
+  document.getElementById('ctrls').classList.toggle('on-dark', slides[0].classList.contains('dark'));
 })();
 </script>
 </body>
