@@ -3,418 +3,813 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 03 · Figma 基礎操作與討論</title>
+<title>Unit 03 · 競品分析與 Persona</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg:      #fbfbfd;
-  --dark:    #1d1d1f;
-  --muted:   #86868b;
-  --accent:  #0066cc;
-  --accent2: #0071e3;
-  --accent3: #4094ff;
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
   --surface: #f5f5f7;
-  --card:    #e8e8ed;
-  --border:  #d2d2d7;
-  --px: clamp(48px, 7vw, 112px);
+  --card: #ffffff;
+  --border: #d2d2d7;
+  --px: clamp(44px, 7vw, 108px);
   --py: 52px;
 }
+
 html, body { height: 100%; overflow: hidden; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; }
-#prog { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); transition: width 0.55s cubic-bezier(.4,0,.2,1); z-index: 200; border-radius: 0 1px 1px 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
 #deck { position: relative; width: 100%; height: 100vh; }
-.slide { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--py) var(--px); opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s .5s; overflow: hidden; }
-.slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
-.slide-head { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.slide-foot { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.unit-pill { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 20px; }
-.slide-num { font-size: 12px; font-weight: 500; color: var(--border); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
-.course-label { font-size: 11px; color: var(--border); letter-spacing: .02em; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+}
+
+.slide-head, .slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+}
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.slide-num, .course-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.course-label { font-size: 11px; color: #a1a1a6; }
+
 .dots { display: flex; gap: 5px; align-items: center; }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: all .3s cubic-bezier(.4,0,.2,1); cursor: pointer; }
-.dot.on { background: var(--accent); width: 16px; border-radius: 2.5px; }
-.overline { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
-.divider { width: 40px; height: 3px; background: var(--accent); border-radius: 2px; margin-bottom: 26px; margin-top: 4px; }
-h1 { font-size: clamp(1.9rem, 3.8vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; color: var(--dark); }
-h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--muted); line-height: 1.65; letter-spacing: -.01em; margin-top: 14px; }
-.cover-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 28px; }
-.cover-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
-.cover-title { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -.055em; line-height: 1.04; color: var(--dark); margin-bottom: 22px; }
-.cover-sub { font-size: clamp(.9rem, 1.5vw, 1.25rem); font-weight: 400; color: var(--muted); line-height: 1.6; letter-spacing: -.01em; margin-bottom: 48px; }
-.cover-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted); }
-.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-.agenda-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
-.agenda-card { background: var(--surface); border-radius: 18px; padding: 28px 24px 32px; display: flex; flex-direction: column; gap: 10px; border: 1px solid transparent; transition: border-color .2s; }
-.agenda-card:hover { border-color: var(--border); }
-.a-step { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-.a-time { font-size: clamp(.85rem, 1.25vw, 1.1rem); font-weight: 600; color: var(--dark); line-height: 1.35; }
-.a-desc { font-size: clamp(.78rem, 1.05vw, .95rem); color: var(--muted); line-height: 1.6; margin-top: 2px; }
-.blist { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 36px; }
-.blist li { font-size: clamp(.88rem, 1.3vw, 1.15rem); color: var(--dark); line-height: 1.65; display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; background: var(--surface); border-radius: 12px; transition: background .2s; }
-.blist li:hover { background: var(--card); }
-.blist li::before { content: attr(data-n); font-size: 10px; font-weight: 700; color: var(--accent); background: rgba(0,102,204,.1); padding: 2px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: .04em; }
-.blist.plain li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: .55em; padding: 0; }
-.blist .hl { color: var(--accent); font-weight: 600; }
-.bg-n { position: absolute; right: calc(var(--px) - 16px); top: 50%; transform: translateY(-52%); font-size: clamp(140px, 21vw, 260px); font-weight: 800; color: var(--surface); letter-spacing: -.1em; line-height: 1; z-index: 0; user-select: none; pointer-events: none; }
-.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
-.layer-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; width: fit-content; }
-#ctrls { position: fixed; bottom: 28px; right: clamp(36px, 5vw, 80px); display: flex; gap: 8px; z-index: 100; }
-#ctrls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(29,29,31,.06); color: var(--dark); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; }
-#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
-#ctrls button:active { transform: scale(.94); }
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.dot.on {
+  width: 16px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.divider {
+  width: 42px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 8px 0 26px;
+}
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.12;
+  color: var(--dark);
+}
+h2 {
+  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: 0;
+  margin-top: 14px;
+  max-width: 900px;
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+.cover-title {
+  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover-sub {
+  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+.cover-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 38px;
+}
+.agenda-card, .mini-card {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 26px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.agenda-card:hover, .mini-card:hover { border-color: var(--border); }
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.a-time {
+  font-size: clamp(.88rem, 1.25vw, 1.1rem);
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.35;
+}
+.a-desc {
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-top: 30px;
+}
+.blist li {
+  font-size: clamp(.88rem, 1.25vw, 1.1rem);
+  color: var(--dark);
+  line-height: 1.62;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 13px 17px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.blist li::before {
+  content: attr(data-n);
+  min-width: 28px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.blist.plain li::before {
+  content: '';
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  padding: 0;
+  margin-top: .6em;
+}
+.blist.compact { gap: 9px; margin-top: 20px; }
+.blist.compact li { padding: 10px 14px; font-size: clamp(.8rem, 1.08vw, .98rem); }
+.hl { color: var(--accent); font-weight: 700; }
+.hl2 { color: var(--accent2); font-weight: 700; }
+
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(130px, 21vw, 250px);
+  font-weight: 800;
+  color: var(--surface);
+  letter-spacing: 0;
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  font-size: clamp(.78rem, 1.05vw, .98rem);
+}
+.cmp-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.55;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child {
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+}
+.mini-card strong {
+  color: var(--dark);
+  font-size: 1rem;
+}
+.mini-card span {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: .92rem;
+}
+.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
+.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
+
+.stat-row {
+  display: flex;
+  gap: 38px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+.stat b {
+  display: block;
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+  line-height: 1;
+  color: var(--accent);
+}
+.stat span {
+  display: block;
+  margin-top: 9px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: .92rem;
+}
+
+.note {
+  margin-top: 18px;
+  font-size: clamp(.75rem, .95vw, .88rem);
+  color: var(--muted);
+  line-height: 1.65;
+  padding: 12px 15px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+}
+
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+#ctrls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+
 .slide.dark { background: #1d1d1f; }
 .slide.dark h1 { color: #f5f5f7; }
-.slide.dark h2 { color: #86868b; }
-.slide.dark .overline { color: #4094ff; }
-.slide.dark .divider { background: #4094ff; }
-.slide.dark .layer-badge { background: rgba(64,148,255,.12); color: #4094ff; }
+.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
+.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
+.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
+.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
 .slide.dark .bg-n { color: #2c2c2e; }
-.slide.dark .blist li { background: rgba(255,255,255,.05); color: #f5f5f7; }
-.slide.dark .blist li:hover { background: rgba(255,255,255,.09); }
-.slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
-.slide.dark .slide-num { color: #48484a; }
-.slide.dark .course-label { color: #3a3a3c; }
+.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card { background: rgba(255,255,255,.055); color: #f5f5f7; }
+.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
+.slide.dark .mini-card strong { color: #f5f5f7; }
+.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
+.slide.dark .a-time { color: #f5f5f7; }
 .slide.dark .dot { background: #3a3a3c; }
-.slide.dark .dot.on { background: #4094ff; }
+.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
+
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding-top: 12px; padding-bottom: 12px; }
+  .agenda-grid, .matrix { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .cmp-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 20px; }
+  .cover-sub { margin-bottom: 22px; }
+  .bg-n { display: none; }
+  .course-label { display: none; }
+  #ctrls { bottom: 16px; right: 16px; }
+}
 </style>
 </head>
 <body>
-
 <div id="prog"></div>
 
 <div id="deck">
-
-  <!-- Slide 1 · Cover -->
   <div class="slide active">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">01 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">01 / 20</span></div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
-      <h1 class="cover-title">Figma<br>基礎操作</h1>
-      <p class="cover-sub">工具入門 · 版面結構 · 圖層管理</p>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 2 · Agenda (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">02 / 12</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Agenda</p>
-      <h1>課程大綱</h1>
-      <div class="agenda-grid">
-        <div class="agenda-card">
-          <span class="a-step">第 1 小時</span>
-          <span class="a-time">介面導覽</span>
-          <span class="a-desc">認識 Figma 工作區與核心工具</span>
-        </div>
-        <div class="agenda-card">
-          <span class="a-step">第 2 小時</span>
-          <span class="a-time">版面實作</span>
-          <span class="a-desc">Frame、圖層、對齊與間距</span>
-        </div>
-        <div class="agenda-card">
-          <span class="a-step">第 3 小時</span>
-          <span class="a-time">App 模仿</span>
-          <span class="a-desc">選一個首頁動手重畫</span>
-        </div>
+      <h1 class="cover-title">競品分析<br>與 Persona</h1>
+      <p class="cover-sub">案例搜集 × 分析框架 × 設計決策依據 × FigJam 人物誌</p>
+      <div class="cover-meta">
+        <span>07/08 全天</span><span class="meta-dot"></span><span>20 張投影片</span><span class="meta-dot"></span><span>含競品分析作業</span>
       </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 3 · Figma 工作區介紹 (light) -->
   <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">03 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">02 / 20</span></div>
     <div class="slide-body">
-      <p class="overline">Overview</p>
-      <h1>Figma 工作區介紹</h1>
-      <h2>你將花最多時間的地方</h2>
-      <ul class="blist">
-        <li data-n="01">頂部工具列 Toolbar</li>
-        <li data-n="02">左側圖層面板 Layers Panel</li>
-        <li data-n="03">中央畫布 Canvas</li>
-        <li data-n="04">右側屬性面板 Properties Panel</li>
-      </ul>
+      <p class="overline">Agenda</p>
+      <h1>今天要完成什麼？</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card"><span class="a-step">Part 1</span><span class="a-time">競品分析觀念</span><span class="a-desc">知道競品分析不是抄畫面，而是看市場選項、使用者期待與設計取捨。</span></div>
+        <div class="agenda-card"><span class="a-step">Part 2</span><span class="a-time">分析框架與表格</span><span class="a-desc">選 3-5 個產品，從功能、流程、資訊架構、UI、商業模式整理比較。</span></div>
+        <div class="agenda-card"><span class="a-step">Part 3</span><span class="a-time">Persona 與作業</span><span class="a-desc">把觀察轉成設計決策依據，再銜接 Persona 與後續 Functional Map。</span></div>
+      </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 4 · Frame (dark) -->
   <div class="slide dark">
-    <div class="bg-n">1</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">04 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">03 / 20</span></div>
     <div class="slide-body">
-      <span class="layer-badge">Tool · Frame</span>
-      <h1>Frame</h1>
+      <p class="overline">Definition</p>
+      <h1>什麼是競品分析？</h1>
       <div class="divider"></div>
-      <h2>Figma 的核心容器</h2>
+      <h2>針對市場上與你的產品「功能相似、對象相近或解決相同問題」的產品，進行系統性的觀察、比較與評估。</h2>
       <ul class="blist plain">
-        <li>等同於「畫布中的畫布」</li>
-        <li>可設定裝置尺寸（iPhone、Desktop…）</li>
-        <li>子元素受 Frame 裁切</li>
-        <li><span class="hl">所有頁面設計都從 Frame 開始</span></li>
+        <li>找出它們的<span class="hl">優勢、弱點與差異</span></li>
+        <li>理解使用者目前有哪些選擇，以及為什麼選那些產品</li>
+        <li>幫助你設計出更具競爭力、也更有根據的產品</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 5 · 圖層面板 (light) -->
+  <div class="slide">
+    <div class="bg-n">1</div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">04 / 20</span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Why 01</span>
+      <h1>了解市場現況<br>與使用者的選擇</h1>
+      <div class="divider"></div>
+      <ul class="blist plain">
+        <li>選擇你的競爭對手，釐清市場上有哪些替代方案</li>
+        <li>知道主流產品長什麼樣子、使用者已經習慣什麼</li>
+        <li>觀察使用者最常使用哪幾個產品，以及背後原因</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
   <div class="slide">
     <div class="bg-n">2</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">05 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">05 / 20</span></div>
     <div class="slide-body">
-      <span class="layer-badge">Tool · Layers</span>
-      <h1>圖層面板</h1>
+      <span class="layer-badge">Why 02</span>
+      <h1>學習優點<br>避免重複錯誤</h1>
       <div class="divider"></div>
-      <h2>設計稿的骨架</h2>
       <ul class="blist plain">
-        <li>命名規範：清楚、有意義</li>
-        <li>階層分組 Group vs Frame</li>
-        <li>物件順序影響前後關係</li>
-        <li><span class="hl">良好命名 = 未來的自己會感謝你</span></li>
+        <li>學習設計亮點與最佳實務（Best Practices）</li>
+        <li>避開已知痛點、負評設計與讓使用者卡住的流程</li>
+        <li>節省自己從錯誤中學習的時間與成本</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 6 · 基本形狀與文字 (dark) -->
   <div class="slide dark">
     <div class="bg-n">3</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">06 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">06 / 20</span></div>
     <div class="slide-body">
-      <span class="layer-badge">Tool · Shapes</span>
-      <h1>基本形狀與文字</h1>
+      <span class="layer-badge">Why 03</span>
+      <h1>找出差異化機會</h1>
       <div class="divider"></div>
-      <h2>建立介面的基礎元素</h2>
+      <h2>不是「別人有，所以我也要有」；而是看見空白、弱點與可切入的族群情境。</h2>
       <ul class="blist plain">
-        <li>矩形、橢圓、線條工具</li>
-        <li>文字工具：字體、字級、行距</li>
-        <li>Fill 與 Stroke 設定</li>
-        <li><span class="hl">快捷鍵：R 矩形、O 橢圓、T 文字</span></li>
+        <li>找出競品沒做好的地方，打造自己的優勢</li>
+        <li>聚焦某個族群、情境或流程，創造獨特價值</li>
+        <li>把差異化寫成可被討論的設計假設</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 7 · 對齊與間距 (light) -->
   <div class="slide">
     <div class="bg-n">4</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">07 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">07 / 20</span></div>
     <div class="slide-body">
-      <span class="layer-badge">Tool · Align</span>
-      <h1>對齊與間距</h1>
+      <span class="layer-badge">Why 04</span>
+      <h1>建立設計決策的依據</h1>
       <div class="divider"></div>
-      <h2>讓版面看起來「對」的關鍵</h2>
-      <ul class="blist plain">
-        <li>對齊工具：靠左、置中、靠右、靠上、置中、靠下</li>
-        <li>均等間距 Distribute</li>
-        <li>用 Tidy Up 快速整理</li>
-        <li><span class="hl">對齊是設計專業感的基礎</span></li>
-      </ul>
+      <h2>設計決策依據，是設計師做出某個選擇時，背後能說清楚的邏輯、數據或觀察。</h2>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>市場驗證</strong><span>主流產品都具備某功能時，可推測它已是使用者期待。</span></div>
+        <div class="mini-card"><strong>正反案例</strong><span>用競品優缺點說明為什麼選這個做法，而不是另一個。</span></div>
+        <div class="mini-card"><strong>提高說服力</strong><span>讓提案不是「我覺得」，而是基於觀察與研究。</span></div>
+        <div class="mini-card warn"><strong>釐清取捨</strong><span>尤其在導航、搜尋、註冊流程等選項上，看到各家怎麼選。</span></div>
+      </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 8 · 色彩與字型設定 (dark) -->
   <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">08 / 12</span>
-    </div>
+    <div class="bg-n">5</div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">08 / 20</span></div>
     <div class="slide-body">
-      <p class="overline">Colors &amp; Typography</p>
-      <h1>色彩與字型設定</h1>
-      <h2>建立一致的視覺語言</h2>
-      <ul class="blist">
-        <li data-n="01">Fill：純色、漸層、圖片填充</li>
-        <li data-n="02">Stroke：外框與粗細</li>
-        <li data-n="03">字型選擇與 Google Fonts 整合</li>
-        <li data-n="04">Color Styles 初介紹</li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 9 · 命名與整理原則 (light) -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">09 / 12</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Best Practice</p>
-      <h1>命名與整理原則</h1>
-      <h2>為之後的元件化奠定基礎</h2>
-      <ul class="blist">
-        <li data-n="01">用「功能 / 位置」命名，避免 Rectangle 1</li>
-        <li data-n="02">善用資料夾（/）分層命名</li>
-        <li data-n="03">及時刪除不用的物件</li>
-        <li data-n="04">保持圖層順序整潔</li>
-      </ul>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 10 · Figma 實機示範 (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">10 / 12</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Live Demo</p>
-      <h1>Figma 實機示範</h1>
+      <span class="layer-badge">Why 05</span>
+      <h1>提升 UX 品質<br>與設計敏感度</h1>
       <div class="divider"></div>
-      <h2>跟著操作，邊看邊學</h2>
       <ul class="blist plain">
-        <li>建立 Frame 與基本版面結構</li>
-        <li>加入文字、圖片佔位符</li>
-        <li>設定對齊與間距</li>
-        <li>儲存與命名規範示範</li>
+        <li>對流程細節更敏感，習慣觀察比較</li>
+        <li>更容易洞察「使用者為什麼會卡住」</li>
+        <li>跳出單一產品視角，用更宏觀方式優化體驗</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 11 · 課堂實作 (light) -->
   <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">11 / 12</span>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">09 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Example</p>
+      <h1>範例：搜尋功能設計</h1>
+      <h2>老闆希望做「自動完成」，但你分析 5 個競品後發現：</h2>
+      <ul class="blist">
+        <li data-n="80%">多數競品都顯示<span class="hl">搜尋歷史 + 熱門搜尋</span></li>
+        <li data-n="1 家">只有 1 家用自動完成，而且使用者回饋不佳</li>
+        <li data-n="建議">採用搜尋建議與歷史記錄，降低學習曲線</li>
+      </ul>
+      <p class="note">決策依據要能說出「我們觀察到什麼」與「因此建議怎麼做」。</p>
     </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">10 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Process</p>
+      <h1>如何做競品分析？</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card"><span class="a-step">Step 1</span><span class="a-time">選擇競品</span><span class="a-desc">直接競品、間接競品、參考性產品，各選出適合比較的對象。</span></div>
+        <div class="agenda-card"><span class="a-step">Step 2</span><span class="a-time">設定分析維度</span><span class="a-desc">依目標選 UX/UI、功能內容、商業策略等觀察面向。</span></div>
+        <div class="agenda-card"><span class="a-step">Step 3</span><span class="a-time">整理分析表格</span><span class="a-desc">把觀察記成證據，最後收斂成洞察與設計機會。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">11 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Competitor Selection</p>
+      <h1>選 3-5 個產品</h1>
+      <h2>競品不只是一模一樣的 App；任何能替代使用者完成任務的方案，都值得觀察。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>類型</th><th>定義</th><th>例子</th></tr></thead>
+        <tbody>
+          <tr><td>直接競品</td><td>解決同樣問題，目標族群相近</td><td>Uber Eats、Foodpanda</td></tr>
+          <tr><td>間接競品</td><td>提供替代解法，但形式或族群不同</td><td>7-11、全聯熟食、LINE 群組揪團訂餐</td></tr>
+          <tr><td>參考性產品</td><td>不一定競爭，但操作體驗或視覺值得借鏡</td><td>在搜尋、結帳、會員任務上做得好的 App</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">12 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Examples</p>
+      <h1>直接競品與間接競品</h1>
+      <table class="cmp-table">
+        <thead><tr><th>產品類型</th><th>直接競品</th><th>間接競品</th></tr></thead>
+        <tbody>
+          <tr><td>線上學習</td><td>Hahow、Udemy、Coursera</td><td>YouTube 教學、Podcast、學習型 IG</td></tr>
+          <tr><td>線上投資</td><td>永豐金、凱基、富邦、口袋證券</td><td>財經 YouTuber、銀行理財顧問、PTT 股票討論版</td></tr>
+          <tr><td>約會交友</td><td>Tinder、派愛族、Coffee Meets Bagel、GoodNight</td><td>IG、Dcard、PTT、Twitch 聊天</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">13 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Dimensions</p>
+      <h1>分析維度要配合目標</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>使用者體驗與設計</strong><span>資訊架構、互動流程、UI 視覺、易用性與可用性原則。</span></div>
+        <div class="mini-card accent"><strong>功能與內容</strong><span>核心功能、內容策略、使用者是否能完成主要任務。</span></div>
+        <div class="mini-card warn"><strong>商業策略</strong><span>目標客群、商業模式、市場表現、評價與媒體聲量。</span></div>
+        <div class="mini-card"><strong>設計機會</strong><span>競品弱點、使用者抱怨、差異化亮點與可切入流程。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">14 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Starter Framework</p>
+      <h1>初學者先用 5 個基本維度</h1>
+      <ul class="blist">
+        <li data-n="01">功能完整性：主要功能是否完整？有無缺漏？</li>
+        <li data-n="02">操作流程順暢度：完成核心任務需要幾步？哪裡卡住？</li>
+        <li data-n="03">視覺與 UI 一致性：色彩、排版、圖示、品牌感是否一致？</li>
+        <li data-n="04">使用情緒與體驗：使用者會期待、焦慮、混亂或安心嗎？</li>
+        <li data-n="05">設計亮點與缺點：哪些細節值得學習？哪些應該避開？</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">15 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Analysis Table</p>
+      <h1>分析表格不是填空<br>是蒐集證據</h1>
+      <table class="cmp-table">
+        <thead><tr><th>欄位</th><th>要填什麼</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td>產品與截圖</td><td>競品名稱、網址、關鍵畫面</td><td>截圖要對應核心任務</td></tr>
+          <tr><td>觀察事實</td><td>使用者看到什麼、點哪裡、流程幾步</td><td>先描述，不急著評價</td></tr>
+          <tr><td>優缺點</td><td>降低成本的地方、造成阻礙的地方</td><td>最好附上使用者評價或證據</td></tr>
+          <tr><td>設計機會</td><td>我們可以怎麼做得更好</td><td>連回目標族群與使用情境</td></tr>
+        </tbody>
+      </table>
+      <p class="note">維度分析表參考：docs.google.com/spreadsheets/d/1EDciItb_cvnmH5owr8u5CksXL-hJ3UxdATRVXL68lI8</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">16 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Insight</p>
+      <h1>從表格收斂成洞察</h1>
+      <h2>不要只交一張很滿的表格。真正有價值的是表格後面的 1 頁洞察。</h2>
+      <ul class="blist">
+        <li data-n="模式">多數競品都怎麼做？這代表什麼使用者期待？</li>
+        <li data-n="落差">哪個流程或情境被忽略？誰的需求沒有被照顧？</li>
+        <li data-n="機會">我們能用什麼策略，讓體驗更快、更清楚或更安心？</li>
+        <li data-n="取捨">哪些功能不該現在做？為什麼先做另一件事？</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">17 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Persona</p>
+      <h1>把競品觀察<br>銜接到 Persona</h1>
+      <h2>Persona 不是人口統計標籤，而是後續設計決策的使用者模型。</h2>
+      <div class="matrix">
+        <div class="mini-card"><strong>Goals</strong><span>這位使用者想完成什麼？成功對他來說是什麼？</span></div>
+        <div class="mini-card"><strong>Mental Model</strong><span>他如何理解這件事？他習慣用什麼方式解決？</span></div>
+        <div class="mini-card"><strong>Context</strong><span>他在什麼時間、地點、設備與壓力下使用？</span></div>
+        <div class="mini-card"><strong>Pains / Gains</strong><span>他最不能忍受什麼？什麼會讓他覺得有價值？</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">18 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">AI Collaboration</p>
+      <h1>AI 可以協助<br>但不能替你下結論</h1>
+      <ul class="blist">
+        <li data-n="01">生成競品分析表格欄位與初始觀察問題</li>
+        <li data-n="02">整理 App Store 評價、訪談筆記與截圖觀察的共通主題</li>
+        <li data-n="03">產生 Persona 假設，協助你檢查是否太籠統</li>
+        <li data-n="04">所有 AI 輸出都要標註為<span class="hl">假設</span>，等待真實資料驗證</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">19 / 20</span></div>
     <div class="slide-body">
       <p class="overline">Workshop</p>
-      <h1>課堂實作<br>App 模仿</h1>
-      <h2>選一個 App 首頁，動手重畫</h2>
-      <ul class="blist plain">
-        <li>截圖一個你常用的 App 首頁</li>
-        <li>在 Figma 中建立 Frame（手機尺寸）</li>
-        <li>用基本形狀重建版面結構</li>
-        <li>注意對齊、間距與命名</li>
-      </ul>
+      <h1>課堂練習流程</h1>
+      <div class="stat-row">
+        <div class="stat"><b>20'</b><span>確認專題題目<br>列出直接與間接競品</span></div>
+        <div class="stat"><b>50'</b><span>截圖與表格觀察<br>完成 3-5 個產品比較</span></div>
+        <div class="stat"><b>40'</b><span>收斂洞察<br>整理設計機會與決策依據</span></div>
+        <div class="stat"><b>40'</b><span>FigJam Persona<br>建立 1-2 位人物誌</span></div>
+      </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
 
-  <!-- Slide 12 · 討論與點評 (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 03</span>
-      <span class="slide-num">12 / 12</span>
-    </div>
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">20 / 20</span></div>
     <div class="slide-body">
-      <p class="overline">Review</p>
-      <h1>討論與點評</h1>
-      <h2>分享你的模仿作品</h2>
+      <p class="overline">Assignment</p>
+      <h1>本單元產出</h1>
+      <h2>交件目標：把你的專題從「我想做」推進到「我知道市場上怎麼做，以及我的使用者是誰」。</h2>
       <ul class="blist">
-        <li data-n="01">你選了哪個 App？為什麼？</li>
-        <li data-n="02">最難重現的部分是什麼？</li>
-        <li data-n="03">圖層結構整潔嗎？命名清楚嗎？</li>
+        <li data-n="作業 1"><span class="hl">競品分析表</span>：3-5 個競品，含案例搜集、表格化比較與 1 頁洞察。</li>
+        <li data-n="作業 2"><span class="hl">Persona 人物誌</span>：在 FigJam / Figma 建立 1-2 位 Persona。</li>
+        <li data-n="附註">標註哪些結論來自觀察，哪些只是 AI 或團隊提出的假設。</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>
-
-</div><!-- /#deck -->
+</div>
 
 <div id="ctrls">
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
 </div>
+
 <script>
 (function () {
   const slides = Array.from(document.querySelectorAll('.slide'));
-  const total  = slides.length;
-  const prog   = document.getElementById('prog');
+  const total = slides.length;
+  const prog = document.getElementById('prog');
   const dotContainers = Array.from(document.querySelectorAll('.dots'));
   let cur = 0;
+
+  slides.forEach((slide, i) => {
+    const num = slide.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
   dotContainers.forEach(container => {
     slides.forEach((_, i) => {
-      const d = document.createElement('span');
-      d.className = 'dot' + (i === 0 ? ' on' : '');
-      d.addEventListener('click', () => go(i));
-      container.appendChild(d);
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === 0 ? ' on' : '');
+      dot.addEventListener('click', () => go(i));
+      container.appendChild(dot);
     });
   });
+
   function go(n) {
     slides[cur].classList.remove('active');
     cur = (n + total) % total;
     slides[cur].classList.add('active');
     prog.style.width = ((cur + 1) / total * 100) + '%';
+    document.getElementById('ctrls').classList.toggle('on-dark', slides[cur].classList.contains('dark'));
     dotContainers.forEach(container => {
-      Array.from(container.children).forEach((d, i) => {
-        d.classList.toggle('on', i === cur);
-      });
+      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
     });
   }
+
   document.getElementById('prev').addEventListener('click', () => go(cur - 1));
   document.getElementById('next').addEventListener('click', () => go(cur + 1));
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === ' ') {
+      event.preventDefault();
+      go(cur + 1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      go(cur - 1);
+    }
   });
+
   prog.style.width = (1 / total * 100) + '%';
+  document.getElementById('ctrls').classList.toggle('on-dark', slides[0].classList.contains('dark'));
 })();
 </script>
 </body>

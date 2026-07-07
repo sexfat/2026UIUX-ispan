@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 03 · 競品分析表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --max-w: 1120px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 32px 24px 80px;
+  line-height: 1.6;
+}
+.sheet { max-width: var(--max-w); margin: 0 auto; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.back-link::before { content: '← '; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+button {
+  border: 1px solid rgba(0,102,204,.18);
+  background: rgba(0,102,204,.08);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover { background: rgba(0,102,204,.14); }
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 28px;
+  margin-bottom: 28px;
+}
+.overline {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+h1 {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  margin-bottom: 12px;
+}
+.lead {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.section {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+h2 { font-size: 1.08rem; letter-spacing: 0; }
+.hint { color: var(--muted); font-size: .86rem; }
+.section-body { padding: 18px 20px 22px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+.field {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 76px;
+}
+.field label {
+  display: flex;
+  align-items: flex-start;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 11px 12px;
+  border-right: 1px solid var(--border);
+}
+.blank {
+  width: 100%;
+  min-height: 88px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 11px 12px;
+  font: inherit;
+  color: var(--dark);
+  outline: none;
+}
+.blank.short { min-height: 54px; }
+.blank.tall { min-height: 130px; }
+.blank.line { min-height: 38px; }
+.blank:empty::before {
+  content: attr(data-placeholder);
+  color: #a1a1a6;
+}
+.blank:focus {
+  box-shadow: inset 0 0 0 2px rgba(0,102,204,.22);
+}
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+  padding: 11px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 8px;
+  vertical-align: top;
+}
+td:first-child {
+  width: 112px;
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 800;
+}
+td .blank {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  min-height: 78px;
+  padding: 4px 2px;
+}
+td .blank.line { min-height: 32px; }
+.mini-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+@media print {
+  body { background: #fff; padding: 0; }
+  .topbar, .actions { display: none; }
+  .sheet { max-width: none; }
+  .section { break-inside: avoid; }
+  .blank { border-color: #bbb; background: #fff; }
+}
+@media (max-width: 760px) {
+  body { padding: 20px 16px 60px; }
+  .topbar, .section-head { align-items: flex-start; flex-direction: column; }
+  .grid { grid-template-columns: 1fr; }
+  .field { grid-template-columns: 1fr; }
+  .field label { border-right: 0; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="topbar">
+    <a class="back-link" href="article.html">回到 Unit 03 講義</a>
+    <div class="actions">
+      <button type="button" onclick="window.print()">列印 / 存成 PDF</button>
+      <button type="button" id="clear">清空填寫內容</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <p class="overline">Unit 03 · Workshop Template</p>
+    <h1>競品分析表</h1>
+    <p class="lead">這份表格配合 4 小時課程使用。請先定義主題與使用者，再選 3 個競品做比較，最後收斂洞察、設計機會與 Persona 假設。</p>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>1. 主題與問題定義</h2>
+      <span class="hint">先定義問題，不要直接跳到功能。</span>
+    </div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="field"><label>我想做的主題</label><div class="blank short" contenteditable="true" data-placeholder="例：上班族午餐選擇"></div></div>
+        <div class="field"><label>目標使用者</label><div class="blank short" contenteditable="true" data-placeholder="例：中午休息時間有限、需要快速決定午餐的上班族"></div></div>
+        <div class="field"><label>使用者問題</label><div class="blank" contenteditable="true" data-placeholder="例：不知道今天吃什麼，怕踩雷，也不想花時間比較太多選項。"></div></div>
+        <div class="field"><label>現在怎麼解決</label><div class="blank" contenteditable="true" data-placeholder="例：外送 App、Google Map、同事推薦、LINE 群組。"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>2. 競品清單</h2>
+      <span class="hint">至少列出直接、間接與參考性產品。</span>
+    </div>
+    <div class="section-body table-wrap">
+      <table>
+        <thead><tr><th>類型</th><th>產品名稱</th><th>為什麼選它</th><th>它解決什麼問題</th><th>網址 / 截圖來源</th></tr></thead>
+        <tbody>
+          <tr><td>直接競品 1</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>直接競品 2</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>間接競品 1</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>間接競品 2</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>參考產品</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>3. 競品分析表</h2>
+      <span class="hint">4 小時課程建議先分析 3 個產品。</span>
+    </div>
+    <div class="section-body table-wrap">
+      <table>
+        <thead><tr><th>分析維度</th><th>競品 A</th><th>競品 B</th><th>競品 C</th><th>觀察小結</th></tr></thead>
+        <tbody>
+          <tr><td>產品名稱</td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank line" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>目標客群</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>核心功能</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>任務流程</td><td><div class="blank" contenteditable="true" data-placeholder="完成核心任務需要幾步？"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>資訊架構</td><td><div class="blank" contenteditable="true" data-placeholder="分類、導覽、搜尋是否清楚？"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>UI 優點</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>UX 痛點</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>使用情緒</td><td><div class="blank" contenteditable="true" data-placeholder="安心、混亂、期待、焦慮？"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>可借鏡之處</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>差異化機會</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          <tr><td>證據來源</td><td><div class="blank" contenteditable="true" data-placeholder="截圖、評價、訪談或觀察紀錄"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+        </tbody>
+      </table>
+      <p class="mini-note">提醒：不要只寫「好用」「很漂亮」。請寫出具體觀察，例如「首頁直接顯示常用分類，少一次搜尋成本」。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>4. 核心任務流程比較</h2>
+      <span class="hint">選一個最重要任務，例如訂餐、註冊、搜尋課程、記帳。</span>
+    </div>
+    <div class="section-body">
+      <div class="field"><label>核心任務</label><div class="blank short" contenteditable="true" data-placeholder="例：在 10 分鐘內決定並訂好今天午餐。"></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>產品</th><th>完成任務需要幾步</th><th>最順的地方</th><th>最卡的地方</th><th>系統回饋</th><th>改善機會</th></tr></thead>
+          <tbody>
+            <tr><td>競品 A</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+            <tr><td>競品 B</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+            <tr><td>競品 C</td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td><td><div class="blank" contenteditable="true"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>5. 洞察與設計機會</h2>
+      <span class="hint">把表格收斂成 1 頁洞察。</span>
+    </div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="field"><label>市場共通模式</label><div class="blank tall" contenteditable="true" data-placeholder="多數競品都怎麼做？這代表什麼使用者期待？"></div></div>
+        <div class="field"><label>使用者可能痛點</label><div class="blank tall" contenteditable="true" data-placeholder="哪個流程或情境被忽略？誰的需求沒有被照顧？"></div></div>
+        <div class="field"><label>設計機會</label><div class="blank tall" contenteditable="true" data-placeholder="我們能讓體驗更快、更清楚或更安心的地方。"></div></div>
+        <div class="field"><label>暫時不做什麼？為什麼？</label><div class="blank tall" contenteditable="true" data-placeholder="哪些功能不是現在的優先級？原因是什麼？"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>6. Persona 假設</h2>
+      <span class="hint">先做 1 位 Persona，標註需要驗證的假設。</span>
+    </div>
+    <div class="section-body">
+      <div class="grid">
+        <div class="field"><label>角色名稱</label><div class="blank short" contenteditable="true" data-placeholder="例：忙碌午餐決策者"></div></div>
+        <div class="field"><label>一句話描述</label><div class="blank short" contenteditable="true" data-placeholder="例：中午只有 30 分鐘，不想花時間比較餐廳的上班族。"></div></div>
+        <div class="field"><label>Goals：目標</label><div class="blank" contenteditable="true"></div></div>
+        <div class="field"><label>Context：使用情境</label><div class="blank" contenteditable="true"></div></div>
+        <div class="field"><label>Mental Model：心智模型</label><div class="blank" contenteditable="true" data-placeholder="例：我不是要探索美食，我只是要快點決定。"></div></div>
+        <div class="field"><label>Pains：痛點</label><div class="blank" contenteditable="true"></div></div>
+        <div class="field"><label>Gains：期待價值</label><div class="blank" contenteditable="true"></div></div>
+        <div class="field"><label>需要驗證的假設</label><div class="blank" contenteditable="true" data-placeholder="例：他真的重視速度勝過價格嗎？同事推薦是否比平台評價可信？"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const fields = Array.from(document.querySelectorAll('.blank[contenteditable="true"]'));
+  const key = 'unit03-competitor-analysis-template';
+
+  function save() {
+    localStorage.setItem(key, JSON.stringify(fields.map(field => field.innerHTML)));
+  }
+
+  function restore() {
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      fields.forEach((field, index) => {
+        if (typeof data[index] === 'string') field.innerHTML = data[index];
+      });
+    } catch (error) {
+      localStorage.removeItem(key);
+    }
+  }
+
+  fields.forEach(field => field.addEventListener('input', save));
+  document.getElementById('clear').addEventListener('click', () => {
+    if (!confirm('確定要清空這份競品分析表嗎？')) return;
+    fields.forEach(field => { field.innerHTML = ''; });
+    localStorage.removeItem(key);
+  });
+  restore();
+})();
+</script>
+</body>
+</html>
