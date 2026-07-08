@@ -467,10 +467,9 @@ tr:last-child td { border-bottom: none; }
     <li><a href="#s4">如何選擇競品</a></li>
     <li><a href="#s5">分析維度與表格</a></li>
     <li><a href="#s6">從表格收斂成洞察</a></li>
-    <li><a href="#s7">Persona 怎麼接上來</a></li>
-    <li><a href="#s8">競品分析與 Persona 如何互相搭配</a></li>
-    <li><a href="#s9">課堂練習與作業</a></li>
-    <li><a href="#s10">AI 協作提示詞</a></li>
+    <li><a href="#s7">Persona 與競品分析的雙向互補關係</a></li>
+    <li><a href="#s8">課堂練習與作業</a></li>
+    <li><a href="#s9">AI 協作提示詞</a></li>
   </ol>
 </nav>
 
@@ -499,10 +498,9 @@ tr:last-child td { border-bottom: none; }
     <li><a href="#s4">如何選擇競品</a></li>
     <li><a href="#s5">分析維度與表格</a></li>
     <li><a href="#s6">從表格收斂成洞察</a></li>
-    <li><a href="#s7">Persona 怎麼接上來</a></li>
-    <li><a href="#s8">競品分析與 Persona 如何互相搭配</a></li>
-    <li><a href="#s9">課堂練習與作業</a></li>
-    <li><a href="#s10">AI 協作提示詞</a></li>
+    <li><a href="#s7">Persona 與競品分析的雙向互補關係</a></li>
+    <li><a href="#s8">課堂練習與作業</a></li>
+    <li><a href="#s9">AI 協作提示詞</a></li>
   </ol>
 </div>
 
@@ -636,7 +634,7 @@ tr:last-child td { border-bottom: none; }
 
   <div class="section" id="s7">
     <p class="sec-num">SECTION 07</p>
-    <h2 class="sec-title">Persona 怎麼接上來</h2>
+    <h2 class="sec-title">Persona 與競品分析的雙向互補關係</h2>
     <p>Persona 不是人口統計資料，而是後續設計決策的使用者模型。競品分析能幫你看見市場中的使用情境與缺口，Persona 則把這些觀察轉成具體角色，幫團隊判斷功能優先順序與流程取捨。</p>
     <div class="tbl-wrap">
       <table>
@@ -652,8 +650,31 @@ tr:last-child td { border-bottom: none; }
     </div>
     <p>好的 Persona 應該能回答：「這位使用者在這個情境下最不能忍受什麼？他為什麼會選擇或放棄某個功能？」如果 Persona 只剩年齡、職業、個性，它就很難幫你做設計判斷。</p>
 
-    <h3>從競品洞察對照到 Persona</h3>
-    <p>Persona 不該憑空想像。最扎實的做法，是讓 Persona 的每一條 <strong>Goals / Pains / Gains</strong> 都能指回競品分析表裡的一則觀察。把「多數競品怎麼做」與「哪裡沒被照顧」翻譯成使用者的心智模型與痛點，Persona 就有了證據，而不只是人設。</p>
+    <p>競品分析與 Persona 的核心，其實在於「從競品推導 Persona」與「用 Persona 審視競品」這兩個方向的雙向互補關係。雖然兩者看似都在處理同樣的素材，但它們在設計思考上的出發點、目的與思考盲點的防禦機制有很大的不同。</p>
+
+    <h3>核心差異對照表</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>維度</th><th>方向一：以競品找出 Persona</th><th>方向二：以 Persona 觀點看競品</th></tr></thead>
+        <tbody>
+          <tr><td>思維方向</td><td>由外而內：從市場與對手收斂出使用者模型</td><td>由內而外：從既有使用者設定去檢視市場</td></tr>
+          <tr><td>出發點</td><td>市場上的既有事實、對手產品、App 評論、負評</td><td>已經具備核心 Goals / Pains / Mental Model 的使用者原型</td></tr>
+          <tr><td>你的角色</td><td>觀察者／偵探：尋找市場缺口和蛛絲馬跡</td><td>扮演者／演員：戴上面具、化身為該角色去體驗流程</td></tr>
+          <tr><td>核心目的</td><td>尋找根據：讓 Persona 有證據支持，避免憑空捏造活在真空中的理想角色</td><td>精準驗證：避免盲目抄襲對手功能，找出對手做很好、但對我的使用者是垃圾的痛點</td></tr>
+          <tr><td>回答的問題</td><td>從對手的缺點和市場的現狀中，我的核心使用者應該長什麼樣子？</td><td>如果我是這個特定使用者，我用對手的產品會卡在哪裡？</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>方向一：以競品找出 Persona——建立證據鏈</h3>
+    <p>這個階段發生在 Persona 還不夠具體、缺乏真實數據的時候。你把競品當成大型實驗室，觀察別人踢到的鐵板，來拼湊出你使用者的面貌。</p>
+    <ul class="bullets">
+      <li>看到 80% 競品都有搜尋歷史功能，推導出使用者有「不想重複打字」的 Mental Model。</li>
+      <li>去 App Store 看競品的一星負評（例如：「改版後找不到功能」），提煉成 Persona 的 Pains。</li>
+    </ul>
+    <div class="callout">白話來說：因為對手（市場）普遍有這個現象、或者這群人都在罵這件事，所以我可以確定並證明，我的 Persona 真的有這種痛點與目標。</div>
+
+    <p>把這個邏輯落地到表格：讓 Persona 的每一條 <strong>Goals / Pains / Gains</strong> 都能指回競品分析表裡的一則觀察。把「多數競品怎麼做」與「哪裡沒被照顧」翻譯成使用者的心智模型與痛點，Persona 就有了證據，而不只是人設。</p>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>競品洞察</th><th>推導出的 Persona 線索</th><th>對應面向</th></tr></thead>
@@ -666,21 +687,23 @@ tr:last-child td { border-bottom: none; }
       </table>
     </div>
     <div class="callout green">對照句型：「我在競品分析看到 <em>[觀察]</em>，這代表這位使用者其實在意 <em>[目標或痛點]</em>，因此 Persona 的 <em>[面向]</em> 應該寫成 <em>[具體描述]</em>。」這樣競品分析與 Persona 就串成同一條證據鏈。</div>
-  </div>
 
-  <div class="section" id="s8">
-    <p class="sec-num">SECTION 08</p>
-    <h2 class="sec-title">競品分析與 Persona 如何互相搭配</h2>
-    <p>在探索階段，競品分析看的是<strong>市場與產品</strong>：別人做了什麼、做得好不好、市場上還有什麼空缺。Persona 看的是<strong>核心使用者</strong>：使用者是誰、有什麼痛點、真正想要什麼。這兩者不是各自獨立的兩份報告，而是高度互補、互相餵養資料的搭配關係。</p>
-    <p>如果分開做，很容易流於形式：沒有 Persona 的競品分析，容易讓你盲目抄對手的功能，卻不知道對方的使用者根本不是你的目標；沒有競品分析的 Persona，則容易讓你設計出一個活在真空、不考慮市場現實的理想使用者。</p>
-    <div class="callout">兩者的關聯主要體現在「痛點的交集」：競品分析幫你找出對手沒滿足的市場痛點，Persona 則幫你確認這個痛點是不是核心使用者真正在意的。</div>
+    <h3>方向二：以 Persona 觀點看競品——戴上面具去體驗</h3>
+    <p>這個階段發生在 Persona 已經有了基本雛形。你要帶著這個角色的偏見、習慣和壓力，重新去審視市場上的競品。</p>
+    <ul class="bullets">
+      <li>不要只做功能有無的對照表。</li>
+      <li>假設 Persona 是一個極度缺乏時間的高壓主管，當你用他的心智模型去操作對手那套看似功能強大、資訊密集的後台時，你才會驚覺：這太複雜了，他絕對會崩潰。</li>
+    </ul>
+    <div class="callout">白話來說：我現在就是這個使用者。我用對手的功能時，雖然他們功能很齊全，但我卻覺得好難用。這就是我們產品可以切入的體驗缺口（機會點）。</div>
 
-    <h3>操作三步驟</h3>
+    <h3>整合後的雙向循環</h3>
+    <p>在實際專案中，這兩者不是單向的，而是一個高度互補的動態循環：</p>
     <ol class="steps">
-      <li><strong>用 Persona 的視角去體驗競品。</strong>做競品分析時，不要只列功能有無對照表，試著「戴上 Persona 的面具」走訪競品的流程。例如假設 Persona 是一位工作忙碌、沒時間研究複雜介面的主管，就用他的設定去操作競品的註冊與核心流程。你會發現對手看似強大的功能，在 Persona 眼裡可能是資訊量過載、太過冗長——這樣分析出來的優缺點，才具備參考價值。</li>
-      <li><strong>從競品使用者的怨言中，提煉 Persona 的痛點。</strong>建立 Persona 時常常缺乏真實數據，這時競品的使用者回饋就是最好的資料庫。到 App Store、Google Play 評論區或相關社群，搜集使用者對競品的一星與負評。像「改版後找不到原本的功能」「通知太多很吵」這類真實抱怨，可以直接轉化為 Persona 故事裡的 Pains。</li>
-      <li><strong>用定位圖與體驗地圖找出產品機會點。</strong>以 Persona 的兩大核心訴求（例如：價格敏感度 vs. 操作便利性）作為 X / Y 軸，畫出四象限矩陣，把市場上的競品標示進去。你會一眼看出哪個象限是對手還沒擠滿、又完全符合 Persona 渴望的機會缺口，這就是產品的核心價值方向。</li>
+      <li><strong>以競品找 Persona：</strong>從競品分析中發現「某個族群在現有產品中沒被好好照顧」，於是提煉出你的 Persona（找到利基市場與主角）。</li>
+      <li><strong>以 Persona 看競品：</strong>接著戴上這個 Persona 的面具回頭去體驗那些競品，這時看到的不再是冷冰冰的功能清單，而是更深刻的「設計風格、效率、情感卡點」等綜效（找出具體的差異化設計決策）。</li>
     </ol>
+    <p>要具體標出機會缺口，可以用定位圖與體驗地圖：以 Persona 的兩大核心訴求（例如：價格敏感度 vs. 操作便利性）作為 X / Y 軸，畫出四象限矩陣，把市場上的競品標示進去。你會一眼看出哪個象限是對手還沒擠滿、又完全符合 Persona 渴望的機會缺口，這就是產品的核心價值方向。</p>
+    <div class="callout green">這種互補關係，讓你的競品分析有了靈魂——因為知道是為誰而分析；也讓你的 Persona 有了落地感——因為背後都有市場證據支撐。</div>
 
     <h3>一張表看懂兩者的資訊互補</h3>
     <div class="tbl-wrap">
@@ -693,7 +716,6 @@ tr:last-child td { border-bottom: none; }
         </tbody>
       </table>
     </div>
-    <p>透過這樣的搭配，競品分析會變得更有依據——因為知道是為誰而分析；Persona 也會變得更有落地感——因為知道在市場上要對比誰。</p>
 
     <h3>實戰範例：AI 工具技能精修平台（SkillSync）</h3>
     <p>以開發一個「AI 工具技能精修平台（SkillSync）」為例：這個平台要幫助職場專業人士（例如產品經理、設計師）利用零碎時間快速掌握 AI 新技能。把 Persona 和競品分析放在一起操作時，不只是單純的數據比較，而是在尋找「產品市場適配（Product-Market Fit）」的切入點。</p>
@@ -731,8 +753,8 @@ tr:last-child td { border-bottom: none; }
     <p>這正是這兩個工具的分工：競品分析畫出「競爭的地平線」，Persona 指出「你應該站立的位置」。</p>
   </div>
 
-  <div class="section" id="s9">
-    <p class="sec-num">SECTION 09</p>
+  <div class="section" id="s8">
+    <p class="sec-num">SECTION 08</p>
     <h2 class="sec-title">課堂練習與作業</h2>
     <h3>課堂練習流程</h3>
     <ol class="steps">
@@ -752,8 +774,8 @@ tr:last-child td { border-bottom: none; }
     </ul>
   </div>
 
-  <div class="section" id="s10">
-    <p class="sec-num">SECTION 10</p>
+  <div class="section" id="s9">
+    <p class="sec-num">SECTION 09</p>
     <h2 class="sec-title">AI 協作提示詞</h2>
     <p>AI 可以協助你建立表格、整理觀察與產生 Persona 假設，但不能替你下研究結論。所有 AI 輸出都應視為假設，需要由截圖、評價、訪談或後續測試驗證。</p>
 

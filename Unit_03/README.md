@@ -190,3 +190,5 @@ AI 在本單元中扮演輔助角色：可以協助產生分析表欄位、整�
 - 擴充 `slides.html`：新增 3 張投影片對應「硬幣兩面」核心關聯、操作三步驟、資訊互補對照表，簡報共 28 張。
 - 擴充 `article.html` Section 08：新增「實戰範例：AI 工具技能精修平台（SkillSync）」完整案例，示範 Persona（Linda）定義、競品分析表、三個結合運用的設計決策與 MVP 優先順序。
 - 新增 `article.html` 側邊大綱導覽（`.side-nav`）：寬螢幕（≥1400px）時固定於頁面左側，隨捲動位置自動高亮當前章節（IntersectionObserver），點擊可跳轉；窄螢幕維持原本頁首的目錄區塊。
+- `slides.html` 第 11、13 張加入講義錨點連結，分別指向 `article.html#s4`（如何選擇競品）與 `#s5`（分析維度與表格），讓簡報與講義可以互相搭配。
+- 合併 `article.html` Section 07「Persona 怎麼接上來」與 Section 08「競品分析與 Persona 如何互相搭配」為單一章節「Persona 與競品分析的雙向互補關係」：新增核心差異對照表（方向一：以競品找出 Persona／方向二：以 Persona 觀點看競品）與雙向循環說明，原有的競品洞察對照表、資訊互補表、SkillSync 範例整併進對應方向底下，移除重複段落；後續章節編號順延（s9→s8、s10→s9）。
