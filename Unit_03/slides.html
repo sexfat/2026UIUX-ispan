@@ -377,6 +377,36 @@ h2 {
   border-radius: 0 8px 8px 0;
 }
 
+.res-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+.res-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color .2s, transform .15s, background .2s;
+}
+.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.res-link .res-icon { font-size: 1.25rem; line-height: 1; }
+.res-link strong {
+  font-size: clamp(.9rem, 1.2vw, 1.05rem);
+  font-weight: 700;
+  color: var(--dark);
+}
+.res-link span {
+  font-size: .78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
 #ctrls {
   position: fixed;
   bottom: 28px;
@@ -416,6 +446,10 @@ h2 {
 .slide.dark .a-time { color: #f5f5f7; }
 .slide.dark .dot { background: #3a3a3c; }
 .slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .res-link:hover { border-color: #58a6ff; }
+.slide.dark .res-link strong { color: #f5f5f7; }
+.slide.dark .res-link span { color: #a1a1a6; }
 .slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
 .slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
 .slide.dark .cmp-table td:first-child { color: #a1a1a6; }
@@ -424,7 +458,7 @@ h2 {
   :root { --px: 20px; --py: 20px; }
   .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .slide-body { justify-content: flex-start; padding-top: 12px; padding-bottom: 12px; }
-  .agenda-grid, .matrix { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .agenda-grid, .matrix, .res-links { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
   .cmp-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .blist { margin-top: 16px; gap: 8px; }
   .stat-row { gap: 24px; margin-top: 20px; }
@@ -446,7 +480,7 @@ h2 {
       <h1 class="cover-title">競品分析<br>與 Persona</h1>
       <p class="cover-sub">案例搜集 × 分析框架 × 設計決策依據 × FigJam 人物誌</p>
       <div class="cover-meta">
-        <span>07/08 全天</span><span class="meta-dot"></span><span>20 張投影片</span><span class="meta-dot"></span><span>含競品分析作業</span>
+        <span>07/08 全天</span><span class="meta-dot"></span><span>28 張投影片</span><span class="meta-dot"></span><span>含設計思考延伸</span>
       </div>
     </div>
     <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
@@ -456,7 +490,7 @@ h2 {
     <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">02 / 20</span></div>
     <div class="slide-body">
       <p class="overline">Agenda</p>
-      <h1>今天要完成什麼？</h1>
+      <h1>我們會學習到哪些？</h1>
       <div class="agenda-grid">
         <div class="agenda-card"><span class="a-step">Part 1</span><span class="a-time">競品分析觀念</span><span class="a-desc">知道競品分析不是抄畫面，而是看市場選項、使用者期待與設計取捨。</span></div>
         <div class="agenda-card"><span class="a-step">Part 2</span><span class="a-time">分析框架與表格</span><span class="a-desc">選 3-5 個產品，從功能、流程、資訊架構、UI、商業模式整理比較。</span></div>
@@ -715,6 +749,71 @@ h2 {
   <div class="slide">
     <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">18 / 20</span></div>
     <div class="slide-body">
+      <p class="overline">Competitor → Persona</p>
+      <h1>競品洞察<br>怎麼長成 Persona</h1>
+      <table class="cmp-table">
+        <thead><tr><th>競品洞察</th><th>推導出的 Persona 線索</th><th>對應面向</th></tr></thead>
+        <tbody>
+          <tr><td>80% 競品都顯示搜尋歷史與熱門搜尋</td><td>期待「快速找回看過的東西」，不想重打</td><td>Mental Model</td></tr>
+          <tr><td>競品註冊常在第 2 步大量流失</td><td>對冗長註冊沒耐心，想先體驗再說</td><td>Pains</td></tr>
+          <tr><td>某族群在既有產品中沒被照顧</td><td>這正是你的 Persona 主角與切入點</td><td>Goals / Context</td></tr>
+          <tr><td>競品用點數與提醒維持黏著</td><td>什麼回饋會讓他願意留下來</td><td>Gains</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Persona 不是憑空想像：每一條 Goals / Pains / Gains，最好都能指回競品分析表裡的一則觀察。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">19 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Two Sides of a Coin</p>
+      <h1>競品分析與 Persona<br>是硬幣的正反兩面</h1>
+      <div class="divider"></div>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>競品分析</strong><span>看的是市場與產品：別人做了什麼、做得好不好、市場上還有什麼空缺。</span></div>
+        <div class="mini-card"><strong>Persona</strong><span>看的是核心使用者：使用者是誰、有什麼痛點、真正想要什麼。</span></div>
+      </div>
+      <p class="note">沒有 Persona 的競品分析，容易變成盲目抄功能；沒有競品分析的 Persona，容易活在真空、不管市場現實。兩者的關聯在於「痛點的交集」：競品分析找出對手沒滿足的市場痛點，Persona 確認這個痛點是不是核心使用者真正在意的。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">20 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">3 Steps</p>
+      <h1>操作三步驟</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card"><span class="a-step">Step 1</span><span class="a-time">用 Persona 視角體驗競品</span><span class="a-desc">戴上 Persona 的面具走訪競品流程，看看對手的功能在他眼裡是不是資訊過載。</span></div>
+        <div class="agenda-card"><span class="a-step">Step 2</span><span class="a-time">從競品負評提煉痛點</span><span class="a-desc">App Store、社群上的一星負評，是最真實的資料庫，直接轉化成 Persona 的 Pains。</span></div>
+        <div class="agenda-card"><span class="a-step">Step 3</span><span class="a-time">用定位圖找機會點</span><span class="a-desc">以 Persona 的核心訴求畫四象限矩陣，標上競品，找出還沒被擠滿的機會缺口。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">21 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Complementary Data</p>
+      <h1>一張表看懂<br>兩者的資訊互補</h1>
+      <table class="cmp-table">
+        <thead><tr><th>思考維度</th><th>競品分析</th><th>Persona</th><th>結合後的綜效</th></tr></thead>
+        <tbody>
+          <tr><td>功能範疇</td><td>對手提供 A、B、C 功能</td><td>使用者在特定情境需要解決 X 問題</td><td>只做符合 X 問題的 A 功能</td></tr>
+          <tr><td>設計風格</td><td>競品多是高資訊密度的商務風</td><td>使用者是初學者，容易焦慮</td><td>改用溫暖、高留白、多步驟引導</td></tr>
+          <tr><td>痛點來源</td><td>結帳流程要走 5 個步驟</td><td>使用者極度缺乏時間</td><td>把一鍵快速結帳列為最優先</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">22 / 20</span></div>
+    <div class="slide-body">
       <p class="overline">AI Collaboration</p>
       <h1>AI 可以協助<br>但不能替你下結論</h1>
       <ul class="blist">
@@ -728,7 +827,75 @@ h2 {
   </div>
 
   <div class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">19 / 20</span></div>
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">20 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Extension · 延伸框架</p>
+      <h1>設計思考框架</h1>
+      <div class="divider"></div>
+      <h2>把競品洞察與 Persona，帶進「發現問題 → 解決問題」的完整節奏。設計思考是一套以人為本、可以隨時跳回上一步的解題方法。</h2>
+      <ul class="blist plain">
+        <li><span class="hl">非線性流程</span>：可以隨時跳回前一步，不是做完 1 才能做 2</li>
+        <li><span class="hl">擁抱失敗</span>：快速失敗（Fail Fast），更便宜地找到正確路徑</li>
+        <li><span class="hl">問題導向</span>：先想「解決什麼問題」，而不是「做什麼產品」</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">21 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">Double Diamond</p>
+      <h1>雙鑽石模型</h1>
+      <h2>發散與收斂的節奏：第一顆鑽石「做正確的事」，第二顆鑽石「把事做正確」。競品分析與 Persona 就發生在第一顆鑽石。</h2>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>發現 Discover</strong><span>走入現場發散觀察使用者——競品分析與 Persona 在這裡。</span></div>
+        <div class="mini-card"><strong>定義 Define</strong><span>收斂問題，找出核心痛點，產出 HMW 問句。</span></div>
+        <div class="mini-card"><strong>發展 Develop</strong><span>針對問題發散各種解決方案，不急著挑一個。</span></div>
+        <div class="mini-card warn"><strong>交付 Deliver</strong><span>收斂想法，轉成 Functional Map 與原型。</span></div>
+      </div>
+      <p class="note">「大部分專案失敗，是因為還沒搞清楚第一顆鑽石，就急著衝進第二顆。」</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">22 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">5 Stages</p>
+      <h1>設計思考五階段</h1>
+      <table class="cmp-table">
+        <thead><tr><th>階段</th><th>在做什麼</th><th>常用工具</th></tr></thead>
+        <tbody>
+          <tr><td>同理 Empathize</td><td>站在使用者的鞋子裡</td><td>訪談、觀察、同理心矩陣</td></tr>
+          <tr><td>定義 Define</td><td>把雜亂資訊結構化、聚焦問題</td><td>HMW（我們可以如何⋯？）</td></tr>
+          <tr><td>發想 Ideate</td><td>推翻直覺，找不合理但有效的點子</td><td>Brainstorming、Crazy 8s</td></tr>
+          <tr><td>原型 Prototype</td><td>把想法具現化</td><td>Functional Map、Wireframe</td></tr>
+          <tr><td>測試 Test</td><td>驗證假設</td><td>使用者測試、AI 壓力測試</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">23 / 20</span></div>
+    <div class="slide-body">
+      <p class="overline">AI as Teammate</p>
+      <h1>AI 是團隊的<br>第 N 個成員</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>研究員</strong><span>從訪談筆記與競品評價中快速分類痛點。</span></div>
+        <div class="mini-card accent"><strong>創意催化劑</strong><span>團隊卡住時，丟出 20 個壞點子打破僵局。</span></div>
+        <div class="mini-card warn"><strong>魔鬼代言人</strong><span>用你的 Persona 扮最機車的使用者，挑戰功能地圖。</span></div>
+        <div class="mini-card"><strong>但決策在人</strong><span>AI 產出都是假設，最終判斷權留在團隊。</span></div>
+      </div>
+      <p class="note">完整雙鑽石、五階段、Crazy 8s 與四階段提示詞，收錄在延伸教材「設計思考指南」（見最後一頁連結）。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
+  </div>
+
+  <div class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 03</span><span class="slide-num">24 / 20</span></div>
     <div class="slide-body">
       <p class="overline">Workshop</p>
       <h1>課堂練習流程</h1>
@@ -753,6 +920,20 @@ h2 {
         <li data-n="作業 2"><span class="hl">Persona 人物誌</span>：在 FigJam / Figma 建立 1-2 位 Persona。</li>
         <li data-n="附註">標註哪些結論來自觀察，哪些只是 AI 或團隊提出的假設。</li>
       </ul>
+      <div class="res-links">
+        <a class="res-link" href="article.html" target="_blank" rel="noopener">
+          <span class="res-icon">📖</span><strong>完整教材</strong><span>article.html</span>
+        </a>
+        <a class="res-link" href="competitor-analysis-template.html" target="_blank" rel="noopener">
+          <span class="res-icon">📋</span><strong>分析樣板</strong><span>competitor-analysis-template.html</span>
+        </a>
+        <a class="res-link" href="exercises.html" target="_blank" rel="noopener">
+          <span class="res-icon">✏️</span><strong>練習作業</strong><span>exercises.html</span>
+        </a>
+        <a class="res-link" href="design-thinking.html" target="_blank" rel="noopener">
+          <span class="res-icon">💡</span><strong>設計思考指南</strong><span>design-thinking.html</span>
+        </a>
+      </div>
     </div>
     <div class="slide-foot"><span class="course-label">用戶研究 ①：競品分析與 Persona</span><div class="dots"></div></div>
   </div>

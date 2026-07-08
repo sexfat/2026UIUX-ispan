@@ -168,6 +168,7 @@ AI 在本單元中扮演輔助角色：可以協助產生分析表欄位、整�
 |---|---|
 | `slides.html` | Unit 03 課堂簡報，主題為競品分析與 Persona。 |
 | `article.html` | HTML 版完整講義，供學生課前或課後閱讀。 |
+| `design-thinking.html` | 設計思考延伸教材：雙鑽石模型、五階段、Crazy 8s、AI 協作與四階段提示詞。 |
 | `exercises.html` | 4 小時課程用練習作業頁，拆成 5 個小練習。 |
 | `competitor-analysis-template.html` | 可填寫、可列印或存 PDF 的競品分析表。 |
 | `README.md` | 本單元課程目標、內容、提示詞與檔案說明。 |
@@ -180,3 +181,12 @@ AI 在本單元中扮演輔助角色：可以協助產生分析表欄位、整�
 - 新增 `competitor-analysis-template.html`：提供學生可直接填寫的競品分析表。
 - 調整 `competitor-analysis-template.html`：移除 input / textarea 樣式，改為表格輸出樣式與 `contenteditable` 儲存格，保留瀏覽器填寫與 localStorage 暫存。
 - 更新課程總覽頁 `../index.html`：Unit 03 加入簡報、講義、練習與作業表連結。
+- 新增 `design-thinking.html`：由 master 分支 Unit 02 的設計思考內容移植而來（雙鑽石模型、五階段、Crazy 8s、AI 三角色與四階段提示詞），作為 Unit 03 的延伸教材。
+- 擴充 `slides.html`：新增「競品洞察 → Persona」對照片，並加入 4 張設計思考延伸投影片（共 25 張），資源卡加入設計思考指南連結。
+- 強化 `article.html` Persona 章節：新增「從競品洞察對照到 Persona」對照表與句型，讓競品分析與 Persona 串成同一條證據鏈。
+- 改寫 `exercises.html`：移除第三人稱「學生」教學者視角措辭，改為對學生本人說話的第二人稱或中性目標敘述。
+- 改寫 `design-thinking.html`：「給學員的口訣」改為「核心口訣」，移除「教練語錄」培訓場域用語。
+- 新增 `article.html` Section 08「競品分析與 Persona 如何互相搭配」：說明兩者互補關係、操作三步驟（Persona 視角評測競品／從競品負評提煉痛點／定位圖找機會點）與資訊互補對照表，後續章節編號順延（s8→s9→s10）。
+- 擴充 `slides.html`：新增 3 張投影片對應「硬幣兩面」核心關聯、操作三步驟、資訊互補對照表，簡報共 28 張。
+- 擴充 `article.html` Section 08：新增「實戰範例：AI 工具技能精修平台（SkillSync）」完整案例，示範 Persona（Linda）定義、競品分析表、三個結合運用的設計決策與 MVP 優先順序。
+- 新增 `article.html` 側邊大綱導覽（`.side-nav`）：寬螢幕（≥1400px）時固定於頁面左側，隨捲動位置自動高亮當前章節（IntersectionObserver），點擊可跳轉；窄螢幕維持原本頁首的目錄區塊。

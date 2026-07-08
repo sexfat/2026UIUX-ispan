@@ -387,6 +387,65 @@ tr:last-child td { border-bottom: none; }
 .foot-nav a:hover { background: rgba(0,102,204,.14); }
 .foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
 
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol {
+  list-style: none;
+  counter-reset: sidenav;
+  border-left: 2px solid var(--border);
+}
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active {
+  color: var(--accent);
+  font-weight: 700;
+  border-left-color: var(--accent);
+}
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) {
+  .side-nav { display: block; }
+}
+
 @media (max-width: 768px) {
   body { padding-left: 18px; padding-right: 18px; }
   .toc ol { columns: 1; }
@@ -398,6 +457,22 @@ tr:last-child td { border-bottom: none; }
 <body>
 
 <div id="prog"></div>
+
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">什麼是競品分析？</a></li>
+    <li><a href="#s2">為什麼要做競品分析？</a></li>
+    <li><a href="#s3">設計決策依據</a></li>
+    <li><a href="#s4">如何選擇競品</a></li>
+    <li><a href="#s5">分析維度與表格</a></li>
+    <li><a href="#s6">從表格收斂成洞察</a></li>
+    <li><a href="#s7">Persona 怎麼接上來</a></li>
+    <li><a href="#s8">競品分析與 Persona 如何互相搭配</a></li>
+    <li><a href="#s9">課堂練習與作業</a></li>
+    <li><a href="#s10">AI 協作提示詞</a></li>
+  </ol>
+</nav>
 
 <div class="topbar">
   <a class="back-link" href="slides.html">回到投影片</a>
@@ -425,8 +500,9 @@ tr:last-child td { border-bottom: none; }
     <li><a href="#s5">分析維度與表格</a></li>
     <li><a href="#s6">從表格收斂成洞察</a></li>
     <li><a href="#s7">Persona 怎麼接上來</a></li>
-    <li><a href="#s8">課堂練習與作業</a></li>
-    <li><a href="#s9">AI 協作提示詞</a></li>
+    <li><a href="#s8">競品分析與 Persona 如何互相搭配</a></li>
+    <li><a href="#s9">課堂練習與作業</a></li>
+    <li><a href="#s10">AI 協作提示詞</a></li>
   </ol>
 </div>
 
@@ -575,10 +651,88 @@ tr:last-child td { border-bottom: none; }
       </table>
     </div>
     <p>好的 Persona 應該能回答：「這位使用者在這個情境下最不能忍受什麼？他為什麼會選擇或放棄某個功能？」如果 Persona 只剩年齡、職業、個性，它就很難幫你做設計判斷。</p>
+
+    <h3>從競品洞察對照到 Persona</h3>
+    <p>Persona 不該憑空想像。最扎實的做法，是讓 Persona 的每一條 <strong>Goals / Pains / Gains</strong> 都能指回競品分析表裡的一則觀察。把「多數競品怎麼做」與「哪裡沒被照顧」翻譯成使用者的心智模型與痛點，Persona 就有了證據，而不只是人設。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>競品洞察</th><th>推導出的 Persona 線索</th><th>對應面向</th></tr></thead>
+        <tbody>
+          <tr><td>80% 競品都顯示搜尋歷史與熱門搜尋</td><td>期待「快速找回看過的東西」，不想每次重打關鍵字</td><td>Mental Model</td></tr>
+          <tr><td>競品註冊常在第 2 步大量流失</td><td>對冗長註冊沒耐心，傾向先體驗、再決定要不要留下</td><td>Pains</td></tr>
+          <tr><td>某個族群在既有產品中沒被好好照顧</td><td>這正是你的 Persona 主角，也是差異化切入點</td><td>Goals / Context</td></tr>
+          <tr><td>競品用點數、提醒與社群維持黏著</td><td>什麼樣的回饋與價值會讓他願意持續使用</td><td>Gains</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">對照句型：「我在競品分析看到 <em>[觀察]</em>，這代表這位使用者其實在意 <em>[目標或痛點]</em>，因此 Persona 的 <em>[面向]</em> 應該寫成 <em>[具體描述]</em>。」這樣競品分析與 Persona 就串成同一條證據鏈。</div>
   </div>
 
   <div class="section" id="s8">
     <p class="sec-num">SECTION 08</p>
+    <h2 class="sec-title">競品分析與 Persona 如何互相搭配</h2>
+    <p>在探索階段，競品分析看的是<strong>市場與產品</strong>：別人做了什麼、做得好不好、市場上還有什麼空缺。Persona 看的是<strong>核心使用者</strong>：使用者是誰、有什麼痛點、真正想要什麼。這兩者不是各自獨立的兩份報告，而是高度互補、互相餵養資料的搭配關係。</p>
+    <p>如果分開做，很容易流於形式：沒有 Persona 的競品分析，容易讓你盲目抄對手的功能，卻不知道對方的使用者根本不是你的目標；沒有競品分析的 Persona，則容易讓你設計出一個活在真空、不考慮市場現實的理想使用者。</p>
+    <div class="callout">兩者的關聯主要體現在「痛點的交集」：競品分析幫你找出對手沒滿足的市場痛點，Persona 則幫你確認這個痛點是不是核心使用者真正在意的。</div>
+
+    <h3>操作三步驟</h3>
+    <ol class="steps">
+      <li><strong>用 Persona 的視角去體驗競品。</strong>做競品分析時，不要只列功能有無對照表，試著「戴上 Persona 的面具」走訪競品的流程。例如假設 Persona 是一位工作忙碌、沒時間研究複雜介面的主管，就用他的設定去操作競品的註冊與核心流程。你會發現對手看似強大的功能，在 Persona 眼裡可能是資訊量過載、太過冗長——這樣分析出來的優缺點，才具備參考價值。</li>
+      <li><strong>從競品使用者的怨言中，提煉 Persona 的痛點。</strong>建立 Persona 時常常缺乏真實數據，這時競品的使用者回饋就是最好的資料庫。到 App Store、Google Play 評論區或相關社群，搜集使用者對競品的一星與負評。像「改版後找不到原本的功能」「通知太多很吵」這類真實抱怨，可以直接轉化為 Persona 故事裡的 Pains。</li>
+      <li><strong>用定位圖與體驗地圖找出產品機會點。</strong>以 Persona 的兩大核心訴求（例如：價格敏感度 vs. 操作便利性）作為 X / Y 軸，畫出四象限矩陣，把市場上的競品標示進去。你會一眼看出哪個象限是對手還沒擠滿、又完全符合 Persona 渴望的機會缺口，這就是產品的核心價值方向。</li>
+    </ol>
+
+    <h3>一張表看懂兩者的資訊互補</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>思考維度</th><th>競品分析（市場角度）</th><th>Persona（使用者角度）</th><th>結合後的綜效</th></tr></thead>
+        <tbody>
+          <tr><td>功能範疇</td><td>對手提供了 A、B、C 功能</td><td>使用者在特定情境下需要解決 X 問題</td><td>只做符合 X 問題的 A 功能，避免加入用不到的功能</td></tr>
+          <tr><td>設計風格</td><td>競品多採嚴肅、高資訊密度的商務風</td><td>使用者是初學者，容易焦慮、需要引導</td><td>採用溫暖、高留白、多步驟引導的介面風格做出差異化</td></tr>
+          <tr><td>痛點來源</td><td>競品效能慢、結帳流程要走 5 個步驟</td><td>使用者極度缺乏時間，重視效率</td><td>把「一鍵快速結帳」列為最優先開發的特色</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>透過這樣的搭配，競品分析會變得更有依據——因為知道是為誰而分析；Persona 也會變得更有落地感——因為知道在市場上要對比誰。</p>
+
+    <h3>實戰範例：AI 工具技能精修平台（SkillSync）</h3>
+    <p>以開發一個「AI 工具技能精修平台（SkillSync）」為例：這個平台要幫助職場專業人士（例如產品經理、設計師）利用零碎時間快速掌握 AI 新技能。把 Persona 和競品分析放在一起操作時，不只是單純的數據比較，而是在尋找「產品市場適配（Product-Market Fit）」的切入點。</p>
+
+    <h4 style="font-size:1rem;font-weight:800;margin:24px 0 10px;">1. 定義 Persona：時間極度稀缺的主角</h4>
+    <ul class="bullets">
+      <li><strong>姓名：</strong>Linda，32 歲，軟體產品經理。</li>
+      <li><strong>動機：</strong>必須在三個月內學會如何用 AI 自動化工作流程，否則會被產出效率更高的同事取代。</li>
+      <li><strong>痛點：</strong>沒時間看 2 小時長的教學影片、討厭太理論的課程、遇到實際操作問題找不到人問，只能自己 Google 很久。</li>
+    </ul>
+
+    <h4 style="font-size:1rem;font-weight:800;margin:24px 0 10px;">2. 競品分析：市場現狀的地圖</h4>
+    <p>分析市面上兩大主流競品，並從 Linda 的視角審視它們：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>評估項目</th><th>競品 A：大型綜合學院</th><th>競品 B：影音市集平台</th></tr></thead>
+        <tbody>
+          <tr><td>教學結構</td><td>學術性強，長達 10-20 小時的系列課</td><td>碎片化，單堂課長度不一</td></tr>
+          <tr><td>互動性</td><td>有論壇，但回覆極慢且無關緊要</td><td>通常無互動，僅單向觀看</td></tr>
+          <tr><td>Linda 的體驗</td><td>沒時間看完這麼長的課程，進度條永遠停在 10%</td><td>內容品質參差不齊，學完不知道怎麼在工作上落地</td></tr>
+          <tr><td>市場缺口</td><td>缺乏短效、高密度的實戰場景</td><td>缺乏針對專業人士的即時輔助機制</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size:1rem;font-weight:800;margin:24px 0 10px;">3. 結合運用：三個設計決策</h4>
+    <p>把 Linda 的旅程疊加在競品的流程體驗上，會得到三個具體的設計決策，而不只是一張比較表：</p>
+    <div class="cards">
+      <div class="card"><h3>重塑內容形式</h3><p>Linda 只有通勤的 15 分鐘或開會前的 10 分鐘，所以把課程切成「5 分鐘理論 + 10 分鐘 AI 實作練習」。目標不是拚課程數量，而是拚完成率。</p></div>
+      <div class="card"><h3>引入即時 AI 助教</h3><p>兩個競品最大的共同痛點都是沒人能即時解決實作中的問題。課程頁面內建 Context-Aware AI 助教，遇到代碼報錯或 Prompt 不對時直接給 Debug 建議，這是競品完全沒有的差異化。</p></div>
+      <div class="card"><h3>MVP 功能優先順序</h3><p>用 Persona 需求對照競品現狀排序：必須做——AI 輔助練習器；可延後——社群論壇（Linda 沒空社交）；不做——超過 30 分鐘的長課程（競品已經做爛，也不符合 Linda 的場景）。</p></div>
+    </div>
+
+    <div class="callout green">如果不做結合，看到競品有 100 堂 AI 課，很容易誤判成「我也要做內容豐富的平台」。結合 Persona 之後，結論會變成：目標使用者不需要更多課程，需要更快的解決方案——所以優勢不在課程數量，而在 AI 互動的即時性。</div>
+    <p>這正是這兩個工具的分工：競品分析畫出「競爭的地平線」，Persona 指出「你應該站立的位置」。</p>
+  </div>
+
+  <div class="section" id="s9">
+    <p class="sec-num">SECTION 09</p>
     <h2 class="sec-title">課堂練習與作業</h2>
     <h3>課堂練習流程</h3>
     <ol class="steps">
@@ -598,8 +752,8 @@ tr:last-child td { border-bottom: none; }
     </ul>
   </div>
 
-  <div class="section" id="s9">
-    <p class="sec-num">SECTION 09</p>
+  <div class="section" id="s10">
+    <p class="sec-num">SECTION 10</p>
     <h2 class="sec-title">AI 協作提示詞</h2>
     <p>AI 可以協助你建立表格、整理觀察與產生 Persona 假設，但不能替你下研究結論。所有 AI 輸出都應視為假設，需要由截圖、評價、訪談或後續測試驗證。</p>
 
@@ -666,6 +820,7 @@ tr:last-child td { border-bottom: none; }
 
 <div class="foot-nav">
   <a href="slides.html">回到 Unit 03 簡報</a>
+  <a href="design-thinking.html">設計思考延伸教材</a>
   <a href="exercises.html">開啟練習作業</a>
   <a href="competitor-analysis-template.html">開啟競品分析表</a>
   <a href="../index.html">回到課程總覽</a>
@@ -682,6 +837,29 @@ tr:last-child td { border-bottom: none; }
   window.addEventListener('scroll', updateProgress, { passive: true });
   window.addEventListener('resize', updateProgress);
   updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
 })();
 
 (function () {

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>設計思考與 AI 協作 · Unit 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a {
+  font-size: .92rem;
+  color: var(--dark);
+  text-decoration: none;
+  display: flex;
+  gap: 10px;
+}
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+
+ul.bullets, ol.steps {
+  margin: 4px 0 20px;
+  padding-left: 0;
+  list-style: none;
+}
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li {
+  counter-increment: step;
+  padding-left: 38px;
+}
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+.callout.orange {
+  background: rgba(194,65,12,.06);
+  border-color: rgba(194,65,12,.2);
+  border-left-color: var(--accent3);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .94rem;
+  min-width: 560px;
+}
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child {
+  font-weight: 800;
+  color: var(--muted);
+  font-size: .9em;
+  white-space: nowrap;
+}
+tr:last-child td { border-bottom: none; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 22px 0;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+.card p {
+  margin: 0;
+  font-size: .93rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.card .tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 3px 9px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+.use-when {
+  font-size: .9rem;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+.use-when strong { color: var(--accent2); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<div class="topbar">
+  <a class="back-link" href="slides.html">回到投影片</a>
+  <span class="unit-pill">Unit 03</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Design Thinking · 延伸教材</p>
+  <h1>設計思考與 AI 協作</h1>
+  <p class="lead">設計思考是一套「以人為本」的解決問題方法論：先透過同理心看懂需求，再透過反覆實驗找到解答。這份延伸教材接在競品分析與 Persona 之後，帶你把使用者觀察帶進「發現問題 → 解決問題」的完整節奏，並學會把 AI 當成團隊中的第 N 個成員。</p>
+  <div class="meta">
+    <span>閱讀時間約 12 分鐘</span><span class="d"></span>
+    <span>延伸自 Unit 03</span><span class="d"></span>
+    <span>含四階段 AI 提示詞</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">什麼是設計思考？</a></li>
+    <li><a href="#s2">雙鑽石模型</a></li>
+    <li><a href="#s3">設計思考五階段</a></li>
+    <li><a href="#s4">Crazy 8s 發想工具</a></li>
+    <li><a href="#s5">當 AI 走進設計思考</a></li>
+    <li><a href="#s6">團體討論的規則</a></li>
+    <li><a href="#s7">四階段 AI 提示詞</a></li>
+    <li><a href="#s8">核心口訣</a></li>
+  </ol>
+</div>
+
+<div class="article">
+  <div class="section" id="s1">
+    <p class="sec-num">SECTION 01</p>
+    <h2 class="sec-title">什麼是設計思考？</h2>
+    <p><strong>設計思考（Design Thinking）</strong>是一套「以人為本」的解決問題方法論，核心在於透過同理心深入理解需求，並透過反覆實驗找到解答。它和競品分析、Persona 是同一條線上的工具：先看懂人，再決定要做什麼、怎麼做。</p>
+    <h3>三個關鍵思維</h3>
+    <ul class="bullets">
+      <li><strong>非線性流程：</strong>可以隨時跳回前一步，不是做完 1 才能做 2。</li>
+      <li><strong>擁抱失敗：</strong>快速失敗（Fail Fast），是為了更便宜地找到正確路徑。</li>
+      <li><strong>問題導向：</strong>不要先想「做什麼產品」，要先想「解決什麼問題」。</li>
+    </ul>
+    <div class="callout green">競品分析與 Persona 是設計思考「第一顆鑽石」的燃料：它們告訴你市場現況與使用者是誰，讓你定義出對的問題，而不是急著跳進解法。</div>
+  </div>
+
+  <div class="section" id="s2">
+    <p class="sec-num">SECTION 02</p>
+    <h2 class="sec-title">核心模型：雙鑽石模型</h2>
+    <p>雙鑽石模型（Double Diamond）講的是一種 <strong>發散（Divergence）</strong>與<strong>收斂（Convergence）</strong>的節奏感。兩顆鑽石，分別回答兩個問題。</p>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Diamond 1 · 做正確的事</span>
+        <h3>發現 Discover</h3>
+        <p>走入現場，發散地觀察使用者。競品分析與 Persona 就發生在這裡。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Diamond 1 · 做正確的事</span>
+        <h3>定義 Define</h3>
+        <p>收斂問題，找出核心痛點，產出 HMW（How Might We）問句。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Diamond 2 · 把事做正確</span>
+        <h3>發展 Develop</h3>
+        <p>針對問題發散各種解決方案，不急著挑一個。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Diamond 2 · 把事做正確</span>
+        <h3>交付 Deliver</h3>
+        <p>收斂想法，轉化為 Functional Map 並產出原型。</p>
+      </div>
+    </div>
+    <div class="callout orange">常見警訊：大部分的專案失敗，是因為還沒搞清楚第一顆鑽石，就急著衝進第二顆鑽石。</div>
+  </div>
+
+  <div class="section" id="s3">
+    <p class="sec-num">SECTION 03</p>
+    <h2 class="sec-title">設計思考五階段</h2>
+    <p>雙鑽石可以再拆成五個操作階段。每個階段都有對應的工具，讓抽象的思考變成可執行的動作。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>階段</th><th>在做什麼</th><th>常用工具</th></tr></thead>
+        <tbody>
+          <tr><td>同理 Empathize</td><td>站在使用者的鞋子裡，理解他的處境。</td><td>訪談、觀察、同理心矩陣</td></tr>
+          <tr><td>定義 Define</td><td>把雜亂的資訊結構化，聚焦成一個問題。</td><td>HMW（我們可以如何⋯？）</td></tr>
+          <tr><td>發想 Ideate</td><td>推翻直覺，尋找「不合理但有效」的點子。</td><td>Brainstorming、Crazy 8s</td></tr>
+          <tr><td>原型 Prototype</td><td>把想法具現化，做出可被討論的東西。</td><td>Functional Map、Wireframe</td></tr>
+          <tr><td>測試 Test</td><td>驗證假設，看看真實使用者怎麼反應。</td><td>使用者測試、AI 壓力測試</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <p class="sec-num">SECTION 04</p>
+    <h2 class="sec-title">Crazy 8s 發想工具</h2>
+    <p>Crazy 8s 是設計衝刺（Design Sprint）的核心方法，也是發散階段最受歡迎的實作工具。它要求你在 <strong>8 分鐘內畫出 8 個不同的設計點子</strong>——追求數量，而不是質量。</p>
+    <h3>為什麼有效</h3>
+    <ul class="bullets">
+      <li><strong>打破第一直覺：</strong>前 2 個點子通常最平庸，逼自己畫到第 8 個才會出現新東西。</li>
+      <li><strong>降低得失心：</strong>只有 60 秒畫一格，沒時間猶豫，誘發潛意識中的創意。</li>
+      <li><strong>快速視覺化：</strong>把抽象想法轉成具體結構，成為討論的起點。</li>
+    </ul>
+    <h3>實作步驟</h3>
+    <ol class="steps">
+      <li>每人一張 A4 紙，折兩次再對摺，展開後得到 8 個格子。</li>
+      <li>設定計時器，每 1 分鐘響一次。</li>
+      <li>每分鐘在一個格子內畫出一個解決方案（Wireframe 概念或功能草圖）。</li>
+      <li>就算第 5、6 格沒靈感，也要用不同角度逼自己填滿（例如：沒有按鈕會怎樣？只有語音會怎樣？）。</li>
+    </ol>
+    <div class="callout">卡住時，把 AI 當第 9 個點子：問它「針對這個問題，給我一個瘋狂且不合常理的解決方案」，再把建議畫進下一格。結束後挑最好的一格，描述給 AI 產出更高精細度的概念圖。</div>
+  </div>
+
+  <div class="section" id="s5">
+    <p class="sec-num">SECTION 05</p>
+    <h2 class="sec-title">當 AI 走進設計思考</h2>
+    <p>在實作中，我們把 AI 定位為「團隊中的第 N 個成員」，讓它扮演三種角色來擴張團隊的思考邊界。</p>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Researcher</span>
+        <h3>研究員</h3>
+        <p>幫你從訪談筆記與競品評價中，快速分類與歸納痛點。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Catalyst</span>
+        <h3>創意催化劑</h3>
+        <p>當團隊腦袋卡住時，提供 20 個「壞點子」來打破僵局。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Adversary</span>
+        <h3>魔鬼代言人</h3>
+        <p>扮演最機車的使用者（用你的 Persona），挑戰功能地圖的邏輯。</p>
+      </div>
+      <div class="card">
+        <span class="tag">Rule</span>
+        <h3>但決策權在人</h3>
+        <p>AI 提供的只是假設，最終判斷權永遠留在團隊手中。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s6">
+    <p class="sec-num">SECTION 06</p>
+    <h2 class="sec-title">團體討論的規則</h2>
+    <p>為了讓討論發揮最大效益，實作前請先和組員約定以下守則：</p>
+    <ul class="bullets">
+      <li><strong>暫時放下評判：</strong>發散階段不說「這不可能」、「這沒用」。</li>
+      <li><strong>建立在他人想法之上：</strong>說「對，而且⋯（Yes, and...）」而不是「但是⋯（But...）」。</li>
+      <li><strong>AI 不是真理：</strong>AI 提供的只是假設，最終判斷權在團隊手中。</li>
+      <li><strong>視覺化思考：</strong>善用便利貼與草圖，不要只用說的。</li>
+    </ul>
+    <div class="callout green">建議每組指派一名「AI 領航員（Prompt Engineer）」負責操作 AI，其他人專心發想與辯論。</div>
+  </div>
+
+  <div class="section" id="s7">
+    <p class="sec-num">SECTION 07</p>
+    <h2 class="sec-title">四階段 AI 提示詞</h2>
+    <p>以下四段提示詞對應設計思考的核心階段，可以直接複製到 AI 對話中使用。每段都附上「什麼時候用」。</p>
+
+    <h3>階段一：同理心與虛擬訪談</h3>
+    <p class="use-when"><strong>使用時機：</strong>當組員對使用者的生活細節有爭執，或想像力不足時。把 AI 投到大螢幕，輪流對它提問。</p>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>你現在是一位 [年齡/職業]，名字叫 [小明]。你正在面臨 [具體問題，例如：想健身但下班太累] 的困擾。
+我們現在是一個設計團隊，想對你進行深度訪談。請根據你的性格，真實、簡短地回答問題。
+如果你覺得某個提問很煩或聽不懂，也可以直接表達。
+準備好了嗎？請先用一句話介紹你自己現在的煩惱。</pre>
+    </div>
+
+    <h3>階段二：定義問題與 HMW</h3>
+    <p class="use-when"><strong>使用時機：</strong>組員寫了一堆痛點，但無法聚焦成「可解決」的問題時。</p>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我們團隊收集到的使用者痛點：[貼上討論紀錄/關鍵字]。
+請發揮 UX 專家的專業，幫我們：
+1. 將這些痛點歸納為 3 個核心衝突。
+2. 針對每個衝突，寫出一個具啟發性的 How Might We (HMW) 問句。
+確保問句範圍適中：不要太寬（解決世界和平），也不要太窄（按鈕改成紅色）。</pre>
+    </div>
+
+    <h3>階段三：瘋狂發想與點子挑戰</h3>
+    <p class="use-when"><strong>使用時機：</strong>大家的點子都差不多（又是做一個 App、又是點數回饋）時，請 AI 當「第 N 個組員」。</p>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>我們正在針對 [HMW 問句] 進行發想。目前已有的點子包括：[列出組員點子]。
+請你提供 5 個極端且不尋常的建議，分別從以下角度切換：
+- 如果完全不使用智慧型手機，我們會怎麼解決？
+- 如果我們有無限的預算，最浮誇的方案是什麼？
+- 如果這是 50 年後的科技，解決方案會變怎樣？
+請盡量挑戰我們的思維慣性。</pre>
+    </div>
+
+    <h3>階段四：功能地圖邏輯審查</h3>
+    <p class="use-when"><strong>使用時機：</strong>功能地圖（Functional Map）初步排出來，需要確認邏輯是否通順時，讓 AI 扮演「機車使用者」做壓力測試。</p>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>這是我們設計的產品功能架構 (Functional Map)：
+[主模組 A] -> [功能 1, 2, 3]
+[主模組 B] -> [功能 4, 5, 6]
+
+現在請你重新扮演剛才那位 [Persona 名字]，請以他的視角：
+1. 挑出一個你覺得最沒用、最不想點的功能，並告訴我們為什麼。
+2. 告訴我們，在完成 [具體任務] 的過程中，你覺得哪兩個功能之間「斷掉了」，讓你感到困惑？</pre>
+    </div>
+  </div>
+
+  <div class="section" id="s8">
+    <p class="sec-num">SECTION 08</p>
+    <h2 class="sec-title">核心口訣</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>階段</th><th>AI 的角色</th><th>口訣</th></tr></thead>
+        <tbody>
+          <tr><td>同理</td><td>使用者</td><td>問它感受</td></tr>
+          <tr><td>定義</td><td>過濾器</td><td>幫你聚焦</td></tr>
+          <tr><td>發想</td><td>怪咖</td><td>幫你破圈</td></tr>
+          <tr><td>邏輯</td><td>嚴師</td><td>幫你挑錯</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">這樣的分工能確保<strong>人類掌握決策權（Logic &amp; Soul）</strong>，而 <strong>AI 負責擴張邊界（Speed &amp; Variety）</strong>。</div>
+  </div>
+</div>
+
+<div class="refs">
+  <h2>延伸關聯</h2>
+  <ul>
+    <li>本頁承接 Unit 03 的<a href="article.html">競品分析與 Persona 完整教材</a>：競品觀察與 Persona 是雙鑽石「發現／定義」階段的輸入。</li>
+    <li>Crazy 8s 與 HMW 為設計衝刺（Design Sprint）常用工具，可延伸至後續 Wireframe 單元。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="slides.html">回到 Unit 03 簡報</a>
+  <a href="article.html">競品分析與 Persona 教材</a>
+  <a href="exercises.html">開啟練習作業</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  document.querySelectorAll('.prompt').forEach(prompt => {
+    const btn = prompt.querySelector('.copy-btn');
+    const pre = prompt.querySelector('pre');
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = '已複製';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = '複製';
+          btn.classList.remove('done');
+        }, 1400);
+      } catch (error) {
+        btn.textContent = '複製失敗';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
