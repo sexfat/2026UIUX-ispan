@@ -3,418 +3,1336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 04 · Auto Layout、Constraints 與彈性版面</title>
+<title>Unit 04 · 用戶旅程地圖與設計目標</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg:      #fbfbfd;
-  --dark:    #1d1d1f;
-  --muted:   #86868b;
-  --accent:  #0066cc;
-  --accent2: #0071e3;
-  --accent3: #4094ff;
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --positive: #0f766e;
+  --negative: #c2410c;
   --surface: #f5f5f7;
-  --card:    #e8e8ed;
-  --border:  #d2d2d7;
-  --px: clamp(48px, 7vw, 112px);
+  --card: #ffffff;
+  --border: #d2d2d7;
+  --px: clamp(44px, 7vw, 108px);
   --py: 52px;
 }
+
 html, body { height: 100%; overflow: hidden; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; }
-#prog { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); transition: width 0.55s cubic-bezier(.4,0,.2,1); z-index: 200; border-radius: 0 1px 1px 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
 #deck { position: relative; width: 100%; height: 100vh; }
-.slide { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--py) var(--px); opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s .5s; overflow: hidden; }
-.slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
-.slide-head { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.slide-foot { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.unit-pill { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 20px; }
-.slide-num { font-size: 12px; font-weight: 500; color: var(--border); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
-.course-label { font-size: 11px; color: var(--border); letter-spacing: .02em; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+}
+
+.slide-head, .slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+  position: relative;
+  z-index: 2;
+}
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.slide-num, .course-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.course-label { font-size: 11px; color: #a1a1a6; }
 .dots { display: flex; gap: 5px; align-items: center; }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: all .3s cubic-bezier(.4,0,.2,1); cursor: pointer; }
-.dot.on { background: var(--accent); width: 16px; border-radius: 2.5px; }
-.overline { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
-.divider { width: 40px; height: 3px; background: var(--accent); border-radius: 2px; margin-bottom: 26px; margin-top: 4px; }
-h1 { font-size: clamp(1.9rem, 3.8vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; color: var(--dark); }
-h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--muted); line-height: 1.65; letter-spacing: -.01em; margin-top: 14px; }
-.cover-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 28px; }
-.cover-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
-.cover-title { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -.055em; line-height: 1.04; color: var(--dark); margin-bottom: 22px; }
-.cover-sub { font-size: clamp(.9rem, 1.5vw, 1.25rem); font-weight: 400; color: var(--muted); line-height: 1.6; letter-spacing: -.01em; margin-bottom: 48px; }
-.cover-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted); }
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.dot.on { width: 16px; border-radius: 3px; background: var(--accent); }
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.divider {
+  width: 42px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 8px 0 26px;
+}
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+h2 {
+  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 940px;
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+.cover-title {
+  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover-sub {
+  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+.cover-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
 .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-.agenda-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
-.agenda-card { background: var(--surface); border-radius: 18px; padding: 28px 24px 32px; display: flex; flex-direction: column; gap: 10px; border: 1px solid transparent; transition: border-color .2s; }
-.agenda-card:hover { border-color: var(--border); }
-.a-step { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-.a-time { font-size: clamp(.85rem, 1.25vw, 1.1rem); font-weight: 600; color: var(--dark); line-height: 1.35; }
-.a-desc { font-size: clamp(.78rem, 1.05vw, .95rem); color: var(--muted); line-height: 1.6; margin-top: 2px; }
-.blist { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 36px; }
-.blist li { font-size: clamp(.88rem, 1.3vw, 1.15rem); color: var(--dark); line-height: 1.65; display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; background: var(--surface); border-radius: 12px; transition: background .2s; }
-.blist li:hover { background: var(--card); }
-.blist li::before { content: attr(data-n); font-size: 10px; font-weight: 700; color: var(--accent); background: rgba(0,102,204,.1); padding: 2px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: .04em; }
-.blist.plain li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: .55em; padding: 0; }
-.blist .hl { color: var(--accent); font-weight: 600; }
-.bg-n { position: absolute; right: calc(var(--px) - 16px); top: 50%; transform: translateY(-52%); font-size: clamp(140px, 21vw, 260px); font-weight: 800; color: var(--surface); letter-spacing: -.1em; line-height: 1; z-index: 0; user-select: none; pointer-events: none; }
-.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
-.layer-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 18px; width: fit-content; }
-#ctrls { position: fixed; bottom: 28px; right: clamp(36px, 5vw, 80px); display: flex; gap: 8px; z-index: 100; }
-#ctrls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(29,29,31,.06); color: var(--dark); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; }
-#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
-#ctrls button:active { transform: scale(.94); }
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 38px;
+}
+.agenda-card, .mini-card {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.a-time, .mini-card strong {
+  font-size: clamp(.9rem, 1.25vw, 1.08rem);
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.35;
+}
+.a-desc, .mini-card span {
+  font-size: clamp(.78rem, 1.05vw, .94rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.blist li {
+  font-size: clamp(.88rem, 1.25vw, 1.08rem);
+  color: var(--dark);
+  line-height: 1.58;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.blist li::before {
+  content: attr(data-n);
+  min-width: 30px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.blist.plain li::before {
+  content: '';
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  padding: 0;
+  margin-top: .6em;
+}
+.blist.compact { gap: 8px; margin-top: 18px; }
+.blist.compact li { padding: 9px 13px; font-size: clamp(.78rem, 1.02vw, .94rem); }
+.hl { color: var(--accent); font-weight: 700; }
+.hl2 { color: var(--accent2); font-weight: 700; }
+.warn-text { color: var(--accent3); font-weight: 700; }
+
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(130px, 21vw, 250px);
+  font-weight: 800;
+  color: var(--surface);
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
+.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
+
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  font-size: clamp(.72rem, .98vw, .92rem);
+}
+.cmp-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.45;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child { font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+.note {
+  margin-top: 17px;
+  font-size: clamp(.72rem, .92vw, .86rem);
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 11px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+}
+.note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.note a:hover { text-decoration: underline; }
+
+.journey-grid {
+  display: grid;
+  grid-template-columns: 122px repeat(5, 1fr);
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card);
+  font-size: clamp(.64rem, .82vw, .78rem);
+}
+.journey-grid > div {
+  min-height: 50px;
+  padding: 9px 10px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.35;
+}
+.journey-grid > div:nth-child(6n) { border-right: 0; }
+.journey-grid > div:nth-last-child(-n+6) { border-bottom: 0; }
+.journey-grid .row-label {
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface);
+}
+.journey-grid .phase {
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+}
+.journey-grid .pain { color: var(--negative); font-weight: 600; }
+.journey-grid .sweet { color: var(--positive); font-weight: 600; }
+
+.chart-wrap {
+  position: relative;
+  height: clamp(220px, 34vh, 310px);
+  margin-top: 18px;
+  padding: 14px 18px 8px;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  background: rgba(255,255,255,.035);
+}
+.chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.chart-wrap.chart-ready canvas { opacity: 1; }
+.chart-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #a1a1a6;
+  font-size: .86rem;
+}
+.chart-wrap.chart-ready .chart-fallback { display: none; }
+.chart-caption-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+  color: #a1a1a6;
+  font-size: clamp(.62rem, .84vw, .76rem);
+  text-align: center;
+}
+.chart-caption-row strong { display: block; color: #f5f5f7; margin-bottom: 3px; }
+
+.chain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+}
+.chain-step {
+  position: relative;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.chain-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+}
+.chain-step b { display: block; color: var(--accent); font-size: .78rem; margin-bottom: 8px; }
+.chain-step span { display: block; color: var(--muted); line-height: 1.5; font-size: .86rem; }
+
+.stat-row { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 32px; }
+.stat b { display: block; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1; color: var(--accent); }
+.stat span { display: block; margin-top: 9px; color: var(--muted); line-height: 1.5; font-size: .9rem; }
+
+.res-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.res-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+}
+.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.res-link strong { font-size: .94rem; color: var(--dark); }
+.res-link span { font-size: .75rem; color: var(--muted); }
+
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+#ctrls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+
 .slide.dark { background: #1d1d1f; }
 .slide.dark h1 { color: #f5f5f7; }
-.slide.dark h2 { color: #86868b; }
-.slide.dark .overline { color: #4094ff; }
-.slide.dark .divider { background: #4094ff; }
-.slide.dark .layer-badge { background: rgba(64,148,255,.12); color: #4094ff; }
+.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
+.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
+.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
+.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
 .slide.dark .bg-n { color: #2c2c2e; }
-.slide.dark .blist li { background: rgba(255,255,255,.05); color: #f5f5f7; }
-.slide.dark .blist li:hover { background: rgba(255,255,255,.09); }
-.slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
-.slide.dark .slide-num { color: #48484a; }
-.slide.dark .course-label { color: #3a3a3c; }
+.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card, .slide.dark .chain-step {
+  background: rgba(255,255,255,.055);
+  color: #f5f5f7;
+  border-color: #3a3a3c;
+}
+.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
+.slide.dark .mini-card strong, .slide.dark .a-time, .slide.dark .chain-step span { color: #f5f5f7; }
+.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
 .slide.dark .dot { background: #3a3a3c; }
-.slide.dark .dot.on { background: #4094ff; }
+.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .note a { color: #58a6ff; }
+.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
+.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .res-link strong { color: #f5f5f7; }
+.slide.dark .res-link span { color: #a1a1a6; }
+
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding: 12px 0; }
+  .agenda-grid, .matrix, .res-links, .chain { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .chain-step:not(:last-child)::after { display: none; }
+  .cmp-table, .journey-grid { overflow-x: auto; min-width: 760px; }
+  .journey-grid { display: grid; }
+  .chart-wrap { min-height: 230px; }
+  .chart-caption-row { min-width: 720px; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 20px; }
+  .cover-sub { margin-bottom: 22px; }
+  .bg-n, .course-label, .dots { display: none; }
+  #ctrls { bottom: 16px; right: 16px; }
+}
 </style>
 </head>
 <body>
-
 <div id="prog"></div>
 
 <div id="deck">
-
-  <!-- Slide 1 · Cover -->
-  <div class="slide active">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">01 / 12</span>
-    </div>
+  <section class="slide active">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
-      <h1 class="cover-title">Auto Layout<br>&amp; Constraints</h1>
-      <p class="cover-sub">彈性版面 · 響應設計 · 元件縮放</p>
-    </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-  <!-- Slide 2 · Agenda (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">02 / 12</span>
-    </div>
-    <div class="slide-body">
-      <p class="overline">Agenda</p>
-      <h1>課程大綱</h1>
-      <div class="agenda-grid">
-        <div class="agenda-card">
-          <span class="a-step">第 1 小時</span>
-          <span class="a-time">Auto Layout 核心概念</span>
-          <span class="a-desc">為什麼需要彈性版面</span>
-        </div>
-        <div class="agenda-card">
-          <span class="a-step">第 2 小時</span>
-          <span class="a-time">Constraints 實作</span>
-          <span class="a-desc">元件在不同尺寸下的行為</span>
-        </div>
-        <div class="agenda-card">
-          <span class="a-step">第 3 小時</span>
-          <span class="a-time">重構練習</span>
-          <span class="a-desc">把靜態版面改寫成彈性結構</span>
-        </div>
+      <h1 class="cover-title">用戶旅程地圖<br>與設計目標</h1>
+      <p class="cover-sub">情境界定 × 行動與情緒 × 峰值體驗 × 甜點與痛點 × 設計機會</p>
+      <div class="cover-meta">
+        <span>07/28 全天</span><span class="meta-dot"></span><span>41 張投影片</span><span class="meta-dot"></span><span>含課堂實作</span>
       </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 3 · 為什麼需要 Auto Layout (light) -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">03 / 12</span>
-    </div>
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <p class="overline">Why</p>
-      <h1>為什麼需要 Auto Layout？</h1>
-      <h2>告別手動調整，讓版面自己長大</h2>
-      <ul class="blist">
-        <li data-n="01">內容變長時按鈕自動撐寬</li>
-        <li data-n="02">列表增加項目時容器自動延伸</li>
-        <li data-n="03">多語言文字長短不一時版面自動適應</li>
-        <li data-n="04"><span class="hl">設計稿更接近真實開發的行為</span></li>
+      <p class="overline">Agenda</p>
+      <h1>今天把研究變成一條<br>可被看見的體驗</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card"><span class="a-step">Part 1</span><span class="a-time">看懂旅程</span><span class="a-desc">理解 Journey Map 的用途、邊界、五個必要元素，以及它和 Persona、User Flow 的差異。</span></div>
+        <div class="agenda-card"><span class="a-step">Part 2</span><span class="a-time">找出關鍵時刻</span><span class="a-desc">把行動、想法、情緒與接觸點排進時間軸，辨識峰值、甜點、痛點與證據缺口。</span></div>
+        <div class="agenda-card"><span class="a-step">Part 3</span><span class="a-time">轉成設計目標</span><span class="a-desc">從洞察提出機會、設定優先順序，完成專題 Journey Map 與下一階段設計目標。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Warm-up</p>
+      <h1>先回想一段<br>讓你有情緒的服務經驗</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>發生了什麼？</strong><span>你原本想完成什麼？從哪一刻開始，到哪一刻才算結束？</span></div>
+        <div class="mini-card"><strong>接觸了誰與什麼？</strong><span>搜尋、網站、App、電話、人員、空間或通知，哪些環節共同形成體驗？</span></div>
+        <div class="mini-card warn"><strong>哪一刻最有感？</strong><span>情緒最高或最低的時刻是什麼？它改變了你的選擇或信任嗎？</span></div>
+        <div class="mini-card"><strong>如果只改一件事？</strong><span>你會先改善哪個階段？為什麼它比其他問題更重要？</span></div>
+      </div>
+      <p class="note">兩人一組分享 3 分鐘。先說故事，不要急著提出功能解法。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">The Big Picture</p>
+      <h1>介面只是旅程中的<br>一個接觸點</h1>
+      <div class="divider"></div>
+      <h2>使用者的體驗可能從搜尋、詢問朋友開始，跨過網站、App、Email 與現場服務，最後才形成「這個產品好不好用」的整體感受。</h2>
+      <ul class="blist plain">
+        <li>Journey Map 幫助團隊<span class="hl">拉遠鏡頭</span>，看見跨時間、跨通路的完整經驗</li>
+        <li>不是先問「這頁怎麼畫」，而是先問「使用者一路上發生了什麼」</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 4 · 水平與垂直排列 (dark) -->
-  <div class="slide dark">
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Definition</p>
+      <h1>什麼是用戶旅程地圖？</h1>
+      <div class="divider"></div>
+      <h2>用時間軸視覺化一位特定使用者，為了完成某個目標所經歷的階段、行動、想法、情緒與接觸點，並從中找出改善機會。</h2>
+      <ul class="blist plain">
+        <li>主角必須明確：<span class="hl">誰</span>正在經歷這段旅程？</li>
+        <li>情境必須具體：他在什麼狀況下，想完成<span class="hl">什麼目標</span>？</li>
+        <li>每張地圖只描述一個觀點，避免把所有人混成「平均使用者」</li>
+      </ul>
+      <p class="note">「顧客旅程」常用於購買與服務關係，「用戶旅程」常用於產品使用；方法相同，本課程依情境選詞。參考：<a href="https://www.nngroup.com/articles/journey-mapping-101/" target="_blank" rel="noopener">NN/g · Journey Mapping 101</a></p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Research Inputs</p>
+      <h1>Journey Map 不靠想像<br>它靠證據拼出旅程</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>觀察 Observation</strong><span>看使用者實際怎麼做、在哪裡停頓、繞路、求助或放棄。</span></div>
+        <div class="mini-card"><strong>訪談 Interview</strong><span>理解當時的目標、期待、判斷、顧慮與情緒原因。</span></div>
+        <div class="mini-card"><strong>數據 Data</strong><span>用轉換、流失、等待時間、客服紀錄或評論判斷問題規模。</span></div>
+        <div class="mini-card warn"><strong>待驗證 Assumption</strong><span>資料不足時可以先寫，但要明確標註，不能包裝成使用者事實。</span></div>
+      </div>
+      <p class="note">先帶著研究問題蒐集資料，再把跨來源證據依時間排序；不要為了填滿模板而補故事。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
     <div class="bg-n">1</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">04 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <span class="layer-badge">Auto Layout · Direction</span>
-      <h1>水平與垂直排列</h1>
+      <span class="layer-badge">Current-state vs. Future-state</span>
+      <h1>先理解現在<br>再設計未來</h1>
+      <div class="matrix">
+        <div class="mini-card warn"><strong>Current-state · 現況旅程</strong><span>描繪今天真實發生的行動、想法、情緒與接觸點，用證據定位斷點、甜點與痛點。</span></div>
+        <div class="mini-card accent"><strong>Future-state · 未來旅程</strong><span>把優先機會轉成理想體驗，說明未來希望使用者如何更順利、更安心地完成目標。</span></div>
+        <div class="mini-card"><strong>先別混在一起</strong><span>現況寫「已知事實」；未來寫「設計假設」。混在一起會讓團隊誤判證據。</span></div>
+        <div class="mini-card"><strong>共同語言</strong><span>兩張地圖讓設計、PM、工程與服務人員看見差距，對齊改善位置與責任。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Breadth × Depth</p>
+      <h1>先決定要畫多寬<br>再決定每一格要多深</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>Breadth · 廣度</strong><span>旅程跨多久、幾個階段、哪些通路？例如「第一次找牙醫到完成看診」或只看「線上預約」。</span></div>
+        <div class="mini-card"><strong>Depth · 深度</strong><span>每階段要記錄哪些層次？行動、想法、情緒、接觸點、證據、痛點與機會。</span></div>
+        <div class="mini-card warn"><strong>太寬的風險</strong><span>「從認識品牌到忠誠」容易變成空泛長表，細節不足以支持設計決策。</span></div>
+        <div class="mini-card"><strong>太深的風險</strong><span>把單一畫面操作拆得過細，會退化成 User Flow，失去跨通路與情緒脈絡。</span></div>
+      </div>
+      <p class="note">判斷標準：這個範圍是否足以回答研究問題，又能讓團隊採取下一步？</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Research Continuity</p>
+      <h1>Persona 定義「誰」<br>Journey Map 描述「如何經歷」</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>Persona</strong><span>目標、動機、情境、行為模式與痛點。提供旅程的主角與觀點。</span></div>
+        <div class="mini-card accent"><strong>Journey Map</strong><span>主角如何跨時間完成目標；在哪裡思考、感受、接觸服務並遇到阻力。</span></div>
+        <div class="mini-card"><strong>Design Goal</strong><span>哪些體驗結果最值得改善，以及改善後希望發生什麼變化。</span></div>
+        <div class="mini-card warn"><strong>IA / Flow / Wireframe</strong><span>把設計目標轉成產品結構、任務流程與介面骨架。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Journey vs. Flow</p>
+      <h1>Journey 看整體經驗<br>Flow 看產品內的操作</h1>
+      <table class="cmp-table">
+        <thead><tr><th>比較</th><th>User Journey</th><th>User Flow</th></tr></thead>
+        <tbody>
+          <tr><td>視角</td><td>宏觀：跨時間、跨通路的完整經驗</td><td>微觀：一個產品內的具體任務步驟</td></tr>
+          <tr><td>內容</td><td>行動、想法、情緒、接觸點與機會</td><td>操作、畫面、判斷點與系統回應</td></tr>
+          <tr><td>時間</td><td>可能跨數天、數週或更久</td><td>通常是幾分鐘到幾小時</td></tr>
+          <tr><td>用途</td><td>理解問題與尋找改善方向</td><td>規劃與檢查任務流程</td></tr>
+        </tbody>
+      </table>
+      <p class="note">參考：<a href="https://www.nngroup.com/articles/user-journeys-vs-user-flows/" target="_blank" rel="noopener">NN/g · User Journeys vs. User Flows</a></p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Anatomy</p>
+      <h1>完整 Journey Map<br>至少有五個元素</h1>
+      <ul class="blist">
+        <li data-n="01"><span class="hl">Actor</span>：一位明確的 Persona 或使用者觀點</li>
+        <li data-n="02"><span class="hl">Scenario + Expectations</span>：具體情境、目標與期待</li>
+        <li data-n="03"><span class="hl">Journey Phases</span>：旅程的高層階段</li>
+        <li data-n="04"><span class="hl">Actions, Mindsets, Emotions</span>：做什麼、想什麼、感受什麼</li>
+        <li data-n="05"><span class="hl">Opportunities</span>：洞察、改善機會、負責人與衡量方式</li>
+      </ul>
+      <p class="note">五個元素整理自 NN/g Journey Mapping 101；版面可依研究目的增減欄位，但主角與情境不能消失。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="bg-n">1</div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Element 01 · Actor</span>
+      <h1>一張地圖，只放一個主角</h1>
       <div class="divider"></div>
-      <h2>兩種基本排列方向</h2>
+      <h2>同一個服務，不同 Persona 會有不同目標、資訊需求與情緒曲線。把他們混在一起，最後只會得到一條沒有人真正走過的旅程。</h2>
       <ul class="blist plain">
-        <li>Horizontal：子元素左右排列（如按鈕列、導覽列）</li>
-        <li>Vertical：子元素上下排列（如卡片、列表）</li>
-        <li>Wrap：超出寬度時自動換行</li>
-        <li><span class="hl">快速建立：選取多個物件 → Shift+A</span></li>
+        <li>寫下 Persona 名稱、目標、關鍵情境與限制</li>
+        <li>行動與想法應來自研究資料，不是為了填滿格子而想像</li>
+        <li>若要比較兩種族群，畫兩張地圖，再找交集與差異</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 5 · Padding 與 Spacing (light) -->
-  <div class="slide">
+  <section class="slide dark">
     <div class="bg-n">2</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">05 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <span class="layer-badge">Auto Layout · Spacing</span>
-      <h1>Padding 與 Spacing</h1>
-      <div class="divider"></div>
-      <h2>控制內部空間的兩個關鍵參數</h2>
-      <ul class="blist plain">
-        <li>Padding：容器內側留白（上下左右可分開設定）</li>
-        <li>Gap：子元素之間的間距</li>
-        <li>Auto：子元素均等分佈</li>
-        <li><span class="hl">統一使用 4px 倍數間距系統</span></li>
-      </ul>
+      <span class="layer-badge">Element 02 · Scenario</span>
+      <h1>先把旅程的起點與終點說清楚</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>模糊情境</strong><span>「小安使用線上課程平台。」範圍太大，不知道何時開始、何時算完成。</span></div>
+        <div class="mini-card accent"><strong>可畫的情境</strong><span>「小安第一次為轉職挑選 UI/UX 課程，從搜尋比較到完成報名並收到確認。」</span></div>
+        <div class="mini-card"><strong>起點</strong><span>需求或事件發生：想轉職、朋友推薦、看到廣告、工作遇到問題。</span></div>
+        <div class="mini-card warn"><strong>終點</strong><span>目標達成或明確中止：完成報名、放棄購買、尋求客服或改選替代方案。</span></div>
+      </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 6 · 三種 Resizing 模式 (dark) -->
-  <div class="slide dark">
+  <section class="slide">
     <div class="bg-n">3</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">06 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <span class="layer-badge">Auto Layout · Resizing</span>
-      <h1>三種 Resizing 模式</h1>
-      <div class="divider"></div>
-      <h2>控制容器如何回應內容</h2>
-      <ul class="blist plain">
-        <li>Fixed：固定尺寸，內容超出時裁切</li>
-        <li>Hug：緊貼內容，隨內容大小變化</li>
-        <li>Fill：填滿父層可用空間</li>
-        <li><span class="hl">正確設定 Resizing = 元件能在各情境正常運作</span></li>
-      </ul>
+      <span class="layer-badge">Element 03 · Phases</span>
+      <h1>階段是使用者經驗的章節<br>不是網站選單</h1>
+      <div class="chain">
+        <div class="chain-step"><b>需求出現</b><span>意識到問題，開始尋找可能解法</span></div>
+        <div class="chain-step"><b>探索比較</b><span>蒐集資訊、確認適配度與風險</span></div>
+        <div class="chain-step"><b>採取行動</b><span>報名、購買、預約或提交資料</span></div>
+        <div class="chain-step"><b>使用與後續</b><span>收到確認、開始使用、求助或分享</span></div>
+      </div>
+      <p class="note">階段名稱要能跨通路成立。「首頁 → 列表頁 → 結帳頁」比較像 User Flow，不是完整 Journey。</p>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 7 · 巢狀 Auto Layout (light) -->
-  <div class="slide">
+  <section class="slide dark">
     <div class="bg-n">4</div>
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">07 / 12</span>
-    </div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <span class="layer-badge">Auto Layout · Nested</span>
-      <h1>巢狀 Auto Layout</h1>
+      <span class="layer-badge">Element 04 · Touchpoints</span>
+      <h1>接觸點讓你看見<br>體驗在哪裡發生</h1>
+      <table class="cmp-table">
+        <thead><tr><th>通路</th><th>常見接觸點</th><th>可以觀察什麼</th></tr></thead>
+        <tbody>
+          <tr><td>搜尋與社群</td><td>Google、YouTube、社群貼文、朋友推薦</td><td>資訊是否可信？關鍵差異是否容易理解？</td></tr>
+          <tr><td>數位產品</td><td>網站、App、Email、推播、聊天室</td><td>資訊與操作是否連續？狀態是否清楚？</td></tr>
+          <tr><td>人員服務</td><td>客服、門市、講師、顧問</td><td>承諾是否一致？交接是否造成重複說明？</td></tr>
+          <tr><td>實體環境</td><td>場地、包裝、設備、交通</td><td>數位承諾能否在現場被實現？</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="bg-n">5</div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Element 05 · Experience</span>
+      <h1>從外在行為走進內在經驗<br>最後看見設計機會</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>外 · Outside</strong><span>階段、行動、接觸點與目標：使用者做了什麼？體驗在哪裡發生？</span></div>
+        <div class="mini-card warn"><strong>內 · Inside</strong><span>想法、期待、痛點與情緒：為什麼這樣做？哪裡安心、焦慮或困惑？</span></div>
+        <div class="mini-card accent"><strong>看見 · Seeing</strong><span>模式、需求、機會與新想法：跨欄位比較後，團隊因此看見了什麼？</span></div>
+        <div class="mini-card"><strong>證據 · Evidence</strong><span>每一層都連回訪談、觀察、客服紀錄、評論或數據；未知就標成假設。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark" data-chart="emotion">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Emotion Curve</p>
+      <h1>情緒曲線不是裝飾<br>它指出最需要理解的時刻</h1>
+      <div class="chart-wrap" id="emotionChartWrap">
+        <canvas id="emotionChart" role="img" aria-label="需求出現、搜尋比較、找到方案、付款確認到收到指引的情緒曲線"></canvas>
+        <div class="chart-fallback">圖表載入中；若無網路，請依下方文字判讀情緒轉折。</div>
+      </div>
+      <div class="chart-caption-row">
+        <span><strong>需求出現</strong>期待／不確定</span>
+        <span><strong>搜尋比較</strong>資訊過多／焦慮</span>
+        <span><strong>找到方案</strong>安心／有希望</span>
+        <span><strong>付款確認</strong>擔心失敗</span>
+        <span><strong>收到指引</strong>成功／可預期</span>
+      </div>
+      <p class="note">教學示意：曲線高低必須能指回使用者原話、行為或其他研究證據。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Reference Case · Dental Appointment</p>
+      <h1>案例：牙醫預約體驗<br>從搜尋一路看到離院</h1>
+      <div class="chain">
+        <div class="chain-step"><b>① 資訊搜尋</b><span>Google Maps、評分與評論</span></div>
+        <div class="chain-step"><b>②–③ 選擇與預約</b><span>比較診所、電話確認時段</span></div>
+        <div class="chain-step"><b>④–⑤ 準備與等待</b><span>行前提醒、報到與候診</span></div>
+        <div class="chain-step"><b>⑥–⑦ 看診與離院</b><span>說明、收據與後續安排</span></div>
+      </div>
+      <p class="note">完整 FigJam：<a href="https://www.figma.com/board/BwTlHzizgSCTknmCRPK6sb/%E7%89%99%E9%86%AB%E9%A0%90%E7%B4%84%E9%AB%94%E9%A9%97-%E2%80%94-%E9%A1%A7%E5%AE%A2%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9C%96?node-id=0-1&t=TnckCjjKY6XXKTms-1" target="_blank" rel="noopener">牙醫預約體驗 — 顧客旅程地圖 ↗</a></p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">How to Read the Case</p>
+      <h1>讀案例時，不只看格子<br>要看它如何推動設計</h1>
+      <div class="matrix">
+        <div class="mini-card warn"><strong>找跨階段痛點</strong><span>資訊不透明、等待不確定與術後資訊不足，是否在不同接觸點反覆出現？</span></div>
+        <div class="mini-card accent"><strong>看機會如何回應</strong><span>線上預約、候診狀態、白話說明與術後通知，是否直接對應痛點與情緒？</span></div>
+        <div class="mini-card"><strong>追到 Feature Breakdown</strong><span>案例把機會再拆成模組、優先級與 User Stories，示範研究如何接到產品規劃。</span></div>
+        <div class="mini-card"><strong>保持研究誠實</strong><span>這是一個結構參考；套用到專題前，仍要用自己的研究證據重畫內容。</span></div>
+      </div>
+      <p class="note">練習：從案例挑一個 P1 功能，指出它對應哪個階段、哪個痛點、哪個期待結果。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="bg-n">↑</div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Peak Moments</span>
+      <h1>峰值是情緒最強烈的時刻</h1>
       <div class="divider"></div>
-      <h2>複雜版面的組成方式</h2>
+      <h2>它可能是最高點，也可能是最低點。強烈情緒往往代表使用者的重要期待被滿足，或重要控制感被破壞。</h2>
       <ul class="blist plain">
-        <li>外層 Vertical Auto Layout 控制整體流向</li>
-        <li>內層 Horizontal Auto Layout 控制單行元素</li>
-        <li>讓每個子元件也具備 Auto Layout</li>
-        <li><span class="hl">思考方式：像 CSS Flexbox 一樣拆解版面</span></li>
+        <li>標出情緒轉折最大的階段，而不是只看最後結果</li>
+        <li>追問「前一刻發生了什麼？」以及「使用者原本期待什麼？」</li>
+        <li>不要把所有低點都當成同等嚴重；先判斷是否影響核心目標</li>
       </ul>
+      <p class="note">本課程的「峰值」指旅程中的強烈情緒時刻，不等同於直接套用 Peak-End Rule。</p>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 8 · Constraints (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">08 / 12</span>
-    </div>
+  <section class="slide">
+    <div class="bg-n">＋</div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <p class="overline">Constraints</p>
-      <h1>Constraints</h1>
-      <h2>元件在不同尺寸 Frame 下的行為</h2>
+      <span class="layer-badge">Sweet Spots</span>
+      <h1>甜點是值得保留與放大的<br>正向時刻</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>期待被確認</strong><span>使用者快速知道「這適合我」，不必猜測產品是否符合需求。</span></div>
+        <div class="mini-card"><strong>進度可預期</strong><span>清楚知道目前狀態、剩餘步驟與接下來會發生什麼。</span></div>
+        <div class="mini-card"><strong>被理解</strong><span>內容與服務回應了真實情境，而不是只講產品功能。</span></div>
+        <div class="mini-card accent"><strong>超出期待</strong><span>在關鍵時刻提供剛好的提醒、支援或選擇，降低不安。</span></div>
+      </div>
+      <p class="note">甜點不是多加動畫或贈品；先找出使用者真正重視的價值，再決定如何放大。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="bg-n">−</div>
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Pain Points</span>
+      <h1>痛點是阻礙目標的摩擦<br>不是所有抱怨的集合</h1>
       <ul class="blist">
-        <li data-n="01">Left / Right / Center（水平固定位置）</li>
-        <li data-n="02">Top / Bottom / Center（垂直固定位置）</li>
-        <li data-n="03">Scale：等比例縮放</li>
-        <li data-n="04">Left+Right：自動拉伸填滿寬度</li>
+        <li data-n="理解">資訊難懂、比較標準不清楚、不知道下一步</li>
+        <li data-n="操作">步驟過多、重複輸入、錯誤後無法恢復</li>
+        <li data-n="信任">價格或規則不透明、狀態不確定、承諾前後不一致</li>
+        <li data-n="情境">時間壓力、裝置限制、環境干擾、需要他人協助</li>
+      </ul>
+      <p class="note">寫痛點時補上「發生在哪一階段、造成什麼影響、有哪些證據」，才能進入優先排序。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Evidence</p>
+      <h1>把事實、解讀與假設分開</h1>
+      <table class="cmp-table">
+        <thead><tr><th>層級</th><th>寫法</th><th>下一步</th></tr></thead>
+        <tbody>
+          <tr><td>觀察事實</td><td>3 位受訪者在比較課程時，反覆切換頁面確認費用與時數</td><td>保留原話、截圖或觀察紀錄</td></tr>
+          <tr><td>研究解讀</td><td>費用資訊分散，增加比較與記憶負擔</td><td>由多筆證據歸納模式</td></tr>
+          <tr><td>設計假設</td><td>若提供固定比較摘要，可能降低選擇焦慮</td><td>用原型與測試驗證</td></tr>
+          <tr><td>未知缺口</td><td>不確定使用者最在意總價、付款方式或退費規則</td><td>安排後續訪談或問卷</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Interview → Journey · Step 01</p>
+      <h1>先讀原話，不要一開始<br>就急著畫表格</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>受訪者 A</strong><span>「我先看很多轉職分享，但每個人講的課程都不一樣，我越看越不知道自己適合哪種。」</span></div>
+        <div class="mini-card accent"><strong>受訪者 B</strong><span>「我最在意上課時間，可是時數、請假與補課規則分散在不同頁面，只好自己做筆記。」</span></div>
+        <div class="mini-card warn"><strong>受訪者 C</strong><span>「付款後畫面跳掉，我不知道有沒有成功，直到收到 Email 才放心。」</span></div>
+        <div class="mini-card"><strong>第一次閱讀</strong><span>圈出目標、行動、接觸點、判斷、期待、情緒與結果；暫時不要提出功能。</span></div>
+      </div>
+      <p class="note">教學用模擬訪談資料，用來示範分析流程，不代表真實研究結論。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Interview → Journey · Step 02</p>
+      <h1>把一段話拆成<br>可以移動的證據卡</h1>
+      <table class="cmp-table">
+        <thead><tr><th>原話片段</th><th>證據卡</th><th>暫時標籤</th></tr></thead>
+        <tbody>
+          <tr><td>「我先看很多轉職分享」</td><td>行動：搜尋並閱讀轉職經驗</td><td>探索／社群</td></tr>
+          <tr><td>「越看越不知道適合哪種」</td><td>想法：缺少判斷適配度的標準</td><td>比較／困惑</td></tr>
+          <tr><td>「只好自己做筆記」</td><td>行動：跨頁整理時數與規則</td><td>比較／額外負擔</td></tr>
+          <tr><td>「收到 Email 才放心」</td><td>情緒：確認前焦慮，收到通知後安心</td><td>付款／狀態</td></tr>
+        </tbody>
+      </table>
+      <p class="note">一張卡只放一個意思，並保留受訪者代號與逐字稿位置，之後才能回查證據。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Interview → Journey · Step 03</p>
+      <h1>先依「發生順序」排列<br>再為階段命名</h1>
+      <div class="chain">
+        <div class="chain-step"><b>需求出現</b><span>工作遇到瓶頸，開始考慮轉職</span></div>
+        <div class="chain-step"><b>搜尋探索</b><span>搜尋文章、社群分享與課程</span></div>
+        <div class="chain-step"><b>比較評估</b><span>整理費用、時間、規則與作品</span></div>
+        <div class="chain-step"><b>報名確認</b><span>填資料、付款、等待成功通知</span></div>
+      </div>
+      <ul class="blist compact">
+        <li data-n="排序">同一張卡可能有多個標籤，但只能放在實際發生的位置</li>
+        <li data-n="聚類">多位受訪者在相近時刻做相似的事，才聚成共同階段</li>
+        <li data-n="差異">少數但重要的不同路徑不要刪除，可標註分支或另畫一張地圖</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 9 · 響應式設計概念 (light) -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">09 / 12</span>
-    </div>
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <p class="overline">Responsive</p>
-      <h1>響應式設計概念</h1>
-      <h2>一份設計稿，多種裝置尺寸</h2>
+      <p class="overline">Interview → Journey · Step 04</p>
+      <h1>同一份證據，要放進<br>正確的旅程層次</h1>
+      <div class="journey-grid">
+        <div class="row-label">階段</div><div class="phase">需求出現</div><div class="phase">搜尋探索</div><div class="phase">比較評估</div><div class="phase">報名付款</div><div class="phase">等待確認</div>
+        <div class="row-label">行動</div><div>思考轉職</div><div>看分享與課程頁</div><div>跨頁做筆記</div><div>填表、付款</div><div>檢查 Email</div>
+        <div class="row-label">想法</div><div>我適合嗎？</div><div>哪一種可信？</div><div>規則差在哪？</div><div>資料正確嗎？</div><div>有成功嗎？</div>
+        <div class="row-label">情緒</div><div>期待／不安</div><div class="pain">資訊過多 ↓</div><div class="pain">比較疲累 ↓</div><div>緊張</div><div class="sweet">收到通知 ↑</div>
+        <div class="row-label">接觸點</div><div>工作情境</div><div>Google、社群</div><div>網站、筆記</div><div>表單、金流</div><div>Email</div>
+        <div class="row-label">證據</div><div>A</div><div>A</div><div>B</div><div>C</div><div>C</div>
+      </div>
+      <p class="note">同一段原話可能同時支持「行動、想法與情緒」，但每一格都要能回到原始資料。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Interview → Journey · Step 05</p>
+      <h1>跨欄閱讀，才會從資料<br>走到洞察與機會</h1>
+      <div class="matrix">
+        <div class="mini-card warn"><strong>模式</strong><span>A 與 B 都需要自行拼接資訊，問題不是資料少，而是缺少一致的比較框架。</span></div>
+        <div class="mini-card"><strong>痛點</strong><span>比較負擔高；付款後狀態不明，讓使用者懷疑操作是否成功。</span></div>
+        <div class="mini-card accent"><strong>機會</strong><span>提供一致的比較摘要；在付款後立即顯示狀態、下一步與備援查詢方式。</span></div>
+        <div class="mini-card"><strong>設計目標</strong><span>讓第一次轉職者能理解課程差異，並在報名後確認狀態，降低選擇與付款焦慮。</span></div>
+      </div>
+      <p class="note">不要從一句抱怨直接跳到功能；先確認它是否跨受訪者、跨欄位形成可解釋的模式。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">5-Step Process</p>
+      <h1>畫 Journey Map 的五個步驟</h1>
+      <ul class="blist compact">
+        <li data-n="01">確認研究目的：這張地圖要幫助團隊回答什麼問題？</li>
+        <li data-n="02">選 Actor 與 Scenario：一位主角、一個目標、清楚起訖點</li>
+        <li data-n="03">整理研究資料：把行動與接觸點依時間排列，再分成階段</li>
+        <li data-n="04">補上想法與情緒：標出高低點、甜點、痛點與證據缺口</li>
+        <li data-n="05">收斂機會與目標：決定先改善什麼、為誰改善、期待什麼結果</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Teaching Example</p>
+      <h1>示意案例：第一次報名<br>UI/UX 轉職課程</h1>
+      <div class="matrix">
+        <div class="mini-card"><strong>Actor</strong><span>小安，初次轉職，工作日晚間蒐集資料；在意時間投入與是否適合零基礎。</span></div>
+        <div class="mini-card accent"><strong>Goal</strong><span>找到一門可信、時程可配合的課程，完成報名並確認下一步。</span></div>
+        <div class="mini-card"><strong>Start</strong><span>工作遇到瓶頸，開始搜尋 UI/UX 轉職資訊。</span></div>
+        <div class="mini-card warn"><strong>End</strong><span>收到報名與付款確認，知道開課前要準備什麼。</span></div>
+      </div>
+      <p class="note">此案例只用來示範方法，不代表真實研究結果；實作時請替換成各組自己的訪談與觀察資料。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Journey Map Example</p>
+      <h1>把資料排進同一條時間軸</h1>
+      <div class="journey-grid">
+        <div class="row-label">階段</div><div class="phase">需求出現</div><div class="phase">搜尋探索</div><div class="phase">比較評估</div><div class="phase">報名付款</div><div class="phase">等待開始</div>
+        <div class="row-label">行動</div><div>詢問朋友、搜尋轉職經驗</div><div>看課程頁與社群分享</div><div>比較費用、時數、作品</div><div>填資料、付款</div><div>查看 Email 與行前通知</div>
+        <div class="row-label">想法</div><div>「我真的適合嗎？」</div><div>「資訊好多，怎麼選？」</div><div>「這對零基礎有用嗎？」</div><div>「有成功嗎？」</div><div>「開課前要準備什麼？」</div>
+        <div class="row-label">情緒</div><div>期待／不安</div><div class="pain">焦慮 ↓</div><div class="sweet">逐漸安心 ↑</div><div class="pain">不確定 ↓</div><div class="sweet">有方向 ↑</div>
+        <div class="row-label">接觸點</div><div>Google、朋友</div><div>網站、YouTube、社群</div><div>課程頁、客服</div><div>表單、金流</div><div>Email、行事曆</div>
+        <div class="row-label">機會</div><div>提供能力自評</div><div>建立選課指南</div><div>集中比較資訊</div><div>即時顯示狀態</div><div>提供清楚準備清單</div>
+      </div>
+      <p class="note">示意案例：每一格都應在真實專題中連回研究證據或標註為待驗證假設。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Interpretation</p>
+      <h1>真正的工作從畫完之後開始</h1>
+      <div class="matrix">
+        <div class="mini-card warn"><strong>最大低點</strong><span>比較資訊分散，使用者需要自己記住與拼接，選擇焦慮升高。</span></div>
+        <div class="mini-card accent"><strong>正向轉折</strong><span>當費用、時數、作品要求被集中說清楚，使用者開始建立信心。</span></div>
+        <div class="mini-card"><strong>關鍵斷點</strong><span>付款後沒有即時確認，讓使用者懷疑是否成功，甚至重複操作。</span></div>
+        <div class="mini-card"><strong>資料缺口</strong><span>仍需確認「零基礎適配」與「時間投入」哪一項最影響決策。</span></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Insight</p>
+      <h1>洞察要說明「為什麼」<br>不能只重述痛點</h1>
+      <div class="chain">
+        <div class="chain-step"><b>證據</b><span>使用者反覆切換頁面確認費用與時數</span></div>
+        <div class="chain-step"><b>模式</b><span>比較時需要自己記住分散資訊</span></div>
+        <div class="chain-step"><b>原因</b><span>第一次轉職，缺乏判斷課程價值的標準</span></div>
+        <div class="chain-step"><b>洞察</b><span>他需要的不是更多資訊，而是能放心做決定的比較框架</span></div>
+      </div>
+      <p class="note">好洞察會改變團隊的理解：從「資訊不夠多」改成「缺少可用的判斷標準」。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Design Goal</p>
+      <h1>設計目標描述體驗結果<br>不是直接指定功能</h1>
+      <table class="cmp-table">
+        <thead><tr><th>層級</th><th>寫法</th><th>判斷</th></tr></thead>
+        <tbody>
+          <tr><td>太抽象</td><td>「提升使用者體驗」</td><td>不知道改善誰、哪個階段、什麼結果</td></tr>
+          <tr><td>太快跳功能</td><td>「做一個課程比較按鈕」</td><td>把解法當目標，限制後續發想</td></tr>
+          <tr><td>可行的目標</td><td>「讓第一次轉職者能在比較階段快速理解差異，降低選擇焦慮並有信心進入報名」</td><td>有對象、情境、改變與期待結果</td></tr>
+        </tbody>
+      </table>
+      <p class="note"><span class="hl">句型：</span>讓［目標使用者］在［旅程階段／情境］能［期待改變］，以達成［體驗結果］。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Prioritization</p>
+      <h1>不是所有痛點都要立刻解決</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>使用者影響</strong><span>是否阻斷核心目標？發生頻率與情緒強度如何？</span></div>
+        <div class="mini-card"><strong>證據強度</strong><span>來自幾種資料？是否有一致模式？還只是團隊假設？</span></div>
+        <div class="mini-card warn"><strong>商業與風險</strong><span>是否影響轉換、信任、安全、法規或品牌承諾？</span></div>
+        <div class="mini-card"><strong>可行性與依賴</strong><span>需要哪些技術、內容、流程與跨部門協作？</span></div>
+      </div>
+      <p class="note">先選 1–3 個最重要機會，讓下一單元的資訊架構有清楚方向。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">AI Collaboration</p>
+      <h1>AI 可以整理旅程<br>但不能虛構旅程</h1>
       <ul class="blist">
-        <li data-n="01">建立 Desktop、Tablet、Mobile 三個 Frame</li>
-        <li data-n="02">用 Constraints 設定元素的響應行為</li>
-        <li data-n="03">核心內容置中、側邊留白彈性縮放</li>
-        <li data-n="04">測試：拖動 Frame 邊框看版面反應</li>
+        <li data-n="01">把訪談逐字稿依時間順序整理成行動、想法、情緒與接觸點</li>
+        <li data-n="02">協助比較多位受訪者，找出重複模式與矛盾資料</li>
+        <li data-n="03">用「證據 → 解讀 → 機會」格式產生洞察草稿</li>
+        <li data-n="04">檢查設計目標是否偷塞解法、太抽象或缺少明確使用者</li>
+        <li data-n="守則">沒有資料支撐的內容必須標成<span class="hl">待驗證假設</span>，不可寫成使用者事實</li>
       </ul>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 10 · Figma 實機示範 (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">10 / 12</span>
-    </div>
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <p class="overline">Live Demo</p>
-      <h1>Figma 實機示範</h1>
-      <div class="divider"></div>
-      <h2>把靜態按鈕改成 Auto Layout</h2>
-      <ul class="blist plain">
-        <li>建立一個靜態按鈕（Rectangle + Text）</li>
-        <li>加上 Auto Layout，設定 Padding</li>
-        <li>改變文字長度，觀察按鈕自動撐寬</li>
-        <li>套用到卡片元件</li>
-      </ul>
+      <p class="overline">Practice Brief</p>
+      <h1>練習題：第一次預約<br>寵物美容服務</h1>
+      <div class="matrix">
+        <div class="mini-card accent"><strong>Actor</strong><span>第一次替寵物預約美容、對流程與風險不熟悉的飼主。</span></div>
+        <div class="mini-card"><strong>Scenario</strong><span>從搜尋店家開始，跨過詢問、預約、到店、等待，直到接回寵物並付款。</span></div>
+        <div class="mini-card warn"><strong>任務</strong><span>用下一頁的三份訪談摘要，完成一張 Current-state Customer Journey Map。</span></div>
+        <div class="mini-card"><strong>交付</strong><span>至少 5 階段、情緒曲線、3 個痛點、1 個甜點、2 個機會與 1 個設計目標。</span></div>
+      </div>
+      <p class="note">35 分鐘小組練習；禁止先畫介面，所有內容都要標出 A、B、C 或「待驗證」。</p>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 11 · 課堂實作 (light) -->
-  <div class="slide">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">11 / 12</span>
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Practice Data Pack</p>
+      <h1>三份訪談摘要<br>請先拆卡，再排旅程</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card"><span class="a-step">受訪者 A</span><span class="a-time">搜尋與確認</span><span class="a-desc">看 Google 評論，但價格與服務內容不清楚；傳 LINE 後等了半天，收到明確時段才放心。</span></div>
+        <div class="agenda-card"><span class="a-step">受訪者 B</span><span class="a-time">預約與到店</span><span class="a-desc">電話預約又重複說一次寵物資料；到店不好停車，但美容師仔細確認需求，感覺被重視。</span></div>
+        <div class="agenda-card"><span class="a-step">受訪者 C</span><span class="a-time">等待與接回</span><span class="a-desc">從 IG 私訊預約，沒有行前提醒而漏帶疫苗資料；不知道何時完成，收到前後對照照片很驚喜。</span></div>
+      </div>
+      <p class="note">教學用模擬訪談摘要。先標 Actor、Start、End，再拆出行動、想法、情緒、接觸點與證據來源。</p>
     </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Hands-on Template</p>
+      <h1>先用空白骨架對齊<br>再開始填內容</h1>
+      <div class="journey-grid">
+        <div class="row-label">階段</div><div>① ______</div><div>② ______</div><div>③ ______</div><div>④ ______</div><div>⑤ ______</div>
+        <div class="row-label">行動</div><div>做了什麼？</div><div>做了什麼？</div><div>做了什麼？</div><div>做了什麼？</div><div>做了什麼？</div>
+        <div class="row-label">想法／情緒</div><div>想什麼？感受？</div><div>想什麼？感受？</div><div>想什麼？感受？</div><div>想什麼？感受？</div><div>想什麼？感受？</div>
+        <div class="row-label">接觸點</div><div>人／物／通路</div><div>人／物／通路</div><div>人／物／通路</div><div>人／物／通路</div><div>人／物／通路</div>
+        <div class="row-label">證據</div><div>原話／觀察</div><div>原話／觀察</div><div>原話／觀察</div><div>原話／觀察</div><div>原話／觀察</div>
+        <div class="row-label">機會</div><div>如何改善？</div><div>如何改善？</div><div>如何改善？</div><div>如何改善？</div><div>如何改善？</div>
+      </div>
+      <p class="note">開工前先寫 Actor、Scenario、Start、End；每一格若沒有證據，就標註「待驗證」。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Workshop</p>
-      <h1>課堂實作<br>版面重構</h1>
-      <h2>把上一堂課的作業改寫成 Auto Layout</h2>
-      <ul class="blist plain">
-        <li>選取 App 模仿稿中的導覽列或按鈕</li>
-        <li>加上 Auto Layout 與 Constraints</li>
-        <li>測試不同內容長度下的反應</li>
-        <li>截圖三種狀態（短文字、長文字、多項目）</li>
-      </ul>
+      <h1>課堂實作流程</h1>
+      <div class="stat-row">
+        <div class="stat"><b>30'</b><span>確認 Actor、Scenario<br>與旅程起訖點</span></div>
+        <div class="stat"><b>60'</b><span>整理行動、想法<br>接觸點與研究證據</span></div>
+        <div class="stat"><b>50'</b><span>完成階段與情緒曲線<br>標出峰值、甜點、痛點</span></div>
+        <div class="stat"><b>40'</b><span>收斂洞察、機會<br>與 1–3 個設計目標</span></div>
+      </div>
+      <p class="note">小組檢核：交換地圖後，另一組是否能說出「主角是誰、想完成什麼、最大低點在哪、為什麼重要」？</p>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
 
-  <!-- Slide 12 · 討論與點評 (dark) -->
-  <div class="slide dark">
-    <div class="slide-head">
-      <span class="unit-pill">Unit 04</span>
-      <span class="slide-num">12 / 12</span>
-    </div>
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 04</span><span class="slide-num"></span></div>
     <div class="slide-body">
-      <p class="overline">Review</p>
-      <h1>討論與點評</h1>
-      <h2>哪裡最難改？哪裡改了最有感？</h2>
-      <ul class="blist">
-        <li data-n="01">展示改版前後的比較</li>
-        <li data-n="02">Hug vs Fill 的選擇邏輯是什麼？</li>
-        <li data-n="03">還有哪些元素可以用 Auto Layout 改善？</li>
+      <p class="overline">Assignment & Resources</p>
+      <h1>本單元產出</h1>
+      <h2>把專題從「我們知道使用者有問題」推進到「我們知道問題發生在哪裡，以及下一步要改善什麼」。</h2>
+      <ul class="blist compact">
+        <li data-n="作業 3"><span class="hl">用戶旅程地圖 1 份</span>：Actor、Scenario、階段、行動、想法、情緒、接觸點與機會。</li>
+        <li data-n="標註">標出峰值、甜點、痛點，以及每項內容的證據來源或假設狀態。</li>
+        <li data-n="目標">整理 1–3 個設計目標，作為 Unit 05 資訊架構與功能取捨的依據。</li>
       </ul>
+      <div class="res-links">
+        <a class="res-link" href="exercises.html" target="_blank" rel="noopener"><strong>Unit 04 · 互動練習</strong><span>選題、人物誌、模擬訪談、AI 提示與可編輯 Journey Map</span></a>
+        <a class="res-link" href="https://www.nngroup.com/articles/journey-mapping-101/" target="_blank" rel="noopener"><strong>NN/g · Journey Mapping 101</strong><span>定義、五個構成元素、用途與常見變體</span></a>
+        <a class="res-link" href="https://media.nngroup.com/media/articles/attachments/JMTemplate.pdf" target="_blank" rel="noopener"><strong>NN/g · Journey Map Template</strong><span>Persona、Scenario、Phases、Doing／Thinking／Saying</span></a>
+        <a class="res-link" href="https://www.figma.com/board/BwTlHzizgSCTknmCRPK6sb/%E7%89%99%E9%86%AB%E9%A0%90%E7%B4%84%E9%AB%94%E9%A9%97-%E2%80%94-%E9%A1%A7%E5%AE%A2%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9C%96?node-id=0-1&t=TnckCjjKY6XXKTms-1" target="_blank" rel="noopener"><strong>案例 · 牙醫預約體驗</strong><span>完整顧客旅程地圖、優化機會與 Feature Breakdown</span></a>
+      </div>
     </div>
-    <div class="slide-foot">
-      <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-      <div class="dots"></div>
-    </div>
-  </div>
-
-</div><!-- /#deck -->
+    <div class="slide-foot"><span class="course-label">用戶研究 ②：用戶旅程地圖與設計目標</span><div class="dots"></div></div>
+  </section>
+</div>
 
 <div id="ctrls">
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
 </div>
+
+<script src="chart.umd.min.js"></script>
 <script>
 (function () {
   const slides = Array.from(document.querySelectorAll('.slide'));
-  const total  = slides.length;
-  const prog   = document.getElementById('prog');
+  const total = slides.length;
+  const prog = document.getElementById('prog');
   const dotContainers = Array.from(document.querySelectorAll('.dots'));
   let cur = 0;
+  let emotionChart = null;
+
+  function ensureEmotionChart() {
+    if (emotionChart || !window.Chart) return;
+    const canvas = document.getElementById('emotionChart');
+    const wrap = document.getElementById('emotionChartWrap');
+    if (!canvas || !wrap) return;
+    emotionChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: ['需求出現', '搜尋比較', '找到方案', '付款確認', '收到指引'],
+        datasets: [{
+          label: '情緒強度',
+          data: [0.4, -1.8, 1.6, -1.2, 2.2],
+          borderColor: '#58a6ff',
+          backgroundColor: 'rgba(88,166,255,.16)',
+          pointBackgroundColor: ['#58a6ff', '#ff8a65', '#34d399', '#ff8a65', '#34d399'],
+          pointBorderColor: '#1d1d1f',
+          pointBorderWidth: 3,
+          pointRadius: 7,
+          pointHoverRadius: 8,
+          borderWidth: 3,
+          tension: .32,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: { intersect: false, mode: 'index' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: context => {
+                const words = ['期待，也不確定', '資訊過多、焦慮', '安心、看到希望', '擔心失敗或重複扣款', '確認成功、可預期'];
+                return words[context.dataIndex];
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { color: '#48484a' },
+            ticks: { color: '#f5f5f7', font: { size: 12, weight: 600 } }
+          },
+          y: {
+            min: -3,
+            max: 3,
+            ticks: {
+              stepSize: 1,
+              color: '#a1a1a6',
+              callback: value => value === 3 ? '高點' : value === 0 ? '平穩' : value === -3 ? '低點' : ''
+            },
+            grid: { color: context => context.tick.value === 0 ? '#6e6e73' : 'rgba(255,255,255,.08)' },
+            border: { display: false }
+          }
+        }
+      }
+    });
+    wrap.classList.add('chart-ready');
+  }
+
+  slides.forEach((slide, i) => {
+    const num = slide.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
   dotContainers.forEach(container => {
     slides.forEach((_, i) => {
-      const d = document.createElement('span');
-      d.className = 'dot' + (i === 0 ? ' on' : '');
-      d.addEventListener('click', () => go(i));
-      container.appendChild(d);
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === 0 ? ' on' : '');
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('aria-label', '前往第 ' + (i + 1) + ' 頁');
+      dot.addEventListener('click', () => go(i));
+      container.appendChild(dot);
     });
   });
+
   function go(n) {
     slides[cur].classList.remove('active');
     cur = (n + total) % total;
     slides[cur].classList.add('active');
     prog.style.width = ((cur + 1) / total * 100) + '%';
+    document.getElementById('ctrls').classList.toggle('on-dark', slides[cur].classList.contains('dark'));
     dotContainers.forEach(container => {
-      Array.from(container.children).forEach((d, i) => {
-        d.classList.toggle('on', i === cur);
-      });
+      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
     });
+    if (slides[cur].dataset.chart === 'emotion') requestAnimationFrame(ensureEmotionChart);
   }
+
   document.getElementById('prev').addEventListener('click', () => go(cur - 1));
   document.getElementById('next').addEventListener('click', () => go(cur + 1));
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') {
+      event.preventDefault();
+      go(cur + 1);
+    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+      event.preventDefault();
+      go(cur - 1);
+    } else if (event.key === 'Home') {
+      go(0);
+    } else if (event.key === 'End') {
+      go(total - 1);
+    }
   });
+
   prog.style.width = (1 / total * 100) + '%';
+  document.getElementById('ctrls').classList.toggle('on-dark', slides[0].classList.contains('dark'));
 })();
 </script>
 </body>

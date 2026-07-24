@@ -1,6 +1,6 @@
 # 單元 4：用戶研究 ②：用戶旅程地圖與設計目標
 > 對應資展時段：2026/07/28（二）09:00–16:30
-> ⚠️ 簡報 slides.html 尚未依新主題重製，待後續處理。
+> 課堂簡報：`slides.html`；互動練習：`exercises.html`
 
 ## 單元目標
 
@@ -34,3 +34,33 @@ Persona 幫助我們定義「誰在使用」，用戶旅程地圖則進一步描
 
 - 對應 `資展課程大綱.md` 第五節階段作業表：
 - 作業 3：用戶旅程地圖（含峰值體驗、甜點與痛點標註），交件為 Figma 旅程地圖 1 份。
+
+## 簡報內容
+
+- Journey Map 的定義、用途，以及與 Persona、User Flow 的差異。
+- 五個必要元素：Actor、Scenario、Journey Phases、Actions／Mindsets／Emotions、Opportunities。
+- 情緒曲線、峰值體驗、甜點、痛點與研究證據標註。
+- HTML 簡報的情緒曲線使用 Chart.js 折線圖呈現，並保留離線文字備援。
+- 教學示意案例：第一次報名 UI/UX 轉職課程。
+- 參考案例：牙醫預約體驗，從顧客旅程延伸至 Feature Breakdown。
+- Current-state／Future-state、Breadth × Depth 與空白實作骨架。
+- 訪談資料轉旅程地圖的五步示範：讀原話、拆證據卡、排時間、填層次、收斂洞察。
+- 分組練習：使用三份模擬訪談摘要，製作「第一次預約寵物美容」現況顧客旅程。
+- 獨立互動練習頁：寵物美容、共享汽車、機場接送、網購退貨退款，皆包含人物誌、未分類的故事式模擬訪談、AI 分析提示、可編輯 Journey Map 與情緒曲線。
+- 從證據、模式與原因收斂洞察，再轉成設計目標與優先順序。
+- AI 協作守則、課堂實作流程與作業規格。
+
+## 參考資料
+
+- [Nielsen Norman Group：Journey Mapping 101](https://www.nngroup.com/articles/journey-mapping-101/)
+- [Nielsen Norman Group：User Journeys vs. User Flows](https://www.nngroup.com/articles/user-journeys-vs-user-flows/)
+- [Nielsen Norman Group：Journey Map Template](https://media.nngroup.com/media/articles/attachments/JMTemplate.pdf)
+- [Figma：牙醫預約體驗 — 顧客旅程地圖](https://www.figma.com/board/BwTlHzizgSCTknmCRPK6sb/%E7%89%99%E9%86%AB%E9%A0%90%E7%B4%84%E9%AB%94%E9%A9%97-%E2%80%94-%E9%A1%A7%E5%AE%A2%E6%97%85%E7%A8%8B%E5%9C%B0%E5%9C%96?node-id=0-1&t=TnckCjjKY6XXKTms-1)
+
+## 檔案清單
+
+| 檔案 | 說明 |
+| :--- | :--- |
+| `slides.html` | 41 張互動式 HTML 課堂簡報，視覺與操作延續 Unit 03。 |
+| `exercises.html` | 顧客旅程地圖互動練習：四個主題、草稿保存、AI 提示與可編輯旅程表。 |
+| `README.md` | 單元目標、內容、產出、參考資料與檔案說明。 |

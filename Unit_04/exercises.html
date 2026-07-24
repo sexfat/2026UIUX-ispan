@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 04 · 顧客旅程地圖互動練習</title>
+<meta name="description" content="選擇練習主題，閱讀人物誌與模擬訪談，運用 AI 分析提示，完成顧客旅程地圖。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+:root {
+  --bg: #fbfbfd;
+  --card: #fff;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent-soft: #e8f2ff;
+  --positive: #0f766e;
+  --negative: #c2410c;
+  --warning: #b45309;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --shadow: 0 18px 60px rgba(0,0,0,.07);
+  --max: 1180px;
+}
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--dark);
+  background: var(--bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+button, select, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(251,251,253,.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(210,210,215,.75);
+}
+.topbar-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  min-height: 62px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.back { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 5px 11px;
+  border-radius: 8px;
+}
+.page { max-width: var(--max); margin: 0 auto; padding: 64px 24px 100px; }
+.hero { max-width: 900px; margin-bottom: 42px; }
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.03;
+  letter-spacing: -.055em;
+}
+.lead {
+  max-width: 790px;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  margin: 22px 0 0;
+}
+.progress-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.progress-steps li {
+  padding: 13px 15px;
+  background: var(--surface);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.progress-steps b { color: var(--accent); margin-right: 5px; }
+.section { margin-top: 56px; scroll-margin-top: 88px; }
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.section-head h2 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.25rem); letter-spacing: -.03em; }
+.section-head p { margin: 0; color: var(--muted); font-size: 14px; }
+.topic-picker {
+  background: var(--dark);
+  color: #f5f5f7;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.picker-top { display: flex; align-items: center; gap: 18px; justify-content: space-between; }
+.picker-top label { font-weight: 800; font-size: 1.15rem; }
+.topic-select {
+  min-width: 330px;
+  border: 1px solid #48484a;
+  color: #f5f5f7;
+  background: #2c2c2e;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.topic-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.topic-card {
+  appearance: none;
+  text-align: left;
+  color: #f5f5f7;
+  background: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 122px;
+  transition: .2s ease;
+}
+.topic-card:hover { border-color: #58a6ff; transform: translateY(-2px); }
+.topic-card.active { background: #16365c; border-color: #58a6ff; box-shadow: inset 0 0 0 1px #58a6ff; }
+.topic-card b { display: block; font-size: 15px; margin-bottom: 7px; }
+.topic-card span { display: block; color: #a1a1a6; font-size: 12px; line-height: 1.5; }
+.topic-card.active span { color: #d7eaff; }
+.brief-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 18px; }
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+}
+.panel h3 { margin: 0 0 15px; font-size: 1.1rem; }
+.scenario-title { font-size: clamp(1.45rem, 3vw, 2.2rem); line-height: 1.2; margin: 0 0 12px; }
+.scenario-copy { color: var(--muted); margin: 0 0 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid #cfe3fa;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.persona { display: grid; grid-template-columns: 88px 1fr; gap: 18px; align-items: start; }
+.avatar {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 34px;
+  font-weight: 800;
+}
+.persona h3 { margin-bottom: 3px; }
+.persona-role { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.fact { padding: 12px 14px; background: var(--surface); border-radius: 9px; }
+.fact b { display: block; color: var(--muted); font-size: 11px; margin-bottom: 4px; }
+.fact span { font-size: 13px; }
+.interviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.interview {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.interview-head { padding: 17px 19px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.interview-id { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.interview-head h3 { margin: 4px 0 0; font-size: 1rem; }
+.interview-body { padding: 17px 19px 20px; }
+.story { margin: 0; color: #2c2c2e; font-size: 14px; line-height: 1.9; }
+.ai-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: 18px; }
+.ai-rules { margin: 0; padding-left: 1.2rem; }
+.ai-rules li { margin-bottom: 9px; color: #2c2c2e; }
+.prompt-box {
+  position: relative;
+  background: var(--dark);
+  color: #f5f5f7;
+  border-radius: 12px;
+  padding: 22px;
+}
+.prompt-box pre {
+  margin: 0;
+  padding-right: 80px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 12px/1.72 "SF Mono", ui-monospace, Menlo, monospace;
+}
+.copy-btn {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  color: #f5f5f7;
+  background: #3a3a3c;
+  border: 1px solid #555;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.copy-btn:hover { background: #48484a; }
+.builder {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.builder-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.builder-toolbar p { margin: 0; color: var(--muted); font-size: 13px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  border: 1px solid var(--border);
+  color: var(--dark);
+  background: #fff;
+  border-radius: 9px;
+  padding: 9px 13px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+.btn.danger { color: var(--negative); }
+.map-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.field label { display: block; color: var(--muted); font-size: 11px; font-weight: 800; margin-bottom: 5px; }
+.field input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--dark);
+  border-radius: 8px;
+  padding: 10px 11px;
+}
+.map-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.journey-map {
+  display: grid;
+  grid-template-columns: 118px repeat(5, minmax(185px, 1fr));
+  min-width: 1040px;
+}
+.cell {
+  min-height: 96px;
+  padding: 12px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  outline: none;
+  white-space: pre-wrap;
+}
+.cell:focus { background: #f0f7ff; box-shadow: inset 0 0 0 2px var(--accent); }
+.cell[data-placeholder]:empty::before { content: attr(data-placeholder); color: #a1a1a6; }
+.row-label {
+  min-height: 96px;
+  padding: 12px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.phase-cell {
+  min-height: 64px;
+  color: var(--accent);
+  background: #f5faff;
+  font-weight: 800;
+}
+.phase-label { min-height: 64px; }
+.emotion-control { padding: 10px 12px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.emotion-control label { display: block; color: var(--muted); font-size: 11px; margin-bottom: 6px; }
+.emotion-control input { width: 100%; accent-color: var(--accent); }
+.emotion-value { display: block; text-align: center; font-size: 12px; font-weight: 800; color: var(--accent); }
+.chart-panel { padding: 22px 20px 24px; }
+.chart-panel h3 { margin: 0 0 12px; }
+.chart-wrap { height: 270px; position: relative; }
+.chart-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: var(--surface);
+  border-radius: 10px;
+  font-size: 13px;
+}
+.chart-wrap.ready .chart-fallback { display: none; }
+.chart-wrap canvas { opacity: 0; }
+.chart-wrap.ready canvas { opacity: 1; }
+.checklist {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+.check {
+  display: flex;
+  align-items: start;
+  gap: 9px;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 12px;
+}
+.check input { margin-top: 3px; accent-color: var(--accent); }
+.privacy-note { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  color: #fff;
+  background: var(--dark);
+  border-radius: 10px;
+  padding: 11px 15px;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: .2s ease;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+@media (max-width: 900px) {
+  .topic-cards, .interviews, .checklist { grid-template-columns: repeat(2, 1fr); }
+  .brief-grid, .ai-grid { grid-template-columns: 1fr; }
+  .map-meta { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  .page { padding: 42px 16px 80px; }
+  .topbar-inner { padding: 0 16px; }
+  .progress-steps, .topic-cards, .interviews, .checklist, .map-meta { grid-template-columns: 1fr; }
+  .picker-top, .section-head { align-items: stretch; flex-direction: column; }
+  .topic-select { min-width: 0; width: 100%; }
+  .persona { grid-template-columns: 64px 1fr; }
+  .avatar { width: 64px; height: 64px; font-size: 25px; }
+  .facts { grid-template-columns: 1fr; }
+}
+@media print {
+  .topbar, .topic-picker, .ai-grid, .builder-toolbar, .toast { display: none !important; }
+  body, .page { background: #fff; padding: 0; }
+  .section { margin-top: 30px; }
+  .builder, .panel, .interview { box-shadow: none; break-inside: avoid; }
+  .map-scroll { overflow: visible; }
+  .journey-map { transform-origin: left top; transform: scale(.72); width: 138%; margin-bottom: -170px; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="../index.html">← 回到課程首頁</a>
+    <span class="unit-pill">Unit 04 · Practice Lab</span>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <p class="eyebrow">Customer Journey Practice</p>
+    <h1>從訪談資料，做出<br>一張有證據的顧客旅程</h1>
+    <p class="lead">選一個服務主題，閱讀人物誌與三份模擬訪談，再用 AI 協助拆解資料。最後請親自判斷階段、情緒、痛點與機會，完成 Current-state Customer Journey Map。</p>
+    <ol class="progress-steps">
+      <li><b>01</b> 選題目</li>
+      <li><b>02</b> 讀人物誌與訪談</li>
+      <li><b>03</b> 用 AI 輔助分析</li>
+      <li><b>04</b> 完成旅程地圖</li>
+    </ol>
+  </section>
+
+  <section class="section" id="choose">
+    <div class="section-head">
+      <h2>選擇一個練習主題</h2>
+      <p>每組完成一題；切換主題會保留各自草稿。</p>
+    </div>
+    <div class="topic-picker">
+      <div class="picker-top">
+        <label for="topicSelect">本組選擇</label>
+        <select class="topic-select" id="topicSelect" aria-label="選擇練習主題"></select>
+      </div>
+      <div class="topic-cards" id="topicCards"></div>
+    </div>
+  </section>
+
+  <section class="section" id="brief">
+    <div class="section-head">
+      <h2>題目與人物誌</h2>
+      <p>先確認「誰、在什麼情境、想完成什麼」。</p>
+    </div>
+    <div class="brief-grid">
+      <article class="panel">
+        <p class="eyebrow">Scenario</p>
+        <h3 class="scenario-title" id="scenarioTitle"></h3>
+        <p class="scenario-copy" id="scenarioCopy"></p>
+        <div class="chips" id="scenarioChips"></div>
+      </article>
+      <article class="panel persona">
+        <div class="avatar" id="personaAvatar"></div>
+        <div>
+          <h3 id="personaName"></h3>
+          <p class="persona-role" id="personaRole"></p>
+          <div class="facts" id="personaFacts"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="interviews">
+    <div class="section-head">
+      <h2>訪談內容（練習用）</h2>
+      <p>模擬資料只供課堂分析，不代表真實研究結論。</p>
+    </div>
+    <div class="interviews" id="interviewCards"></div>
+  </section>
+
+  <section class="section" id="ai">
+    <div class="section-head">
+      <h2>AI 分析技巧</h2>
+      <p>讓 AI 整理，不讓 AI 代替研究判斷。</p>
+    </div>
+    <div class="ai-grid">
+      <article class="panel">
+        <h3>建議分三輪使用</h3>
+        <ol class="ai-rules">
+          <li><strong>拆卡：</strong>一張卡只留一個行動、想法、情緒或接觸點。</li>
+          <li><strong>排序：</strong>按照發生時間排列，不用產品頁面順序取代旅程。</li>
+          <li><strong>聚類：</strong>找跨受訪者模式，同時保留矛盾與少數重要路徑。</li>
+          <li><strong>守則：</strong>AI 不得補寫訪談沒有提到的內容；未知一律標「待驗證」。</li>
+        </ol>
+      </article>
+      <article class="prompt-box">
+        <button class="copy-btn" id="copyPrompt" type="button">複製提示詞</button>
+        <pre id="promptText"></pre>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="builder">
+    <div class="section-head">
+      <h2>顧客旅程地圖產出區</h2>
+      <p>每一格都要能指出證據來源，或標成待驗證。</p>
+    </div>
+    <div class="builder">
+      <div class="builder-toolbar">
+        <p id="saveStatus">草稿會保存在這台裝置。</p>
+        <div class="actions">
+          <button class="btn" id="loadPhases" type="button">載入建議階段</button>
+          <button class="btn" id="printMap" type="button">列印／另存 PDF</button>
+          <button class="btn danger" id="clearMap" type="button">清空本題草稿</button>
+        </div>
+      </div>
+      <div class="map-meta">
+        <div class="field"><label for="metaActor">Actor</label><input id="metaActor" data-meta="actor" placeholder="旅程主角"></div>
+        <div class="field"><label for="metaGoal">Goal</label><input id="metaGoal" data-meta="goal" placeholder="想完成的目標"></div>
+        <div class="field"><label for="metaStart">Start</label><input id="metaStart" data-meta="start" placeholder="旅程起點"></div>
+        <div class="field"><label for="metaEnd">End</label><input id="metaEnd" data-meta="end" placeholder="旅程終點"></div>
+      </div>
+      <div class="map-scroll" aria-label="可編輯顧客旅程地圖">
+        <div class="journey-map" id="journeyMap"></div>
+      </div>
+      <div class="chart-panel">
+        <h3>情緒曲線</h3>
+        <div class="chart-wrap" id="emotionWrap">
+          <canvas id="emotionChart" role="img" aria-label="依五個旅程階段呈現的情緒曲線"></canvas>
+          <div class="chart-fallback">若圖表未載入，仍可使用上方的情緒分數完成作業。</div>
+        </div>
+        <div class="checklist">
+          <label class="check"><input type="checkbox" data-check="actor">一位明確 Actor</label>
+          <label class="check"><input type="checkbox" data-check="evidence">每格有證據或待驗證</label>
+          <label class="check"><input type="checkbox" data-check="moments">標出 3 痛點與 1 甜點</label>
+          <label class="check"><input type="checkbox" data-check="goal">提出 2 機會與 1 設計目標</label>
+        </div>
+        <p class="privacy-note">資料只儲存在目前瀏覽器的 localStorage，不會上傳到伺服器。完成後請列印為 PDF，或搬到小組 FigJam。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="chart.umd.min.js"></script>
+<script>
+(function () {
+  const topics = {
+    pet: {
+      icon: '寵',
+      short: '寵物美容',
+      title: '第一次預約寵物美容',
+      teaser: '搜尋、LINE 預約、到店、等待與接回',
+      scenario: '第一次替自己的狗預約美容，從找店家到接回寵物並付款。',
+      chips: ['跨 Google／IG／LINE', '服務等待', '信任與風險'],
+      persona: {
+        name: '怡君，29 歲',
+        role: '新手飼主 · 第一次預約專業寵物美容',
+        facts: [
+          ['目標', '找到可信任、價格清楚的店家'],
+          ['行為', '習慣先看 Google 評論與 IG 作品'],
+          ['顧慮', '寵物緊張、服務內容與完工時間不明'],
+          ['限制', '平日工作忙，只能用訊息聯絡']
+        ]
+      },
+      interviews: [
+        ['受訪者 A｜第一次養狗', '怡君發現狗狗的毛開始打結後，先在 Google Maps 搜尋附近店家，也到 Instagram 看美容前後的照片。她開了好幾個頁面，卻看不懂每家「基礎洗」包含哪些項目，價格也都寫要依現場評估。她挑了一家評論較好的店傳 LINE 詢問，等了半天沒有回覆，一度想改問別家。晚上收到店家回覆，對方說明價格範圍、可以預約的日期與需要攜帶的資料，她才決定預約。到店後美容師先蹲下來觀察狗狗，也確認牠怕吹風機，這讓她安心不少。等待期間她不知道進度，直到三個小時後收到可以接回的訊息才放下心。'],
+        ['受訪者 B｜曾自己替狗洗澡', '志豪原本都在家替狗洗澡，這次因為要參加家庭聚會，第一次找專業美容。他先問朋友推薦，再打電話預約。電話中他已經說過狗狗的品種、體重和皮膚狀況，到店時卻又填了一次相同資料。附近停車位很難找，他比預約時間晚了十分鐘，一路上都擔心會被取消。美容師現場解釋毛況並建議增加護毛服務，但他不知道這是不是必要項目，也不確定最後會多多少錢。接回時效果比預期好，不過結帳金額比電話中聽到的高，他回家後才仔細看明細。'],
+        ['受訪者 C｜習慣用社群找店家', '佩珊在 Instagram 看到一間風格很可愛的寵物美容店，直接用私訊詢問並完成預約。店家口頭提醒要帶疫苗資料，但預約到實際到店隔了一週，她沒有再收到提醒，當天才發現自己忘了帶。店員讓她之後補傳照片，美容仍然可以進行。她離開後一直想知道狗狗是否適應，卻又覺得打電話詢問會打擾工作。下午店家傳來一張美容中的照片，她馬上安心很多。完成後又收到美容前後的對照照和簡短照護提醒，她覺得很貼心，也把照片分享到了自己的限時動態。']
+      ],
+      phases: ['搜尋店家', '詢問比較', '完成預約', '到店等待', '接回付款'],
+      meta: ['第一次預約寵物美容的飼主', '安心完成預約並確認寵物受到妥善照顧', '開始搜尋店家', '接回寵物並完成付款']
+    },
+    carshare: {
+      icon: '車',
+      short: '共享汽車',
+      title: '共享汽車首次租借',
+      teaser: '註冊驗證、找車、解鎖、駕駛與還車',
+      scenario: '第一次使用共享汽車完成週末半日行程，從下載 App、驗證身分到還車並確認費用。',
+      chips: ['數位與實體銜接', '即時操作', '車況與計費'],
+      persona: {
+        name: '宇翔，31 歲',
+        role: '都市上班族 · 有駕照但平時沒有車',
+        facts: [
+          ['目標', '臨時取得一台車，順利完成郊區行程'],
+          ['行為', '出發前才下載 App，比較價格與取車點'],
+          ['顧慮', '驗證是否及時、車況責任與額外費用'],
+          ['限制', '地下停車場訊號不穩，行程時間固定']
+        ]
+      },
+      interviews: [
+        ['受訪者 A｜臨時需要用車', '宇翔週五晚上決定隔天開車去郊區，朋友推薦他使用共享汽車。他下載 App 後才發現需要上傳身分證與駕照，送出資料後畫面只顯示「審核中」，沒有說通常要等多久。他一邊比較其他租車方案，一邊反覆打開 App 看結果。審核通過後，他開始找住家附近的車，但時間費、里程費和保險分開顯示，他算了幾次仍不確定整趟會花多少。最後他先預約一台距離較近的車，直到收到預約成功通知，才取消原本請朋友接送的備案。'],
+        ['受訪者 B｜第一次到停車場取車', '雅婷在 App 上看到車輛停在一座商場停車場，照著地圖抵達後才發現沒有樓層資訊。她在地下室繞了十幾分鐘，終於看到車牌，但手機訊號只剩一格。她按下解鎖後畫面一直轉圈，不敢再次按鈕，怕系統重複計費。車門打開後，App 要她拍攝車身狀況；她看到保險桿原本就有刮痕，卻不知道多小的痕跡才需要回報，只好把每個角度都拍一遍。正式出發時已經比原定時間晚了二十分鐘。'],
+        ['受訪者 C｜還車時遇到滿位', '家豪使用完車輛後依導航回到指定停車場，卻發現共享汽車專用區已經停滿。他繞了兩圈，App 只提醒必須停在合法區域，沒有告訴他滿位時該怎麼辦。他打客服等待了一段時間，最後被引導到另一層停車。完成熄火、拍照和鎖車後，畫面仍停在處理中，他擔心租金繼續累積，一直站在車旁刷新。幾分鐘後收到行程結束通知與費用明細，看到時間、里程和停車費都列出來，他才離開。']
+      ],
+      phases: ['註冊驗證', '選車預約', '找車解鎖', '駕駛使用', '還車計費'],
+      meta: ['第一次使用共享汽車的都市駕駛', '順利完成租借並清楚確認責任與費用', '決定使用共享汽車', '確認還車成功與最終費用']
+    },
+    airport: {
+      icon: '接',
+      short: '機場接送',
+      title: '機場接送預約與乘車',
+      teaser: '比價、航班資料、行前聯絡、會合與到家',
+      scenario: '帶著長輩與大型行李返國，從預約機場接送到與司機會合並安全抵達住家。',
+      chips: ['跨通路協調', '時間不確定', '多人與行李'],
+      persona: {
+        name: '美玲，42 歲',
+        role: '家庭旅遊規劃者 · 與兩位長輩同行',
+        facts: [
+          ['目標', '下飛機後快速會合，不讓長輩拖行李等太久'],
+          ['行為', '先比價，再用通訊軟體確認細節'],
+          ['顧慮', '航班延誤、車型容量、夜間加價與會合地點'],
+          ['限制', '抵達時間可能變動，機場網路與電量有限']
+        ]
+      },
+      interviews: [
+        ['受訪者 A｜帶長輩返國', '美玲要和兩位長輩一起返國，除了三個行李箱還有兩件手提行李。她搜尋機場接送時，發現不同網站對行李數量與車型的說法不一樣，有的報價看起來便宜，到了結帳才出現夜間費與等待費。她擔心選錯車，到時候行李放不下，於是把行李照片傳給客服確認。客服建議較大的車型並重新計算總價，她覺得價格比預期高，但至少知道不會臨時加價，最後才完成付款。'],
+        ['受訪者 B｜航班臨時延誤', '俊偉預約時已經填了航班號，仍然不確定班機延誤後司機會等多久。出發前一天，他收到司機姓名、車牌和聯絡電話，覺得安心不少。返程當天航班延誤將近一小時，航空公司的資訊已更新，但接送 App 仍顯示原定抵達時間。他在飛機起飛前用 LINE 問客服，客服回覆已通知司機，卻沒有提供新的會合時間。落地開機後，他第一件事就是確認司機是否還在等。'],
+        ['受訪者 C｜在機場找不到司機', '佳穎入境後按照訊息走向指定出口，但現場有好幾個相似的柱號，也有很多接送車輛。她拖著行李來回走，打電話時又因為環境吵雜聽不清楚。司機後來拍了一張出口與柱子的照片傳給她，兩人才順利會合。上車後司機協助安排行李，也主動說明預計抵達時間。到家後她收到完整車資明細，確認沒有增加等待費，但想稱讚司機時，在 App 和 Email 裡都找不到評價入口。']
+      ],
+      phases: ['搜尋比價', '預約付款', '行前確認', '機場會合', '乘車到家'],
+      meta: ['帶長輩與大型行李返國的旅客', '在航班變動下仍能順利與司機會合並到家', '開始尋找機場接送', '抵達住家並確認費用']
+    },
+    return: {
+      icon: '退',
+      short: '網購退貨退款',
+      title: '網購退貨與退款',
+      teaser: '確認規則、申請、包裝交寄、追蹤與退款',
+      scenario: '收到尺寸不合的網購服飾，從確認退貨資格到交回商品並收到退款。',
+      chips: ['服務失敗補救', '物流交接', '退款等待'],
+      persona: {
+        name: '小晴，26 歲',
+        role: '重度網購使用者 · 第一次在此平台申請退貨',
+        facts: [
+          ['目標', '用最少時間完成退貨，確認不會損失運費'],
+          ['行為', '先查訂單，再搜尋退貨規則與其他買家經驗'],
+          ['顧慮', '包裝要求、物流責任、退款金額與時間'],
+          ['限制', '白天上班，只能使用超商交寄']
+        ]
+      },
+      interviews: [
+        ['受訪者 A｜收到尺寸不合的衣服', '小晴收到網購洋裝後立刻試穿，發現實際版型比尺寸表小很多。她回到訂單頁想申請退貨，卻只看到再次購買與聯絡賣家，只好再去說明中心搜尋。頁面寫著七天鑑賞期，但也提醒商品必須保持完整，她已經拆開包裝並剪下外袋，不確定這樣是否還能退。她問了客服機器人，得到的仍是同一段規則，最後轉接真人後才確認只要吊牌未拆就可以申請。'],
+        ['受訪者 B｜第一次使用超商退貨', '冠宇收到的鞋子顏色和照片差異很大，決定辦理退貨。申請表要求選擇原因，但選項只有尺寸、瑕疵與寄錯商品，他不知道該選哪一個，只能選其他再自行輸入。送出後系統顯示要妥善包裝，卻沒有說能不能沿用原本的破壞袋。他找了一個紙箱重新包裝，帶到超商後才發現要先在機台輸入退貨代碼。列印單據並交給店員後，App 顯示已完成交寄，他才確定自己沒有漏掉步驟。'],
+        ['受訪者 C｜等待退款更新', '思妤將商品交寄後每天都到物流網站查看，第三天顯示商家已簽收，但購物平台仍停留在等待退回。她擔心包裹遺失，透過客服查詢，對方只說需要幾個工作天檢查。後來平台通知退貨通過，退款金額卻比原付款少，她才想到訂單使用過折價券，但頁面沒有說折價券是否會退回。直到信用卡收到退款、帳戶也重新出現折價券，她才停止每天查看訂單狀態。']
+      ],
+      phases: ['發現不合', '確認規則', '提出申請', '包裝交寄', '等待退款'],
+      meta: ['第一次在此平台辦理退貨的網購者', '清楚完成退貨並確認退款金額與時間', '收到不符合期待的商品', '收到退款與完整明細']
+    }
+  };
+
+  const rows = [
+    ['actions', '行動', '使用者實際做了什麼？'],
+    ['thoughts', '想法／期待', '當時在判斷或擔心什麼？'],
+    ['touchpoints', '接觸點', '人、通路、裝置或環境'],
+    ['evidence', '證據', 'A／B／C 原話，或待驗證'],
+    ['pain', '痛點／甜點', '什麼造成摩擦或正向轉折？'],
+    ['opportunity', '改善機會', '希望未來發生什麼改變？']
+  ];
+  const topicSelect = document.getElementById('topicSelect');
+  const topicCards = document.getElementById('topicCards');
+  const journeyMap = document.getElementById('journeyMap');
+  const metaInputs = Array.from(document.querySelectorAll('[data-meta]'));
+  const checks = Array.from(document.querySelectorAll('[data-check]'));
+  const toast = document.getElementById('toast');
+  let currentTopic = 'pet';
+  let chart = null;
+  let saveTimer = null;
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  function storageKey() { return 'unit04-journey-' + currentTopic; }
+
+  function renderPicker() {
+    Object.entries(topics).forEach(([key, topic]) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = topic.title;
+      topicSelect.appendChild(option);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'topic-card';
+      button.dataset.topic = key;
+      button.innerHTML = '<b>' + topic.title + '</b><span>' + topic.teaser + '</span>';
+      button.addEventListener('click', () => selectTopic(key));
+      topicCards.appendChild(button);
+    });
+  }
+
+  function renderTopic() {
+    const topic = topics[currentTopic];
+    topicSelect.value = currentTopic;
+    Array.from(topicCards.children).forEach(card => card.classList.toggle('active', card.dataset.topic === currentTopic));
+    document.getElementById('scenarioTitle').textContent = topic.title;
+    document.getElementById('scenarioCopy').textContent = topic.scenario;
+    document.getElementById('scenarioChips').innerHTML = topic.chips.map(chip => '<span class="chip">' + chip + '</span>').join('');
+    document.getElementById('personaAvatar').textContent = topic.icon;
+    document.getElementById('personaName').textContent = topic.persona.name;
+    document.getElementById('personaRole').textContent = topic.persona.role;
+    document.getElementById('personaFacts').innerHTML = topic.persona.facts.map(fact => '<div class="fact"><b>' + fact[0] + '</b><span>' + fact[1] + '</span></div>').join('');
+    document.getElementById('interviewCards').innerHTML = topic.interviews.map((interview, index) =>
+      '<article class="interview"><div class="interview-head"><span class="interview-id">INTERVIEW ' + String(index + 1).padStart(2, '0') + '</span><h3>' + interview[0] + '</h3></div><div class="interview-body">' +
+      '<p class="story">' + interview[1] + '</p></div></article>'
+    ).join('');
+    document.getElementById('promptText').textContent = buildPrompt(topic);
+    buildMap();
+    loadDraft();
+  }
+
+  function buildPrompt(topic) {
+    const source = topic.interviews.map((interview, index) => {
+      return interview[0] + '：\n' + interview[1];
+    }).join('\n\n');
+    return '你是 UX Research 分析助手。請只根據下列訪談內容進行整理，不得補寫資料中沒有的事實。\n\n' +
+      '任務：\n1. 將原話拆成單一證據卡。\n2. 每張卡標註：受訪者、行動／想法／情緒／接觸點、可能發生順序。\n3. 找出跨受訪者重複模式與矛盾。\n4. 提出可能的旅程階段，但不要直接提出介面功能。\n5. 資料不足處標註「待驗證」。\n\n' +
+      '主題：' + topic.title + '\n人物誌：' + topic.persona.role + '\n\n訪談資料：\n' + source;
+  }
+
+  function buildMap() {
+    journeyMap.innerHTML = '';
+    journeyMap.appendChild(labelCell('旅程階段', 'row-label phase-label'));
+    for (let i = 0; i < 5; i++) journeyMap.appendChild(editableCell('phase', i, '階段 ' + (i + 1), 'cell phase-cell'));
+    rows.forEach(row => {
+      journeyMap.appendChild(labelCell(row[1], 'row-label'));
+      for (let i = 0; i < 5; i++) journeyMap.appendChild(editableCell(row[0], i, row[2], 'cell'));
+    });
+    journeyMap.appendChild(labelCell('情緒分數', 'row-label'));
+    for (let i = 0; i < 5; i++) {
+      const wrap = document.createElement('div');
+      wrap.className = 'emotion-control';
+      wrap.innerHTML = '<label for="emotion-' + i + '">低 −2　高 +2</label><input id="emotion-' + i + '" type="range" min="-2" max="2" step="1" value="0" data-emotion="' + i + '"><span class="emotion-value">0</span>';
+      const input = wrap.querySelector('input');
+      input.addEventListener('input', () => {
+        wrap.querySelector('.emotion-value').textContent = Number(input.value) > 0 ? '+' + input.value : input.value;
+        updateChart();
+        scheduleSave();
+      });
+      journeyMap.appendChild(wrap);
+    }
+  }
+
+  function labelCell(text, className) {
+    const el = document.createElement('div');
+    el.className = className;
+    el.textContent = text;
+    return el;
+  }
+
+  function editableCell(row, index, placeholder, className) {
+    const el = document.createElement('div');
+    el.className = className;
+    el.contentEditable = 'true';
+    el.dataset.row = row;
+    el.dataset.index = index;
+    el.dataset.placeholder = placeholder;
+    el.setAttribute('role', 'textbox');
+    el.setAttribute('aria-label', placeholder + '，第 ' + (index + 1) + ' 階段');
+    el.addEventListener('input', () => {
+      if (row === 'phase') updateChart();
+      scheduleSave();
+    });
+    return el;
+  }
+
+  function selectTopic(key) {
+    saveDraft();
+    currentTopic = key;
+    renderTopic();
+    document.getElementById('brief').scrollIntoView({ block: 'start' });
+  }
+
+  function collectDraft() {
+    const cells = {};
+    document.querySelectorAll('[data-row][data-index]').forEach(cell => {
+      cells[cell.dataset.row + '-' + cell.dataset.index] = cell.textContent.trim();
+    });
+    return {
+      cells,
+      emotions: Array.from(document.querySelectorAll('[data-emotion]')).map(input => Number(input.value)),
+      meta: Object.fromEntries(metaInputs.map(input => [input.dataset.meta, input.value])),
+      checks: Object.fromEntries(checks.map(input => [input.dataset.check, input.checked]))
+    };
+  }
+
+  function applyDraft(draft) {
+    document.querySelectorAll('[data-row][data-index]').forEach(cell => {
+      cell.textContent = draft.cells?.[cell.dataset.row + '-' + cell.dataset.index] || '';
+    });
+    document.querySelectorAll('[data-emotion]').forEach((input, index) => {
+      input.value = draft.emotions?.[index] ?? 0;
+      input.parentElement.querySelector('.emotion-value').textContent = Number(input.value) > 0 ? '+' + input.value : input.value;
+    });
+    metaInputs.forEach(input => input.value = draft.meta?.[input.dataset.meta] || '');
+    checks.forEach(input => input.checked = Boolean(draft.checks?.[input.dataset.check]));
+    updateChart();
+  }
+
+  function saveDraft() {
+    localStorage.setItem(storageKey(), JSON.stringify(collectDraft()));
+    document.getElementById('saveStatus').textContent = '已儲存：' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 300);
+  }
+
+  function loadDraft() {
+    const raw = localStorage.getItem(storageKey());
+    if (raw) {
+      try { applyDraft(JSON.parse(raw)); }
+      catch (error) { applyDraft({}); }
+    } else {
+      applyDraft({});
+    }
+  }
+
+  function loadSuggestedPhases() {
+    const topic = topics[currentTopic];
+    document.querySelectorAll('[data-row="phase"]').forEach((cell, index) => cell.textContent = topic.phases[index]);
+    metaInputs.forEach((input, index) => input.value = topic.meta[index]);
+    updateChart();
+    saveDraft();
+    showToast('已載入建議階段與旅程邊界');
+  }
+
+  function clearDraft() {
+    if (!window.confirm('確定要清空這個題目的所有填寫內容嗎？')) return;
+    localStorage.removeItem(storageKey());
+    applyDraft({});
+    document.getElementById('saveStatus').textContent = '本題草稿已清空。';
+    showToast('已清空本題草稿');
+  }
+
+  function ensureChart() {
+    if (chart || !window.Chart) return;
+    const wrap = document.getElementById('emotionWrap');
+    chart = new Chart(document.getElementById('emotionChart'), {
+      type: 'line',
+      data: { labels: ['階段 1', '階段 2', '階段 3', '階段 4', '階段 5'], datasets: [{
+        data: [0, 0, 0, 0, 0],
+        borderColor: '#0066cc',
+        backgroundColor: 'rgba(0,102,204,.1)',
+        pointBackgroundColor: '#0066cc',
+        pointRadius: 6,
+        borderWidth: 3,
+        tension: .3,
+        fill: true
+      }]},
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#1d1d1f', font: { weight: 600 } } },
+          y: { min: -2, max: 2, ticks: { stepSize: 1, callback: value => value === 2 ? '高點' : value === 0 ? '平穩' : value === -2 ? '低點' : '' } }
+        }
+      }
+    });
+    wrap.classList.add('ready');
+  }
+
+  function updateChart() {
+    ensureChart();
+    if (!chart) return;
+    chart.data.labels = Array.from(document.querySelectorAll('[data-row="phase"]')).map((cell, index) => cell.textContent.trim() || '階段 ' + (index + 1));
+    chart.data.datasets[0].data = Array.from(document.querySelectorAll('[data-emotion]')).map(input => Number(input.value));
+    chart.update();
+  }
+
+  topicSelect.addEventListener('change', event => selectTopic(event.target.value));
+  metaInputs.forEach(input => input.addEventListener('input', scheduleSave));
+  checks.forEach(input => input.addEventListener('change', scheduleSave));
+  document.getElementById('loadPhases').addEventListener('click', loadSuggestedPhases);
+  document.getElementById('clearMap').addEventListener('click', clearDraft);
+  document.getElementById('printMap').addEventListener('click', () => window.print());
+  document.getElementById('copyPrompt').addEventListener('click', async () => {
+    const text = document.getElementById('promptText').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('AI 提示詞已複製');
+    } catch (error) {
+      window.prompt('請複製以下提示詞：', text);
+    }
+  });
+  window.addEventListener('beforeunload', saveDraft);
+
+  renderPicker();
+  renderTopic();
+  requestAnimationFrame(ensureChart);
+})();
+</script>
+</body>
+</html>
