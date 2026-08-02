@@ -382,14 +382,91 @@ h1 {
   .avatar { width: 64px; height: 64px; font-size: 25px; }
   .facts { grid-template-columns: 1fr; }
 }
+#printSheet { display: none; }
+
 @media print {
-  .topbar, .topic-picker, .ai-grid, .builder-toolbar, .toast { display: none !important; }
-  body, .page { background: #fff; padding: 0; }
-  .section { margin-top: 30px; }
-  .builder, .panel, .interview { box-shadow: none; break-inside: avoid; }
-  .map-scroll { overflow: visible; }
-  .journey-map { transform-origin: left top; transform: scale(.72); width: 138%; margin-bottom: -170px; }
+  @page { size: A4 portrait; margin: 10mm; }
+  html, body { background: #fff !important; }
+  body > *:not(#printSheet) { display: none !important; }
+  #printSheet {
+    display: block;
+    width: 100%;
+    color: #1d1d1f;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #psInner { transform-origin: top left; }
+
+  #printSheet h1 { font-size: 20px; margin: 0 0 4px; letter-spacing: 0; }
+  #printSheet .ps-topic { font-size: 13px; color: #55555a; margin: 0 0 14px; }
+  #printSheet .ps-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  #printSheet .ps-meta div {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    min-height: 46px;
+  }
+  #printSheet .ps-meta b {
+    display: block;
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  #printSheet .ps-meta span { font-size: 13px; }
+
+  /* 沿用畫面上的地圖格式 */
+  #printSheet .journey-map {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  #printSheet .cell,
+  #printSheet .row-label,
+  #printSheet .emotion-print { min-height: 84px; }
+  #printSheet .cell[data-placeholder]:empty::before { content: ''; }
+  #printSheet .emotion-print {
+    padding: 10px 12px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  #printSheet .ps-lower {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+    break-inside: avoid;
+  }
+  #printSheet .ps-chart, #printSheet .ps-check {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  #printSheet .ps-chart h2, #printSheet .ps-check h2 { font-size: 13px; margin: 0 0 8px; }
+  #printSheet .ps-chart svg { width: 100%; height: auto; display: block; }
+  #printSheet .ps-check ul { list-style: none; margin: 0; padding: 0; }
+  #printSheet .ps-check li { padding: 5px 0; font-size: 13px; }
+  #printSheet .ps-foot {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
 }
+
 </style>
 </head>
 <body>
@@ -521,6 +598,7 @@ h1 {
   </section>
 </main>
 
+<div id="printSheet" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="chart.umd.min.js"></script>
@@ -859,7 +937,155 @@ h1 {
   checks.forEach(input => input.addEventListener('change', scheduleSave));
   document.getElementById('loadPhases').addEventListener('click', loadSuggestedPhases);
   document.getElementById('clearMap').addEventListener('click', clearDraft);
-  document.getElementById('printMap').addEventListener('click', () => window.print());
+  function esc(text) {
+    return String(text).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  }
+
+  // 列印用的情緒曲線：用分數畫 SVG，不依賴 Chart.js 或 canvas
+  // 曲線比照畫面上的圖表：Chart.js splineCurve，tension = .3，填色到 0 基準線
+  function buildEmotionSvg(scores, labels) {
+    const W = 560, H = 240;
+    const padL = 52, padR = 48, padT = 18, padB = 44;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const X = i => padL + (plotW / 4) * i;
+    const Y = v => padT + plotH * (2 - v) / 4;
+    const T = 0.3;
+
+    const pts = scores.map((v, i) => ({ x: X(i), y: Y(v) }));
+
+    // Chart.js 的 splineCurve：依前後點距離比例決定控制點
+    const cps = pts.map((cur, i) => {
+      const prev = pts[i - 1] || cur;
+      const next = pts[i + 1] || cur;
+      const d01 = Math.hypot(cur.x - prev.x, cur.y - prev.y);
+      const d12 = Math.hypot(next.x - cur.x, next.y - cur.y);
+      const total = d01 + d12;
+      const s01 = total ? d01 / total : 0;
+      const s12 = total ? d12 / total : 0;
+      const fa = T * s01, fb = T * s12;
+      return {
+        prev: { x: cur.x - fa * (next.x - prev.x), y: cur.y - fa * (next.y - prev.y) },
+        next: { x: cur.x + fb * (next.x - prev.x), y: cur.y + fb * (next.y - prev.y) }
+      };
+    });
+
+    let d = 'M' + pts[0].x + ',' + pts[0].y;
+    for (let i = 0; i < pts.length - 1; i++) {
+      d += ' C' + cps[i].next.x + ',' + cps[i].next.y +
+           ' ' + cps[i + 1].prev.x + ',' + cps[i + 1].prev.y +
+           ' ' + pts[i + 1].x + ',' + pts[i + 1].y;
+    }
+    const zero = Y(0);
+    const area = d + ' L' + pts[pts.length - 1].x + ',' + zero + ' L' + pts[0].x + ',' + zero + ' Z';
+
+    const yText = { 2: '高點', 0: '平穩', '-2': '低點' };
+    let grid = '';
+    for (let v = 2; v >= -2; v--) {
+      const yy = Y(v);
+      grid += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (W - padR) + '" y2="' + yy +
+              '" stroke="#e4e4e8" stroke-width="1"/>';
+      if (yText[v]) {
+        grid += '<text x="' + (padL - 10) + '" y="' + (yy + 4) + '" text-anchor="end" ' +
+                'font-size="11" fill="#86868b">' + yText[v] + '</text>';
+      }
+    }
+
+    const dots = pts.map(pt =>
+      '<circle cx="' + pt.x + '" cy="' + pt.y + '" r="5" fill="#0066cc"/>').join('');
+
+    const names = labels.map((name, i) => {
+      const text = name.length > 6 ? name.slice(0, 6) + '…' : name;
+      return '<text x="' + X(i) + '" y="' + (H - 18) + '" text-anchor="middle" ' +
+             'font-size="11.5" font-weight="600" fill="#1d1d1f">' + esc(text) + '</text>';
+    }).join('');
+
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="情緒曲線">' +
+      grid +
+      '<path d="' + area + '" fill="rgba(0,102,204,.1)" stroke="none"/>' +
+      '<path d="' + d + '" fill="none" stroke="#0066cc" stroke-width="3" ' +
+      'stroke-linejoin="round" stroke-linecap="round"/>' +
+      dots + names +
+      '</svg>';
+  }
+
+  const PAGE_W = 731;   // A4 直式 210mm - 左右 10mm 邊界 @96dpi
+  const PAGE_H = 1046;  // A4 直式 297mm - 上下 10mm 邊界 @96dpi
+
+  function buildPrintSheet() {
+    const draft = collectDraft();
+    const topic = topics[currentTopic];
+    const metaLabels = { actor: 'Actor', goal: 'Goal', start: 'Start', end: 'End' };
+    const checkLabels = {
+      actor: '一位明確 Actor',
+      evidence: '每格有證據或待驗證',
+      moments: '標出 3 痛點與 1 甜點',
+      goal: '提出 2 機會與 1 設計目標'
+    };
+
+    // 複製畫面上的地圖，維持原本格式
+    const mapClone = journeyMap.cloneNode(true);
+    mapClone.removeAttribute('id');
+    mapClone.querySelectorAll('[contenteditable]').forEach(cell => {
+      cell.removeAttribute('contenteditable');
+      cell.removeAttribute('role');
+    });
+    // 滑桿換成純數字，列印才看得清楚
+    mapClone.querySelectorAll('.emotion-control').forEach((wrap, index) => {
+      const score = draft.emotions[index];
+      const box = document.createElement('div');
+      box.className = 'emotion-print';
+      box.textContent = score > 0 ? '+' + score : String(score);
+      wrap.replaceWith(box);
+    });
+
+    const chartSvg = buildEmotionSvg(
+      draft.emotions,
+      Array.from(document.querySelectorAll('[data-row="phase"]'))
+        .map((cell, index) => cell.textContent.trim() || '階段 ' + (index + 1))
+    );
+
+    const stamp = new Date().toLocaleDateString('zh-TW');
+    const inner = document.createElement('div');
+    inner.id = 'psInner';
+    inner.style.width = mapClone.style.minWidth || '1043px';
+    inner.innerHTML =
+      '<h1>顧客旅程地圖</h1>' +
+      '<p class="ps-topic">主題：' + esc(topic.title) + '</p>' +
+      '<div class="ps-meta">' + Object.keys(metaLabels).map(key =>
+        '<div><b>' + metaLabels[key] + '</b><span>' + esc(draft.meta[key] || '') + '</span></div>'
+      ).join('') + '</div>' +
+      '<div class="ps-map"></div>' +
+      '<div class="ps-lower">' +
+        '<section class="ps-chart"><h2>情緒曲線</h2>' + chartSvg + '</section>' +
+        '<section class="ps-check"><h2>自我檢核</h2><ul>' +
+          Object.keys(checkLabels).map(key =>
+            '<li>' + (draft.checks[key] ? '☑' : '☐') + '　' + checkLabels[key] + '</li>'
+          ).join('') +
+        '</ul></section>' +
+      '</div>' +
+      '<p class="ps-foot">Unit 04 · 用戶旅程地圖與設計目標　|　列印於 ' + stamp + '</p>';
+    inner.querySelector('.ps-map').appendChild(mapClone);
+
+    const sheet = document.getElementById('printSheet');
+    sheet.innerHTML = '';
+    sheet.appendChild(inner);
+
+    // 量測後等比縮放，確保剛好一頁
+    sheet.style.cssText = 'display:block;position:absolute;left:-10000px;top:0;width:' + PAGE_W + 'px;';
+    inner.style.transform = 'none';
+    const w = inner.scrollWidth || 1043;
+    const h = inner.scrollHeight || 1;
+    const scale = Math.min(1, PAGE_W / w, PAGE_H / h);
+    inner.style.transform = 'scale(' + scale + ')';
+    sheet.style.cssText = '';
+  }
+
+  window.addEventListener('beforeprint', buildPrintSheet);
+  document.getElementById('printMap').addEventListener('click', () => {
+    buildPrintSheet();
+    window.print();
+  });
   document.getElementById('copyPrompt').addEventListener('click', async () => {
     const text = document.getElementById('promptText').textContent;
     try {
