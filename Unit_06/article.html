@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flowchart 到 Wireframe · 完整教材 · Unit 06</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+.callout.warn {
+  background: rgba(194,65,12,.06);
+  border-color: rgba(194,65,12,.2);
+  border-left-color: var(--accent3);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 { margin: 0 0 8px; font-size: 1rem; }
+.card p { margin: 0; font-size: .93rem; color: var(--muted); line-height: 1.65; }
+
+.dia {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin: 22px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.85;
+  color: #2c2c2e;
+  white-space: pre;
+  overflow-x: auto;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">這堂課在哪裡</a></li>
+    <li><a href="#s2">先把四個詞分開</a></li>
+    <li><a href="#s3">什麼時候用哪一種</a></li>
+    <li><a href="#s4">Flowchart 怎麼畫</a></li>
+    <li><a href="#s5">例外路徑</a></li>
+    <li><a href="#s6">從 IA 到 Flow</a></li>
+    <li><a href="#s7">Wireframe 在回答什麼</a></li>
+    <li><a href="#s8">保真度</a></li>
+    <li><a href="#s9">Wireframe 的內容</a></li>
+    <li><a href="#s10">Auto Layout</a></li>
+    <li><a href="#s11">Constraints</a></li>
+    <li><a href="#s12">課堂練習與作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="slides.html">回到投影片</a>
+  <span class="unit-pill">Unit 06</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Design Process · 完整教材</p>
+  <h1>Flowchart 到 Wireframe</h1>
+  <p class="lead">上個單元交出來的 IA 圖是一張靜態的地圖，這份講義要教你怎麼在地圖上走出路線，再把路線變成一張張畫面。內容包含四種流程圖的差別、Flowchart 的畫法與最容易漏掉的例外路徑、Wireframe 該放什麼不該放什麼、原型保真度怎麼選，以及用 Figma Auto Layout 做出不會一改就垮的版面。</p>
+  <div class="meta">
+    <span>閱讀時間約 20 分鐘</span><span class="d"></span>
+    <span>搭配 Unit 06 投影片</span><span class="d"></span>
+    <span>含 Figma 操作與 AI 提示詞</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">這堂課在整條流程的哪裡</a></li>
+    <li><a href="#s2">先把四個詞分開</a></li>
+    <li><a href="#s3">什麼時候用哪一種</a></li>
+    <li><a href="#s4">Flowchart 怎麼畫</a></li>
+    <li><a href="#s5">你一定會漏掉的例外路徑</a></li>
+    <li><a href="#s6">從 IA 圖轉成 Flow</a></li>
+    <li><a href="#s7">Wireframe 在回答什麼問題</a></li>
+    <li><a href="#s8">保真度：三個可以分開調的維度</a></li>
+    <li><a href="#s9">Wireframe 上該放什麼</a></li>
+    <li><a href="#s10">Figma Auto Layout</a></li>
+    <li><a href="#s11">Constraints 與 Auto Layout 的分工</a></li>
+    <li><a href="#s12">課堂練習與回家作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</div>
+
+<div class="article">
+
+  <section class="section" id="s1">
+    <p class="sec-num">01</p>
+    <h2 class="sec-title">這堂課在整條流程的哪裡</h2>
+    <p>Unit 05 你畫了一張 IA 圖，把功能分好類、標出核心路徑。那張圖告訴別人「這個產品有哪些東西、放在哪一層」，但它沒有告訴任何人<strong>使用者實際上怎麼走</strong>。</p>
+    <p>IA 圖像是一張捷運路線圖：你看得到有哪些站、怎麼轉乘。但「從家裡到公司該怎麼走」是另一件事——那才是流程圖要回答的。</p>
+    <div class="callout">
+      Unit 05 IA 圖與功能清單 → <span class="hl">Unit 06 Flowchart、User Flow、初版 Wireframe</span> → Unit 07 Wireframe 細修 → Unit 10 高保真 Mockup。
+    </div>
+    <p>作業 5「Flowchart + UI Flow + Wireframe」是 Unit 06 跟 Unit 07 合起來完成的，最後交件是 1 張 Flow 加 3–5 個 Wireframe。這個單元先把流程與初版畫面做出來，細修留給下一堂。</p>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">02</p>
+    <h2 class="sec-title">先把四個詞分開</h2>
+    <p>User Journey、User Flow、Flowchart、Wireflow——這四個詞在網路文章裡常常混著用。開會的時候你說 A、對方腦中想的是 B，討論就會空轉半小時。</p>
+    <p>分法其實很簡單：<strong>前兩個是尺度，後兩個是畫法。</strong>這是課堂上用來理清關係的整理法，不是業界所有文件都照這樣分類——看別人的文件時還是要看他怎麼定義。</p>
+
+    <h3>User Journey 與 User Flow：兩種尺度</h3>
+    <p>NN/g 的定義是這樣的。User Journey 是「使用者為了達成一個高層目標所走過的、以情境為基礎的步驟序列」；User Flow 則是「一組互動，描述在產品裡完成某個常見任務所需要的典型或理想步驟」。</p>
+    <p>用外送 App 舉例：<em>肚子餓到吃飽</em>是 Journey，中間可能包含看到朋友限動、想起某家店、Google 評價、打開 App、下單、等外送、吃完評分。<em>打開 App 到按下送出訂單</em>是 Flow。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>面向</th><th>User Journey（Unit 04 做過）</th><th>User Flow（這個單元）</th></tr></thead>
+        <tbody>
+          <tr><td>尺度</td><td>宏觀，看整段體驗</td><td>微觀，看一個任務</td></tr>
+          <tr><td>時間</td><td>數天、數週、數月</td><td>數分鐘到數小時</td></tr>
+          <tr><td>範圍</td><td>跨通路，廣告、朋友、客服電話都算</td><td>只在產品裡面</td></tr>
+          <tr><td>畫什麼</td><td>行動、情緒、想法、接觸點</td><td>操作與系統的回應</td></tr>
+          <tr><td>產出物</td><td>旅程地圖</td><td>Wireflow、Flowchart、Task diagram</td></tr>
+          <tr><td>資料來源</td><td>田野研究、日記研究、訪談</td><td>可用性測試、後台數據</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>兩者不是二選一的關係。<strong>Flow 是 Journey 裡某一段的放大</strong>——你在旅程地圖上標紅的那個痛點，放大之後就是這堂課要畫的 Flow。</p>
+
+    <h3>Flowchart 與 Wireflow：兩種畫法</h3>
+    <p>同一條 User Flow，可以用不同格式畫出來。而這兩種格式各自看不到一些東西。</p>
+    <div class="cards">
+      <div class="card">
+        <h3>Flowchart 的盲點</h3>
+        <p>邏輯分支再完整，都缺少畫面脈絡。「選擇付款方式」在圖上是一個方塊，但實際上是整頁跳轉、還是底部彈出？使用者的感受差很多，圖上看不出來。</p>
+      </div>
+      <div class="card">
+        <h3>Wireframe 的盲點</h3>
+        <p>版面畫得再清楚，都不擅長記錄互動。尤其頁面沒換、內容卻變了的情況——點篩選器之後列表就地更新，一張張靜態畫面表達不出來。</p>
+      </div>
+    </div>
+    <p>Wireflow 就是為了補這兩個洞而出現的：它把 wireframe 風格的版面設計，跟簡化過的流程圖式互動表示法結合起來。用畫面設計取代抽象符號，讓討論的焦點留在使用者實際會操作的東西上。</p>
+    <div class="dia">┌──────────┐            ┌──────────┐            ┌──────────┐
+│ <span class="n">商品列表</span> │            │ <span class="n">商品詳情</span> │            │ <span class="n">購物車</span>   │
+│          │  <span class="c">點商品卡</span>  │          │  <span class="c">點加入</span>    │          │
+│ ▤ ▤ ▤  │ ─────────▶ │ ▣        │ ─────────▶ │ ▤ 1 件   │
+│ ▤ ▤ ▤  │            │ [加入購物車] │          │ [結帳]   │
+└──────────┘            └──────────┘            └──────────┘
+                                                      │
+                                             <span class="x">未登入</span> │
+                                                      ▼
+                                                ┌──────────┐
+                                                │ <span class="n">登入頁</span>   │
+                                                └──────────┘</div>
+    <p>畫 Wireflow 有幾個要注意的地方：每個節點呈現的是<strong>畫面狀態</strong>，可以是整個畫面，也可以只畫有變動的區塊；箭頭要從<strong>具體可點的 UI 元件</strong>出發，不能只拉一條線；桌機因為畫面大，建議只畫變動的部分，不然圖會大到看不完。</p>
+    <div class="callout green">
+      Wireflow 低保真、高保真都能畫。草圖階段拿來想事情，規格階段拿來交付給工程師。它最早是行動 App 團隊發展出來的作法，每個步驟就是一張完整的手機畫面。
+    </div>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">03</p>
+    <h2 class="sec-title">什麼時候用哪一種</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>你的產品長這樣</th><th>畫這個</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>頁面多、每頁內容相對固定的網站</td><td>Wireframe</td><td>重點在每一頁該放什麼；頁面之間的關係用 IA 圖表達就夠了</td></tr>
+          <tr><td>流程長、分支多、需要窮盡記錄</td><td>Flowchart</td><td>邏輯分支是主角，畫面長什麼樣先不重要</td></tr>
+          <tr><td>頁面少、內容隨互動一直變的 App 或 Web App</td><td>Wireflow</td><td>不畫出畫面狀態，就講不清楚「到底哪裡變了」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>學生專題大多屬於第三種。所以這堂課的順序是：<strong>先用 Flowchart 把邏輯理乾淨，再畫 Wireframe，Unit 07 再把兩者合成 Wireflow。</strong>一開始就想直接畫 Wireflow，通常會卡在「邏輯還沒想清楚就要決定畫面」。</p>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">04</p>
+    <h2 class="sec-title">Flowchart 怎麼畫</h2>
+    <p>工程用的流程圖符號有幾十種，你們不用背。畫使用者流程，四個符號就夠了。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>符號</th><th>代表什麼</th><th>寫法</th></tr></thead>
+        <tbody>
+          <tr><td>◯ 起訖符號</td><td>起點與終點</td><td>正式畫法是圓角矩形（膠囊形），課堂上畫成圓形也通。一張圖只有一個起點；終點可以有多個（成功、放棄、失敗）</td></tr>
+          <tr><td>▭ 矩形</td><td>動作或畫面</td><td>用動詞開頭：「輸入手機號碼」，不要寫「手機號碼頁」</td></tr>
+          <tr><td>◇ 菱形</td><td>判斷點</td><td>裡面寫成是非題：「已登入？」不要寫「登入判斷」</td></tr>
+          <tr><td>→ 箭頭</td><td>路徑</td><td>從菱形出去的每一條都要標條件：是／否、成功／失敗</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>最常見的錯：</strong>菱形只畫「是」那一條線出去。如果一個判斷點只有一條路徑，那它就不該是判斷點——把它改成矩形，或者去想清楚「否」的時候會怎樣。
+    </div>
+
+    <h3>一條流程要交代三件事</h3>
+    <div class="dia">     ◯ <span class="n">起點：從首頁點「我的課程」</span>
+     │
+     ▼
+   ┌──────────────┐
+   │ 顯示課程列表  │
+   └──────────────┘
+     │
+     ▼
+   ◇ <span class="d">有進行中的課程嗎？</span>
+     │
+     ├── <span class="d">有</span> ──▶ 顯示上次看到第幾分鐘 ──▶ 點「繼續看」──▶ ◯ <span class="n">終點：播放器開始播</span>
+     │
+     └── <span class="x">沒有</span> ─▶ <span class="x">空狀態：「還沒開始任何課程」＋ 去逛課程的按鈕</span></div>
+    <ol class="steps">
+      <li><strong>入口：</strong>使用者從哪裡進到這條流程？如果不只一個入口（首頁按鈕、推播通知、分享連結），全部畫出來。</li>
+      <li><strong>判斷點：</strong>中間哪裡會分岔？條件寫清楚。</li>
+      <li><strong>終點：</strong>怎樣算完成？成功跟失敗要分開畫成兩個終點。</li>
+    </ol>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">05</p>
+    <h2 class="sec-title">最常漏掉的例外路徑</h2>
+    <p>畫流程圖的時候，理想路徑十分鐘就畫完了。剩下的時間全部花在這一節的東西上——而評圖的時候，老師問的也都是這些。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>狀況</th><th>要問自己</th><th>畫面上會是什麼</th></tr></thead>
+        <tbody>
+          <tr><td>沒資料</td><td>第一次使用的人打開這一頁，看到什麼？</td><td>空狀態：一句說明 + 一個引導動作</td></tr>
+          <tr><td>找不到</td><td>搜尋沒結果、篩選之後一個都不剩？</td><td>無結果頁：放寬條件的建議、熱門推薦</td></tr>
+          <tr><td>沒權限</td><td>沒登入、沒付費、帳號被停用？</td><td>擋在哪一步、擋下來之後給什麼出路</td></tr>
+          <tr><td>出錯</td><td>網路斷掉、付款失敗、檔案太大？</td><td>錯誤訊息要說「怎麼辦」，不是只說「失敗」</td></tr>
+          <tr><td>要等</td><td>需要載入三秒以上的地方？</td><td>載入狀態、進度提示</td></tr>
+          <tr><td>反悔</td><td>中途想退出、想改剛剛填的？</td><td>返回、取消、編輯的入口</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>這六條當檢查表用。畫完理想路徑之後，一條一條問自己「這個情況我畫了嗎」。第一次做通常會漏掉好幾種，這很正常，逐條核對就補得回來。</p>
+    <div class="callout">
+      <strong>為什麼重要：</strong>這些狀態在 Wireframe 階段補，成本是多畫幾個灰階方塊。等到 Mockup 或切版才發現，成本是整個版面重排。
+    </div>
+  </section>
+
+  <section class="section" id="s6">
+    <p class="sec-num">06</p>
+    <h2 class="sec-title">從 IA 圖轉成 Flow</h2>
+    <ol class="steps">
+      <li><strong>挑一條。</strong>從 IA 圖上標了顏色的核心路徑挑<em>一條</em>，不要一次畫全部。</li>
+      <li><strong>拆步驟。</strong>把這條路徑拆成使用者實際會做的動作，動詞開頭。</li>
+      <li><strong>找分岔。</strong>每一步問一次「這裡會不會有人走不下去」，會的話就是判斷點。</li>
+      <li><strong>補例外。</strong>拿上一節那六條逐一補上。</li>
+    </ol>
+    <div class="callout green">
+      一堂課能畫完<strong>一條完整的核心路徑</strong>就夠了。畫三條半成品，不如一條把例外都補齊——半成品的流程圖沒辦法拿來畫 Wireframe，因為你不知道要畫幾個畫面。
+    </div>
+  </section>
+
+  <section class="section" id="s7">
+    <p class="sec-num">07</p>
+    <h2 class="sec-title">Wireframe 在回答什麼問題</h2>
+    <p>只有三個問題：<strong>這一頁要放哪些資訊、使用者可以做哪些動作、下一步在哪裡。</strong>其他都先不管。</p>
+    <p>Wireframe 是灰階方塊，看起來很陽春，這是刻意的。看到彩色跟圖片，所有人的注意力都會跑到「這個藍色好看嗎」，而不是「這裡少了一個返回按鈕」。</p>
+    <div class="callout warn">
+      <strong>學生最常做的事：</strong>Wireframe 畫到一半忍不住開始調圓角、選字體、找圖片。一旦開始，這張圖就不再是 Wireframe 了，而是一張很醜的 Mockup——兩邊的好處都拿不到。
+    </div>
+  </section>
+
+  <section class="section" id="s8">
+    <p class="sec-num">08</p>
+    <h2 class="sec-title">保真度：三個可以分開調的維度</h2>
+    <p>很多人以為保真度就是「畫得精不精緻」，是一條從粗到細的刻度。實際上它是三個可以各自調整的維度——你完全可以做出一個視覺很粗糙、但互動很完整的原型。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>維度</th><th>低保真</th><th>高保真</th></tr></thead>
+        <tbody>
+          <tr><td>互動 Interactivity</td><td>需要有人在旁邊手動換畫面</td><td>連結與選單真的點得下去</td></tr>
+          <tr><td>視覺 Visuals</td><td>手繪草圖、灰階方塊</td><td>完整的層級、間距、版面</td></tr>
+          <tr><td>內容 Content</td><td>摘要與佔位符</td><td>真實的文案與圖片</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>各自的好處</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>低保真</th><th>高保真</th></tr></thead>
+        <tbody>
+          <tr><td>準備時間</td><td>快，省下的時間可以多迭代幾輪</td><td>慢，做一版就用掉不少時間</td></tr>
+          <tr><td>測試中途</td><td>當場拿筆畫一畫就改好了</td><td>要回去改檔案，下一場才能用</td></tr>
+          <tr><td>受測者</td><td>壓迫感低，比較不怕做錯，更願意給負面回饋</td><td>當成真的軟體在用，行為更接近真實</td></tr>
+          <tr><td>能測到什麼</td><td>概念、流程順不順、資訊夠不夠</td><td>特定元件、工作流程、可視線索、易讀性</td></tr>
+          <tr><td>測試時誰在忙</td><td>設計師要一邊操作原型一邊觀察，容易分心也容易操作失誤</td><td>原型自己會動，設計師可以專心觀察使用者</td></tr>
+          <tr><td>設計師心態</td><td>還沒投入太多，願意打掉重來</td><td>做很久了，捨不得改</td></tr>
+          <tr><td>利害關係人</td><td>看得出還沒完成，預期還會再改</td><td>容易誤以為快做完了</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>最後兩列才是關鍵。<strong>高保真真正的成本不是工時，是你捨不得改。</strong>投入越多，越傾向於說服自己「這樣其實也還好」，而不是把它砍掉。</p>
+
+    <h3>為什麼這個單元刻意停在低保真</h3>
+    <ul class="bullets">
+      <li>畫面一漂亮，評圖的回饋就會全部集中在配色跟字體，結構問題被蓋住。</li>
+      <li>結構問題留到 Mockup 才發現，要重畫的量是現在的十倍。</li>
+      <li>你自己也會捨不得——花三小時調好的版面，誰想砍掉重來。</li>
+    </ul>
+    <div class="callout">
+      這堂課的規則：<strong>只能用黑、白、灰</strong>。要標重點就用一個藍色，只准一個。內容維度例外——文字要用真的，見下一節。
+    </div>
+  </section>
+
+  <section class="section" id="s9">
+    <p class="sec-num">09</p>
+    <h2 class="sec-title">Wireframe 上該放什麼</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>要放</h3>
+        <p>真實的標題與按鈕文字、資訊的先後順序與分組、每一個可以點的東西、這一頁唯一最明顯的主要動作、空狀態與錯誤狀態的版本。</p>
+      </div>
+      <div class="card">
+        <h3>先不要放</h3>
+        <p>顏色、漸層、陰影、真實照片（用灰方塊加一個叉代替）、精挑的字體、圖示細節（畫個圈標「icon」就好）、動畫與轉場。</p>
+      </div>
+    </div>
+    <p>文字一定要用真的。<strong>Lorem ipsum 會騙你</strong>——假字排起來永遠很整齊，等到真的標題塞進去才發現會爆版、或者短到留一大片空白。按鈕也一樣，寫「加入購物車」，不要寫「按鈕」。</p>
+
+    <h3>畫完一張，問自己這六題</h3>
+    <ol class="steps">
+      <li>第一眼會看到什麼？那是這一頁最重要的東西嗎？</li>
+      <li>這一頁的主要動作是哪一個？它有比其他按鈕明顯嗎？</li>
+      <li>使用者從哪裡來的？他知道自己在哪一層嗎？</li>
+      <li>如果這裡沒有資料，畫面長什麼樣？</li>
+      <li>按下去之後會發生什麼？成功跟失敗分別看到什麼？</li>
+      <li>想回上一步的話，回得去嗎？</li>
+    </ol>
+    <div class="callout green">
+      六題都答得出來，這張 Wireframe 才算畫完。答不出來的那一題，通常就是流程圖上漏掉的那條線——回去補流程圖，不要在畫面上硬掰。
+    </div>
+  </section>
+
+  <section class="section" id="s10">
+    <p class="sec-num">10</p>
+    <h2 class="sec-title">Figma Auto Layout</h2>
+    <p>沒用 Auto Layout 的時候，元素靠絕對座標擺放：你把標題改成兩行，下面所有東西都要手動往下推。用了之後，它們自己會讓開。</p>
+    <p>Auto Layout 讓 frame 隨內容變動自動反應——裡面的元素會依照<strong>方向、間距、內距、對齊</strong>自動排列。快捷鍵是選好圖層按 <code>⇧ A</code>（Windows 是 <code>Shift A</code>）。</p>
+
+    <h3>三種排列方向</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>方向</th><th>行為</th><th>典型用途</th></tr></thead>
+        <tbody>
+          <tr><td>垂直 Vertical</td><td>沿 y 軸往下排</td><td>清單、表單欄位、卡片內部的標題與說明</td></tr>
+          <tr><td>水平 Horizontal</td><td>沿 x 軸往右排，可設定換行</td><td>按鈕列、標籤列、導覽項目</td></tr>
+          <tr><td>網格 Grid</td><td>排成行與列，格子可跨欄</td><td>商品列表、儀表板</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>實務上幾乎都在<strong>巢狀</strong>使用：一張商品卡內部是垂直（圖片／標題／價格），一排卡片是水平或網格。每一層 frame 各自有獨立的 padding 與 gap。</p>
+
+    <h3>Padding 與 Gap</h3>
+    <p>兩個都是留白，差別在留在哪裡。這兩個搞混，版面就會怎麼調都不對。</p>
+    <div class="dia">┌─────────────────────────────────┐  ◀── 容器邊界
+│ ↕ <span class="d">padding-top</span>                    │
+│   ┌─────────────────────────┐   │
+│   │        項目 A            │   │
+│   └─────────────────────────┘   │
+│   ↕ <span class="n">gap</span>                           │
+│   ┌─────────────────────────┐   │
+│   │        項目 B            │   │
+│   └─────────────────────────┘   │
+│ ↕ <span class="d">padding-bottom</span>                 │
+└─────────────────────────────────┘
+  ↔ <span class="d">padding-left</span>        <span class="d">padding-right</span> ↔</div>
+    <ul class="bullets">
+      <li><strong>Padding：</strong>容器邊緣與裡面東西之間的留白。可以四邊統一、上下左右分開，或四個值各自設定。</li>
+      <li><strong>Gap between：</strong>裡面的東西彼此之間的距離。給固定數值，或設成 <code>Auto</code> 讓它們平均散開。</li>
+    </ul>
+
+    <h3>三種尺寸模式</h3>
+    <p>這是 Auto Layout 最容易卡住的地方。先記一句話：<strong>Hug 只能給容器，Fill 只能給裡面的東西。</strong></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>模式</th><th>能套在誰身上</th><th>行為</th><th>什麼時候用</th></tr></thead>
+        <tbody>
+          <tr><td>Hug contents</td><td>只有 Auto Layout 容器</td><td>縮到剛好包住內容</td><td>按鈕：文字多長，按鈕就多寬</td></tr>
+          <tr><td>Fill container</td><td>只有子元件</td><td>撐滿父容器剩下的空間（會遵守間距設定）</td><td>輸入框：不管視窗多寬都填滿</td></tr>
+          <tr><td>Fixed</td><td>容器與子元件都可以</td><td>尺寸固定不變</td><td>頭像、圖示這類固定尺寸的東西</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>一定要記住這條規則：</strong>只要 Auto Layout 容器裡有任何一個子元件設成 Fill container，容器在那個軸向就<strong>不再是 Hug，會自動變成 Fixed</strong>。「我明明設了 Hug 怎麼沒反應」，九成是這個原因。
+    </div>
+    <p>另外可以疊加最小／最大尺寸限制。兩個最常用的時機：文字容器加 <code>max width</code>，避免視窗拉很寬時一行變成八十個字；卡片或區塊加 <code>min height</code>，避免內容很少的時候整塊塌掉。作業的壓力測試如果發現拉寬會爆版，通常就是少了這兩個其中之一。</p>
+
+    <h3>Absolute position：跳出排列流程</h3>
+    <p>有些東西不該排在流程裡——例如卡片右上角的收藏愛心、蓋在圖片上的標籤。把它設成 absolute position，它會留在 frame 內但不參與排列，位置相對於父容器精確定位。Mac 按住 <code>Ctrl</code> 拖曳，Windows 按住 <code>S</code> 拖曳。</p>
+
+    <h3>快捷鍵</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>動作</th><th>Mac</th><th>Windows</th></tr></thead>
+        <tbody>
+          <tr><td>加上 Auto Layout</td><td><code>⇧ A</code></td><td><code>Shift A</code></td></tr>
+          <tr><td>移除 Auto Layout</td><td><code>⌥ ⇧ A</code></td><td><code>Alt Shift A</code></td></tr>
+          <tr><td>設為 Hug contents</td><td colspan="2">雙擊 frame 邊緣</td></tr>
+          <tr><td>設為 Fill container</td><td><code>⌥</code> + 雙擊</td><td><code>Alt</code> + 雙擊</td></tr>
+          <tr><td>調整對齊</td><td colspan="2">方向鍵 <code>↑ ↓ ← →</code>；靠邊 <code>W A S D</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="s11">
+    <p class="sec-num">11</p>
+    <h2 class="sec-title">Constraints 與 Auto Layout 的分工</h2>
+    <p>Constraints 管的是另一件事：<strong>當 frame 被拉大拉小的時候，圖層要怎麼跟著動。</strong></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>設定</th><th>水平方向的行為</th></tr></thead>
+        <tbody>
+          <tr><td>Left / Right</td><td>與左邊界（或右邊界）保持固定距離</td></tr>
+          <tr><td>Left and Right</td><td>兩邊都固定，所以圖層自己會變寬變窄</td></tr>
+          <tr><td>Center</td><td>永遠對齊 frame 的水平中線</td></tr>
+          <tr><td>Scale</td><td>尺寸與位置都按 frame 的比例縮放</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>垂直方向同理：Top、Bottom、Top and Bottom、Center、Scale。</p>
+    <div class="callout warn">
+      <strong>兩套機制是獨立的。</strong>Auto Layout 容器裡的一般子元件<strong>用不了 Constraints</strong>——它們用的是 Hug／Fill／Fixed。只有設成 absolute position、跳出排列流程的元件，才會回到 Constraints。
+    </div>
+    <p>什麼時候會用到 Constraints：做多裝置的響應式版面、frame 縮放時要維持元素位置、控制巢狀 frame 內部的行為。Unit 09 做 Web 多斷點版面的時候會再深入。</p>
+  </section>
+
+  <section class="section" id="s12">
+    <p class="sec-num">12</p>
+    <h2 class="sec-title">課堂練習與回家作業</h2>
+
+    <h3>課堂練習：從你自己的 IA 圖開始（80 分鐘）</h3>
+    <p>個人作業，用自己的專題。四階段結束後另有 15 分鐘各組成果分享。</p>
+    <ol class="steps">
+      <li><strong>拆步驟（15 分）</strong>：從 IA 圖挑一條核心路徑，拆成使用者的動作。</li>
+      <li><strong>畫 Flowchart（20 分）</strong>：補上判斷點與六種例外路徑。</li>
+      <li><strong>Auto Layout 練手（20 分）</strong>：做一張卡片，再排成一個列表。</li>
+      <li><strong>畫 Wireframe（25 分）</strong>：3 個低保真畫面，涵蓋流程的頭、中、尾。</li>
+    </ol>
+
+    <h3>回家作業：作業 5（上半）</h3>
+    <ol class="steps">
+      <li>把課堂上那條 Flowchart 補完整，六種例外路徑一條都不能少。</li>
+      <li>Wireframe 補到 3–5 個畫面，整組至少涵蓋一個關鍵的例外狀態。</li>
+      <li>每張 Wireframe 旁邊寫下六題檢查清單的答案。</li>
+      <li>主要容器與會重複的元件用 Auto Layout 做，交件前把 Frame 拉寬拉窄各一次，看會不會爆版。</li>
+      <li>行有餘力再畫第二條與第一條交會的 Flow，這是加分項，不是必要。</li>
+    </ol>
+    <div class="callout">
+      <strong>繳交：</strong>Figma 連結一份，含 1 張 Flow 與 3–5 個 Wireframe，對應課綱作業 5 的交件規格。完整步驟與配分見<a href="exercises.html#hw">練習頁</a>，交件清單見<a href="exercises.html#submit">繳交清單與評分</a>。
+    </div>
+  </section>
+
+  <section class="section" id="s13">
+    <p class="sec-num">13</p>
+    <h2 class="sec-title">AI 協作提示詞</h2>
+    <p>AI 在這個階段能幫你<strong>檢查有沒有漏</strong>，但不能幫你決定流程長什麼樣——它不知道你的使用者是誰。以下提示詞都要先貼上你自己的東西再問。</p>
+
+    <h3>① 檢查流程有沒有漏掉例外</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我畫的使用者流程，用文字描述：
+[貼上流程步驟，一行一步，分岔的地方寫清楚條件]
+
+我的使用者是：[貼上 Persona 摘要]
+
+請幫我檢查：
+1. 這條流程有哪些判斷點是我沒標出來的？
+2. 下面六種狀況我分別漏掉了哪些：沒資料、找不到、沒權限、出錯、要等、反悔。
+3. 有沒有哪一步，使用者可能不知道下一步要做什麼？
+4. 終點只有「成功」嗎？失敗跟中途放棄的終點在哪裡？
+
+請把「流程裡明確缺少的」跟「你的推測」分開列。
+不要幫我重寫整條流程，只指出缺口。</pre>
+    </div>
+
+    <h3>② 從流程推出需要哪些畫面</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我補完例外路徑之後的流程：
+[貼上完整流程]
+
+請幫我整理：
+1. 這條流程總共需要幾個畫面？各自是什麼？
+2. 哪些是同一個畫面的不同狀態（例如空狀態、載入中、錯誤），
+   不需要另外算一個畫面？
+3. 如果只能先畫 3 個，你建議畫哪 3 個？為什麼？
+4. 每個畫面上必須有的資訊與動作各是什麼？
+
+只根據我提供的流程分析，不要自行新增我沒寫的功能。</pre>
+    </div>
+
+    <h3>③ 檢查 Wireframe 的資訊層級</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我某一張 Wireframe 上，由上到下的所有元素：
+[一行一個元素，照實際順序寫，標註哪些是可點的]
+
+這一頁的主要任務是：[一句話]
+
+請幫我檢查：
+1. 最重要的資訊有沒有排在使用者第一眼會看到的位置？
+2. 這一頁有幾個可點的東西？主要動作夠不夠明顯，還是被淹沒了？
+3. 有沒有哪些元素其實跟主要任務無關，可以拿掉？
+4. 依這個順序，使用者讀完會知道下一步要做什麼嗎？
+
+只根據我列出的元素判斷，不要假設畫面上還有其他東西。</pre>
+    </div>
+
+    <div class="callout warn">
+      <strong>使用界線：</strong>不要讓 AI 直接生成流程圖或 Wireframe。它不知道你的使用者研究結果，產出的會是「一般電商大概長這樣」的通用版本——那跟你前四個單元做的研究完全脫鉤，評圖時很容易被看出跟研究資料脫節。
+    </div>
+  </section>
+
+</div><!-- /.article -->
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li><a href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">Wireflows: A UX Deliverable for Workflows and Apps</a> — NN/g，Wireflow 定義與實作準則。</li>
+    <li><a href="https://www.nngroup.com/articles/user-journeys-vs-user-flows/" target="_blank" rel="noopener">User Journeys vs. User Flows</a> — NN/g，兩種尺度的定義與對照。</li>
+    <li><a href="https://www.nngroup.com/articles/ux-prototype-hi-lo-fidelity/" target="_blank" rel="noopener">UX Prototypes: Low Fidelity vs. High Fidelity</a> — NN/g，保真度三維度與取捨。</li>
+    <li><a href="https://www.nngroup.com/articles/ux-deliverables-glossary/" target="_blank" rel="noopener">UX Deliverables: Glossary</a> — NN/g，產出物名詞定義。</li>
+    <li><a href="https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout" target="_blank" rel="noopener">Guide to auto layout</a> — Figma 官方文件。</li>
+    <li><a href="https://help.figma.com/hc/en-us/articles/360039957734-Apply-constraints-to-define-how-layers-resize" target="_blank" rel="noopener">Apply constraints to define how layers resize</a> — Figma 官方文件。</li>
+    <li>課程資源：<code>Unit_06/resources/guide.md</code>（上述來源的中文整理與課程對照）。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="slides.html">回到 Unit 06 簡報</a>
+  <a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">練習檔 ① 流程圖</a>
+  <a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">練習檔 ② Wireframe</a>
+  <a href="exercises.html#ex1">課堂練習</a>
+  <a href="exercises.html#hw">回家作業</a>
+  <a href="../Unit_05/article.html">Unit 05 講義：資訊架構</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+
+(function () {
+  document.querySelectorAll('.prompt').forEach(prompt => {
+    const btn = prompt.querySelector('.copy-btn');
+    const pre = prompt.querySelector('pre');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = '已複製';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = '複製';
+          btn.classList.remove('done');
+        }, 1400);
+      } catch (error) {
+        btn.textContent = '複製失敗';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

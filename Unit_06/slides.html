@@ -3,759 +3,1132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit 06 · 十大易用性原則與檢查表實務</title>
+<title>Unit 06 · Flowchart 到 Wireframe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg:      #fbfbfd;
-  --dark:    #1d1d1f;
-  --muted:   #86868b;
-  --accent:  #0066cc;
-  --accent2: #0071e3;
-  --accent3: #4094ff;
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --positive: #0f766e;
+  --negative: #c2410c;
   --surface: #f5f5f7;
-  --card:    #e8e8ed;
-  --border:  #d2d2d7;
-  --green:   #34c759;
-  --red:     #ff3b30;
-  --px: clamp(48px, 7vw, 112px);
-  --py: 44px;
+  --card: #ffffff;
+  --border: #d2d2d7;
+  --px: clamp(44px, 7vw, 108px);
+  --py: 52px;
 }
+
 html, body { height: 100%; overflow: hidden; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; }
-#prog { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); transition: width 0.55s cubic-bezier(.4,0,.2,1); z-index: 200; border-radius: 0 1px 1px 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
 #deck { position: relative; width: 100%; height: 100vh; }
-.slide { position: absolute; inset: 0; display: flex; flex-direction: column; padding: var(--py) var(--px); opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s .5s; overflow: hidden; }
-.slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
-.slide-head { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.slide-foot { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 28px; }
-.unit-pill { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 20px; }
-.slide-num { font-size: 12px; font-weight: 500; color: var(--border); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
-.course-label { font-size: 11px; color: var(--border); letter-spacing: .02em; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+}
+
+.slide-head, .slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+}
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.slide-num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.course-label { font-size: 11px; color: #a1a1a6; }
+
 .dots { display: flex; gap: 5px; align-items: center; }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: all .3s cubic-bezier(.4,0,.2,1); cursor: pointer; }
-.dot.on { background: var(--accent); width: 16px; border-radius: 2.5px; }
-.overline { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-.divider { width: 40px; height: 3px; background: var(--accent); border-radius: 2px; margin-bottom: 20px; margin-top: 4px; }
-h1 { font-size: clamp(1.9rem, 3.8vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; color: var(--dark); }
-h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--muted); line-height: 1.65; letter-spacing: -.01em; margin-top: 14px; }
-.cover-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 28px; }
-.cover-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--muted); flex-shrink: 0; }
-.cover-title { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -.055em; line-height: 1.04; color: var(--dark); margin-bottom: 22px; }
-.cover-sub { font-size: clamp(.9rem, 1.5vw, 1.25rem); font-weight: 400; color: var(--muted); line-height: 1.6; letter-spacing: -.01em; margin-bottom: 48px; }
-.cover-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--muted); }
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.dot.on { width: 16px; border-radius: 3px; background: var(--accent); }
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.divider {
+  width: 42px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 8px 0 26px;
+}
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+h2 {
+  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 900px;
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+.cover-title {
+  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover-sub {
+  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+.cover-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
 .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
 
-/* Overview grid */
-.overview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 28px; }
-.ov-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border-radius: 12px; transition: background .2s; }
-.ov-item:hover { background: var(--card); }
-.ov-num { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--accent); background: rgba(0,102,204,.1); padding: 2px 8px; border-radius: 5px; flex-shrink: 0; }
-.ov-name { font-size: clamp(.8rem, 1.1vw, .95rem); font-weight: 600; color: var(--dark); }
-.ov-en { font-size: .75rem; color: var(--muted); font-weight: 400; }
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 38px;
+}
+.agenda-card, .mini-card {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.a-time, .mini-card strong {
+  font-size: clamp(.9rem, 1.25vw, 1.08rem);
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.35;
+}
+.a-desc, .mini-card span {
+  font-size: clamp(.78rem, 1.05vw, .94rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
 
-/* Heuristic slide layout */
-.h-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 20px; align-items: start; }
-.h-left { display: flex; flex-direction: column; gap: 10px; }
-.h-subtitle { font-size: clamp(.82rem, 1.1vw, .96rem); color: var(--muted); line-height: 1.7; }
-.h-insight { margin-top: 12px; padding: 11px 15px; background: rgba(0,102,204,.07); border-radius: 10px; border-left: 3px solid var(--accent); font-size: clamp(.78rem, 1vw, .88rem); font-weight: 600; color: var(--accent); line-height: 1.5; }
-.h-right { display: flex; flex-direction: column; gap: 10px; }
-.ex-card { background: var(--surface); border-radius: 14px; padding: 16px 18px; border: 1px solid var(--border); }
-.ex-tag { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
-.ex-tag.good { color: var(--green); }
-.ex-tag.bad  { color: var(--red); }
-.ex-tag::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.ex-tag.good::before { background: var(--green); }
-.ex-tag.bad::before  { background: var(--red); }
-.ex-app { font-size: clamp(.82rem, 1.1vw, .93rem); font-weight: 600; color: var(--dark); margin-bottom: 3px; }
-.ex-desc { font-size: clamp(.76rem, .95vw, .85rem); color: var(--muted); line-height: 1.6; }
-.h-title { font-size: clamp(1.5rem, 2.6vw, 2.4rem); font-weight: 700; letter-spacing: -.04em; line-height: 1.15; color: var(--dark); }
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.blist li {
+  font-size: clamp(.88rem, 1.25vw, 1.08rem);
+  color: var(--dark);
+  line-height: 1.58;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.blist li::before {
+  content: attr(data-n);
+  min-width: 30px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.blist.plain li::before {
+  content: '';
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  padding: 0;
+  margin-top: .6em;
+}
+.blist.compact { gap: 8px; margin-top: 18px; }
+.blist.compact li { padding: 9px 13px; font-size: clamp(.78rem, 1.02vw, .94rem); }
+.hl { color: var(--accent); font-weight: 700; }
+.hl2 { color: var(--accent2); font-weight: 700; }
+.warn-text { color: var(--accent3); font-weight: 700; }
 
-/* Agenda */
-.agenda-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
-.agenda-card { background: rgba(255,255,255,.04); border-radius: 18px; padding: 26px 22px 28px; display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(255,255,255,.07); }
-.a-step { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent3); }
-.a-time { font-size: clamp(.85rem, 1.25vw, 1.1rem); font-weight: 600; color: #f5f5f7; line-height: 1.35; }
-.a-desc { font-size: clamp(.78rem, 1.05vw, .92rem); color: #86868b; line-height: 1.6; margin-top: 2px; }
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(130px, 21vw, 250px);
+  font-weight: 800;
+  color: var(--surface);
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.matrix.c3 { grid-template-columns: repeat(3, 1fr); }
+.matrix.c4 { grid-template-columns: repeat(4, 1fr); }
+.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
+.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
 
-/* Nielsen intro */
-.nielsen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px; }
-.nielsen-stat { background: rgba(255,255,255,.05); border-radius: 14px; padding: 20px 22px; border: 1px solid rgba(255,255,255,.07); }
-.n-value { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -.05em; color: var(--accent3); line-height: 1; margin-bottom: 6px; }
-.n-label { font-size: clamp(.78rem, 1.05vw, .92rem); color: #86868b; line-height: 1.6; }
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  font-size: clamp(.72rem, .98vw, .92rem);
+}
+.cmp-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.45;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child { font-weight: 700; color: var(--muted); white-space: nowrap; }
 
-/* Checklist slide */
-.checklist-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-top: 0; }
-.cl-item { display: flex; gap: 11px; align-items: flex-start; padding: 11px 13px; background: rgba(255,255,255,.04); border-radius: 11px; border: 1px solid rgba(255,255,255,.06); cursor: pointer; transition: background .18s, border-color .18s; user-select: none; }
-.cl-item:hover { background: rgba(255,255,255,.08); }
-.cl-check { display: none; }
-.cl-box { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid rgba(255,255,255,.22); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: transparent; transition: background .18s, border-color .18s, color .18s; }
-.cl-item:has(.cl-check:checked) { background: rgba(52,199,89,.13); border-color: rgba(52,199,89,.3); }
-.cl-item:has(.cl-check:checked) .cl-box { background: var(--green); border-color: var(--green); color: #fff; }
-.cl-item:has(.cl-check:checked) .cl-name { color: var(--green); }
-.cl-item:has(.cl-check:checked) .cl-num { background: rgba(52,199,89,.2); color: var(--green); }
-.cl-num { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--accent3); background: rgba(64,148,255,.15); padding: 2px 8px; border-radius: 5px; flex-shrink: 0; margin-top: 1px; transition: background .18s, color .18s; }
-.cl-content { display: flex; flex-direction: column; gap: 2px; }
-.cl-name { font-size: clamp(.76rem, .98vw, .86rem); font-weight: 600; color: #f5f5f7; transition: color .18s; }
-.cl-q { font-size: clamp(.7rem, .88vw, .78rem); color: #86868b; line-height: 1.5; }
-/* Progress header */
-.cl-prog-header { display: flex; align-items: center; gap: 14px; margin: 10px 0 12px; }
-.cl-count { font-size: 13px; font-weight: 700; color: #f5f5f7; white-space: nowrap; min-width: 96px; font-variant-numeric: tabular-nums; }
-.cl-track { flex: 1; height: 5px; background: rgba(255,255,255,.1); border-radius: 3px; overflow: hidden; }
-.cl-fill { height: 100%; width: 0%; background: var(--green); border-radius: 3px; transition: width .45s cubic-bezier(.4,0,.2,1); }
-.cl-label { font-size: 11px; color: #86868b; white-space: nowrap; transition: color .3s; }
+.note {
+  margin-top: 17px;
+  font-size: clamp(.72rem, .92vw, .86rem);
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 11px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+}
+.note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.note a:hover { text-decoration: underline; }
 
-/* bg number */
-.bg-n { position: absolute; right: calc(var(--px) - 20px); top: 50%; transform: translateY(-52%); font-size: clamp(140px, 22vw, 280px); font-weight: 800; color: var(--surface); letter-spacing: -.1em; line-height: 1; z-index: 0; user-select: none; pointer-events: none; }
-.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
+.chain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+}
+.chain.c5 { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.chain-step {
+  position: relative;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.chain-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+}
+.chain-step b { display: block; color: var(--accent); font-size: .78rem; margin-bottom: 8px; }
+.chain-step span { display: block; color: var(--muted); line-height: 1.5; font-size: .86rem; }
 
-/* Controls */
-#ctrls { position: fixed; bottom: 28px; right: clamp(36px, 5vw, 80px); display: flex; gap: 8px; z-index: 100; }
-#ctrls button { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(29,29,31,.06); color: var(--dark); cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; }
-#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
-#ctrls button:active { transform: scale(.94); }
+.stat-row { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 32px; }
+.stat b { display: block; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1; color: var(--accent); }
+.stat span { display: block; margin-top: 9px; color: var(--muted); line-height: 1.5; font-size: .9rem; }
 
-/* Dark mode */
+/* 流程圖 */
+.flow-dia {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 20px 22px;
+  font-size: clamp(.68rem, .92vw, .85rem);
+  line-height: 1.85;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  color: var(--dark);
+  white-space: pre;
+  overflow-x: auto;
+}
+.flow-dia .n { color: var(--accent); font-weight: 700; }
+.flow-dia .d { color: var(--accent2); font-weight: 700; }
+.flow-dia .x { color: var(--accent3); font-weight: 700; }
+.flow-dia .c { color: var(--muted); }
+
+/* 線框示意 */
+.wf-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+.wf {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 250px;
+}
+.wf .bar { background: var(--surface); border-radius: 3px; }
+.wf .bar.h { height: 26px; }
+.wf .bar.t { height: 13px; width: 62%; }
+.wf .bar.s { height: 9px; width: 88%; }
+.wf .bar.box { flex: 1; }
+.wf .bar.btn { height: 22px; width: 44%; background: rgba(0,102,204,.16); }
+.wf-cap { font-size: .78rem; color: var(--muted); margin-top: 9px; text-align: center; }
+
+.res-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.res-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color .2s, transform .2s;
+}
+.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.res-link strong { font-size: .94rem; color: var(--dark); }
+.res-link span { font-size: .75rem; color: var(--muted); }
+
+.slide-body a.ilink {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,102,204,.35);
+}
+.slide-body a.ilink:hover { border-bottom-color: var(--accent); }
+
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+#ctrls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+
 .slide.dark { background: #1d1d1f; }
 .slide.dark h1 { color: #f5f5f7; }
-.slide.dark h2 { color: #86868b; }
-.slide.dark .overline { color: #4094ff; }
-.slide.dark .divider { background: #4094ff; }
-.slide.dark .bg-n { color: #242426; }
-.slide.dark .unit-pill { background: rgba(64,148,255,.15); color: #4094ff; }
-.slide.dark .slide-num { color: #48484a; }
-.slide.dark .course-label { color: #3a3a3c; }
+.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
+.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
+.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
+.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
+.slide.dark .bg-n { color: #2c2c2e; }
+.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card,
+.slide.dark .chain-step, .slide.dark .flow-dia, .slide.dark .wf {
+  background: rgba(255,255,255,.055);
+  color: #f5f5f7;
+  border-color: #3a3a3c;
+}
+.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
+.slide.dark .mini-card strong, .slide.dark .a-time, .slide.dark .chain-step span { color: #f5f5f7; }
+.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
+.slide.dark .chain-step b, .slide.dark .flow-dia .n { color: #58a6ff; }
+.slide.dark .flow-dia .c, .slide.dark .wf-cap { color: #a1a1a6; }
+.slide.dark .wf .bar { background: rgba(255,255,255,.10); }
+.slide.dark .wf .bar.btn { background: rgba(88,166,255,.28); }
+.slide.dark .stat b { color: #58a6ff; }
+.slide.dark .stat span { color: #a1a1a6; }
 .slide.dark .dot { background: #3a3a3c; }
-.slide.dark .dot.on { background: #4094ff; }
-.slide.dark .h-title { color: #f5f5f7; }
-.slide.dark .h-subtitle { color: #86868b; }
-.slide.dark .h-insight { background: rgba(64,148,255,.1); color: #4094ff; border-left-color: #4094ff; }
-.slide.dark .ex-card { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); }
-.slide.dark .ex-app { color: #f5f5f7; }
-.slide.dark .ex-desc { color: #86868b; }
-.slide.dark .ov-item { background: rgba(255,255,255,.05); }
-.slide.dark .ov-item:hover { background: rgba(255,255,255,.09); }
-.slide.dark .ov-name { color: #f5f5f7; }
-.slide.dark .ov-num { background: rgba(64,148,255,.15); color: #4094ff; }
+.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .note a { color: #58a6ff; }
+.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
+.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .res-link strong { color: #f5f5f7; }
+.slide.dark .res-link span { color: #a1a1a6; }
+.slide.dark .slide-body a.ilink { color: #58a6ff; border-bottom-color: rgba(88,166,255,.42); }
+.slide.dark .slide-body a.ilink:hover { border-bottom-color: #58a6ff; }
+
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding: 12px 0; }
+  .agenda-grid, .matrix, .matrix.c3, .matrix.c4,
+  .res-links, .chain, .chain.c5, .wf-row { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .chain-step:not(:last-child)::after { display: none; }
+  .cmp-table { display: block; overflow-x: auto; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 20px; }
+  .cover-sub { margin-bottom: 22px; }
+  .bg-n, .course-label, .dots { display: none; }
+}
 </style>
 </head>
 <body>
 
 <div id="prog"></div>
+
 <div id="deck">
 
-<!-- ─── Slide 1 · Cover ─── -->
-<div class="slide active">
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">01 / 14</span>
-  </div>
-  <div class="slide-body">
-    <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
-    <h1 class="cover-title">十大易用性<br>原則</h1>
-    <p class="cover-sub">Nielsen's 10 Usability Heuristics<br>用真實案例理解 UX 評估框架</p>
-    <div class="cover-meta">
-      <span>10 條原則</span>
-      <span class="meta-dot"></span>
-      <span>真實範例說明</span>
-      <span class="meta-dot"></span>
-      <span>易用性檢核表</span>
+  <!-- 01 Cover -->
+  <section class="slide active">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
+      <h1 class="cover-title">Flowchart<br>到 Wireframe</h1>
+      <p class="cover-sub">User Flow × 例外路徑 × 低保真 Wireframe × Figma Auto Layout</p>
+      <div class="cover-meta">
+        <span>08/03 下午</span><span class="meta-dot"></span><span>26 張投影片</span><span class="meta-dot"></span><span>含 Figma 實作</span>
+      </div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 2 · About Nielsen (dark) ─── -->
-<div class="slide dark">
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">02 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">Background</p>
-    <h1>Jakob Nielsen<br>是誰？</h1>
-    <div class="nielsen-grid">
-      <div class="nielsen-stat">
-        <div class="n-value">1994</div>
-        <div class="n-label">提出十大易用性原則<br>至今仍是業界最常用的 UX 評估框架</div>
-      </div>
-      <div class="nielsen-stat">
-        <div class="n-value">30 年</div>
-        <div class="n-label">這套原則歷經三十年考驗<br>從桌面軟體到行動 App 全適用</div>
-      </div>
-      <div class="nielsen-stat">
-        <div class="n-value">Heuristic</div>
-        <div class="n-label">啟發式評估（Heuristic Evaluation）<br>不需用戶測試，專家即可審查介面</div>
-      </div>
-      <div class="nielsen-stat">
-        <div class="n-value">3–5 人</div>
-        <div class="n-label">研究顯示只需 3–5 位評估者<br>即可找出約 75% 的易用性問題</div>
+  <!-- 02 Agenda -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Agenda</p>
+      <h1>今天開始動手畫畫面</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="a-step">Part 1 · 50 min</span>
+          <span class="a-time">流程怎麼畫</span>
+          <span class="a-desc">四個常被混用的詞、什麼時候用哪一種、Flowchart 的符號與判斷點、最容易漏掉的例外路徑。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 2 · 35 min</span>
+          <span class="a-time">Wireframe 與保真度</span>
+          <span class="a-desc">Wireframe 該放什麼、保真度的三個維度，以及為什麼這堂課要刻意停在低保真。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 3 · 95 min</span>
+          <span class="a-time">Figma 實作</span>
+          <span class="a-desc">Auto Layout 與 Constraints 觀念，接著動手畫 Flow 與 3 個 Wireframe（80 分），最後成果分享與作業說明（15 分）。</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 3 · Overview all 10 (light) ─── -->
-<div class="slide">
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">03 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">Overview</p>
-    <h1>十大易用性原則</h1>
-    <div class="overview-grid">
-      <div class="ov-item"><span class="ov-num">H1</span><div><div class="ov-name">系統狀態可見性</div><div class="ov-en">Visibility of System Status</div></div></div>
-      <div class="ov-item"><span class="ov-num">H2</span><div><div class="ov-name">現實世界對應</div><div class="ov-en">Match Between System and Real World</div></div></div>
-      <div class="ov-item"><span class="ov-num">H3</span><div><div class="ov-name">使用者控制與自由</div><div class="ov-en">User Control and Freedom</div></div></div>
-      <div class="ov-item"><span class="ov-num">H4</span><div><div class="ov-name">一致性與標準</div><div class="ov-en">Consistency and Standards</div></div></div>
-      <div class="ov-item"><span class="ov-num">H5</span><div><div class="ov-name">錯誤預防</div><div class="ov-en">Error Prevention</div></div></div>
-      <div class="ov-item"><span class="ov-num">H6</span><div><div class="ov-name">辨識而非記憶</div><div class="ov-en">Recognition Rather Than Recall</div></div></div>
-      <div class="ov-item"><span class="ov-num">H7</span><div><div class="ov-name">彈性與效率</div><div class="ov-en">Flexibility and Efficiency of Use</div></div></div>
-      <div class="ov-item"><span class="ov-num">H8</span><div><div class="ov-name">極簡美學設計</div><div class="ov-en">Aesthetic and Minimalist Design</div></div></div>
-      <div class="ov-item"><span class="ov-num">H9</span><div><div class="ov-name">錯誤識別與修復</div><div class="ov-en">Help Users Recognize and Recover</div></div></div>
-      <div class="ov-item"><span class="ov-num">H10</span><div><div class="ov-name">說明文件</div><div class="ov-en">Help and Documentation</div></div></div>
+  <!-- 03 這堂課在哪裡 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Where We Are</p>
+      <h1>上禮拜畫的 IA 圖，今天要變成畫面</h1>
+      <h2>Unit 05 交出來的功能清單與 IA 圖，就是今天的原料。沒帶的人先開起來，等一下要用。</h2>
+      <div class="chain c5">
+        <div class="chain-step"><b>Unit 05</b><span>IA 圖<br>功能清單</span></div>
+        <div class="chain-step"><b>今天 ①</b><span>Flowchart<br>User Flow</span></div>
+        <div class="chain-step"><b>今天 ②</b><span>低保真<br>Wireframe</span></div>
+        <div class="chain-step"><b>Unit 07</b><span>Wireframe<br>細修與延伸</span></div>
+        <div class="chain-step"><b>Unit 10</b><span>高保真<br>Mockup</span></div>
+      </div>
+      <div class="note">作業 5「Flowchart + UI Flow + Wireframe」是 Unit 06 跟 07 一起完成的，交件是 1 張 Flow 加 3–5 個 Wireframe。今天先把 Flow 跟初版畫面弄出來。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 4 · H1 系統狀態可見性 (dark) ─── -->
-<div class="slide dark">
-  <div class="bg-n">1</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">04 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H1 · Visibility of System Status</p>
-    <div class="h-title">系統狀態可見性</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">系統應在合理的時間內，透過<strong style="color:#f5f5f7">適當的視覺回饋</strong>讓使用者了解目前發生了什麼事。使用者不應該猜測——動作是否成功？系統是否還在跑？</p>
-        <div class="h-insight">沒有回饋 = 使用者焦慮 = 反覆點擊 = 更多錯誤</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Gmail — 寄信 Toast 提示</div>
-          <div class="ex-desc">郵件寄出後立即出現「郵件已傳送」Toast，並附上「復原」按鈕倒數 5 秒。使用者明確知道動作成功，且可以反悔。</div>
+  <!-- 04 四個常被混用的詞 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Terminology</p>
+      <h1>先把四個詞分開</h1>
+      <h2>這四個在網路上常常混著用，開會的時候你講 A 對方想 B，討論就會空轉。</h2>
+      <div class="matrix c4">
+        <div class="mini-card">
+          <strong>User Journey</strong>
+          <span>跨通路、跨天數的高層目標。Unit 04 畫的旅程地圖就是這個。</span>
         </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">YouTube — 上傳進度條</div>
-          <div class="ex-desc">上傳影片時顯示藍色進度條 + 百分比數字 + 預估剩餘時間，使用者知道還要等多久，不會誤以為當機。</div>
+        <div class="mini-card">
+          <strong>User Flow</strong>
+          <span>在單一產品內完成一個任務的步驟。今天要畫的是這個。</span>
         </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">舊版銀行網站 — 轉帳後頁面空轉</div>
-          <div class="ex-desc">按下「確認轉帳」後頁面無任何反應，沒有 Loading 動畫也沒有成功訊息。使用者不確定交易是否執行，傾向重複提交。</div>
+        <div class="mini-card">
+          <strong>Flowchart</strong>
+          <span>表達 User Flow 的一種畫法，用方塊跟菱形，強在邏輯分支。</span>
+        </div>
+        <div class="mini-card">
+          <strong>Wireflow</strong>
+          <span>另一種畫法，用畫面縮圖取代方塊，強在看得到頁面長怎樣。</span>
         </div>
       </div>
+      <div class="note">記法：<span class="hl">Journey 是尺度，Flow 也是尺度</span>；Flowchart 跟 Wireflow 是把 Flow 畫出來的兩種格式。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 5 · H2 現實世界對應 (light) ─── -->
-<div class="slide">
-  <div class="bg-n">2</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">05 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H2 · Match Between System and the Real World</p>
-    <div class="h-title">現實世界對應</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">使用使用者<strong>熟悉的語言、詞彙與隱喻</strong>，而非系統導向的術語。圖示、語言和概念都應對應到使用者的既有認知，讓他們「不需要學習」就能直覺操作。</p>
-        <div class="h-insight">好的隱喻讓使用者用既有知識理解新事物，學習成本趨近於零</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">iPhone — 實體隱喻圖示</div>
-          <div class="ex-desc">電話聽筒 = 撥打電話、垃圾桶 = 刪除、購物車 = 待結帳商品。所有圖示都有現實原型，即使是第一次使用智慧型手機的長輩也能理解。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Google Maps — 空間導航語言</div>
-          <div class="ex-desc">「藍點 = 你在這裡」、指南針對應真實方向感、路線用箭頭標示——完全對應人類閱讀實體地圖的習慣。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">系統錯誤訊息 — 工程師語言</div>
-          <div class="ex-desc">顯示「HTTP 403 Forbidden」或「ECONNREFUSED」——這是工程師的語言，對一般使用者毫無意義，無法產生任何心智對應。</div>
-        </div>
-      </div>
+  <!-- 05 Journey vs Flow -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Journey vs. Flow</p>
+      <h1>旅程地圖跟流程圖差在哪</h1>
+      <h2>同一個外送 App，用旅程地圖看是「餓了到吃飽」，用 Flow 看是「打開 App 到按下送出訂單」。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>面向</th><th>User Journey（Unit 04）</th><th>User Flow（今天）</th></tr></thead>
+        <tbody>
+          <tr><td>尺度</td><td>宏觀，看整段體驗</td><td>微觀，看一個任務</td></tr>
+          <tr><td>時間</td><td>數天、數週、數月</td><td>數分鐘到數小時</td></tr>
+          <tr><td>範圍</td><td>跨通路：廣告、朋友推薦、客服電話都算</td><td>只在產品裡面</td></tr>
+          <tr><td>畫什麼</td><td>行動、情緒、想法、接觸點</td><td>操作與系統的回應</td></tr>
+          <tr><td>產出物</td><td>旅程地圖</td><td>Flowchart、Wireflow、Task diagram</td></tr>
+          <tr><td>資料哪裡來</td><td>田野研究、日記研究、訪談</td><td>可用性測試、後台數據</td></tr>
+        </tbody>
+      </table>
+      <div class="note">兩者不是二選一。<span class="hl">Flow 是 Journey 裡某一段的放大</span>——你在旅程地圖上標的那個痛點，放大就是今天要畫的 Flow。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 6 · H3 使用者控制與自由 (dark) ─── -->
-<div class="slide dark">
-  <div class="bg-n">3</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">06 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H3 · User Control and Freedom</p>
-    <div class="h-title">使用者控制與自由</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">使用者常會<strong style="color:#f5f5f7">誤觸或做出錯誤決定</strong>，系統需提供明顯的「緊急出口」讓他們隨時後悔。這不是在縱容粗心，而是讓使用者敢大膽探索的安全感來源。</p>
-        <div class="h-insight">「緊急出口」設計得越清楚，使用者就越敢嘗試新功能</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Gmail — 復原寄送功能</div>
-          <div class="ex-desc">寄出後可在設定的秒數內（5/10/20/30 秒可調）點「復原」取消。這讓使用者在寄信時更放心，即使寄錯也有救。</div>
+  <!-- 06 兩者的盲點 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Blind Spots</p>
+      <h1>Flowchart 跟 Wireframe 各自看不到的東西</h1>
+      <div class="matrix">
+        <div class="mini-card warn">
+          <strong>Flowchart 的盲點</strong>
+          <span>邏輯分支寫得再完整，都<b>沒有畫面脈絡</b>。<br><br>「選擇付款方式」在圖上是一個方塊，但實際上是全螢幕的頁面、還是底部彈出的選單？使用者的感受差很多，圖上看不出來。</span>
         </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Mac — 垃圾桶機制</div>
-          <div class="ex-desc">刪除檔案不會立即永久消失，而是移至垃圾桶，使用者可隨時還原。需要「永久清除」才是不可逆的操作，且有二次確認。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">某訂閱 App — 取消訂閱流程</div>
-          <div class="ex-desc">取消訂閱入口藏在設定的第 5 層選單中，還需點過「保留訂閱」、「確定離開」等多個障礙頁面，被設計成讓使用者找不到出口。</div>
+        <div class="mini-card warn">
+          <strong>Wireframe 的盲點</strong>
+          <span>版面畫得再清楚，都<b>不擅長記錄互動</b>。<br><br>尤其是頁面沒換、內容卻變了的情況：點篩選器之後商品列表就地更新，這在一張張靜態的 Wireframe 上根本表達不出來。</span>
         </div>
       </div>
+      <div class="note">這兩個盲點合在一起，就是為什麼會有第三種東西。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 7 · H4 一致性與標準 (light) ─── -->
-<div class="slide">
-  <div class="bg-n">4</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">07 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H4 · Consistency and Standards</p>
-    <div class="h-title">一致性與標準</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">相同的動作、詞彙、圖示在整個產品中應保持一致，並遵循平台設計規範（iOS HIG / Material Design）。<strong>打破一致性就等於強迫使用者重新學習</strong>，增加認知負擔。</p>
-        <div class="h-insight">一致性讓使用者把腦力花在任務上，而不是花在搞懂介面上</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">iOS — 全系統「返回」一致性</div>
-          <div class="ex-desc">無論第三方 App 還是原生 App，「返回上一頁」統一在左上角，手勢也統一是右滑。使用者只需學一次，適用所有 App。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Google Workspace — 分享按鈕</div>
-          <div class="ex-desc">Docs、Sheets、Slides、Drive 的「分享」按鈕位置、顏色（藍色）、文字完全相同。跨產品使用時零學習成本。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">介面內部不一致</div>
-          <div class="ex-desc">同一個 App 裡，購物頁面「確定」在右側，結帳頁面「確定」跑到左側；「取消」有時是按鈕，有時是連結文字——每次都讓使用者多想一秒。</div>
-        </div>
-      </div>
+  <!-- 07 Wireflow -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Wireflow</p>
+      <h1>Wireflow：把畫面塞進流程圖</h1>
+      <h2>節點不再是抽象的方塊，而是那個畫面本身。箭頭從「你點的那顆按鈕」出發，指向點完之後看到的東西。</h2>
+      <div class="flow-dia">┌──────────┐            ┌──────────┐            ┌──────────┐
+│ <span class="n">商品列表</span> │            │ <span class="n">商品詳情</span> │            │ <span class="n">購物車</span>   │
+│          │  <span class="c">點商品卡</span>  │          │  <span class="c">點加入</span>    │          │
+│ ▤ ▤ ▤  │ ─────────▶ │ ▣        │ ─────────▶ │ ▤ 1 件   │
+│ ▤ ▤ ▤  │            │ [加入購物車] │          │ [結帳]   │
+└──────────┘            └──────────┘            └──────────┘
+                                                      │
+                                             <span class="x">未登入</span> │
+                                                      ▼
+                                                ┌──────────┐
+                                                │ <span class="n">登入頁</span>   │
+                                                └──────────┘</div>
+      <div class="note">箭頭一定要標<span class="hl">是點了哪個元件</span>，不能只畫一條線。低保真高保真都能畫——草圖階段拿來想，規格階段拿來交付。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 8 · H5 錯誤預防 (dark) ─── -->
-<div class="slide dark">
-  <div class="bg-n">5</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">08 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H5 · Error Prevention</p>
-    <div class="h-title">錯誤預防</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">比起設計漂亮的錯誤訊息，<strong style="color:#f5f5f7">防止錯誤發生</strong>才是更好的設計。設計應在可能出錯的地方加上護欄：限制輸入、二次確認、語境提示，讓使用者根本無法犯那個錯。</p>
-        <div class="h-insight">限制 &gt; 確認 &gt; 修復 ── 越早攔截錯誤，代價越低</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Google 日曆 — 日期選擇器</div>
-          <div class="ex-desc">以點選月曆取代手動輸入日期，根本不讓使用者輸入「2月30日」這種不存在的日期，從源頭排除格式錯誤。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">GitHub — 刪除 Repository 二次確認</div>
-          <div class="ex-desc">刪除 Repo 前必須手動輸入完整的 Repository 名稱才能啟用刪除按鈕。主動的確認行為讓誤刪幾乎不可能發生。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">Outlook — 全部回覆的致命鄰居</div>
-          <div class="ex-desc">「回覆」與「全部回覆」按鈕緊鄰放置，圖示極為相似。每年都有人誤按全部回覆，把私人訊息發給整個部門或公司通訊錄。</div>
-        </div>
-      </div>
+  <!-- 08 什麼時候用哪一種 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">When to Use</p>
+      <h1>那我到底該畫哪一種？</h1>
+      <div class="divider"></div>
+      <table class="cmp-table">
+        <thead><tr><th>你的產品長這樣</th><th>畫這個</th><th>為什麼</th></tr></thead>
+        <tbody>
+          <tr><td>頁面多、每頁內容相對固定的網站</td><td>Wireframe</td><td>重點在每一頁該放什麼，頁面之間的關係用 IA 圖表達就夠了</td></tr>
+          <tr><td>流程長、分支多、要窮盡記錄</td><td>Flowchart</td><td>邏輯分支是主角，畫面長怎樣先不重要</td></tr>
+          <tr><td>頁面少、但內容隨互動一直變的 App</td><td>Wireflow</td><td>不畫出畫面狀態，就講不清楚「哪裡變了」</td></tr>
+        </tbody>
+      </table>
+      <div class="note">你們的專題多半是第三種。所以今天的順序是：<span class="hl">先用 Flowchart 把邏輯理清楚，再畫 Wireframe，Unit 07 把兩者合成 Wireflow</span>。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 9 · H6 辨識而非記憶 (light) ─── -->
-<div class="slide">
-  <div class="bg-n">6</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">09 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H6 · Recognition Rather Than Recall</p>
-    <div class="h-title">辨識而非記憶</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">減少使用者的記憶負荷，<strong>將選項、物件和動作可視化</strong>。使用者不應需要記住前一個頁面的資訊才能完成目前的任務——讓系統記住，不要讓人記住。</p>
-        <div class="h-insight">辨識（從選項中找到）比回憶（從記憶中提取）的認知成本低 10 倍</div>
+  <!-- 09 Flowchart 符號 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Notation</p>
+      <h1>Flowchart 只要記四個符號</h1>
+      <h2>不用背工程用的完整符號表。你們畫的流程，這四個就夠了。</h2>
+      <div class="matrix c4">
+        <div class="mini-card"><strong>◯ 起點／終點</strong><span>正式畫法是圓角矩形，課堂上畫成圓形也可以。使用者從哪進來、任務在哪算完成。一張圖只有一個起點，終點可以有好幾個。</span></div>
+        <div class="mini-card"><strong>▭ 動作／畫面</strong><span>使用者做的一件事，或看到的一個畫面。用動詞開頭：「輸入手機號碼」。</span></div>
+        <div class="mini-card"><strong>◇ 判斷點</strong><span>系統或使用者要做選擇的地方。裡面寫成是非題：「已登入？」</span></div>
+        <div class="mini-card"><strong>→ 路徑</strong><span>從判斷點出去的每條線都要標條件：是／否、成功／失敗。</span></div>
       </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Google 搜尋 — 自動完成</div>
-          <div class="ex-desc">輸入前幾個字，系統立即顯示候選搜尋詞。使用者不需記住完整關鍵字，也不需知道正確拼法，「看到就認得出來」就夠了。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Spotify — 最近播放 / 推薦</div>
-          <div class="ex-desc">首頁直接顯示最近聽過的歌單和藝人，使用者不用記住自己喜歡的歌單叫什麼名字，看到封面圖就能辨識。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">舊版 Windows — 執行視窗</div>
-          <div class="ex-desc">「Win + R」打開空白執行框，要使用者自行記住 cmd、regedit、msconfig、devmgmt.msc…… 沒有任何提示，完全仰賴記憶。</div>
-        </div>
-      </div>
+      <div class="note">最常見的錯：<span class="warn-text">判斷點只畫「是」那條線</span>。菱形只要有一條線出去，那它就不該是菱形。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 10 · H7 彈性與效率 (dark) ─── -->
-<div class="slide dark">
-  <div class="bg-n">7</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">10 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H7 · Flexibility and Efficiency of Use</p>
-    <div class="h-title">彈性與效率</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">系統應<strong style="color:#f5f5f7">同時兼顧新手與專家</strong>。為新手提供清晰引導；為專家提供快捷鍵、批次操作和個人化設定，讓高頻使用者能更快完成任務，不必每次都走完整流程。</p>
-        <div class="h-insight">新手走寬路，專家走捷徑 ── 好設計讓兩者都滿意</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Figma — 鍵盤快捷鍵體系</div>
-          <div class="ex-desc">V = 選取工具、R = 矩形、T = 文字、Cmd+G = 群組、Alt+拖曳 = 複製。熟練後完全不需碰側邊欄，設計速度提升數倍。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">VS Code — Command Palette</div>
-          <div class="ex-desc">Cmd+Shift+P 打開命令面板，輸入任意關鍵字就能執行所有功能。專家不需記住選單路徑，用語言直接調用任何命令。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">無快捷機制的 ERP 系統</div>
-          <div class="ex-desc">每筆訂單都需從頂部導覽列逐層點選，沒有快捷鍵、沒有常用書籤、沒有批次處理。每天使用 200 次的員工和第一次使用的人走完全一樣的路徑。</div>
-        </div>
+  <!-- 10 一條流程要標三件事 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Anatomy</p>
+      <h1>一條流程要交代三件事</h1>
+      <div class="flow-dia">     ◯ <span class="n">起點：從首頁點「我的課程」</span>
+     │
+     ▼
+   ┌──────────────┐
+   │ 顯示課程列表  │
+   └──────────────┘
+     │
+     ▼
+   ◇ <span class="d">有進行中的課程嗎？</span>
+     │
+     ├── <span class="d">有</span> ──▶ 顯示上次看到第幾分鐘 ──▶ 點「繼續看」──▶ ◯ <span class="n">終點：播放器開始播</span>
+     │
+     └── <span class="x">沒有</span> ─▶ <span class="x">空狀態：「還沒開始任何課程」＋ 去逛課程的按鈕</span></div>
+      <div class="blist compact">
+        <li data-n="01"><span class="hl">入口</span>：使用者從哪裡進到這條流程？不只一個入口就全部畫出來。</li>
+        <li data-n="02"><span class="hl">判斷點</span>：中間哪裡會分岔？條件是什麼？</li>
+        <li data-n="03"><span class="hl">終點</span>：怎樣算「完成」？成功跟失敗要分開畫。</li>
       </div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 11 · H8 極簡美學 (light) ─── -->
-<div class="slide">
-  <div class="bg-n">8</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">11 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H8 · Aesthetic and Minimalist Design</p>
-    <div class="h-title">極簡美學設計</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">介面上的每個元素都應有其存在理由。<strong>多餘的資訊不只是無用，而是在稀釋重要資訊的能見度。</strong>每增加一個不必要的元素，核心訊息就被削弱一分。</p>
-        <div class="h-insight">刪去一個不必要的元素，整體設計就進步了一步</div>
-      </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Google 首頁</div>
-          <div class="ex-desc">Logo + 搜尋框 + 兩個按鈕，就是整個頁面的全部。沒有廣告欄、沒有導覽列、沒有推薦內容。所有視覺注意力都被引導到唯一的任務：搜尋。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Apple 產品頁</div>
-          <div class="ex-desc">大圖、少量精煉文字、大量留白。每個畫面只傳遞一個核心訊息，讓使用者的眼睛自然地被引導，而非被迫在資訊叢林中尋找。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">早期 Yahoo 首頁</div>
-          <div class="ex-desc">新聞頭條、天氣、股市、廣告 Banner、郵件入口、熱門搜尋……全部擠在同一個頁面。使用者的眼睛無從聚焦，沒有任何資訊是重要的。</div>
-        </div>
-      </div>
+  <!-- 11 例外路徑 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="bg-n">!</span>
+      <p class="overline">Edge Cases</p>
+      <h1>你一定會漏掉的那幾條線</h1>
+      <h2>畫 Flow 的時候，理想路徑十分鐘就畫完了。剩下的時間都花在這些上面——而評圖的時候問的也都是這些。</h2>
+      <ul class="blist compact">
+        <li data-n="01"><span class="warn-text">沒資料</span>：第一次使用的人打開這一頁，看到什麼？</li>
+        <li data-n="02"><span class="warn-text">找不到</span>：搜尋沒有結果、篩選之後一個都不剩，畫面怎麼辦？</li>
+        <li data-n="03"><span class="warn-text">沒權限</span>：沒登入、沒付費、帳號被停用，擋在哪一步？</li>
+        <li data-n="04"><span class="warn-text">出錯</span>：網路斷掉、付款失敗、上傳的檔案太大。</li>
+        <li data-n="05"><span class="warn-text">要等</span>：需要載入三秒以上的地方，等待中顯示什麼？</li>
+        <li data-n="06"><span class="warn-text">反悔</span>：中途想退出、想改剛剛填的東西，回得去嗎？</li>
+      </ul>
+      <div class="note">練習的時候用這六條當檢查表，一條一條問自己「這個情況我畫了嗎」。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 12 · H9 錯誤識別與修復 (dark) ─── -->
-<div class="slide dark">
-  <div class="bg-n">9</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">12 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H9 · Help Users Recognize, Diagnose, and Recover from Errors</p>
-    <div class="h-title">錯誤識別與修復</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">錯誤訊息應以<strong style="color:#f5f5f7">使用者看得懂的語言</strong>準確指出問題，並提供明確的解決方向。好的錯誤訊息包含三個要素：<em>發生了什麼</em>、<em>為什麼發生</em>、<em>怎麼解決</em>。</p>
-        <div class="h-insight">好的錯誤訊息 = 問題是什麼 + 為什麼 + 怎麼修</div>
+  <!-- 12 從 IA 到 Flow -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">IA → Flow</p>
+      <h1>怎麼把 IA 圖變成流程</h1>
+      <div class="divider"></div>
+      <h2>IA 圖是靜態的地圖，Flow 是走過去的路線。地圖上你標的那條核心路徑，就是要先畫的那條 Flow。</h2>
+      <div class="chain">
+        <div class="chain-step"><b>01 挑一條</b><span>從 IA 圖上標了顏色的核心路徑挑一條，不要一次畫全部。</span></div>
+        <div class="chain-step"><b>02 拆步驟</b><span>把這條路徑拆成使用者實際的動作，動詞開頭。</span></div>
+        <div class="chain-step"><b>03 找分岔</b><span>每一步問一次「這裡會不會有人走不下去」，會的話就是判斷點。</span></div>
+        <div class="chain-step"><b>04 補例外</b><span>拿前一頁的六條檢查表逐一補上。</span></div>
       </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Airbnb — 表單驗證訊息</div>
-          <div class="ex-desc">「請輸入有效的電子郵件地址，例如 name@example.com」— 具體說明錯在哪裡，並直接給出正確格式示範，使用者一看就知道怎麼改。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">GitHub — 404 錯誤頁面</div>
-          <div class="ex-desc">幽默插圖 + 清楚說明（頁面不存在）+ 搜尋框 + 「回到首頁」按鈕。使用者迷路了，但有明確的出口，不會被卡死在錯誤頁面。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">無意義的系統錯誤代碼</div>
-          <div class="ex-desc">只顯示「Error 0x80070005」或「操作失敗」—— 使用者完全不知道哪裡錯、為什麼錯，也不知道下一步該做什麼，只能重試或放棄。</div>
-        </div>
-      </div>
+      <div class="note">一堂課只要畫得完<span class="hl">一條完整的核心路徑</span>就夠了。畫三條半成品，不如一條把例外都補齊。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 13 · H10 說明文件 (light) ─── -->
-<div class="slide">
-  <div class="bg-n">10</div>
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">13 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">H10 · Help and Documentation</p>
-    <div class="h-title">說明文件</div>
-    <div class="divider"></div>
-    <div class="h-layout">
-      <div class="h-left">
-        <p class="h-subtitle">雖然最好的介面不需要說明就能使用，但當使用者真的卡住時，<strong>說明要易於找到、易於搜尋，且以使用者的任務為導向</strong>——而不是以功能或系統架構為導向。</p>
-        <div class="h-insight">最好的說明是「你需要它的當下，它就在那裡」</div>
+  <!-- 13 Wireframe 是什麼 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Wireframe</p>
+      <h1>Wireframe 在回答什麼問題</h1>
+      <h2>只有三個：<span class="hl">這頁要放哪些資訊、使用者可以做哪些動作、下一步在哪裡。</span>其他都先不管。</h2>
+      <div class="wf-row">
+        <div>
+          <div class="wf">
+            <div class="bar h"></div>
+            <div class="bar t"></div>
+            <div class="bar s"></div>
+            <div class="bar box"></div>
+            <div class="bar btn"></div>
+          </div>
+          <p class="wf-cap">課程列表</p>
+        </div>
+        <div>
+          <div class="wf">
+            <div class="bar h"></div>
+            <div class="bar box"></div>
+            <div class="bar t"></div>
+            <div class="bar s"></div>
+            <div class="bar btn"></div>
+          </div>
+          <p class="wf-cap">課程詳情</p>
+        </div>
+        <div>
+          <div class="wf">
+            <div class="bar h"></div>
+            <div class="bar t"></div>
+            <div class="bar box"></div>
+            <div class="bar s"></div>
+            <div class="bar btn"></div>
+          </div>
+          <p class="wf-cap">播放頁</p>
+        </div>
       </div>
-      <div class="h-right">
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Notion — 空狀態引導文字</div>
-          <div class="ex-desc">空白頁面上顯示「輸入 / 以選擇區塊類型」的淡灰提示文字。新用戶第一秒就知道怎麼開始，不需要看任何說明文件。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag good">良好範例</div>
-          <div class="ex-app">Figma — 情境式說明</div>
-          <div class="ex-desc">Help Center 可全文搜尋；UI 中的 ? 圖示直連相關說明頁；複雜功能有影片示範。說明跟著你走，不是你去找說明。</div>
-        </div>
-        <div class="ex-card">
-          <div class="ex-tag bad">反例警示</div>
-          <div class="ex-app">說明文件藏在頁尾的企業系統</div>
-          <div class="ex-desc">說明連結藏在頁尾 10px 的灰色文字中；或說明文件全是工程師寫的技術術語，有效資訊需要在 20 頁 PDF 中自行尋找。</div>
-        </div>
-      </div>
+      <div class="note">灰階方塊看起來很陽春，這是刻意的。看到彩色跟圖片，大家的注意力就會跑到「這個藍色好看嗎」，而不是「這裡少了一個返回」。</div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
-<!-- ─── Slide 14 · 易用性檢核表 (dark) ─── -->
-<div class="slide dark">
-  <div class="slide-head">
-    <span class="unit-pill">Unit 06</span>
-    <span class="slide-num">14 / 14</span>
-  </div>
-  <div class="slide-body">
-    <p class="overline">Checklist</p>
-    <h1>易用性檢核表</h1>
-    <div class="cl-prog-header">
-      <span class="cl-count" id="clCount">0 / 10 項符合</span>
-      <div class="cl-track"><div class="cl-fill" id="clFill"></div></div>
-      <span class="cl-label" id="clLabel">選擇你正在審查的介面，逐項打勾</span>
+  <!-- 14 保真度三維度 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Fidelity</p>
+      <h1>保真度不是一條刻度，是三條</h1>
+      <h2>很多人以為保真度就是「畫得精不精緻」。其實是三個可以各自調整的維度，你可以視覺很粗糙但互動很完整。</h2>
+      <div class="matrix c3">
+        <div class="mini-card">
+          <strong>互動 Interactivity</strong>
+          <span><b>低：</b>需要有人在旁邊幫忙換畫面。<br><b>高：</b>連結跟選單真的點得下去。</span>
+        </div>
+        <div class="mini-card">
+          <strong>視覺 Visuals</strong>
+          <span><b>低：</b>手繪草圖、灰階方塊。<br><b>高：</b>完整的層級、間距、版面。</span>
+        </div>
+        <div class="mini-card">
+          <strong>內容 Content</strong>
+          <span><b>低：</b>摘要跟佔位符。<br><b>高：</b>真實的文案跟圖片。</span>
+        </div>
+      </div>
+      <div class="note">今天做的是：<span class="hl">互動低、視覺低、內容中</span>——文字用真的，因為假字看不出資訊夠不夠。</div>
     </div>
-    <div class="checklist-grid">
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H1</span>
-        <div class="cl-content">
-          <div class="cl-name">系統狀態可見性</div>
-          <div class="cl-q">使用者知道「現在在哪 / 動作成功了嗎」？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H2</span>
-        <div class="cl-content">
-          <div class="cl-name">現實世界對應</div>
-          <div class="cl-q">圖示和文字，非設計師的使用者也看得懂嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H3</span>
-        <div class="cl-content">
-          <div class="cl-name">使用者控制與自由</div>
-          <div class="cl-q">誤觸之後，使用者能輕易取消或返回嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H4</span>
-        <div class="cl-content">
-          <div class="cl-name">一致性與標準</div>
-          <div class="cl-q">同功能在不同頁面的位置、文字、顏色一致嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H5</span>
-        <div class="cl-content">
-          <div class="cl-name">錯誤預防</div>
-          <div class="cl-q">高風險操作有護欄（格式限制 / 二次確認）嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H6</span>
-        <div class="cl-content">
-          <div class="cl-name">辨識而非記憶</div>
-          <div class="cl-q">使用者不需記住前一頁資訊就能完成任務嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H7</span>
-        <div class="cl-content">
-          <div class="cl-name">彈性與效率</div>
-          <div class="cl-q">高頻使用者有更快完成任務的捷徑嗎？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H8</span>
-        <div class="cl-content">
-          <div class="cl-name">極簡美學設計</div>
-          <div class="cl-q">頁面上每個元素都有必要存在嗎？有無干擾核心任務的贅語？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H9</span>
-        <div class="cl-content">
-          <div class="cl-name">錯誤識別與修復</div>
-          <div class="cl-q">錯誤訊息有告訴使用者「哪裡錯 / 為什麼 / 怎麼修」？</div>
-        </div>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox" class="cl-check">
-        <span class="cl-box">✓</span>
-        <span class="cl-num">H10</span>
-        <div class="cl-content">
-          <div class="cl-name">說明文件</div>
-          <div class="cl-q">使用者卡住時，能在 10 秒內找到有用的說明嗎？</div>
-        </div>
-      </label>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 15 低保真 vs 高保真 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Trade-offs</p>
+      <h1>低保真跟高保真各自的好處</h1>
+      <table class="cmp-table">
+        <thead><tr><th></th><th>低保真</th><th>高保真</th></tr></thead>
+        <tbody>
+          <tr><td>做起來</td><td>快，省下的時間可以多改幾輪</td><td>慢，做一版就用掉不少時間</td></tr>
+          <tr><td>測試中途</td><td>當場拿筆改就好</td><td>要回去改檔案，下一場才能用</td></tr>
+          <tr><td>受測者反應</td><td>壓力小，比較敢講難聽的話</td><td>當成真的軟體在用，行為更真實</td></tr>
+          <tr><td>能測到什麼</td><td>概念、流程順不順、資訊夠不夠</td><td>特定元件、可視線索、字好不好讀</td></tr>
+          <tr><td>設計師心態</td><td>還沒投入太多，願意打掉重來</td><td>做很久了，捨不得改</td></tr>
+          <tr><td>老闆的期待</td><td>看得出還沒完成，預期會再改</td><td>容易誤以為快做完了</td></tr>
+        </tbody>
+      </table>
+      <div class="note">最後兩列是關鍵。<span class="hl">高保真真正的成本不是工時，是你捨不得改。</span></div>
     </div>
-  </div>
-  <div class="slide-foot">
-    <span class="course-label">UI 設計實作：Figma 與 UX 流程 × AI 設計整合</span>
-    <div class="dots"></div>
-  </div>
-</div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 16 為什麼停在低保真 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Why Low-Fi</p>
+      <h1>這堂課不准上色</h1>
+      <div class="divider"></div>
+      <h2>不是為了為難你們。是因為視覺一上去，就沒有人會再討論結構了。</h2>
+      <ul class="blist plain">
+        <li>畫面一漂亮，評圖的回饋就會全部集中在配色跟字體。</li>
+        <li>結構的問題被掩蓋住，等到 Mockup 才發現，要重畫的量是現在的十倍。</li>
+        <li>你自己也會捨不得——花三小時調好的版面，誰想砍掉重來。</li>
+        <li><span class="hl">現在畫得越醜，後面改得越輕鬆。</span></li>
+      </ul>
+      <div class="note">今天的規則：<span class="warn-text">只能用黑、白、灰</span>。要標重點的話，用一個藍色，就一個。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 17 放什麼不放什麼 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Content</p>
+      <h1>Wireframe 上該放什麼</h1>
+      <div class="matrix">
+        <div class="mini-card accent">
+          <strong>要放</strong>
+          <span>• 真實的標題與按鈕文字（「加入購物車」不要寫「按鈕」）<br>
+          • 資訊的先後順序與分組<br>
+          • 每個可以點的東西<br>
+          • 這一頁的主要動作，只能有一個最明顯<br>
+          • 空狀態、錯誤狀態的版本</span>
+        </div>
+        <div class="mini-card warn">
+          <strong>先不要放</strong>
+          <span>• 顏色、漸層、陰影<br>
+          • 真實照片（用灰色方塊加一個叉）<br>
+          • 精挑的字體<br>
+          • 圖示的細節（畫個圈圈標「icon」就好）<br>
+          • 動畫與轉場</span>
+        </div>
+      </div>
+      <div class="note">文字一定要用真的。<span class="hl">Lorem ipsum 會騙你</span>——假字排起來永遠很整齊，真的標題塞進去才知道會不會爆版。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 18 檢查清單 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Checklist</p>
+      <h1>畫完一張，問自己這六題</h1>
+      <ul class="blist compact">
+        <li data-n="01">第一眼會看到什麼？那是這頁最重要的東西嗎？</li>
+        <li data-n="02">這一頁的主要動作是哪一個？它有比別的按鈕明顯嗎？</li>
+        <li data-n="03">使用者從哪裡來的？他知道自己在哪一層嗎？</li>
+        <li data-n="04">如果這裡沒有資料，畫面長什麼樣？</li>
+        <li data-n="05">按下去之後會發生什麼？成功跟失敗分別看到什麼？</li>
+        <li data-n="06">想回上一步的話，回得去嗎？</li>
+      </ul>
+      <div class="note">六題都答得出來，這張 Wireframe 才算畫完。答不出來的那一題，通常就是流程圖上漏掉的那條線。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 19 Auto Layout 為什麼 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Figma</p>
+      <h1>Auto Layout：讓版面自己會動</h1>
+      <h2>沒用 Auto Layout 的時候，你改一個標題變兩行，下面所有東西都要手動往下推。用了之後，它們自己會讓開。</h2>
+      <div class="matrix">
+        <div class="mini-card warn">
+          <strong>沒有 Auto Layout</strong>
+          <span>元素靠絕對座標擺放。<br><br>加一個項目 → 手動推下面全部<br>文字變長 → 手動改寬度<br>要做手機版 → 幾乎整個重排</span>
+        </div>
+        <div class="mini-card accent">
+          <strong>有 Auto Layout</strong>
+          <span>元素依方向、間距、內距自動排列。<br><br>加一個項目 → 自己往下長<br>文字變長 → 容器自己撐開<br>要做手機版 → 改一下寬度就好</span>
+        </div>
+      </div>
+      <div class="note">快捷鍵：選好圖層按 <span class="hl">⇧ A</span>（Windows 是 <span class="hl">Shift A</span>）就加上去了。移除是再加一個 ⌥／Alt。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 20 三種方向 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Flow Direction</p>
+      <h1>三種排列方向</h1>
+      <div class="matrix c3">
+        <div class="mini-card">
+          <strong>垂直 Vertical</strong>
+          <span>沿 y 軸往下排。<br><br>清單、表單欄位、卡片內部的標題與說明。</span>
+        </div>
+        <div class="mini-card">
+          <strong>水平 Horizontal</strong>
+          <span>沿 x 軸往右排，可以設定換行（wrap）。<br><br>按鈕列、標籤列、導覽項目。</span>
+        </div>
+        <div class="mini-card">
+          <strong>網格 Grid</strong>
+          <span>排成行與列，格子可以跨欄。<br><br>商品列表、儀表板。</span>
+        </div>
+      </div>
+      <div class="note">實務上幾乎都在<span class="hl">巢狀</span>：一張商品卡是垂直（圖／標題／價格），一排卡片是水平或網格。每一層各自有自己的間距設定。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 21 Padding 與 Gap -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Spacing</p>
+      <h1>Padding 跟 Gap 差在哪</h1>
+      <h2>兩個都是留白，差別在留在哪裡。這兩個搞混，版面就會怎麼調都不對。</h2>
+      <div class="flow-dia">┌─────────────────────────────────┐  ◀── 容器邊界
+│ ↕ <span class="d">padding-top</span>                    │
+│   ┌─────────────────────────┐   │
+│   │        項目 A            │   │
+│   └─────────────────────────┘   │
+│   ↕ <span class="n">gap</span>                           │
+│   ┌─────────────────────────┐   │
+│   │        項目 B            │   │
+│   └─────────────────────────┘   │
+│ ↕ <span class="d">padding-bottom</span>                 │
+└─────────────────────────────────┘
+  ↔ <span class="d">padding-left</span>        <span class="d">padding-right</span> ↔</div>
+      <table class="cmp-table">
+        <thead><tr><th>屬性</th><th>是什麼</th><th>可以怎麼設</th></tr></thead>
+        <tbody>
+          <tr><td>Padding</td><td>容器邊緣跟裡面的東西之間的留白</td><td>四邊統一、上下左右分開，或四個值各自設</td></tr>
+          <tr><td>Gap between</td><td>裡面的東西彼此之間的距離</td><td>給固定數值，或設成 Auto 讓它們平均散開</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 22 三種尺寸模式 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Resizing</p>
+      <h1>Hug、Fill、Fixed</h1>
+      <h2>這三個是 Auto Layout 最常卡住的地方。先記住一件事：<span class="hl">Hug 只能給容器，Fill 只能給裡面的東西。</span></h2>
+      <table class="cmp-table">
+        <thead><tr><th>模式</th><th>能套在誰身上</th><th>它會做什麼</th><th>什麼時候用</th></tr></thead>
+        <tbody>
+          <tr><td>Hug contents</td><td>只有 Auto Layout 容器</td><td>縮到剛好包住裡面的東西</td><td>按鈕：文字多長，按鈕就多寬</td></tr>
+          <tr><td>Fill container</td><td>只有子元件</td><td>撐滿父容器剩下的空間</td><td>輸入框：不管視窗多寬都填滿</td></tr>
+          <tr><td>Fixed</td><td>容器跟子元件都可以</td><td>尺寸就是不變</td><td>頭像、圖示這種固定尺寸的東西</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="warn-text">一定要記住這條規則：</span>只要容器裡有任何一個子元件設成 Fill，容器在那個軸向就<span class="hl">不再是 Hug，會自動變成 Fixed</span>。「我明明設了 Hug 怎麼沒反應」，九成是這個原因。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 23 Constraints -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Constraints</p>
+      <h1>那 Constraints 又是什麼</h1>
+      <h2>Constraints 管的是「frame 被拉大拉小的時候，圖層要怎麼跟著動」。跟 Auto Layout 是<span class="hl">兩套獨立的機制</span>。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>設定</th><th>水平方向的行為</th></tr></thead>
+        <tbody>
+          <tr><td>Left / Right</td><td>跟左邊界（或右邊界）保持固定距離</td></tr>
+          <tr><td>Left and Right</td><td>兩邊都固定，所以圖層自己會跟著變寬變窄</td></tr>
+          <tr><td>Center</td><td>永遠對齊中線</td></tr>
+          <tr><td>Scale</td><td>尺寸跟位置都按比例縮放</td></tr>
+        </tbody>
+      </table>
+      <div class="note">垂直方向同理：Top、Bottom、Top and Bottom、Center、Scale。<br><span class="warn-text">重要：</span>Auto Layout 容器裡的一般子元件<span class="hl">用不了 Constraints</span>——它們用的是 Hug／Fill／Fixed。只有設成 absolute position（Mac 按住 <span class="hl">Ctrl</span> 拖曳）跳出排列流程的元件，才會回到 Constraints。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 24 課堂練習 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">課堂練習 · 80 分鐘</span>
+      <h1>從你自己的 IA 圖開始畫</h1>
+      <h2>個人作業，用自己的專題。四個階段做完後各組分享 3 分鐘（另計 15 分）。</h2>
+      <div class="chain">
+        <div class="chain-step"><b>Step 1 · 15 min</b><span>從 IA 圖挑一條核心路徑，拆成使用者的動作步驟。</span></div>
+        <div class="chain-step"><b>Step 2 · 20 min</b><span>畫成 Flowchart，補上判斷點與六種例外路徑。</span></div>
+        <div class="chain-step"><b>Step 3 · 20 min</b><span>Auto Layout 練手：做一張卡片，再排成一個列表。</span></div>
+        <div class="chain-step"><b>Step 4 · 25 min</b><span>畫 3 個低保真 Wireframe：1 張用 Auto Layout 做完整，另 2 張先排骨架。</span></div>
+      </div>
+      <div class="note">詳細步驟見<a class="ilink" href="exercises.html#ex1" target="_blank" rel="noopener">練習頁</a>。課堂用檔已建好，各自複製一份：<a class="ilink" href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">① 流程圖（FigJam）</a>、<a class="ilink" href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">② Auto Layout 與 Wireframe（Figma）</a>。全程只能用黑白灰，加一個藍色標重點。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 25 回家作業 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">回家作業 · 作業 5（上半）</span>
+      <h1>把流程補完，畫面補到 5 張</h1>
+      <h2>作業 5 是 Unit 06 跟 07 合起來的，這次先交流程與初版畫面，Unit 07 再細修。</h2>
+      <ul class="blist">
+        <li data-n="01">把課堂上那條 Flowchart <span class="hl">補完整</span>：六種例外路徑一條都不能少。</li>
+        <li data-n="02">Wireframe 補到 <span class="hl">3–5 個畫面</span>，整組<span class="hl">至少涵蓋一個關鍵的例外狀態</span>（空狀態或錯誤狀態）。</li>
+        <li data-n="03">每張 Wireframe 旁邊寫下<span class="hl">六題檢查清單</span>的答案。</li>
+        <li data-n="04">主要容器與會重複的元件用 Auto Layout 做，交件前<span class="warn-text">把 Frame 拉寬拉窄各一次</span>，看會不會爆版。</li>
+        <li data-n="05">行有餘力再畫第二條與第一條交會的 Flow（登入、搜尋之類）——<span class="hl2">這是加分，不是必要</span>。</li>
+      </ul>
+      <div class="note">繳交：Figma 連結一份，含 <span class="hl">1 張 Flow 與 3–5 個 Wireframe</span>（對應課綱作業 5 的交件規格）。下次上課抽點分享。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 26 資源 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 06</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Resources</p>
+      <h1>延伸資源</h1>
+      <div class="res-links">
+        <a class="res-link" href="article.html" target="_blank" rel="noopener">
+          <strong>Unit 06 完整教材</strong>
+          <span>流程圖、Wireframe、保真度與 Auto Layout 全文</span>
+        </a>
+        <a class="res-link" href="exercises.html" target="_blank" rel="noopener">
+          <strong>課堂練習與回家作業</strong>
+          <span>四階段步驟 · Auto Layout 操作指引 · 交件與配分</span>
+        </a>
+        <a class="res-link" href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">
+          <strong>課堂練習檔 ①（FigJam）</strong>
+          <span>流程圖：符號庫、動作便利貼、例外路徑檢查表</span>
+        </a>
+        <a class="res-link" href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">
+          <strong>課堂練習檔 ②（Figma）</strong>
+          <span>Auto Layout 素材與 3 個空白 Wireframe 畫框</span>
+        </a>
+        <a class="res-link" href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">
+          <strong>Wireflows</strong>
+          <span>NN/g · Flowchart 與 Wireframe 的結合</span>
+        </a>
+        <a class="res-link" href="https://www.nngroup.com/articles/user-journeys-vs-user-flows/" target="_blank" rel="noopener">
+          <strong>User Journeys vs. User Flows</strong>
+          <span>NN/g · 兩種尺度的差別</span>
+        </a>
+        <a class="res-link" href="https://www.nngroup.com/articles/ux-prototype-hi-lo-fidelity/" target="_blank" rel="noopener">
+          <strong>低保真 vs. 高保真原型</strong>
+          <span>NN/g · 保真度的三個維度</span>
+        </a>
+        <a class="res-link" href="https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout" target="_blank" rel="noopener">
+          <strong>Guide to auto layout</strong>
+          <span>Figma 官方文件 · 本單元 Figma 內容的來源</span>
+        </a>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
+  </section>
 
 </div><!-- /#deck -->
 
@@ -763,66 +1136,61 @@ h2 { font-size: clamp(.9rem, 1.5vw, 1.3rem); font-weight: 400; color: var(--mute
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
 </div>
+
 <script>
 (function () {
   const slides = Array.from(document.querySelectorAll('.slide'));
-  const total  = slides.length;
-  const prog   = document.getElementById('prog');
+  const total = slides.length;
+  const prog = document.getElementById('prog');
+  const ctrls = document.getElementById('ctrls');
   const dotContainers = Array.from(document.querySelectorAll('.dots'));
   let cur = 0;
+
+  slides.forEach((slide, i) => {
+    const num = slide.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
   dotContainers.forEach(container => {
     slides.forEach((_, i) => {
-      const d = document.createElement('span');
-      d.className = 'dot' + (i === 0 ? ' on' : '');
-      d.addEventListener('click', () => go(i));
-      container.appendChild(d);
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === 0 ? ' on' : '');
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('aria-label', '前往第 ' + (i + 1) + ' 頁');
+      dot.addEventListener('click', () => go(i));
+      container.appendChild(dot);
     });
   });
+
   function go(n) {
     slides[cur].classList.remove('active');
     cur = (n + total) % total;
     slides[cur].classList.add('active');
     prog.style.width = ((cur + 1) / total * 100) + '%';
+    ctrls.classList.toggle('on-dark', slides[cur].classList.contains('dark'));
     dotContainers.forEach(container => {
-      Array.from(container.children).forEach((d, i) => {
-        d.classList.toggle('on', i === cur);
-      });
+      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
     });
   }
+
   document.getElementById('prev').addEventListener('click', () => go(cur - 1));
   document.getElementById('next').addEventListener('click', () => go(cur + 1));
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') {
+      event.preventDefault();
+      go(cur + 1);
+    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+      event.preventDefault();
+      go(cur - 1);
+    } else if (event.key === 'Home') {
+      go(0);
+    } else if (event.key === 'End') {
+      go(total - 1);
+    }
   });
-  prog.style.width = (1 / total * 100) + '%';
 
-  // ── Checklist interactivity ──
-  const clChecks = Array.from(document.querySelectorAll('.cl-check'));
-  const clFill   = document.getElementById('clFill');
-  const clCount  = document.getElementById('clCount');
-  const clLabel  = document.getElementById('clLabel');
-  const scoreMap = [
-    '選擇你正在審查的介面，逐項打勾',
-    '發現問題是改善的第一步',
-    '找到了一些待加強之處',
-    '已識別出多個易用性缺口',
-    '設計有一定基礎，仍有空間',
-    '達到中等易用性水準',
-    '超過一半！繼續審查下去',
-    '接近優良設計水準',
-    '非常好，只差最後幾項',
-    '幾乎完美，再審查一項！',
-    '滿分！這個介面非常易用 ✓'
-  ];
-  function updateChecklist() {
-    const n = clChecks.filter(c => c.checked).length;
-    clFill.style.width  = (n / 10 * 100) + '%';
-    clCount.textContent = n + ' / 10 項符合';
-    clLabel.textContent = scoreMap[n];
-    clLabel.style.color = n === 10 ? 'var(--green)' : '';
-  }
-  clChecks.forEach(cb => cb.addEventListener('change', updateChecklist));
+  prog.style.width = (1 / total * 100) + '%';
+  ctrls.classList.toggle('on-dark', slides[0].classList.contains('dark'));
 })();
 </script>
 </body>

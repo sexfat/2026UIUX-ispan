@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 06 · 課堂練習與回家作業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code: #1d1d1f;
+  --max-w: 860px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 28px 22px 88px;
+  line-height: 1.72;
+}
+.page { max-width: var(--max-w); margin: 0 auto; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 42px;
+}
+.back-link { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+.back-link::before { content: '← '; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.hero { padding-bottom: 34px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
+.overline {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 14px; }
+.lead { color: var(--muted); max-width: 720px; font-size: 1rem; }
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+.toc h2 {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.toc ol { list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 8px 0; }
+.toc a { color: var(--dark); text-decoration: none; display: flex; gap: 10px; font-size: .95rem; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--accent);
+  font-size: .75rem;
+  font-weight: 800;
+  padding-top: 3px;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 46px 0 6px;
+  padding-top: 26px;
+  border-top: 2px solid var(--border);
+}
+.band-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+.band-tag.home { background: var(--accent2); }
+.band h2 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); }
+.band-note { color: var(--muted); font-size: .9rem; margin: 6px 0 4px; }
+
+.exercise {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.exercise.home { border-color: rgba(15,118,110,.28); }
+.exercise-head { padding: 18px 22px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.exercise.home .exercise-head { background: rgba(15,118,110,.05); border-bottom-color: rgba(15,118,110,.2); }
+.exercise-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.exercise.home .exercise-tag { color: var(--accent2); }
+h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); line-height: 1.25; }
+.exercise-body { padding: 20px 22px 24px; }
+h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+p { color: #2c2c2e; margin-bottom: 12px; }
+ul, ol { padding-left: 1.1rem; margin: 8px 0 16px; }
+li { margin-bottom: 8px; color: #2c2c2e; }
+strong { color: var(--dark); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+.good { color: var(--accent2); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.16);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.exercise.home .chip { color: var(--accent2); background: rgba(15,118,110,.07); border-color: rgba(15,118,110,.18); }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: .92rem; }
+th {
+  text-align: left;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: #2c2c2e; vertical-align: top; }
+td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
+
+.dia {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.85;
+  white-space: pre;
+  overflow-x: auto;
+  color: #2c2c2e;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.prompt {
+  background: var(--code);
+  color: #f5f5f7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 14px 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.7;
+}
+.callout {
+  background: rgba(0,102,204,.05);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #2c2c2e;
+}
+.callout.green { background: rgba(15,118,110,.06); border-left-color: var(--accent2); }
+.callout.warn { background: rgba(194,65,12,.06); border-left-color: var(--accent3); }
+.callout a { color: var(--accent); font-weight: 700; }
+
+.check { list-style: none; padding-left: 0; }
+.check li { position: relative; padding-left: 28px; }
+.check li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .45em;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+
+.foot-nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.foot-nav a {
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media print {
+  body { background: #fff; padding: 0; }
+  .topbar, .toc, .foot-nav { display: none; }
+  .exercise { break-inside: avoid; }
+}
+@media (max-width: 700px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .band { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back-link" href="article.html">回到 Unit 06 講義</a>
+    <span class="unit-pill">Unit 06</span>
+  </div>
+
+  <div class="hero">
+    <p class="overline">Practice &amp; Homework</p>
+    <h1>從 IA 圖畫到 Wireframe</h1>
+    <p class="lead">課堂練習用 80 分鐘，把你在 Unit 05 交出來的 IA 圖，變成一條完整的流程圖與 3 個低保真畫面，中間插入一段 Auto Layout 練手。回家作業把流程補完整、畫面補到 3–5 張，就是作業 5 的上半部。</p>
+  </div>
+
+  <div class="toc">
+    <h2>本頁內容</h2>
+    <ol>
+      <li><a href="#ex1">課堂練習 01 · 挑一條路徑，拆成步驟</a></li>
+      <li><a href="#ex2">課堂練習 02 · 畫成 Flowchart，補例外路徑</a></li>
+      <li><a href="#ex3">課堂練習 03 · Auto Layout 練手</a></li>
+      <li><a href="#ex4">課堂練習 04 · 畫 3 個 Wireframe</a></li>
+      <li><a href="#hw">回家作業 · 作業 5（上半）</a></li>
+      <li><a href="#submit">繳交清單與評分配分</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== 課堂練習 ===== -->
+  <div class="band">
+    <span class="band-tag">課堂練習 · 80 分鐘</span>
+    <h2>從 IA 圖到 3 個 Wireframe</h2>
+  </div>
+  <p class="band-note"><strong>課堂用檔已經建好了</strong>：<a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">練習檔 ①（FigJam）</a> 給 Exercise 01–02 的流程圖，<a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">練習檔 ②（Figma）</a> 給 Exercise 03–04 的 Auto Layout 與 Wireframe。各自複製一份再開始。<br>個人作業，用自己的專題。開始前先把 Unit 05 的 IA 圖與功能清單打開。四個階段合計 80 分鐘，之後另有 15 分鐘成果分享與作業說明——抽點 3–4 位同學，每人 3 分鐘。全程只能用黑白灰，要標重點就用一個藍色。</p>
+
+  <div class="exercise" id="ex1">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 01</p>
+      <h2>挑一條路徑，拆成使用者的動作</h2>
+      <div class="meta"><span class="chip">15 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">練習檔 ① · 區塊 1</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>先把「使用者實際會做什麼」講清楚，再開始畫圖。跳過這一步直接畫，通常畫到一半會發現步驟接不起來。</p>
+
+      <h3>任務</h3>
+      <ol>
+        <li>打開 Unit 05 的 IA 圖，找出你標了顏色的<strong>核心路徑</strong>。挑一條，只挑一條。</li>
+        <li>寫下這條路徑的<strong>使用者目標</strong>，一句話。例如「下班通勤時，想接著看上次沒看完的課」。</li>
+        <li>把這條路徑拆成使用者實際的動作，一張便利貼一個動作，<strong>動詞開頭</strong>。</li>
+        <li>排出順序，先不用管分岔。</li>
+      </ol>
+
+      <h3>動作要怎麼寫</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>寫法</th><th>例子</th><th>問題</th></tr></thead>
+          <tbody>
+            <tr><td class="bad">✗ 名詞</td><td>「課程列表頁」</td><td>這是畫面不是動作，看不出使用者在幹嘛</td></tr>
+            <tr><td class="bad">✗ 太籠統</td><td>「使用 App」</td><td>拆不出下一層，等於沒拆</td></tr>
+            <tr><td class="bad">✗ 系統視角</td><td>「系統驗證使用者身分」</td><td>使用者看不到這件事，先寫他看得到的</td></tr>
+            <tr><td class="good">✓ 動詞開頭</td><td>「點『我的課程』」「找到上次那堂」「按繼續播放」</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><strong>交件：</strong>一句使用者目標 + 5–10 張排好順序的動作便利貼。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 02</p>
+      <h2>畫成 Flowchart，補上例外路徑</h2>
+      <div class="meta"><span class="chip">20 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">練習檔 ① · 區塊 2</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>把線性的步驟變成有分岔的流程。這一步的重點<strong>不是畫得漂亮，是把例外找出來</strong>。</p>
+
+      <h3>只要四個符號</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>符號</th><th>代表</th><th>寫法</th></tr></thead>
+          <tbody>
+            <tr><td>◯</td><td>起點／終點</td><td>正式畫法是圓角矩形，畫成圓形也可以；一個起點，終點可以多個（成功、失敗、放棄）</td></tr>
+            <tr><td>▭</td><td>動作或畫面</td><td>動詞開頭</td></tr>
+            <tr><td>◇</td><td>判斷點</td><td>寫成是非題：「已登入？」</td></tr>
+            <tr><td>→</td><td>路徑</td><td>從菱形出去的每一條都要標條件</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>參考格式</h3>
+      <div class="dia">     ◯ <span class="n">起點：從首頁點「我的課程」</span>
+     │
+     ▼
+   ┌──────────────┐
+   │ 顯示課程列表  │
+   └──────────────┘
+     │
+     ▼
+   ◇ <span class="d">有進行中的課程嗎？</span>
+     │
+     ├── <span class="d">有</span> ──▶ 顯示上次看到第幾分鐘 ──▶ 點「繼續看」──▶ ◯ <span class="n">終點：開始播放</span>
+     │
+     └── <span class="x">沒有</span> ─▶ <span class="x">空狀態：「還沒開始任何課程」＋ 去逛課程</span></div>
+
+      <h3>例外路徑檢查表</h3>
+      <p>理想路徑畫完之後，拿這六條逐一問自己。<strong>多數人第一次做會漏掉四條。</strong></p>
+      <ul class="check">
+        <li><strong>沒資料：</strong>第一次使用的人打開這頁看到什麼？</li>
+        <li><strong>找不到：</strong>搜尋沒結果、篩選之後一個都不剩，怎麼辦？</li>
+        <li><strong>沒權限：</strong>沒登入、沒付費、帳號被停用，擋在哪一步？擋下來給什麼出路？</li>
+        <li><strong>出錯：</strong>網路斷掉、付款失敗、檔案太大？</li>
+        <li><strong>要等：</strong>需要載入三秒以上的地方，等待中顯示什麼？</li>
+        <li><strong>反悔：</strong>中途想退出、想改剛剛填的，回得去嗎？</li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>自我檢查：</strong>看一下你畫的每個菱形。如果有哪個菱形<span class="bad">只有一條線出去</span>，那它就不該是菱形——要嘛改成矩形，要嘛去想清楚另一條路。
+      </div>
+
+      <div class="callout"><strong>交件：</strong>一張含判斷點與至少 4 條例外路徑的 Flowchart。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 03</p>
+      <h2>Auto Layout 練手：卡片與列表</h2>
+      <div class="meta"><span class="chip">20 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">練習檔 ② · Exercise 03</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>在畫 Wireframe 之前先把工具練順。這 20 分鐘做出來的卡片，等一下畫畫面時直接複製來用。</p>
+
+      <h3>Step 1 · 做一張卡片（8 分）</h3>
+      <ol>
+        <li>畫一個灰色方塊當縮圖（<code>240 × 135</code>），下面放標題文字、一行說明、一個標籤。</li>
+        <li>全選這四個，按 <code>⇧ A</code>（Windows：<code>Shift A</code>）加上垂直 Auto Layout。</li>
+        <li>設定 <strong>padding 16</strong>、<strong>gap 8</strong>。</li>
+        <li>把卡片設成 <strong>Hug contents</strong>（雙擊 frame 邊緣）。</li>
+        <li><strong>測試：</strong>把標題改成很長的一句話。卡片應該自己變高，下面的東西自己讓開。</li>
+      </ol>
+
+      <h3>Step 2 · 排成列表（7 分）</h3>
+      <ol>
+        <li>複製卡片三份，全選後加上<strong>水平</strong> Auto Layout，gap 設 16。</li>
+        <li>外層設成 <strong>Fixed 寬度</strong>，例如 <code>1200</code>。</li>
+        <li>把每張卡片的水平尺寸改成 <strong>Fill container</strong>（<code>⌥</code> + 雙擊）。</li>
+        <li><strong>測試：</strong>把外層寬度改成 <code>800</code>。三張卡片應該一起變窄，間距不變。</li>
+      </ol>
+
+      <h3>Step 3 · 踩一次那個坑（5 分）</h3>
+      <p>這一步是故意讓你踩的，踩過就不會忘。</p>
+      <ol>
+        <li>把外層列表改成 <strong>Hug contents</strong>。</li>
+        <li>你會發現<strong>設不了</strong>，或者設了沒反應。</li>
+        <li>原因：<strong>裡面有子元件設成 Fill container，容器在那個軸向就會被強制變成 Fixed。</strong></li>
+        <li>把卡片改回 Fixed 寬度，外層的 Hug 就正常了。</li>
+      </ol>
+
+      <div class="callout green">
+        <strong>記住這條：</strong>Hug 只能給容器，Fill 只能給子元件；而且<strong>只要有一個子元件是 Fill，父容器那個軸向就自動變 Fixed</strong>。之後遇到「我明明設了 Hug 怎麼沒反應」，九成是這個。
+      </div>
+
+      <h3>Step 4 · 加上 min / max（有時間再做）</h3>
+      <p>回家作業要做拉寬拉窄的壓力測試，會爆版的地方通常就是少了這兩個：</p>
+      <ul>
+        <li>文字容器加 <code>max width</code>：避免視窗拉很寬時，一行變成八十個字。</li>
+        <li>卡片或區塊加 <code>min height</code>：避免內容很少的時候整塊塌掉。</li>
+      </ul>
+
+      <div class="callout"><strong>交件：</strong>一張會自己撐開的卡片 + 一個會跟著容器縮放的列表。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex4">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 04</p>
+      <h2>畫 3 個低保真 Wireframe</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">練習檔 ② · Exercise 04</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>把流程圖上的節點變成畫面。挑<strong>頭、中、尾</strong>三個關鍵節點，不要平均分配。</p>
+
+      <h3>挑哪三個</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>位置</th><th>挑什麼</th><th>例子</th></tr></thead>
+          <tbody>
+            <tr><td>頭</td><td>使用者進到這條流程看到的第一個畫面</td><td>課程列表</td></tr>
+            <tr><td>中</td><td>流程中最關鍵的判斷點所在的畫面</td><td>課程詳情（決定要不要看）</td></tr>
+            <tr><td>尾</td><td>任務完成的那個畫面，或最重要的一個例外狀態</td><td>播放頁，或「還沒開始任何課程」的空狀態</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>畫到什麼程度</h3>
+      <p>25 分鐘畫 3 張全部用 Auto Layout 做完是不切實際的。實際的做法是：</p>
+      <ul>
+        <li><strong>第 1 張做完整</strong>：用 Auto Layout 排好，直接用 Exercise 03 的卡片。</li>
+        <li><strong>第 2、3 張先排骨架</strong>：方塊擺對位置、順序對就好，Auto Layout 留到回家補。</li>
+        <li>如果某個畫面只有一小塊變動（例如篩選之後只有列表更新），<strong>只畫那一塊就好</strong>，不用整頁重畫一次。</li>
+      </ul>
+
+      <h3>畫的規則</h3>
+      <ul>
+        <li><strong>只能用黑白灰</strong>，要標重點就用一個藍色。</li>
+        <li><strong>文字用真的。</strong>寫「加入購物車」不要寫「按鈕」；寫真實的課程名稱不要寫 Lorem ipsum。假字排起來永遠很整齊，真字才知道會不會爆版。</li>
+        <li>照片用灰方塊加一個叉代替，圖示畫個圈標「icon」。</li>
+        <li>每一頁<strong>只能有一個最明顯的主要動作</strong>。</li>
+        <li>全部用 Auto Layout 做，用 Exercise 03 的卡片直接複製。</li>
+      </ul>
+
+      <h3>畫完每一張，問這六題</h3>
+      <ul class="check">
+        <li>第一眼會看到什麼？那是這頁最重要的東西嗎？</li>
+        <li>這一頁的主要動作是哪一個？它有比別的按鈕明顯嗎？</li>
+        <li>使用者從哪裡來的？他知道自己在哪一層嗎？</li>
+        <li>如果這裡沒有資料，畫面長什麼樣？</li>
+        <li>按下去之後會發生什麼？成功跟失敗分別看到什麼？</li>
+        <li>想回上一步的話，回得去嗎？</li>
+      </ul>
+
+      <div class="callout warn">
+        答不出來的那一題，通常是<strong>流程圖上漏掉的那條線</strong>。回去補流程圖，不要在畫面上硬掰。
+      </div>
+
+      <div class="callout"><strong>交件：</strong>3 個低保真 Wireframe，每張旁邊寫下六題的答案。<br><strong>成果分享（另計 15 分鐘）：</strong>抽點 3–4 位，每人 3 分鐘，只講三件事——你的使用者目標、流程上最難決定的那個判斷點、以及你補了哪些例外路徑。</div>
+    </div>
+  </div>
+
+  <!-- ===== 回家作業 ===== -->
+  <div class="band">
+    <span class="band-tag home">回家作業 · 作業 5（上半）</span>
+    <h2>把流程補完，畫面補到 5 張</h2>
+  </div>
+  <p class="band-note">個人作業。作業 5「Flowchart + UI Flow + Wireframe」是 Unit 06 跟 07 合起來完成的，這次先交流程與初版畫面，Unit 07 再細修並合成 Wireflow。</p>
+
+  <div class="exercise home" id="hw">
+    <div class="exercise-head">
+      <p class="exercise-tag">Homework</p>
+      <h2>完整流程與 3–5 個 Wireframe</h2>
+      <div class="meta"><span class="chip">約 3 小時</span><span class="chip">個人</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+
+      <h3>Step 1 · 把第一條流程補完整</h3>
+      <p>課堂上因為時間關係一定有漏。把六種例外路徑<strong>一條不漏</strong>全部補上，每一條都要有對應的終點或回到主流程的路徑。</p>
+      <div class="callout warn">
+        檢查方式：從起點開始，每走到一個菱形就問「另一條路呢」。走完之後，圖上不應該有任何<span class="bad">斷掉的箭頭</span>——每條線都要指到某個節點或終點。
+      </div>
+
+      <h3>Step 2 · Wireframe 補到 3–5 個</h3>
+      <ul>
+        <li>課堂上畫了 3 個，補到 5 個以內。第 2、3 張的骨架補上 Auto Layout。</li>
+        <li><strong>整組至少要涵蓋一個關鍵的例外狀態</strong>——空狀態或錯誤狀態擇一，可以是同一張的另一個 Frame。不用每張都做。</li>
+        <li>只有一小塊變動的畫面，只畫變動的那一塊就好。</li>
+        <li>每張旁邊寫下六題檢查清單的答案，用 Figma 的文字或註解都可以。</li>
+      </ul>
+
+      <h3>Step 3 · 行有餘力：第二條 Flow（加分項）</h3>
+      <p>作業 5 的交件規格是 1 張 Flow，所以這一步<strong>不是必要的</strong>。時間夠再做：</p>
+      <ul>
+        <li>選一條<strong>會跟第一條交會</strong>的路徑，例如登入、搜尋、結帳。</li>
+        <li>交會的地方要畫出來：使用者在第一條流程走到一半被丟到第二條，完成之後<strong>回得到原本的位置嗎</strong>？</li>
+        <li>這是最常出包的地方——很多產品登入完就把你丟回首頁，剛剛在看的東西不見了。</li>
+      </ul>
+
+      <h3>Step 4 · Auto Layout 壓力測試</h3>
+      <p>交件前一定要做這一步，這是最快找出爆版問題的方法。</p>
+      <ol>
+        <li>把主要容器的 Frame 寬度<strong>拉寬 1.5 倍</strong>，看有沒有東西沒跟著長、或間距爆開。</li>
+        <li>再<strong>縮到 0.7 倍</strong>，看有沒有文字被截斷、元素重疊。</li>
+        <li>把某個標題改成兩倍長的文字，看容器有沒有自己撐開。</li>
+        <li>有問題的地方修好，改回原本尺寸再交。</li>
+      </ol>
+
+      <h3>可以用 AI 幫忙的部分</h3>
+      <p>AI 適合幫你<strong>檢查有沒有漏</strong>，不適合幫你決定流程長什麼樣——它不知道你的使用者是誰。三段提示詞放在講義：<a href="article.html#s13">檢查流程缺口</a>、從流程推出需要哪些畫面、檢查 Wireframe 的資訊層級。全部都要先貼上你自己畫的東西再問。</p>
+      <div class="callout warn">
+        <strong>使用界線：</strong>不要讓 AI 直接生成流程圖或 Wireframe。它不知道你前四個單元做的研究，產出的會是「一般電商大概長這樣」的通用版本，跟你的 Persona 完全脫鉤，<span class="bad">評圖時一問就露餡</span>。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 繳交 ===== -->
+  <div class="band">
+    <span class="band-tag home">繳交</span>
+    <h2>繳交清單與評分配分</h2>
+  </div>
+
+  <div class="exercise home" id="submit">
+    <div class="exercise-head">
+      <p class="exercise-tag">Submission</p>
+      <h2>對應階段作業 5（上半）</h2>
+      <div class="meta"><span class="chip">Figma 連結 1 份</span><span class="chip">下次上課抽點分享</span></div>
+    </div>
+    <div class="exercise-body">
+      <h3>繳交清單</h3>
+      <ul class="check">
+        <li>使用者目標一句話。</li>
+        <li>Flowchart 一張：含判斷點，六種例外路徑全部補齊，沒有斷掉的箭頭。</li>
+        <li>3–5 個低保真 Wireframe，全部黑白灰。</li>
+        <li>整組至少涵蓋一個關鍵的例外狀態（空狀態或錯誤狀態）。</li>
+        <li>每張 Wireframe 旁邊有六題檢查清單的答案。</li>
+        <li>主要容器與可重複元件用 Auto Layout 製作，已做過拉寬拉窄的壓力測試。</li>
+        <li>（加分）第二條 Flow，與第一條的交會點畫出來，完成後能回到原位置。</li>
+      </ul>
+
+      <h3>評分配分</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>面向</th><th>配分</th><th>看什麼</th><th>不及格的樣子</th></tr></thead>
+          <tbody>
+            <tr><td>流程完整度</td><td>30</td><td>六種例外路徑都有，每條線都指到終點或回到主流程。</td><td>只有理想路徑，菱形只出一條線。</td></tr>
+            <tr><td>判斷點的品質</td><td>15</td><td>分岔的地方是使用者真的會卡住的地方，條件寫成是非題。</td><td>判斷點寫成「系統驗證」這類使用者看不到的事。</td></tr>
+            <tr><td>Wireframe 的資訊層級</td><td>25</td><td>主要動作明顯，資訊順序合理，文字是真的。</td><td>滿版 Lorem ipsum，五個按鈕一樣大。</td></tr>
+            <tr><td>狀態完整度</td><td>15</td><td>整組至少一張畫出空狀態或錯誤狀態，並在流程圖上找得到對應的那條線。</td><td>只有一切順利的版本，或畫了狀態但流程圖沒有對應。</td></tr>
+            <tr><td>Auto Layout 使用</td><td>15</td><td>主要容器拉寬拉窄不爆版，Hug／Fill 用對地方。</td><td>絕對座標硬排，一縮就重疊。</td></tr>
+            <tr><td>（加分）第二條 Flow</td><td>+5</td><td>交會點畫出來，完成後回得到原位置。</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.9rem;color:var(--muted)">總分 100 分，加分項最多 +5。Wireframe 若少於 3 個、或出現黑白灰以外的顏色（單一藍色標重點除外），該項以未完成計。</p>
+
+      <div class="callout green">
+        <strong>下一步：</strong>這份流程與 Wireframe 會直接帶到 Unit 07，在那堂課細修版面、補齊畫面，並把 Flowchart 與 Wireframe 合成 Wireflow。畫得越完整，下堂課越輕鬆。
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-nav">
+    <a href="slides.html">回到簡報</a>
+    <a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">練習檔 ① 流程圖</a>
+    <a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">練習檔 ② Wireframe</a>
+    <a href="article.html">回到講義</a>
+    <a href="article.html#s5">講義：例外路徑</a>
+    <a href="article.html#s10">講義：Auto Layout</a>
+    <a href="https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout" target="_blank" rel="noopener">Figma Auto Layout 官方文件</a>
+    <a href="../index.html">回到課程總覽</a>
+  </div>
+</div>
+</body>
+</html>
