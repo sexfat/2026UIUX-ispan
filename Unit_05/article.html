@@ -311,6 +311,137 @@ tr:last-child td { border-bottom: none; }
 .copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
 .copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
 
+/* ── 互動範例彈窗（共用） ─────────────── */
+.demo-launch {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; margin: 26px 0; padding: 18px 22px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.2);
+  border-radius: 8px; cursor: pointer; text-align: left;
+  font-family: inherit;
+  transition: background .2s, border-color .2s;
+}
+.demo-launch:hover { background: rgba(0,102,204,.1); border-color: var(--accent); }
+.demo-launch .dl-icon {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: grid; place-items: center; font-size: 14px;
+}
+.demo-launch b { display: block; font-size: 1rem; color: var(--dark); margin-bottom: 2px; }
+.demo-launch .dl-text > span { display: block; font-size: .88rem; color: var(--muted); line-height: 1.5; }
+
+#demo-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,.55);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility 0s .25s;
+}
+#demo-overlay.open { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+.demo-modal {
+  background: #fff; border-radius: 12px;
+  max-width: 640px; width: 100%; max-height: 86vh; overflow-y: auto;
+  padding: 34px 36px 30px; position: relative;
+  transform: translateY(14px) scale(.98);
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,.3);
+}
+#demo-overlay.open .demo-modal { transform: none; }
+.demo-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px; border: none; border-radius: 50%;
+  background: var(--surface); color: var(--dark);
+  font-size: 17px; cursor: pointer; display: grid; place-items: center;
+}
+.demo-close:hover { background: #e8e8ed; }
+.d-tag {
+  font-size: 11px; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.demo-modal h3 { font-size: 1.35rem; margin: 0 0 8px; }
+
+.d-task {
+  margin: 16px 0 18px; padding: 14px 16px;
+  background: rgba(15,118,110,.07);
+  border-left: 4px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem; line-height: 1.7;
+}
+.d-crumb { font-size: .82rem; color: var(--muted); margin-bottom: 10px; min-height: 1.2em; }
+.d-crumb b { color: var(--accent); font-weight: 700; }
+.d-list { list-style: none; margin: 0 0 14px; padding: 0; }
+.d-list li { margin: 0 0 8px; }
+.d-list button {
+  width: 100%; text-align: left; padding: 13px 16px;
+  font-family: inherit; font-size: .96rem; color: var(--dark);
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.d-list button:hover { border-color: var(--accent); background: rgba(0,102,204,.04); }
+.d-list button:disabled { opacity: .45; cursor: default; }
+.d-list button .d-arrow { float: right; color: var(--muted); font-size: .85rem; }
+.d-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.d-btn {
+  font-family: inherit; font-size: .85rem; font-weight: 700;
+  padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--dark);
+}
+.d-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.d-verdict {
+  padding: 16px 18px; border-radius: 8px; margin-bottom: 16px;
+  font-size: .95rem; line-height: 1.7;
+}
+.d-verdict.ok { background: rgba(15,118,110,.08); border: 1px solid rgba(15,118,110,.25); }
+.d-verdict.no { background: rgba(194,65,12,.07); border: 1px solid rgba(194,65,12,.25); }
+.d-verdict b { display: block; margin-bottom: 6px; font-size: 1.02rem; }
+.d-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 18px; }
+.d-stat { border: 1px solid var(--border); border-radius: 8px; padding: 12px 10px; text-align: center; }
+.d-stat b { display: block; font-size: 1.5rem; color: var(--accent); line-height: 1.1; }
+.d-stat span { display: block; font-size: .74rem; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+.d-note {
+  font-size: .9rem; line-height: 1.7; color: #2c2c2e;
+  background: var(--surface); border-radius: 8px;
+  padding: 14px 16px; margin-bottom: 16px;
+}
+.d-progress { font-size: .8rem; color: var(--muted); margin-bottom: 12px; }
+
+/* 卡片分類互動 */
+.d-cards { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.d-card {
+  font-family: inherit; font-size: .88rem;
+  padding: 8px 13px; border-radius: 6px; cursor: pointer;
+  background: #fff8dd; border: 1px solid #e6d38a; color: var(--dark);
+}
+.d-card.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+.d-card.done { opacity: .35; cursor: default; }
+.d-bins { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+.d-bin {
+  font-family: inherit; text-align: left;
+  padding: 11px 13px; border-radius: 8px; cursor: pointer;
+  background: #fff; border: 1px solid var(--border);
+}
+.d-bin:hover { border-color: var(--accent); }
+.d-bin b { display: block; font-size: .92rem; margin-bottom: 3px; }
+.d-bin span { display: block; font-size: .76rem; color: var(--muted); line-height: 1.45; min-height: 1.4em; }
+.d-rows { margin: 4px 0 16px; }
+.d-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .88rem;
+}
+.d-row:last-child { border-bottom: 0; }
+.d-row .r-name { min-width: 96px; font-weight: 700; }
+.d-row .r-bar { flex: 1; height: 8px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+.d-row .r-bar i { display: block; height: 100%; background: var(--accent); }
+.d-row.low .r-bar i { background: var(--accent3); }
+.d-row .r-num { min-width: 52px; text-align: right; color: var(--muted); font-size: .82rem; }
+
+@media (max-width: 560px) {
+  .demo-modal { padding: 28px 20px 24px; }
+  .d-stats, .d-bins { grid-template-columns: 1fr; }
+}
+
 .refs {
   max-width: var(--max-w);
   margin: 64px auto 0;
@@ -790,6 +921,14 @@ tr:last-child td { border-bottom: none; }
       <li><span class="bad">只看結果不問理由：</span>分群結果只是表面，「為什麼這樣分」才是能拿來設計的東西。</li>
     </ul>
 
+    <button class="demo-launch" data-demo="sort" type="button">
+      <span class="dl-icon">▶</span>
+      <span class="dl-text">
+        <b>自己分一次看看</b>
+        <span>用課堂練習那 13 張電商後台卡片，把它們放進 5 個分類。分完會拿你的結果對照 20 人的共識度，看出哪幾張是真正的分歧卡片。</span>
+      </span>
+    </button>
+
     <h3>結果怎麼分析</h3>
     <p>把每位參與者的分群疊起來，計算哪些卡片「一起出現」的次數最高。線上工具會畫成<strong>樹狀圖（Dendrogram）</strong>：兩張卡片合併的位置越靠左，代表共識越高。課堂內用手算共識比例就夠了。</p>
     <div class="tbl-wrap">
@@ -824,6 +963,14 @@ tr:last-child td { border-bottom: none; }
       </table>
     </div>
     <p>三個關鍵指標：<strong>成功率</strong>（找到正確位置的比例）、<strong>直接率</strong>（沒有走回頭路就找到的比例）、<strong>放棄點</strong>（使用者最常卡住的那一層）。</p>
+
+    <button class="demo-launch" data-demo="tree" type="button">
+      <span class="dl-icon">▶</span>
+      <span class="dl-text">
+        <b>親自跑一次樹狀測試</b>
+        <span>用一個購物 App 的分類樹當題目。你只會看到文字，沒有任何介面——這就是受測者的處境。走完會看到你的路徑，以及 20 人測試的統計結果。</span>
+      </span>
+    </button>
     <p>成功率高但直接率低，代表使用者<strong>繞了路才找到</strong>——最後有找到，過程卻不順。這時不要只看總分，要回頭看工具記錄的錯誤路徑：使用者先點了哪一個分類、在第幾層折返。問題可能出在任何一層的分類或標籤，不一定是第一層。</p>
     <div class="callout green">
       課堂實作只做卡片分類。樹狀測試留給有餘力的同學，可以在 Unit 06 畫完 Flow 之後回頭補做，用來檢查 IA 是不是真的站得住。
@@ -866,6 +1013,14 @@ tr:last-child td { border-bottom: none; }
         </tbody>
       </table>
     </div>
+    <button class="demo-launch" data-demo="label" type="button">
+      <span class="dl-icon">▶</span>
+      <span class="dl-text">
+        <b>四題標籤測驗</b>
+        <span>給你一個使用者目標，從四個候選標籤裡挑一個。每題會告訴你其他選項各違反了哪一個 S。</span>
+      </span>
+    </button>
+
     <p>注意 Succinct 排在最後。連結<strong>沒有固定的字數上限</strong>：11 個字的連結只要具體、誠實、能獨立看懂，就比 3 個字的「了解更多」有效得多。但這不代表可以無限拉長——NN/g 的原則是「需要多長就多長，但不能再更長」。精簡是在滿足前三項之後才追求的，不是可以被犧牲的。</p>
   </section>
 
@@ -1031,6 +1186,15 @@ tr:last-child td { border-bottom: none; }
   </ul>
 </div>
 
+<div id="demo-overlay" role="dialog" aria-modal="true" aria-labelledby="demoTitle">
+  <div class="demo-modal">
+    <button class="demo-close" id="demoClose" type="button" aria-label="關閉">&times;</button>
+    <p class="d-tag" id="demoTag"></p>
+    <h3 id="demoTitle"></h3>
+    <div id="demoBody"></div>
+  </div>
+</div>
+
 <div class="foot-nav">
   <a href="slides.html">回到 Unit 05 簡報</a>
   <a href="exercises.html#ex1">課堂練習：卡片分類法</a>
@@ -1076,6 +1240,389 @@ tr:last-child td { border-bottom: none; }
   }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
 
   sections.forEach(sec => observer.observe(sec));
+})();
+
+// ── 互動範例（樹狀測試 / 卡片分類 / 標籤命名） ───────────────
+(function () {
+  const overlay = document.getElementById('demo-overlay');
+  const body = document.getElementById('demoBody');
+  const tagEl = document.getElementById('demoTag');
+  const titleEl = document.getElementById('demoTitle');
+  if (!overlay || !body) return;
+
+  const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  let active = null;
+  function setTitle(tag, title) {
+    if (tagEl) tagEl.textContent = tag;
+    if (titleEl) titleEl.textContent = title;
+  }
+
+  /* ---------- 範例一：樹狀測試（四題隨機） ---------- */
+  const tree = (function () {
+    const SCENARIOS = [
+      {
+        title: '購物 App：你要去哪裡退貨？',
+        task: '你在這個購物 App 買了一雙鞋，尺寸不合想退掉。請找到可以「申請退貨」的地方。',
+        tree: {
+          '商品分類': { '女裝': null, '男裝': null, '鞋類': null, '3C 家電': null },
+          '優惠活動': { '折價券': null, '限時特賣': null, '會員專屬': null },
+          '訂單查詢': { '訂單列表': null, '物流追蹤': null, '退貨與換貨': null, '發票管理': null },
+          '客戶服務': { '常見問題': null, '線上客服': null, '服務條款': null, '檢舉賣家': null },
+          '我的帳戶': { '個人資料': null, '收件地址': null, '付款方式': null, '通知設定': null }
+        },
+        answer: ['訂單查詢', '退貨與換貨'],
+        stats: [['75%', '成功率<br>15／20 找到正確位置'], ['45%', '直接率<br>9／20 沒走回頭路'], ['客戶服務', '放棄點<br>8 人先點這裡']],
+        notes: [
+          '<strong>怎麼讀這組數字。</strong>成功率 75% 看起來還行，但直接率只有 45%——代表<strong>一半的人是繞路才找到的</strong>。這種「成功率高、直接率低」的組合，問題不在找不到，而在第一步就走錯。<br><br>再看放棄點：20 人裡有 8 人第一步先點「客戶服務」。這不是使用者笨，是他們把退貨理解成<strong>「客服問題」</strong>，而產品把它放在<strong>「訂單操作」</strong>底下。兩邊都有道理，這就是典型的分歧項目。',
+          '<strong>所以要改什麼？</strong>不是把「退貨與換貨」搬到客戶服務，那只會讓原本走對的人變成走錯。正解是<strong>多重層級</strong>：兩邊都放，客戶服務底下放一個指向同一頁的入口。這正是卡片分類遇到分歧卡片的處理方式——樹狀測試只是用數據把它再確認一次。'
+        ]
+      },
+      {
+        title: '銀行 App：你要去哪裡調高信用卡額度？',
+        task: '你下個月要出國，想把信用卡的額度調高。請找到可以「申請調整額度」的地方。',
+        tree: {
+          '存款業務': { '台幣帳戶': null, '外幣帳戶': null, '定期存款': null, '約定轉帳': null },
+          '信用卡服務': { '帳單查詢': null, '繳款設定': null, '額度調整': null, '紅利點數': null, '掛失補發': null },
+          '貸款專區': { '信用貸款': null, '房屋貸款': null, '車貸專案': null, '額度試算': null },
+          '投資理財': { '基金申購': null, '外匯交易': null, '保險服務': null },
+          '個人設定': { '基本資料': null, '通知偏好': null, '安全設定': null }
+        },
+        answer: ['信用卡服務', '額度調整'],
+        stats: [['60%', '成功率<br>12／20 找到正確位置'], ['30%', '直接率<br>6／20 沒走回頭路'], ['貸款專區', '放棄點<br>9 人先點這裡']],
+        notes: [
+          '<strong>成功率掉到 60%，直接率只剩 30%。</strong>9 個人第一步先進「貸款專區」——因為那裡有「額度試算」，<strong>同樣出現「額度」兩個字</strong>。使用者不是在讀分類邏輯，是在掃描關鍵字。',
+          '<strong>問題出在分類的切法。</strong>存款業務、信用卡服務、貸款專區——這是<strong>銀行內部的部門</strong>。使用者腦中沒有這張組織圖，他只知道自己要「調額度」。這正是最常見的 IA 錯誤第一條：用公司內部組織架構當分類，而不是使用者的心智模型。',
+          '<strong>怎麼改？</strong>把部門名稱全部重寫不現實，銀行內部也不會同意。實務上的解法是<strong>另外開一條任務導向的路徑</strong>：首頁放「常用服務」快捷區，把調額度、掛失、繳費這些高頻任務直接露出來，繞過部門分類。原本的部門結構留給知道自己要找哪一區的人。'
+        ]
+      },
+      {
+        title: '大學網站：補繳學分費的截止日在哪？',
+        task: '你這學期加簽了一門課，要補繳學分費。請找到公告繳費截止日的地方。',
+        tree: {
+          '未來學生': { '招生資訊': null, '獎學金說明': null, '校園導覽': null, '線上申請': null },
+          '在校學生': { '課程查詢': null, '學籍規定': null, '註冊繳費': null, '宿舍申請': null, '社團活動': null },
+          '教職員工': { '差勤系統': null, '研究計畫': null, '教學資源': null },
+          '校友專區': { '校友卡': null, '募款專案': null, '返校活動': null },
+          '關於本校': { '校史沿革': null, '行政單位': null, '交通位置': null, '聯絡我們': null }
+        },
+        answer: ['在校學生', '註冊繳費'],
+        stats: [['70%', '成功率<br>14／20 找到正確位置'], ['40%', '直接率<br>8／20 沒走回頭路'], ['關於本校', '放棄點<br>7 人先點這裡']],
+        notes: [
+          '<strong>7 個人第一步點了「關於本校」</strong>，想從「行政單位」找出納組。他們的推理沒有錯：繳費是行政程序，行政程序當然找行政單位。',
+          '<strong>問題出在用受眾別切導覽。</strong>未來學生、在校學生、教職員、校友——使用者要先回答「我算哪一種人」才能開始找。多數人可以，但延畢生、休學復學、旁聽生、剛畢業還在辦離校的人就會卡住。而且「補繳學分費」在使用者腦中是<strong>一件事</strong>，不是<strong>一種身分</strong>。這是最常見的 IA 錯誤第二條。',
+          '<strong>怎麼改？</strong>受眾別當首頁入口沒問題，它幫新訪客快速收斂。但任務型的內容不能只掛在受眾底下——要另外做一條任務導向的路徑（「我想繳費／查成績／申請證明」），並且讓搜尋能直接命中。同一頁掛在兩處，就是多重層級。'
+        ]
+      },
+      {
+        title: '串流平台：你要去哪裡取消訂閱？',
+        task: '這個月開始你不想再續訂了。請找到可以「取消訂閱」的地方。',
+        tree: {
+          '首頁推薦': { '熱門影集': null, '新片上架': null, '為你推薦': null },
+          '我的片單': { '待看清單': null, '已看過': null, '下載管理': null },
+          '帳戶': {
+            '個人資料': null,
+            '觀看紀錄': null,
+            '裝置管理': null,
+            '訂閱與付款': { '付款方式': null, '帳單紀錄': null, '變更方案': null, '取消訂閱': null }
+          },
+          '客服中心': { '常見問題': null, '聯絡我們': null, '退款政策': null },
+          '設定': { '播放品質': null, '語言與字幕': null, '通知設定': null }
+        },
+        answer: ['帳戶', '訂閱與付款', '取消訂閱'],
+        stats: [['55%', '成功率<br>11／20 找到正確位置'], ['20%', '直接率<br>4／20 沒走回頭路'], ['5.2 次', '平均點擊<br>其他三題都在 3 次以內']],
+        notes: [
+          '<strong>這題四題裡最難：成功率 55%、直接率只有 20%。</strong>而且平均要點 5.2 次——其他三題都在 3 次以內。有 6 個人先跑去「客服中心」找退款政策，另外有人卡在「變更方案」，以為降到最低方案就等於取消。',
+          '<strong>三層深本身不是問題。</strong>問題是「取消訂閱」被埋在第三層，而第二層叫<strong>「訂閱與付款」</strong>——使用者看到這個名字會以為裡面是繳費相關，不會想到取消也在那。回到扁平 vs 深層那一節：深層結構適合內容量大、分類邏輯明確的產品，但<strong>使用者高頻需要的動作不該埋在最深處</strong>。',
+          '<strong>要誠實面對一件事：</strong>取消流程被藏深，很多時候是<strong>刻意</strong>的。把退出路徑做難一點，短期留存數字會好看。但這是黑暗模式，代價是使用者對整個產品的信任——而且各國法規已經開始要求「取消要和訂閱一樣容易」。做 IA 的時候，你會遇到有人要求你把某個東西藏起來，這時候要知道自己在做什麼。'
+        ]
+      }
+    ];
+
+    let sc = null, prev = -1;
+    let path = [], back = 0, clicks = 0;
+    const at = keys => keys.reduce((n, k) => n[k], sc.tree);
+
+    function pick() {
+      let i = Math.floor(Math.random() * SCENARIOS.length);
+      if (SCENARIOS.length > 1 && i === prev) i = (i + 1) % SCENARIOS.length;
+      prev = i;
+      sc = SCENARIOS[i];
+    }
+
+    function render() {
+      const node = at(path);
+      const items = Object.keys(node).map(k =>
+        '<li><button type="button" data-key="' + esc(k) + '">' + esc(k) +
+        '<span class="d-arrow">' + (node[k] === null ? '選這個' : '›') + '</span></button></li>').join('');
+      body.innerHTML =
+        '<p class="d-task"><strong>任務：</strong>' + esc(sc.task) + '<br>' +
+        '<span style="color:var(--muted);font-size:.88rem">沒有搜尋框、沒有圖示、沒有版面——樹狀測試就是這樣，只剩分類名稱。</span></p>' +
+        '<p class="d-crumb">你在：<b>' + (path.length ? esc(path.join(' → ')) : '首頁（第一層）') + '</b></p>' +
+        '<ul class="d-list">' + items + '</ul>' +
+        '<div class="d-actions">' +
+        (path.length ? '<button class="d-btn" data-act="back">← 回上一層</button>' : '') +
+        '<button class="d-btn" data-act="reset">換一題</button></div>';
+    }
+
+    function finish(choice) {
+      const chosen = path.concat(choice);
+      const ok = chosen.join('/') === sc.answer.join('/');
+      const direct = ok && back === 0;
+      const stats = sc.stats.map(st =>
+        '<div class="d-stat"><b>' + st[0] + '</b><span>' + st[1] + '</span></div>').join('');
+      const notes = sc.notes.map(n => '<div class="d-note">' + n + '</div>').join('');
+      body.innerHTML =
+        (ok
+          ? '<div class="d-verdict ok"><b>找到了。</b>你的路徑：' + esc(chosen.join(' → ')) +
+            '｜點了 ' + clicks + ' 次，走回頭路 ' + back + ' 次。' +
+            (direct ? '一次到位，統計上算「直接成功」。' : '有走回頭路，算「成功但不直接」——總分會過，過程是卡的。') + '</div>'
+          : '<div class="d-verdict no"><b>這裡沒有你要找的東西。</b>你的路徑：' + esc(chosen.join(' → ')) +
+            '｜點了 ' + clicks + ' 次，走回頭路 ' + back + ' 次。<br>正確位置是「' + esc(sc.answer.join(' → ')) +
+            '」。走錯不代表你不會用——下面的統計會告訴你，多數人也走錯同一個地方。</div>') +
+        '<p style="font-size:.95rem;margin:0 0 10px"><strong>20 位受測者跑同一題的結果：</strong></p>' +
+        '<div class="d-stats">' + stats + '</div>' + notes +
+        '<div class="d-actions"><button class="d-btn primary" data-act="reset">換一題再玩</button>' +
+        '<button class="d-btn" data-act="close">關閉</button></div>';
+    }
+
+    return {
+      tag: 'Tree Testing · 互動範例',
+      title: '',
+      start() {
+        pick();
+        this.title = sc.title;
+        setTitle(this.tag, this.title);
+        path = []; back = 0; clicks = 0;
+        render();
+      },
+      click(btn) {
+        const act = btn.dataset.act;
+        if (act === 'back') { path.pop(); back++; render(); return; }
+        if (act === 'reset') { this.start(); return; }
+        const key = btn.dataset.key;
+        if (!key) return;
+        clicks++;
+        if (at(path)[key] === null) finish(key); else { path.push(key); render(); }
+      }
+    };
+  })();
+
+  /* ---------- 範例二：封閉式卡片分類 ---------- */
+  const sort = (function () {
+    const BINS = ['訂單處理', '商品資訊', '客戶關係', '行銷與數據', '系統設定'];
+    // consensus：多數人放的分類 + 幾人／20 + 分歧時的第二選擇
+    const CARDS = [
+      ['訂單管理', '訂單處理', 20, null],
+      ['產品管理', '商品資訊', 20, null],
+      ['物流資訊', '訂單處理', 19, null],
+      ['庫存管理', '商品資訊', 19, null],
+      ['客戶服務', '客戶關係', 18, null],
+      ['站點設置', '系統設定', 18, null],
+      ['用戶管理', '客戶關係', 16, null],
+      ['退貨處理', '訂單處理', 15, '客戶關係'],
+      ['報告和分析', '行銷與數據', 15, null],
+      ['用戶反饋', '客戶關係', 14, '行銷與數據'],
+      ['安全設置', '系統設定', 13, '客戶關係'],
+      ['促銷活動設置', '行銷與數據', 12, '商品資訊'],
+      ['支付處理', '訂單處理', 11, '系統設定']
+    ];
+    let picked = {}, sel = null;
+
+    function render() {
+      const done = Object.keys(picked).length;
+      const cards = CARDS.map(([name]) =>
+        '<button class="d-card' + (picked[name] ? ' done' : '') + (sel === name ? ' sel' : '') + '" type="button" ' +
+        'data-card="' + esc(name) + '"' + (picked[name] ? ' disabled' : '') + '>' + esc(name) + '</button>').join('');
+      const bins = BINS.map(bin => {
+        const inside = CARDS.filter(([n]) => picked[n] === bin).map(([n]) => n);
+        return '<button class="d-bin" type="button" data-bin="' + esc(bin) + '"><b>' + esc(bin) + '</b>' +
+          '<span>' + (inside.length ? esc(inside.join('、')) : '（還沒有卡片）') + '</span></button>';
+      }).join('');
+      body.innerHTML =
+        '<p class="d-task"><strong>任務：</strong>先點一張卡片，再點你覺得它該去的分類。這 5 個分類是研究人員先給定的——這就是<strong>封閉式</strong>卡片分類。</p>' +
+        '<p class="d-progress">已分配 ' + done + '／13' + (sel ? '　·　已選：' + esc(sel) + '，現在點分類' : '') + '</p>' +
+        '<div class="d-cards">' + cards + '</div>' +
+        '<div class="d-bins">' + bins + '</div>' +
+        '<div class="d-actions">' +
+        (done === 13 ? '<button class="d-btn primary" data-act="check">看共識度對照</button>' : '') +
+        '<button class="d-btn" data-act="reset">重新開始</button></div>';
+    }
+
+    function result() {
+      let match = 0;
+      const rows = CARDS.map(([name, top, votes, second]) => {
+        const mine = picked[name];
+        if (mine === top) match++;
+        const pct = Math.round(votes / 20 * 100);
+        const low = votes <= 13;
+        return '<div class="d-row' + (low ? ' low' : '') + '"><span class="r-name">' + esc(name) + '</span>' +
+          '<span class="r-bar"><i style="width:' + pct + '%"></i></span>' +
+          '<span class="r-num">' + votes + '／20</span></div>';
+      }).join('');
+      const diverge = CARDS.filter(c => c[2] <= 13);
+      body.innerHTML =
+        '<div class="d-verdict ' + (match >= 10 ? 'ok' : 'no') + '"><b>你和多數人一致的有 ' + match + '／13 張。</b>' +
+        '這個數字本身不重要——重要的是下面哪幾張卡片<strong>大家都分不定</strong>。</div>' +
+        '<p style="font-size:.95rem;margin:0 0 8px"><strong>20 人的共識度</strong>（橘色＝共識低於 70%）：</p>' +
+        '<div class="d-rows">' + rows + '</div>' +
+        '<div class="d-note"><strong>高共識的直接採用。</strong>訂單管理、產品管理這種 19–20 人都放同一格的，不用再討論。<br><br>' +
+        '<strong>低共識的才是產出。</strong>這次有三張：' +
+        diverge.map(c => '<strong>' + esc(c[0]) + '</strong>（' + c[2] + '／20，另外 ' + (20 - c[2]) + ' 人放到「' + esc(c[3]) + '」）').join('、') +
+        '。這三張不是雜訊，是告訴你使用者的心智模型跟你的分類有落差。</div>' +
+        '<div class="d-note"><strong>三種處理方式，看情況選：</strong><br>' +
+        '「支付處理」11／20 —— 兩邊理由都成立（它既是訂單流程的一環，也是系統設定），這種用<strong>多重層級</strong>，兩邊都掛。<br>' +
+        '「促銷活動設置」12／20 —— 分歧來自命名太籠統，使用者不確定它是行銷工具還是商品設定，先<strong>改名</strong>再測一次。<br>' +
+        '「安全設置」13／20 —— 使用者對它根本沒有既定認知，這種要在介面上<strong>補說明</strong>，或考慮併進更大的分類。</div>' +
+        '<div class="d-actions"><button class="d-btn primary" data-act="reset">再分一次</button>' +
+        '<button class="d-btn" data-act="close">關閉</button></div>';
+    }
+
+    return {
+      tag: 'Card Sorting · 互動範例',
+      title: '封閉式卡片分類：13 張電商後台卡片',
+      start() { picked = {}; sel = null; render(); },
+      click(btn) {
+        const act = btn.dataset.act;
+        if (act === 'reset') { this.start(); return; }
+        if (act === 'check') { result(); return; }
+        if (btn.dataset.card) { sel = (sel === btn.dataset.card) ? null : btn.dataset.card; render(); return; }
+        if (btn.dataset.bin && sel) { picked[sel] = btn.dataset.bin; sel = null; render(); }
+      }
+    };
+  })();
+
+  /* ---------- 範例三：標籤命名 4 個 S ---------- */
+  const label = (function () {
+    const Q = [
+      {
+        goal: '你想知道「退貨要不要自己付運費」。',
+        options: [
+          ['了解更多', false, '違反 Substantial：脫離上下文完全看不出內容，也違反 Specific。'],
+          ['服務中心', false, '違反 Specific：範圍太大，退貨、維修、客訴全都可能在裡面。'],
+          ['退貨與換貨說明', true, '四個 S 都過：具體、誠實、能獨立看懂，長度也剛好。'],
+          ['點此查看關於退貨換貨的完整說明與相關費用規定', false, '前三個 S 都過，但違反 Succinct：滿足前三項之後就該收，這句多了一半。']
+        ]
+      },
+      {
+        goal: '你想換掉綁定的信用卡。',
+        options: [
+          ['付款方式', true, '具體且精簡，使用者一看就知道信用卡在這裡。'],
+          ['我的錢包', false, '違反 Specific：自創的比喻詞，使用者不確定裡面是餘額、點數還是信用卡。'],
+          ['帳戶設定', false, '違反 Specific：範圍太大，付款、密碼、通知都可能在裡面。'],
+          ['更多', false, '四個 S 全違反，這是最沒有資訊氣味的一種標籤。']
+        ]
+      },
+      {
+        goal: '你想知道這堂線上課程上完之後，你能做出什麼東西。',
+        options: [
+          ['詳細資訊', false, '違反 Specific 與 Substantial：什麼都可能在裡面。'],
+          ['學習成果', true, '直接對應使用者心裡的問題「我學完會什麼」。'],
+          ['課程介紹', false, '不算錯，但偏向介紹課程本身，沒有回答「我能做出什麼」。'],
+          ['開始學習', false, '違反 Sincere：這是行動按鈕，點下去會直接進課程，不是說明頁。']
+        ]
+      },
+      {
+        mode: 'bad',
+        goal: '以下哪一個標籤最可能讓使用者覺得「被騙了」？',
+        options: [
+          ['免費試用', true, '這就是違反 Sincere 的典型——如果點進去要先綁信用卡，標籤承諾與實際內容不符。使用者不會怪自己看漏，只會不再信任這一區。'],
+          ['查看方案與價格', false, '誠實，點進去就是價格，沒有落差。'],
+          ['下載使用手冊（PDF, 2.4MB）', false, '不但誠實，還先告知格式與檔案大小，減少意外。'],
+          ['聯絡客服', false, '具體且誠實。']
+        ]
+      }
+    ];
+    let i = 0, score = 0, answered = false;
+
+    function render(feedback) {
+      const q = Q[i];
+      const opts = q.options.map((opt, idx) =>
+        '<li><button type="button" data-opt="' + idx + '"' + (answered ? ' disabled' : '') + '>' +
+        esc(opt[0]) + '</button></li>').join('');
+      body.innerHTML =
+        '<p class="d-progress">第 ' + (i + 1) + ' 題／共 ' + Q.length + '　·　答對 ' + score + ' 題</p>' +
+        '<p class="d-task"><strong>' + (q.mode === 'bad' ? '題目：' : '使用者目標：') + '</strong>' + esc(q.goal) +
+        (q.mode === 'bad' ? '' : '<br><span style="color:var(--muted);font-size:.88rem">哪一個標籤最能讓他放心點下去？</span>') + '</p>' +
+        '<ul class="d-list">' + opts + '</ul>' +
+        (feedback || '') +
+        (answered
+          ? '<div class="d-actions">' +
+            (i < Q.length - 1
+              ? '<button class="d-btn primary" data-act="next">下一題 →</button>'
+              : '<button class="d-btn primary" data-act="done">看總結</button>') +
+            '</div>'
+          : '');
+    }
+
+    function answer(idx) {
+      const q = Q[i];
+      const ok = q.options[idx][1];
+      if (ok) score++;
+      answered = true;
+      const lines = q.options.map((opt, k) =>
+        '<div style="padding:5px 0"><strong>' + (opt[1] ? '✓ ' : '✗ ') + esc(opt[0]) + '</strong>　' + esc(opt[2]) + '</div>').join('');
+      render('<div class="d-verdict ' + (ok ? 'ok' : 'no') + '"><b>' +
+        (ok ? '答對了。' : '再看一次每個選項：') + '</b>' + lines + '</div>');
+    }
+
+    function summary() {
+      body.innerHTML =
+        '<div class="d-verdict ' + (score >= 3 ? 'ok' : 'no') + '"><b>' + score + '／' + Q.length + ' 題</b>' +
+        (score >= 3 ? '標籤的敏感度不錯。' : '多練幾次，這是最容易忽略但影響最大的一環。') + '</div>' +
+        '<div class="d-note"><strong>四題各測一個 S：</strong><br>' +
+        '第 1 題 —— Succinct 排在最後。那個超長選項前三個 S 都過，但滿足之後就該收。<br>' +
+        '第 2 題 —— Specific。「我的錢包」「帳戶設定」「更多」都是範圍太大或自創詞。<br>' +
+        '第 3 題 —— Substantial。標籤要能回答使用者心裡的問題，不是描述你的內容。<br>' +
+        '第 4 題 —— Sincere。標籤承諾與點進去看到的東西不符，代價是整區都不再被信任。</div>' +
+        '<div class="d-note"><strong>回到 IA。</strong>導覽的用字不是文案問題，是架構問題。' +
+        '一個看不懂的標籤，等於那一整支分類在使用者眼中不存在——結構做得再乾淨也沒用。</div>' +
+        '<div class="d-actions"><button class="d-btn primary" data-act="reset">再測一次</button>' +
+        '<button class="d-btn" data-act="close">關閉</button></div>';
+    }
+
+    return {
+      tag: 'Labeling · 互動範例',
+      title: '四題標籤測驗：哪一個氣味最強？',
+      start() { i = 0; score = 0; answered = false; render(); },
+      click(btn) {
+        const act = btn.dataset.act;
+        if (act === 'reset') { this.start(); return; }
+        if (act === 'next') { i++; answered = false; render(); return; }
+        if (act === 'done') { summary(); return; }
+        if (btn.dataset.opt && !answered) answer(Number(btn.dataset.opt));
+      }
+    };
+  })();
+
+  const DEMOS = { tree: tree, sort: sort, label: label };
+
+  function open(key) {
+    active = DEMOS[key];
+    if (!active) return;
+    active.start();
+    setTitle(active.tag, active.title);
+    overlay.classList.add('open');
+  }
+  function close() {
+    overlay.classList.remove('open');
+    body.innerHTML = '';
+    active = null;
+  }
+
+  body.addEventListener('click', event => {
+    const btn = event.target.closest('button');
+    if (!btn || !active) return;
+    if (btn.dataset.act === 'close') { close(); return; }
+    active.click(btn);
+  });
+
+  document.querySelectorAll('.demo-launch[data-demo]').forEach(btn =>
+    btn.addEventListener('click', () => open(btn.dataset.demo)));
+  document.getElementById('demoClose').addEventListener('click', close);
+  overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && overlay.classList.contains('open')) close();
+  });
 })();
 
 (function () {
