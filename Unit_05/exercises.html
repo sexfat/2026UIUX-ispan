@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 05 · 課堂練習與回家作業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code: #1d1d1f;
+  --max-w: 860px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 28px 22px 88px;
+  line-height: 1.72;
+}
+.page { max-width: var(--max-w); margin: 0 auto; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 42px;
+}
+.back-link { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+.back-link::before { content: '← '; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.hero { padding-bottom: 34px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
+.overline {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 14px; }
+.lead { color: var(--muted); max-width: 720px; font-size: 1rem; }
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+.toc h2 {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.toc ol { list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 8px 0; }
+.toc a { color: var(--dark); text-decoration: none; display: flex; gap: 10px; font-size: .95rem; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--accent);
+  font-size: .75rem;
+  font-weight: 800;
+  padding-top: 3px;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 46px 0 6px;
+  padding-top: 26px;
+  border-top: 2px solid var(--border);
+}
+.band-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+.band-tag.home { background: var(--accent2); }
+.band h2 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); }
+.band-note { color: var(--muted); font-size: .9rem; margin: 6px 0 4px; }
+
+.exercise {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.exercise.home { border-color: rgba(15,118,110,.28); }
+.exercise-head { padding: 18px 22px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.exercise.home .exercise-head { background: rgba(15,118,110,.05); border-bottom-color: rgba(15,118,110,.2); }
+.exercise-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.exercise.home .exercise-tag { color: var(--accent2); }
+h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); line-height: 1.25; }
+.exercise-body { padding: 20px 22px 24px; }
+h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+p { color: #2c2c2e; margin-bottom: 12px; }
+ul, ol { padding-left: 1.1rem; margin: 8px 0 16px; }
+li { margin-bottom: 8px; color: #2c2c2e; }
+strong { color: var(--dark); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+.good { color: var(--accent2); font-weight: 800; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.16);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.exercise.home .chip { color: var(--accent2); background: rgba(15,118,110,.07); border-color: rgba(15,118,110,.18); }
+
+.cardset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+.cardset span {
+  font-size: .85rem;
+  padding: 7px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: #2c2c2e;
+}
+
+.table-wrap { overflow-x: auto; margin: 14px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: .92rem; }
+th {
+  text-align: left;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: #2c2c2e; vertical-align: top; }
+td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
+
+.tree {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.85;
+  white-space: pre;
+  overflow-x: auto;
+  color: #2c2c2e;
+}
+.tree .n1 { color: var(--accent); font-weight: 700; }
+.tree .cm { color: var(--muted); }
+
+.prompt {
+  background: var(--code);
+  color: #f5f5f7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 14px 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.7;
+}
+.callout {
+  background: rgba(0,102,204,.05);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #2c2c2e;
+}
+.callout.green { background: rgba(15,118,110,.06); border-left-color: var(--accent2); }
+.callout.warn { background: rgba(194,65,12,.06); border-left-color: var(--accent3); }
+.callout a { color: var(--accent); font-weight: 700; }
+
+.check { list-style: none; padding-left: 0; }
+.check li { position: relative; padding-left: 28px; }
+.check li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .45em;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+
+.foot-nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.foot-nav a {
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media print {
+  body { background: #fff; padding: 0; }
+  .topbar, .toc, .foot-nav { display: none; }
+  .exercise { break-inside: avoid; }
+}
+@media (max-width: 700px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .band { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back-link" href="article.html">回到 Unit 05 講義</a>
+    <span class="unit-pill">Unit 05</span>
+  </div>
+
+  <div class="hero">
+    <p class="overline">Practice &amp; Homework</p>
+    <h1>卡片分類法與 Sitemap 分析</h1>
+    <p class="lead">課堂練習用 80 分鐘跑完一輪完整的卡片分類法，從準備卡片到畫出 IA 草圖（另有 15 分鐘成果分享）；回家作業則依 NN/g「資訊架構三個關鍵模型」影片，逆向拆解一個真實網站的 Sitemap，再回頭修正自己的專題資訊架構。</p>
+  </div>
+
+  <div class="toc">
+    <h2>本頁內容</h2>
+    <ol>
+      <li><a href="#ex1">課堂練習 01 · 準備卡片與設定情境</a></li>
+      <li><a href="#ex2">課堂練習 02 · 開放式卡片分類</a></li>
+      <li><a href="#ex3">課堂練習 03 · 封閉式卡片分類</a></li>
+      <li><a href="#ex4">課堂練習 04 · 分析結果並畫出 IA 草圖</a></li>
+      <li><a href="#hw">回家作業 · 網站 Sitemap 分析</a></li>
+      <li><a href="#submit">繳交清單與評分重點</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== 課堂練習 ===== -->
+  <div class="band">
+    <span class="band-tag">課堂練習 · 80 分鐘</span>
+    <h2>電商後台管理系統卡片分類法</h2>
+  </div>
+  <p class="band-note">4–5 人一組，在 FigJam 上完成。組內輪流擔任「主持人」與「參與者」，每個階段都要有人負責記錄理由。四個階段合計 80 分鐘，之後另有 15 分鐘的各組成果分享與作業說明（每組 3 分鐘）。</p>
+
+  <div class="exercise" id="ex1">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 01</p>
+      <h2>準備卡片與設定情境</h2>
+      <div class="meta"><span class="chip">15 分鐘</span><span class="chip">全組</span><span class="chip">FigJam</span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>在開始分類之前，先確定「誰在分」以及「為了什麼在分」。沒有情境的卡片分類，結果會是每個人各憑想像。</p>
+
+      <h3>13 張功能卡片</h3>
+      <p>把下列項目各做成一張便利貼，顏色統一，不要分組排列（隨機打散擺放）。<strong>課堂用板已經建好了</strong>：<a href="https://www.figma.com/board/KtPtouN73pY8SBP90Uz1j2" target="_blank" rel="noopener">開啟 Unit 05 練習板</a>，13 張卡片已隨機打散、顏色統一，六個工作區（說明／卡片／開放式／封閉式／分析／IA 草圖）都備妥，各組複製一份即可開始。另可參考 <a href="https://www.figma.com/board/K0a0hIcnHdfyH09bRjhIeW/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E" target="_blank" rel="noopener">FigJam 範例 1</a>、<a href="https://www.figma.com/board/Dx2liUBXBgKuXg8psCjN4a/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E-2" target="_blank" rel="noopener">範例 2</a>。</p>
+      <div class="cardset">
+        <span>訂單管理</span><span>產品管理</span><span>庫存管理</span><span>用戶反饋</span>
+        <span>促銷活動設置</span><span>報告和分析</span><span>用戶管理</span><span>支付處理</span>
+        <span>物流資訊</span><span>退貨處理</span><span>客戶服務</span><span>站點設置</span><span>安全設置</span>
+      </div>
+
+      <h3>任務</h3>
+      <ol>
+        <li>設定參與者角色：這次的目標使用者是誰？例如「經營三年、每天處理 50 筆訂單的電商店長」「負責出貨的倉管人員」「客服專員」。不同角色的分類邏輯會明顯不同。</li>
+        <li>寫下使用情境一句話：「你每天早上打開後台，第一件事會做什麼？」</li>
+        <li>檢查卡片命名有沒有洩題（詳見下方檢查表）。</li>
+      </ol>
+
+      <h3>卡片檢查表</h3>
+      <ul class="check">
+        <li>沒有多張卡片共用同一個前綴詞（例如「訂單查詢／訂單取消／訂單匯出」會讓參與者直接照字面配對）。</li>
+        <li>沒有內部術語或系統代號。</li>
+        <li>各功能區的卡片數量大致平均，沒有某一區佔一半以上。</li>
+        <li>每張卡片只講一件事，沒有「訂單與物流管理」這種複合卡。</li>
+      </ul>
+
+      <div class="callout"><strong>交件：</strong>FigJam 上一組打散的 13 張卡片 + 一段參與者角色與情境描述。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 02</p>
+      <h2>開放式卡片分類</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">每人 4–5 分鐘</span><span class="chip">輪流</span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>讓參與者自由分群並自己命名，看出他們的心智模型與慣用詞彙。</p>
+
+      <h3>執行方式</h3>
+      <ol>
+        <li>組員輪流當參與者，其他人當主持人與記錄者。</li>
+        <li>參與者把 13 張卡片分成任意數量的群組，數量不限、可以有單張成群。</li>
+        <li>分完後，請參與者<strong>自己替每一群命名</strong>，並說明分類理由。</li>
+        <li>記錄者把「群組名稱」與「分類理由的原句」都抄下來——原句比摘要有價值。</li>
+        <li>每輪結束後把卡片打散復原，換下一位。</li>
+      </ol>
+
+      <h3>主持人守則</h3>
+      <ul>
+        <li><span class="bad">不要</span>解釋卡片是什麼意思。參與者理解錯了，本身就是發現。</li>
+        <li><span class="bad">不要</span>暗示分群數量（「大概分 4 群吧」）。</li>
+        <li><span class="bad">不要</span>在參與者猶豫時幫忙決定。</li>
+        <li><span class="good">要</span>問：「你為什麼把這兩張放一起？」「這張你猶豫了一下，在想什麼？」</li>
+        <li><span class="good">要</span>記錄猶豫的卡片——猶豫本身就是訊號。</li>
+      </ul>
+
+      <h3>記錄表格式</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>參與者</th><th>群組名稱</th><th>包含卡片</th><th>分類理由（原句）</th></tr></thead>
+          <tbody>
+            <tr><td>P1（店長）</td><td>每天要看的</td><td>訂單管理、物流資訊、退貨處理</td><td>「這三個是我每天早上第一件事會看的。」</td></tr>
+            <tr><td>P1（店長）</td><td>商品相關</td><td>產品管理、庫存管理、促銷活動設置</td><td>「上架跟補貨我通常一起做。」</td></tr>
+            <tr><td>P2（客服）</td><td>…</td><td>…</td><td>…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><strong>交件：</strong>每位參與者一份分群結果截圖 + 一份彙整記錄表。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 03</p>
+      <h2>封閉式卡片分類</h2>
+      <div class="meta"><span class="chip">18 分鐘</span><span class="chip">跨組驗證</span><span class="chip">驗證</span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>把開放式的結果收斂成一套分類草案，再跑一次驗證，看哪些卡片放不進去。</p>
+
+      <h3>任務</h3>
+      <ol>
+        <li>綜合開放式結果，訂出 4–5 個分類名稱。建議直接<strong>採用參與者用過的詞</strong>，不要自己重新發明。</li>
+        <li><strong>去找隔壁組借 1 個人</strong>當參與者，請他把 13 張卡片放進這些分類。一定要找組外的人——組內成員已經看過整個討論過程，測不出東西。</li>
+        <li>記錄：哪些卡片<strong>立刻就放</strong>、哪些<strong>猶豫超過 5 秒</strong>、哪些<strong>參與者說「哪一個都可以」或「都不對」</strong>。</li>
+      </ol>
+
+      <h3>參考分類草案（可以不採用）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分類</th><th>可能包含</th></tr></thead>
+          <tbody>
+            <tr><td>訂單處理</td><td>訂單管理、支付處理、物流資訊、退貨處理</td></tr>
+            <tr><td>商品資訊</td><td>產品管理、庫存管理</td></tr>
+            <tr><td>客戶關係</td><td>用戶管理、客戶服務、用戶反饋</td></tr>
+            <tr><td>行銷與數據</td><td>促銷活動設置、報告和分析</td></tr>
+            <tr><td>系統設定</td><td>站點設置、安全設置</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <strong>注意：</strong>上面這組是常見答案，不是標準答案。如果你的開放式結果跟它不一樣，<span class="bad">請採用你的結果</span>——研究資料優先於範例。
+      </div>
+
+      <div class="callout"><strong>交件：</strong>封閉式分類結果 + 一份「難以歸類卡片」清單，每張註明參與者當下說了什麼。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex4">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 04</p>
+      <h2>分析結果並畫出 IA 草圖</h2>
+      <div class="meta"><span class="chip">22 分鐘</span><span class="chip">全組</span><span class="chip">產出</span></div>
+    </div>
+    <div class="exercise-body">
+      <p><strong>目標：</strong>把分類結果變成一張可以拿去畫 Wireframe 的資訊架構圖。</p>
+
+      <h3>Step 1 · 統計共識度</h3>
+      <p>對每一張卡片，算出「被放進最多人選擇的那個分類」的比例：</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>共識度</th><th>判讀</th><th>處理方式</th></tr></thead>
+          <tbody>
+            <tr><td>高 · 80%↑</td><td>使用者認知一致。</td><td>直接採用。</td></tr>
+            <tr><td>中 · 50–80%</td><td>大致合理，分界模糊。</td><td>檢查命名，或考慮合併相鄰分類。</td></tr>
+            <tr><td>低 · 50%↓</td><td>沒有共同認知。</td><td>命名重寫，或用多重層級同時掛兩處。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Step 2 · 處理分歧卡片</h3>
+      <p>分歧的卡片是這個練習<strong>最有價值的產出</strong>。針對每一張，判斷屬於哪一種狀況：</p>
+      <ul>
+        <li><strong>命名不清：</strong>例如「站點設置」到底包含什麼，沒人說得準 → 改名或拆開。</li>
+        <li><strong>本來就跨分類：</strong>例如「支付處理」既屬於訂單也屬於系統設定 → 用多重層級，兩邊都掛。</li>
+        <li><strong>沒有既定認知：</strong>例如「用戶反饋」跟「客戶服務」的差別 → 需要在介面上補說明，或合併。</li>
+      </ul>
+
+      <h3>Step 3 · 畫出 IA 草圖</h3>
+      <p>格式參考如下，三件事一定要標注：核心路徑上色、交叉連結用虛線、例外狀態寫成註解。</p>
+      <div class="tree"><span class="n1">後台首頁</span>（今日概況）
+├── <span class="n1">訂單處理</span>　　<span class="cm">← 核心路徑</span>
+│   ├── 訂單管理　　<span class="cm">（含：無訂單的空狀態）</span>
+│   ├── 支付處理　　<span class="cm">⇠ 亦連結至「系統設定」</span>
+│   ├── 物流資訊
+│   └── 退貨處理
+├── <span class="n1">商品資訊</span>
+│   ├── 產品管理
+│   └── 庫存管理　　<span class="cm">（含：低庫存警示）</span>
+├── <span class="n1">客戶關係</span>
+│   ├── 用戶管理
+│   ├── 客戶服務
+│   └── 用戶反饋
+├── <span class="n1">行銷與數據</span>
+│   ├── 促銷活動設置
+│   └── 報告和分析
+└── <span class="n1">系統設定</span>
+    ├── 站點設置
+    └── 安全設置　　<span class="cm">（含：權限不足的錯誤狀態）</span></div>
+
+      <h3>Step 4 · 組內互評</h3>
+      <ul class="check">
+        <li>核心路徑有沒有被標出來？只有 1 條還是 3 條以上？</li>
+        <li>每個分類名稱，是使用者說過的詞，還是我們自己發明的？</li>
+        <li>分歧卡片都有寫明處理方式與理由嗎？</li>
+        <li>有沒有任何例外狀態（空資料、錯誤、權限）被標注？</li>
+      </ul>
+
+      <div class="callout"><strong>交件：</strong>FigJam 上一張 IA 草圖 + 共識度統計表 + 分歧卡片處理說明。<br><strong>成果分享（另計 15 分鐘）：</strong>四階段結束後，各組 3 分鐘，只講三件事——你們的分類方案、最分歧的那張卡片、你們怎麼處理它。</div>
+    </div>
+  </div>
+
+  <!-- ===== 回家作業 ===== -->
+  <div class="band">
+    <span class="band-tag home">回家作業 · 作業 4</span>
+    <h2>網站 Sitemap 分析</h2>
+  </div>
+  <p class="band-note">個人作業。先看影片，再拆解一個真實網站，最後回頭修正自己的專題 IA。</p>
+
+  <div class="exercise home" id="hw">
+    <div class="exercise-head">
+      <p class="exercise-tag">Homework</p>
+      <h2>用三個 IA 模型逆向拆解一個網站</h2>
+      <div class="meta"><span class="chip">約 3 小時</span><span class="chip">個人</span><span class="chip">Figma / FigJam</span></div>
+    </div>
+    <div class="exercise-body">
+
+      <h3>Step 0 · 先看影片</h3>
+      <div class="callout green">
+        <strong>指定影片：</strong>Information Architecture — 3 Key Models（NN/g，約 5 分鐘）<br>
+        <a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">https://www.youtube.com/watch?v=v39z0JPeIc8</a><br><br>
+        看完後用一句話寫下：底層 IA 結構、分類法（Taxonomy）、導覽（Navigation）這三者的差別是什麼。這句話會用在 Step 2。
+      </div>
+
+      <h3>Step 1 · 選一個網站並畫出 Sitemap</h3>
+      <ul>
+        <li>選一個你熟悉、且結構有一定複雜度的網站：電商、政府機關、大學、新聞媒體、銀行皆可。</li>
+        <li>避免選首頁只有 5 個連結的形象官網——太簡單看不出問題。</li>
+        <li>從首頁開始，逐層點開，畫出 <strong>至少 3 層、20 個節點</strong> 的 Sitemap。</li>
+        <li>不要抄它的 <code>sitemap.xml</code>。那是給搜尋引擎看的，不是使用者實際看到的結構。</li>
+      </ul>
+      <div class="callout warn">
+        <strong>提醒：</strong>先畫<strong>你實際點得到、觀察得到的結構</strong>，這是你的一手資料。接著再用另一種顏色或註解，標出你<strong>推測的底層 IA 與看不見的規則</strong>（例如「這兩個分類後台應該共用同一組標籤」）。<span class="bad">觀察與推測一定要分開標</span>——這正是三個模型要練的事：導覽是看得到的，底層結構與分類法多半要靠推論。看不到的頁面（例如只有登入後才有的區域）用虛線框標注「需登入」。
+      </div>
+
+      <h3>Step 2 · 用三個模型分別標注</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>模型</th><th>你要找出什麼</th><th>在 Sitemap 上怎麼標</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>① 底層 IA 結構</td>
+              <td>內容真正的層級與從屬關係。哪些是主分類、哪些是子分類、哪些頁面同時掛在多處。</td>
+              <td>就是你畫的樹狀圖本身。跨分類的節點用虛線畫出第二條線。</td>
+            </tr>
+            <tr>
+              <td>② 分類法 Taxonomy</td>
+              <td>分類與命名規則：有哪些篩選器（facet）、標籤、排序選項、屬性值、受控詞彙。台前的篩選器與幕後的 metadata 都算。</td>
+              <td>在對應的清單頁旁邊列出所有篩選維度，例如「價格帶／品牌／顏色／評分」。</td>
+            </tr>
+            <tr>
+              <td>③ 導覽 Navigation</td>
+              <td>主選單、側欄、麵包屑、頁尾各露出了什麼。哪些結構<strong>存在但沒有被導覽露出</strong>。</td>
+              <td>主選單有的節點塗一個顏色；只能靠搜尋或連結抵達的節點塗另一個顏色。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <strong>最有價值的觀察通常在這裡：</strong>結構上存在、但導覽完全沒有露出的節點。問自己一句「為什麼它被藏起來？是刻意的取捨，還是遺漏？」
+      </div>
+
+      <h3>Step 3 · 找出 3 個 IA 問題並提出改善建議</h3>
+      <p>每個問題要寫成三段：<strong>觀察 → 對應原則 → 改善建議</strong>。原則請引用講義中的名詞（資訊氣味、可尋性／可發現性、扁平 vs 深層、多重層級、4 個 S、常見 IA 錯誤…）。</p>
+      <div class="callout">
+        <strong>寫法範例：</strong><br>
+        <strong>觀察：</strong>主選單有「服務」與「解決方案」兩個項目，點開後有 4 個子項目完全重複。<br>
+        <strong>對應原則：</strong>分類語意重疊（常見 IA 錯誤）＋ 資訊氣味弱——使用者無法從標籤判斷差別。<br>
+        <strong>建議：</strong>合併為單一入口「服務項目」，並在子層用「依產業」「依需求」兩種篩選維度取代兩個平行分類。
+      </div>
+      <div class="callout warn">
+        <strong>要避免的寫法：</strong><span class="bad">「選單太亂，建議重新設計。」</span>——沒有具體觀察、沒有對應原則、沒有可執行的建議，三項都不及格。
+      </div>
+
+      <h3>Step 4 · 回到自己的專題</h3>
+      <p>把分析別人網站時看到的東西，用在自己的專題上。這一步才是這份作業真正的目的。</p>
+      <ol>
+        <li><strong>功能清單：</strong>依講義第 6 節的四欄格式完成（功能／對應需求／證據來源／優先級）。至少 15 項，並標出核心／次要／邊緣／待驗證。</li>
+        <li><strong>IA 圖：</strong>依功能清單畫出專題的資訊架構圖，至少 3 層。三件事必須標注：核心路徑上色、交叉連結虛線、例外狀態註解。</li>
+        <li><strong>一段自評：</strong>寫 3–5 句，說明你在分析別人網站時發現的哪個問題，自己的專題也有，你打算怎麼改。</li>
+      </ol>
+
+      <h3>可以用 AI 幫忙的部分</h3>
+      <p>AI 適合幫你檢查與整理，不適合替你觀察。以下提示詞在你已經畫完 Sitemap 之後使用：</p>
+      <div class="prompt">以下是我從 [網站名稱] 逆向拆解出來的 Sitemap 結構：
+[貼上你的樹狀結構]
+
+以下是我觀察到的篩選器與導覽露出狀況：
+[貼上分類法與導覽的觀察]
+
+請幫我檢查：
+1. 哪些分類名稱彼此語意重疊，使用者可能分不出差別？
+2. 哪些分類的層級明顯過深或過淺？
+3. 依 NN/g 的 4 個 S（Specific / Sincere / Substantial / Succinct），
+   哪些導覽標籤的資訊氣味偏弱？各給一個改寫版本。
+4. 我列出的 3 個問題中，哪一個的證據最薄弱、需要補觀察？
+
+限制：只根據我提供的結構分析，不要自行查詢或編造這個網站的其他頁面。
+請把「從我的資料能直接看出的」與「你的推測」分開列。</div>
+      <div class="callout warn">
+        <strong>使用界線：</strong>不要讓 AI 直接生成 Sitemap。它沒有真的看過那個網站，會編出不存在的頁面。<span class="bad">Sitemap 必須是你自己點出來的。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 繳交 ===== -->
+  <div class="band">
+    <span class="band-tag home">繳交</span>
+    <h2>繳交清單與評分重點</h2>
+  </div>
+
+  <div class="exercise home" id="submit">
+    <div class="exercise-head">
+      <p class="exercise-tag">Submission</p>
+      <h2>對應階段作業 4：資訊架構圖</h2>
+      <div class="meta"><span class="chip">Figma 連結 1 份</span><span class="chip">下次上課抽點分享</span></div>
+    </div>
+    <div class="exercise-body">
+      <h3>繳交清單</h3>
+      <ul class="check">
+        <li>影片心得一句話（三個模型的差別）。</li>
+        <li>目標網站 Sitemap：至少 3 層、20 個節點，已用顏色區分導覽露出狀況。</li>
+        <li>分類法觀察：列出主要清單頁的篩選維度。</li>
+        <li>3 個 IA 問題，每個含「觀察 → 對應原則 → 改善建議」三段。</li>
+        <li>專題功能清單：至少 15 項，四欄完整，標出優先級。</li>
+        <li>專題 IA 圖：至少 3 層，含核心路徑上色、交叉連結、例外狀態註解。</li>
+        <li>自評 3–5 句。</li>
+      </ul>
+
+      <h3>評分重點與配分</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>面向</th><th>配分</th><th>看什麼</th><th>不及格的樣子</th></tr></thead>
+          <tbody>
+            <tr><td>觀察的具體度</td><td>20</td><td>問題描述指得出「哪一頁、哪個標籤、哪一層」。</td><td>「選單很亂」「使用者體驗不好」。</td></tr>
+            <tr><td>原則的運用</td><td>20</td><td>把觀察對應到講義中的具體概念，而不是憑直覺說好壞。</td><td>沒有引用任何原則名稱。</td></tr>
+            <tr><td>建議的可執行性</td><td>15</td><td>改善建議能直接畫成 Wireframe。</td><td>「建議優化導覽」。</td></tr>
+            <tr><td>功能清單的證據</td><td>15</td><td>每項功能都有來源；待驗證項目誠實標出。</td><td>證據欄空白，或全部標成「核心」。</td></tr>
+            <tr><td>IA 圖的完整度</td><td>20</td><td>核心路徑上色、交叉連結、例外狀態三項都有標注。</td><td>只有樹狀圖，三項都沒標。</td></tr>
+            <tr><td>回饋迴路</td><td>10</td><td>分析別人網站的發現，真的用在自己的專題上。</td><td>自評與前面的分析毫無關聯。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.9rem;color:var(--muted)">Sitemap 若未達 3 層 20 個節點、或功能清單少於 15 項，該項以未完成計。</p>
+
+      <div class="callout green">
+        <strong>下一步：</strong>這份 IA 圖會直接成為 Unit 06「Flowchart 到 Wireframe」的輸入。結構標得越清楚，下一堂課畫 Flow 的時候越省力。
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-nav">
+    <a href="slides.html">回到簡報</a>
+    <a href="article.html">回到講義</a>
+    <a href="article.html#s7">講義：卡片分類法</a>
+    <a href="article.html#s12">講義：IA 圖製作</a>
+    <a href="https://www.figma.com/board/KtPtouN73pY8SBP90Uz1j2" target="_blank" rel="noopener">課堂練習板</a>
+    <a href="https://www.figma.com/board/K0a0hIcnHdfyH09bRjhIeW/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E" target="_blank" rel="noopener">FigJam 範例 1</a>
+    <a href="https://www.figma.com/board/Dx2liUBXBgKuXg8psCjN4a/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E-2" target="_blank" rel="noopener">FigJam 範例 2</a>
+    <a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">指定影片</a>
+    <a href="../index.html">回到課程總覽</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>產品結構與資訊架構 · 完整教材 · Unit 05</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+.callout.warn {
+  background: rgba(194,65,12,.06);
+  border-color: rgba(194,65,12,.2);
+  border-left-color: var(--accent3);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 { margin: 0 0 8px; font-size: 1rem; }
+.card p { margin: 0; font-size: .93rem; color: var(--muted); line-height: 1.65; }
+
+.tree {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin: 22px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .82rem;
+  line-height: 1.9;
+  color: #2c2c2e;
+  white-space: pre;
+  overflow-x: auto;
+}
+.tree .n1 { color: var(--accent); font-weight: 700; }
+.tree .cm { color: var(--muted); }
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">什麼是資訊架構？</a></li>
+    <li><a href="#s2">IA、導覽與 Sitemap</a></li>
+    <li><a href="#s3">使用者怎麼找資訊</a></li>
+    <li><a href="#s4">組織結構的取捨</a></li>
+    <li><a href="#s5">導覽設計</a></li>
+    <li><a href="#s6">從洞察到功能清單</a></li>
+    <li><a href="#s7">Functional Map</a></li>
+    <li><a href="#s8">卡片分類法</a></li>
+    <li><a href="#s9">樹狀測試</a></li>
+    <li><a href="#s10">內容模型</a></li>
+    <li><a href="#s11">命名與標籤</a></li>
+    <li><a href="#s12">IA 圖製作</a></li>
+    <li><a href="#s13">課堂練習與作業</a></li>
+    <li><a href="#s14">AI 協作提示詞</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="slides.html">回到投影片</a>
+  <span class="unit-pill">Unit 05</span>
+</div>
+
+<div class="hero">
+  <p class="overline">User Research · 完整教材</p>
+  <h1>產品結構與資訊架構</h1>
+  <p class="lead">研究資料如果沒有整理成結構，就無法進入介面設計。這份講義會帶你把 Persona、競品分析與旅程地圖轉成功能清單，理解資訊架構如何決定內容分組、命名與導覽層級，並用卡片分類法找出使用者真正的心智模型，最後產出可以支撐 Flowchart 與 Wireframe 的 IA 圖。</p>
+  <div class="meta">
+    <span>閱讀時間約 20 分鐘</span><span class="d"></span>
+    <span>搭配 Unit 05 投影片</span><span class="d"></span>
+    <span>含課堂練習、回家作業與 AI 提示詞</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">什麼是資訊架構？</a></li>
+    <li><a href="#s2">IA、導覽與 Sitemap 的差異</a></li>
+    <li><a href="#s3">使用者怎麼找資訊</a></li>
+    <li><a href="#s4">組織結構的取捨</a></li>
+    <li><a href="#s5">導覽設計：把 IA 變成看得到的東西</a></li>
+    <li><a href="#s6">從研究洞察到功能清單</a></li>
+    <li><a href="#s7">Functional Map：核心路徑與邊緣案例</a></li>
+    <li><a href="#s8">卡片分類法</a></li>
+    <li><a href="#s9">樹狀測試：驗證你的分類</a></li>
+    <li><a href="#s10">內容模型</a></li>
+    <li><a href="#s11">命名與標籤：4 個 S</a></li>
+    <li><a href="#s12">IA 圖與 Sitemap 製作</a></li>
+    <li><a href="#s13">課堂練習與回家作業</a></li>
+    <li><a href="#s14">AI 協作提示詞</a></li>
+  </ol>
+</div>
+
+<div class="article">
+
+  <section class="section" id="s1">
+    <p class="sec-num">01</p>
+    <h2 class="sec-title">什麼是資訊架構？</h2>
+    <p>資訊架構（Information Architecture, IA）是決定<strong>內容與功能如何被組織、命名與連結</strong>的實務。它是產品的資訊骨幹：使用者看不到它，但每一次「我該點哪裡」的判斷，都被它決定。</p>
+    <p>做 IA 的時候，你其實在回答四個問題：</p>
+    <ul class="bullets">
+      <li><strong>組織：</strong>這些內容要分成哪幾群？依主題、依任務、依對象、還是依時間？</li>
+      <li><strong>命名：</strong>每一群要叫什麼？這個名字使用者看得懂嗎？</li>
+      <li><strong>關係：</strong>誰是誰的上層？哪些內容需要跨分類交叉連結？</li>
+      <li><strong>尋找：</strong>使用者要靠導覽、搜尋、篩選還是推薦抵達？</li>
+    </ul>
+    <p>對課程專題來說，IA 的價值很直接：<em>先把結構確定，Wireframe 才不用一直重畫</em>。每次改導覽、改分類、改頁面關係，畫面都得跟著改一次。這也是為什麼 IA 排在 Unit 06 的 Flowchart 與 Wireframe 之前。</p>
+    <div class="callout">
+      <strong>這堂課在整條研究鏈的位置：</strong><br>
+      Unit 02 訪談洞察 → Unit 03 競品分析與 Persona → Unit 04 用戶旅程地圖 → <span class="hl">Unit 05 功能清單與資訊架構</span> → Unit 06–07 Flowchart 與 Wireframe。
+    </div>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">02</p>
+    <h2 class="sec-title">IA、導覽與 Sitemap 的差異</h2>
+    <p>這三個詞在討論中最常被混用，但它們處在不同層次。搞混會讓團隊討論一直卡住——有人在講後台的資料結構，有人在講首頁選單要放幾個字。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>名詞</th><th>它是什麼</th><th>位置</th><th>典型產出</th></tr></thead>
+        <tbody>
+          <tr><td>資訊架構 IA</td><td>底層的內容組織邏輯與命名規則，是持續維護的一整套實務。</td><td>看不見，在結構層。</td><td>分類原則、命名規範、內容模型。</td></tr>
+          <tr><td>導覽 Navigation</td><td>把 IA 呈現給使用者的一組 UI 元件，目標是幫使用者找到內容並鼓勵行動。</td><td>看得見，在介面層。</td><td>主選單、側欄、麵包屑、頁尾。</td></tr>
+          <tr><td>網站地圖 Sitemap</td><td>用節點與線條把結構畫出來的視覺文件，是 IA 的一個切片。</td><td>設計文件，不是產品。</td><td>Figma／FigJam 結構圖。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>NN/g 說得很直接：<strong>A sitemap is only one part of the site's information architecture.</strong> 畫完一張漂亮的 Sitemap，不代表 IA 做完了——Sitemap 刻意省略了命名規範、UI 元件（搜尋、麵包屑、分頁）與後台的分類規則。</p>
+
+    <h3>資訊架構的三個關鍵模型</h3>
+    <p>要特別注意：<strong>Sitemap 不是這三個模型之一</strong>。NN/g 影片講的三個模型是<em>底層 IA 結構</em>、<em>分類法 Taxonomy</em> 與<em>導覽 Navigation</em>——它們是描述同一個產品結構的三種互補視角，Sitemap 只是把其中的底層結構畫出來的一張文件。這三個模型是回家作業的分析框架，請務必看懂：</p>
+    <div class="cards">
+      <div class="card">
+        <h3>① 底層 IA 結構</h3>
+        <p>內容之間真正的層級與關係，是整個產品的資訊骨幹。使用者接觸不到它，但每個導覽決策都源自它。</p>
+      </div>
+      <div class="card">
+        <h3>② 分類法 Taxonomy</h3>
+        <p>一套正式的分類與命名規則：類別、標籤、屬性、受控詞彙與 facet（可組合的篩選維度）。它讓內容能被一致地檢索與重組。它有幕後的一面（後台 metadata），也有台前的一面（篩選器、標籤列）。</p>
+      </div>
+      <div class="card">
+        <h3>③ 導覽 Navigation</h3>
+        <p>使用者實際接觸的 UI 元件。它是 IA 的呈現方式，而且只會露出結構的一部分——沒露出的不代表不存在。</p>
+      </div>
+      <div class="card">
+        <h3>為什麼要分開看</h3>
+        <p>同一套底層結構可以有很多種導覽呈現；同一個導覽項目背後可能對應好幾組分類法規則。分開看，才知道問題出在哪一層。</p>
+      </div>
+    </div>
+    <div class="callout green">
+      <strong>指定影片：</strong>Information Architecture — 3 Key Models（NN/g，約 5 分鐘）。<a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">https://www.youtube.com/watch?v=v39z0JPeIc8</a><br>
+      回家作業會要求你用這三個模型去拆解一個真實網站，請先看完再動手。
+    </div>
+
+    <h3>一個具體例子</h3>
+    <p>以電商網站為例：商品其實同時屬於「女裝 → 上衣 → 針織衫」（底層結構），也帶有「顏色＝米白、材質＝羊毛、季節＝秋冬、價格帶＝1000–2000」等屬性（分類法）。而主選單上只露出「女裝」「男裝」「配件」三個入口（導覽），左側篩選器則是分類法的可視化。三層都在，只是使用者只看得到後兩層的一部分。</p>
+
+    <h3>分類法為什麼能補 Sitemap 的不足</h3>
+    <p>Sitemap 是一棵樹，一個節點只能長在一個地方。但真實世界的內容常常同時屬於好幾個維度——一件商品同時是「羊毛的」「秋冬的」「米白的」「1000–2000 元的」。這些維度沒辦法用一棵樹表達，這就是分類法登場的時機。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>元素</th><th>意思</th><th>電商的例子</th></tr></thead>
+        <tbody>
+          <tr><td>類別</td><td>樹狀的階層分類，通常對應導覽。</td><td>女裝 → 上衣 → 針織衫</td></tr>
+          <tr><td>Facet</td><td>可自由組合的篩選維度，彼此獨立。</td><td>顏色 × 材質 × 價格帶 × 尺寸</td></tr>
+          <tr><td>受控詞彙</td><td>某個欄位只能填的固定選項清單，避免同義詞亂長。</td><td>顏色只能是「米白／杏色／象牙白」擇一，不能自由填寫</td></tr>
+          <tr><td>同義詞對照</td><td>把使用者的說法對應到系統的正式用語。</td><td>使用者搜「毛衣」→ 對應到「針織衫」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">
+      <strong>實務判斷：</strong>當你發現「這個東西該放哪一類」怎麼想都不對，通常代表它不該用階層解決，而該用 facet。與其在樹上多開一個分類，不如加一個篩選維度。
+    </div>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">03</p>
+    <h2 class="sec-title">使用者怎麼找資訊</h2>
+
+    <h3>可尋性 vs. 可發現性</h3>
+    <p>這兩件事需要完全不同的設計手法，混在一起談會做出錯的決定。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>面向</th><th>可尋性 Findability</th><th>可發現性 Discoverability</th></tr></thead>
+        <tbody>
+          <tr><td>使用者狀態</td><td>已經知道自己要什麼。</td><td>不知道這個功能／內容存在。</td></tr>
+          <tr><td>對應設計</td><td>清楚的分類與標籤、搜尋、篩選、麵包屑。</td><td>首頁曝光、引導、空狀態提示、推薦、新功能提示。</td></tr>
+          <tr><td>檢驗方式</td><td>樹狀測試、任務式可用性測試。</td><td>觀察是否從來沒有人點過那個入口。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>常見誤判：</strong>「使用者找不到 → 加一個搜尋框就好。」如果問題是可發現性，加搜尋框完全沒用——使用者根本不知道要搜什麼關鍵字。
+    </div>
+
+    <h3>資訊氣味（Information Scent）</h3>
+    <p>使用者不會讀完整頁再決定，而是像動物覓食一樣「順著氣味走」：從連結文字判斷「點下去會不會離我的目標更近」。</p>
+    <ul class="bullets">
+      <li><strong>氣味強：</strong>連結文字直接對應使用者心中的目標詞，例如「退貨與換貨」。</li>
+      <li><strong>氣味弱：</strong>模糊或行銷式用語，例如「服務中心」「了解更多」「探索」。</li>
+      <li><strong>氣味斷掉：</strong>點進去的內容與連結文字不符，使用者會退回，並且從此不信任這一區。</li>
+    </ul>
+    <p>這帶出一個重要的實務含意：<strong>導覽的用字不是文案問題，是架構問題</strong>。命名錯了，結構再乾淨也沒有用。</p>
+
+    <h3>「三次點擊原則」是假的</h3>
+    <p>「任何頁面都不應該超過三次點擊才能到達」是流傳最廣的 IA 迷思。研究顯示，使用者放棄與否跟點擊次數沒有直接關係——只要每一步都確定自己走對方向，多點幾次也願意。</p>
+    <p>真正要避免的不是「點很多次」，而是<strong>「點下去才發現走錯，要退回重來」</strong>。為了湊足三次而硬把分類壓扁，反而會造出一個選項爆炸、無法掃視的主選單。</p>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">04</p>
+    <h2 class="sec-title">組織結構的取捨</h2>
+
+    <h3>扁平 vs. 深層</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>結構</th><th>特徵</th><th>優點</th><th>風險</th></tr></thead>
+        <tbody>
+          <tr><td>扁平 Flat</td><td>層級少（1–2 層），每層選項多。</td><td>點擊次數少，內容一眼看得到，容易被發現。</td><td>單層選項爆炸、掃視成本高、難以擴充。</td></tr>
+          <tr><td>深層 Deep</td><td>層級多（3 層以上），每層選項少。</td><td>每個決策都簡單，分類乾淨，好擴充。</td><td>路徑長，中間層命名不清就會迷路。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>多數產品的答案是中間值：用<strong>巨型選單（Mega Menu）</strong>或<strong>左側垂直導覽</strong>，把深層結構在一個畫面裡攤開，既保有分類邏輯，又維持可掃視性。</p>
+
+    <h3>多重層級（Polyhierarchy）</h3>
+    <p>不是每個項目都只能屬於一個分類。「無線耳機」可以同時出現在「音訊配件」與「手機周邊」底下；「退貨政策」可以同時掛在「客服」與「訂單」之下。這種交叉列出的做法叫多重層級，能明顯提升模糊項目的可尋性。</p>
+    <div class="callout">
+      <strong>判斷時機：</strong>當卡片分類的結果顯示某張卡片<span class="hl">被不同人放進不同群組</span>，而且雙方的理由都合理時，那就是多重層級的訊號——不要硬選一邊。
+    </div>
+
+    <h3>邊緣分類項目</h3>
+    <p>總會有幾個項目哪一群都塞不進去。三種處理方式：一是<strong>放進最接近的分類並用交叉連結補強</strong>；二是<strong>調整分類定義</strong>讓它有地方去；三是誠實建立一個「其他」——但「其他」超過 3 項就代表你的分類邏輯需要重想。</p>
+
+    <h3>常見的 IA 錯誤</h3>
+    <ul class="bullets">
+      <li>用<span class="bad">公司內部組織架構</span>當分類，而不是使用者的心智模型。</li>
+      <li>用<span class="bad">受眾別</span>切主導覽（學生／教師／企業），使用者常不確定自己算哪一種。</li>
+      <li>分類名稱是<span class="bad">行銷詞或自創詞</span>，使用者從來沒聽過。</li>
+      <li>主導覽塞了<span class="bad">十幾個項目</span>，什麼都重要等於什麼都不重要。</li>
+      <li>分類彼此<span class="bad">語意重疊</span>（「服務」「解決方案」「產品」），使用者無法判斷差別。</li>
+      <li>只設計<span class="bad">理想路徑</span>，沒想過搜尋無結果、權限不足、資料為空的狀況。</li>
+    </ul>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">05</p>
+    <h2 class="sec-title">導覽設計：把 IA 變成看得到的東西</h2>
+    <p>IA 決定結構，導覽決定使用者看到結構的哪一部分、以什麼形式看到。這一節談的是把架構落地成介面時的常見選擇——不需要在 Unit 05 全部做完，但畫 Wireframe 之前你必須知道有哪些選項。</p>
+
+    <h3>導覽不是只有主選單</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>類型</th><th>作用</th><th>常見位置</th></tr></thead>
+        <tbody>
+          <tr><td>全站導覽</td><td>露出主要分類，出現在每一頁，是使用者的定位基準。</td><td>頂部主選單、左側垂直導覽。</td></tr>
+          <tr><td>區域導覽</td><td>在使用者目前所在的區塊內，展示同層級的其他選項。</td><td>側欄子選單、分頁標籤。</td></tr>
+          <tr><td>工具導覽</td><td>與內容分類無關、但隨時要能用到的功能。</td><td>登入、購物車、語言切換、搜尋、客服。</td></tr>
+          <tr><td>情境導覽</td><td>依當下內容推薦的相關連結。</td><td>相關文章、你可能也喜歡、下一步。</td></tr>
+          <tr><td>頁尾導覽</td><td>低頻但必要的項目，以及使用者滑到底時的下一步。</td><td>條款、關於、聯絡、網站地圖。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>學生專題最常見的狀況，是只設計了全站導覽，然後在第二層之後就沒有任何導覽——使用者進去之後不知道旁邊還有什麼，也不知道怎麼回去。</p>
+
+    <h3>「有搜尋就不需要導覽」是錯的</h3>
+    <p>搜尋只服務「已經知道要找什麼、而且說得出關鍵字」的使用者。導覽則同時做兩件搜尋做不到的事：</p>
+    <ul class="bullets">
+      <li><strong>告訴使用者這裡有什麼。</strong>沒有導覽，使用者無從得知產品的範圍與能力——這是可發現性的問題。</li>
+      <li><strong>告訴使用者自己在哪裡。</strong>搜尋結果頁是一個沒有上下文的孤島，導覽提供的是位置感。</li>
+    </ul>
+    <p>所以<strong>不要廢除全站導覽</strong>。搜尋與導覽是互補的，不是替代關係。</p>
+
+    <h3>尋路與定向（Wayfinding）</h3>
+    <p>使用者在任何一頁都應該能回答三個問題：<em>我在哪裡</em>、<em>我還可以去哪裡</em>、<em>我怎麼回去</em>。</p>
+    <ul class="bullets">
+      <li><strong>「你在此處」指示：</strong>當前所在的導覽項目要有明顯的視覺標示。這是最常被忘記、成本卻最低的一件事。</li>
+      <li><strong>麵包屑：</strong>顯示從首頁到當前頁的層級路徑。層級 3 層以上、或使用者常從搜尋引擎直接進入內頁時特別必要。麵包屑是<strong>輔助</strong>，不能拿來取代主導覽。</li>
+      <li><strong>區域導覽：</strong>讓使用者看到「同一區還有哪些兄弟項目」，這是深層結構能不能被接受的關鍵。</li>
+    </ul>
+
+    <h3>桌機端常見模式</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>模式</th><th>什麼時候用</th><th>要注意</th></tr></thead>
+        <tbody>
+          <tr><td>巨型選單 Mega Menu</td><td>分類多、階層深，想讓使用者一眼看完全部選項。</td><td>要分組、要有標題，不能只是一長串連結。</td></tr>
+          <tr><td>左側垂直導覽</td><td>分類數量多或名稱長、未來還會增加。後台系統很常用。</td><td>佔水平空間；行動端需另一套方案。</td></tr>
+          <tr><td>置頂標頭</td><td>長頁面，希望導覽隨時可用。</td><td>高度要壓低，不要蓋掉太多內容。</td></tr>
+          <tr><td>頁尾</td><td>低頻但必要的連結；也是滑到底的使用者的下一步。</td><td>不是垃圾桶，仍要分組與命名。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <strong>桌機端要小心漢堡選單。</strong>研究顯示，把導覽藏在漢堡圖示後面會明顯降低使用率、拉長任務時間，也降低使用者對整體內容的認知。桌機有空間，就把導覽露出來。
+    </div>
+
+    <h3>行動端常見模式</h3>
+    <ul class="bullets">
+      <li><strong>底部標籤列（Tab Bar）：</strong>核心路徑 3–5 個時最有效，永遠可見、可發現性最高。</li>
+      <li><strong>漢堡選單：</strong>行動端空間有限，是常見的妥協——但只適合放次要與工具類項目，不要把核心路徑藏進去。</li>
+      <li><strong>手風琴（Accordion）子導覽：</strong>展開／收合多層分類。圖示的選擇會影響使用者知不知道它可以展開，用「＋／－」或「∨」這類明確的意象符號，不要只用箭頭。</li>
+    </ul>
+    <div class="callout">
+      <strong>對你的專題的意思：</strong>IA 圖畫完之後，先問一句「這個結構在手機上怎麼呈現？」如果答案是「全部塞進漢堡選單」，那通常代表第一層分類太多，該回頭調整結構，而不是靠導覽元件硬撐。
+    </div>
+  </section>
+
+  <section class="section" id="s6">
+    <p class="sec-num">06</p>
+    <h2 class="sec-title">從研究洞察到功能清單</h2>
+    <p>功能清單是 IA 的原料。做法的核心原則只有一句：<strong>每一個功能都要能回答「它服務誰的哪個需求，證據在哪裡」</strong>。沒有證據的功能不是不能做，但要誠實標成「待驗證」，不要偷偷混進核心功能裡。</p>
+    <ol class="steps">
+      <li><strong>需求：</strong>回到訪談逐字稿與旅程地圖，找出痛點與甜點。</li>
+      <li><strong>功能：</strong>寫成「使用者可以做什麼」，動詞開頭，不要寫成名詞堆疊。</li>
+      <li><strong>證據：</strong>標註來源——第幾位受訪者、哪個競品、旅程地圖的哪個階段。</li>
+      <li><strong>優先級：</strong>核心／次要／邊緣／待驗證，並寫下判斷理由。</li>
+    </ol>
+    <p>以線上課程平台為例，功能清單長這樣（這也是作業 4 的欄位範本）：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>功能</th><th>對應需求</th><th>證據來源</th><th>優先級</th></tr></thead>
+        <tbody>
+          <tr><td>依剩餘時間篩選課程</td><td>下班後只有 20 分鐘，想找當下看得完的內容。</td><td>受訪者 A、C；旅程地圖「挑選」階段痛點。</td><td>核心</td></tr>
+          <tr><td>斷點續播</td><td>通勤中斷後不想重找進度。</td><td>受訪者 B、D；競品 Hahow 已有。</td><td>核心</td></tr>
+          <tr><td>課後提問區</td><td>卡關時找不到人問，只能自己 Google。</td><td>受訪者 A、B、E 皆提到。</td><td>次要</td></tr>
+          <tr><td>學習時數統計</td><td>想知道自己有沒有進步。</td><td>僅受訪者 C 提到一次。</td><td>邊緣</td></tr>
+          <tr><td>社群動態牆</td><td>—</td><td>無訪談證據，來自團隊發想。</td><td>待驗證</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">
+      <strong>檢查方法：</strong>把功能清單念給組員聽，每念一項就問「這是誰說的？」。答不出來的，就移到待驗證區。
+    </div>
+  </section>
+
+  <section class="section" id="s7">
+    <p class="sec-num">07</p>
+    <h2 class="sec-title">Functional Map：核心路徑與邊緣案例</h2>
+    <p>有了功能清單，下一步是依「對主要任務的貢獻」分層，這會直接決定它們在 IA 中的位置。</p>
+    <div class="cards">
+      <div class="card">
+        <h3>核心路徑</h3>
+        <p>Persona 完成主要目標一定會經過的功能。IA 位置：主導覽第一層、首頁明顯入口。數量控制在 3–5 個。</p>
+      </div>
+      <div class="card">
+        <h3>次要功能</h3>
+        <p>支援核心任務，但不是每次都會用到。IA 位置：第二層、情境入口、工具導覽（Utility Navigation）。</p>
+      </div>
+      <div class="card">
+        <h3>邊緣案例</h3>
+        <p>少數情境或例外狀態：錯誤、空資料、權限不足、退款、帳號刪除。需要時才出現，但一定要有位置。</p>
+      </div>
+      <div class="card">
+        <h3>系統邊界</h3>
+        <p>明確寫下「這個版本不做什麼」。沒有邊界的產品結構會無限膨脹，Wireframe 永遠畫不完。</p>
+      </div>
+    </div>
+    <div class="callout warn">
+      <strong>最容易被忽略的一塊：</strong>邊緣案例。這卻是專題講評時最常被問到的地方——「搜尋不到結果的時候畫面長什麼樣？」「還沒有任何資料的新使用者看到什麼？」提前想好，Wireframe 階段會省下大量時間。
+    </div>
+  </section>
+
+  <section class="section" id="s8">
+    <p class="sec-num">08</p>
+    <h2 class="sec-title">卡片分類法</h2>
+    <p>卡片分類法（Card Sorting）是一種 UX 研究技術：讓參與者把寫著內容或功能的卡片，分成他們覺得合理的群組。它最常用在<strong>發想階段</strong>，目的是揭露使用者的心智模型；但它也能用來評估——封閉式與混合式卡片分類，就是拿既有或草案中的分類去測試使用者放不放得進去。</p>
+
+    <h3>它能給你什麼</h3>
+    <ul class="bullets">
+      <li>使用者<strong>自然的分群邏輯</strong>，而不是你以為的邏輯。</li>
+      <li>使用者<strong>實際使用的詞彙</strong>，可以直接拿來當導覽標籤。</li>
+      <li><strong>被反覆放錯位置的項目</strong>——那通常代表命名有問題，或該項目本來就跨分類。</li>
+      <li>成本低：不需要做出任何畫面，早期就能執行。</li>
+    </ul>
+
+    <h3>兩種類型</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>類型</th><th>做法</th><th>回答的問題</th><th>用在什麼時候</th></tr></thead>
+        <tbody>
+          <tr><td>開放式 Open</td><td>參與者自由分群，並自己替每一群命名。</td><td>使用者怎麼看這些內容？他們會怎麼稱呼？</td><td>從零建立 IA，還沒有分類方案。</td></tr>
+          <tr><td>封閉式 Closed</td><td>你先給定分類，參與者把卡片放進去。</td><td>我這套分類，使用者放得進去嗎？</td><td>已有分類草案，要驗證或改版既有 IA。</td></tr>
+          <tr><td>混合式 Hybrid</td><td>給定分類，但允許參與者新增分類。</td><td>既有分類夠不夠？少了什麼？</td><td>改版時想同時驗證與發現。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>四個步驟</h3>
+    <ol class="steps">
+      <li><strong>準備卡片。</strong>一張卡片一個內容或功能。用使用者看得懂的詞，避免內部術語。建議 30–60 張，課堂練習用 13 張即可。</li>
+      <li><strong>招募參與者。</strong>找目標使用者，不是找同組同學。開放式建議 15 人以上才能看出穩定模式，課堂內至少 3–5 人。</li>
+      <li><strong>進行分類。</strong>不引導、不解釋卡片的意思。請參與者邊分邊說出理由——這比分類結果本身更有價值。</li>
+      <li><strong>分析結果。</strong>找共通模式：哪些卡片總是被放在一起？哪些每個人放的位置都不同？</li>
+    </ol>
+
+    <h3>最容易做壞的地方</h3>
+    <ul class="bullets">
+      <li><span class="bad">卡片用詞洩題：</span>卡片上直接寫「訂單查詢」「訂單取消」，參與者只是在做字詞配對，不是真的在分類。</li>
+      <li><span class="bad">卡片比例失衡：</span>某個功能區塞了 20 張卡、其他區只有 2 張，結果一定偏向那一區。</li>
+      <li><span class="bad">卡片太多：</span>超過 60 張參與者會疲勞、隨便分，品質急速下降。</li>
+      <li><span class="bad">中途解釋卡片：</span>一旦你開始解釋，你就把自己的心智模型灌給參與者了。</li>
+      <li><span class="bad">只看結果不問理由：</span>分群結果只是表面，「為什麼這樣分」才是能拿來設計的東西。</li>
+    </ul>
+
+    <h3>結果怎麼分析</h3>
+    <p>把每位參與者的分群疊起來，計算哪些卡片「一起出現」的次數最高。線上工具會畫成<strong>樹狀圖（Dendrogram）</strong>：兩張卡片合併的位置越靠左，代表共識越高。課堂內用手算共識比例就夠了。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>共識程度</th><th>判讀</th><th>怎麼處理</th></tr></thead>
+        <tbody>
+          <tr><td>高（80% 以上）</td><td>使用者對這群的認知一致。</td><td>直接採用成為一個分類。</td></tr>
+          <tr><td>中（50–80%）</td><td>大致合理，但分界模糊。</td><td>檢查命名，或考慮合併相鄰分類。</td></tr>
+          <tr><td>低（50% 以下）</td><td>使用者對它沒有共同認知。</td><td>命名可能不清、或該用多重層級同時掛兩處。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>分歧的卡片不是雜訊，是最有價值的發現。</strong>它代表三件事之一：命名不清、該項目本來就跨分類、或使用者對它沒有既定認知——每一種都指向一個具體的設計決策。
+    </div>
+  </section>
+
+  <section class="section" id="s9">
+    <p class="sec-num">09</p>
+    <h2 class="sec-title">樹狀測試：驗證你的分類</h2>
+    <p>卡片分類幫你「建立」架構，樹狀測試（Tree Testing）幫你「驗證」架構。做法是把 UI 全部拿掉，只留純文字的層級結構，然後請使用者「去找某個東西」。找不到，就是架構有問題，不能怪視覺設計。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>比較</th><th>卡片分類法</th><th>樹狀測試</th></tr></thead>
+        <tbody>
+          <tr><td>階段</td><td>發想 / 建立架構</td><td>驗證 / 評估架構</td></tr>
+          <tr><td>問題</td><td>使用者會怎麼分類？</td><td>使用者找得到嗎？</td></tr>
+          <tr><td>輸入</td><td>一堆未分類的卡片</td><td>一套已經做好的分類樹</td></tr>
+          <tr><td>產出</td><td>分群模式、使用者詞彙</td><td>成功率、直接率、放棄點</td></tr>
+          <tr><td>時機</td><td>IA 草案之前</td><td>IA 草案之後、Wireframe 之前</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>三個關鍵指標：<strong>成功率</strong>（找到正確位置的比例）、<strong>直接率</strong>（沒有走回頭路就找到的比例）、<strong>放棄點</strong>（使用者最常卡住的那一層）。</p>
+    <p>成功率高但直接率低，代表使用者<strong>繞了路才找到</strong>——最後有找到，過程卻不順。這時不要只看總分，要回頭看工具記錄的錯誤路徑：使用者先點了哪一個分類、在第幾層折返。問題可能出在任何一層的分類或標籤，不一定是第一層。</p>
+    <div class="callout green">
+      課堂實作只做卡片分類。樹狀測試留給有餘力的同學，可以在 Unit 06 畫完 Flow 之後回頭補做，用來檢查 IA 是不是真的站得住。
+    </div>
+  </section>
+
+  <section class="section" id="s10">
+    <p class="sec-num">10</p>
+    <h2 class="sec-title">內容模型</h2>
+    <p>IA 決定內容放在哪裡；內容模型（Content Model）決定每一種內容<strong>由哪些欄位組成</strong>。它是 Wireframe 上每個區塊的依據，也是跟工程師溝通資料結構的共同語言。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>元素</th><th>定義</th><th>線上課程平台的例子</th></tr></thead>
+        <tbody>
+          <tr><td>內容類型</td><td>內容的不同類別或結構。</td><td>課程、講師、評價、文章。</td></tr>
+          <tr><td>屬性</td><td>描述該類型特性的欄位。</td><td>課程名稱、時數、難度、價格、封面圖、章節數。</td></tr>
+          <tr><td>關聯</td><td>不同類型之間的關係。</td><td>一堂課屬於一位講師；一堂課可有多則評價。</td></tr>
+          <tr><td>元數據</td><td>用來組織、搜尋與管理的資料。</td><td>標籤、分類、上架日期、狀態（草稿／已發布）。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>建立內容模型的順序：識別內容類型 → 定義屬性與關聯 → 設計元數據策略 → 建立內容管理流程（誰創建、誰審核、誰更新）。</p>
+    <div class="callout">
+      <strong>對你的專題的實務價值：</strong>先寫清楚欄位，Wireframe 階段就不用再猜「這張課程卡片上要放什麼」。同時，結構化的內容更容易在不同斷點與裝置上重組，也對 SEO 有幫助。
+    </div>
+  </section>
+
+  <section class="section" id="s11">
+    <p class="sec-num">11</p>
+    <h2 class="sec-title">命名與標籤：4 個 S</h2>
+    <p>NN/g 提出四個原則檢查導覽項目與連結文字。這四個 S 要一起看——只顧其中一個會出問題。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>原則</th><th>意思</th><th>不好的寫法</th><th>好的寫法</th></tr></thead>
+        <tbody>
+          <tr><td>Specific 具體</td><td>明確說出點下去會看到什麼。</td><td>服務</td><td>維修預約</td></tr>
+          <tr><td>Sincere 誠實</td><td>點進去的內容要與標籤承諾一致。</td><td>免費試用（實際要先綁卡）</td><td>免費試用 14 天，需綁定信用卡</td></tr>
+          <tr><td>Substantial 充分</td><td>脫離上下文也看得懂，能獨立成立。</td><td>了解更多</td><td>查看退款條件</td></tr>
+          <tr><td>Succinct 精簡</td><td>在滿足前三項的前提下越短越好。</td><td>點此以查看關於我們公司的更多相關資訊</td><td>關於我們</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>注意 Succinct 排在最後。連結<strong>沒有固定的字數上限</strong>：11 個字的連結只要具體、誠實、能獨立看懂，就比 3 個字的「了解更多」有效得多。但這不代表可以無限拉長——NN/g 的原則是「需要多長就多長，但不能再更長」。精簡是在滿足前三項之後才追求的，不是可以被犧牲的。</p>
+  </section>
+
+  <section class="section" id="s12">
+    <p class="sec-num">12</p>
+    <h2 class="sec-title">IA 圖與 Sitemap 製作</h2>
+    <p>IA 圖用節點與線條表示層級，一層一層往下展開。這就是作業 4 要交的東西。</p>
+    <div class="tree"><span class="n1">首頁</span>
+├── <span class="n1">探索課程</span>
+│   ├── 依主題瀏覽　<span class="cm">（設計 / 程式 / 行銷）</span>
+│   ├── 依時長篩選　<span class="cm">（＜20 分 / 20–60 分 / ＞60 分）</span>
+│   └── 課程詳情　　<span class="cm">（大綱・講師・評價・試看）</span>
+├── <span class="n1">我的學習</span>
+│   ├── 進行中　　　<span class="cm">← 核心路徑，含斷點續播</span>
+│   ├── 已完成
+│   └── 收藏
+├── <span class="n1">提問與討論</span>
+│   └── 課後提問區　<span class="cm">← 次要功能</span>
+└── <span class="n1">帳號</span>
+    ├── 訂單與發票
+    ├── 通知設定
+    └── 訂閱管理　　<span class="cm">← 含退訂（邊緣案例）</span></div>
+
+    <h3>畫的時候要標注的三件事</h3>
+    <ol class="steps">
+      <li><strong>核心路徑用顏色標出來。</strong>看圖的人要能一眼看出主要任務怎麼走。</li>
+      <li><strong>交叉連結用虛線。</strong>多重層級的項目，兩條線都要畫，不要只挑一邊。</li>
+      <li><strong>空狀態與錯誤狀態寫在旁邊註解。</strong>「搜尋無結果」「尚未購買任何課程」也是結構的一部分。</li>
+    </ol>
+
+    <h3>常見的 IA 圖問題</h3>
+    <ul class="bullets">
+      <li>只有階層、沒有標注優先級——看不出哪個是核心路徑。</li>
+      <li>把每一個 UI 元件都畫上去，變成 Wireframe 而不是結構圖。</li>
+      <li>節點命名用內部術語，別人看不懂。</li>
+      <li>沒有任何例外狀態，看起來像所有事情都會順利發生。</li>
+    </ul>
+    <div class="callout green">
+      <strong>Figma 實作範本：</strong><a href="https://www.figma.com/board/KtPtouN73pY8SBP90Uz1j2" target="_blank" rel="noopener">Unit 05 課堂練習板</a>（卡片與六個工作區已建好）｜參考範例：<a href="https://www.figma.com/board/K0a0hIcnHdfyH09bRjhIeW/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E" target="_blank" rel="noopener">1</a>、<a href="https://www.figma.com/board/Dx2liUBXBgKuXg8psCjN4a/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E-2" target="_blank" rel="noopener">2</a>
+    </div>
+  </section>
+
+  <section class="section" id="s13">
+    <p class="sec-num">13</p>
+    <h2 class="sec-title">課堂練習與回家作業</h2>
+
+    <h3>課堂練習：電商後台卡片分類法（80 分鐘）</h3>
+    <p>4–5 人一組，用 FigJam 完成一輪完整的卡片分類，並產出後台管理系統的 IA 草圖。13 張功能卡片：訂單管理、產品管理、庫存管理、用戶反饋、促銷活動設置、報告和分析、用戶管理、支付處理、物流資訊、退貨處理、客戶服務、站點設置、安全設置。四階段結束後另有 15 分鐘各組成果分享。</p>
+    <ol class="steps">
+      <li><strong>準備卡片與情境（15 分）</strong>：設定參與者角色與使用情境。</li>
+      <li><strong>開放式分類（25 分）</strong>：組員輪流當參與者，自由分群並命名。</li>
+      <li><strong>封閉式分類（18 分）</strong>：去隔壁組借 1 人當參與者，看哪些卡片放不進去。</li>
+      <li><strong>分析與 IA 草圖（22 分）</strong>：統計共識度，畫出 IA 草圖，標出分歧項目的處理方式。</li>
+    </ol>
+
+    <h3>回家作業：網站 Sitemap 分析（作業 4）</h3>
+    <p>先看指定影片理解三個 IA 模型，再挑一個你熟悉的網站，把它的結構逆向拆解出來，最後回頭修正自己的專題 IA。</p>
+    <ol class="steps">
+      <li>看完 <a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">Information Architecture — 3 Key Models</a>（NN/g，約 5 分鐘）。</li>
+      <li>選一個網站（電商、政府、學校、媒體皆可），畫出它現有的 Sitemap，至少 3 層、20 個節點。</li>
+      <li>用三個模型分別標注：底層結構、分類法（有哪些篩選與標籤）、導覽（主選單露出了哪些、藏了哪些）。</li>
+      <li>找出 3 個 IA 問題，各寫一句改善建議，並指出對應本講義的哪個原則。</li>
+      <li>回到自己的專題，交出功能清單 + IA 圖（Figma）。</li>
+    </ol>
+    <div class="callout">
+      <strong>繳交：</strong>Figma 連結一份（含網站 Sitemap 分析 + 專題 IA 圖）＋ 功能清單表格。下次上課抽點分享。完整步驟與檢查清單見<a href="exercises.html#hw">練習頁</a>，配分見<a href="exercises.html#submit">繳交清單與評分</a>。
+    </div>
+  </section>
+
+  <section class="section" id="s14">
+    <p class="sec-num">14</p>
+    <h2 class="sec-title">AI 協作提示詞</h2>
+    <p>AI 可以幫你整理卡片分類結果、檢查命名、產生分類假設，但它<strong>不能取代真實使用者的分類行為</strong>。以下提示詞的共同限制：只能根據你提供的內容分析，不可自行編造資料。</p>
+
+    <h3>① 從功能清單產生卡片</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我的產品功能清單：
+[貼上功能清單]
+
+請幫我轉成卡片分類法用的卡片，規則：
+1. 一張卡片一個功能或內容，用使用者看得懂的日常用語。
+2. 避免使用會洩題的命名（例如多張卡片共用同一個前綴詞）。
+3. 各功能區的卡片數量盡量平均，不要讓某一區佔比過高。
+4. 總數控制在 30-40 張。
+5. 標註每張卡片來自哪一條原始功能，方便我回溯。
+
+只能根據我提供的清單產生，不要自行新增我沒寫的功能。</pre>
+    </div>
+
+    <h3>② 整理卡片分類結果</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是 5 位參與者的卡片分類結果：
+[貼上每位參與者的分群與命名]
+
+請幫我分析：
+1. 哪些卡片被放在一起的次數最高？列出共識度（幾人／總人數）。
+2. 哪些卡片分歧最大？分別被放進哪些不同群組？
+3. 參與者替各群命名時用了哪些詞？哪些詞重複出現？
+4. 根據以上，提出 1-2 套可能的分類方案，並說明各自的取捨。
+5. 哪些項目適合用多重層級同時掛在兩個分類下？
+
+只根據我提供的資料分析，不要補充不存在的參與者或卡片。</pre>
+    </div>
+
+    <h3>③ 檢查導覽命名（4 個 S）</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我的導覽項目與連結文字：
+[貼上導覽清單]
+
+請用 NN/g 的 4 個 S 原則逐項檢查：
+- Specific：是否明確說出點下去會看到什麼？
+- Sincere：標籤承諾與實際內容是否一致？
+- Substantial：脫離上下文能否獨立看懂？
+- Succinct：在滿足前三項的前提下是否夠精簡？
+
+輸出格式：每個項目一列，標示通過／不通過的 S，並給一個改寫版本。
+指出哪些項目彼此語意重疊，使用者可能分不出差別。</pre>
+    </div>
+
+    <h3>④ 檢查 IA 是否有遺漏</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我的 Persona、核心任務與 IA 草案：
+[貼上 Persona 摘要]
+[貼上核心任務]
+[貼上 IA 樹狀結構]
+
+請幫我檢查：
+1. 這個 Persona 完成核心任務的路徑，在 IA 中是否完整？缺哪一步？
+2. 哪些節點沒有對應到任何使用者需求，可能是多餘的？
+3. 我漏掉了哪些例外狀態（搜尋無結果、資料為空、權限不足、錯誤、取消／退出）？
+4. 有沒有分類彼此語意重疊、或層級明顯過深的地方？
+
+請把「有證據支持的問題」與「你的推測」分開列出。</pre>
+    </div>
+
+    <div class="callout warn">
+      <strong>使用界線：</strong>AI 產出的分類方案只是假設。真正的分類依據必須來自使用者的卡片分類結果——不要拿 AI 的分群當成研究結論交作業。
+    </div>
+  </section>
+
+</div><!-- /.article -->
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li><a href="https://www.nngroup.com/articles/ia-study-guide/" target="_blank" rel="noopener">Information Architecture: Study Guide</a> — NN/g，本單元教材的主要來源（中譯見 <code>resources/guide.md</code>）。</li>
+    <li><a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">Information Architecture: 3 Key Models</a> — NN/g 影片，回家作業指定觀看。</li>
+    <li><a href="https://www.nngroup.com/articles/information-architecture-sitemaps/" target="_blank" rel="noopener">Information Architecture vs. Sitemaps: What's the Difference?</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/ia-vs-navigation/" target="_blank" rel="noopener">The Difference Between Information Architecture (IA) and Navigation</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/card-sorting-definition/" target="_blank" rel="noopener">Card Sorting: Uncover Users' Mental Models for Better Information Architecture</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/tree-testing/" target="_blank" rel="noopener">Tree Testing: Fast, Iterative Evaluation of Menu Labels and Categories</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/information-scent/" target="_blank" rel="noopener">Information Scent: How Users Decide Where to Go Next</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/flat-vs-deep-hierarchy/" target="_blank" rel="noopener">Flat vs. Deep Website Hierarchies</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/3-click-rule/" target="_blank" rel="noopener">The 3-Click Rule for Navigation Is False</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/top-10-ia-mistakes/" target="_blank" rel="noopener">Top 10 Information Architecture (IA) Mistakes</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/better-link-labels/" target="_blank" rel="noopener">Better Link Labels: 4 Ss for Encouraging Clicks</a> — NN/g。</li>
+    <li><a href="https://www.nngroup.com/articles/taxonomy-101/" target="_blank" rel="noopener">Taxonomy 101: Definition, Best Practices</a> — NN/g。</li>
+    <li>課程資源：<code>Unit_05/resources/卡片分類法 67fb5443c57d42b0a140cba0eb2abbcb.md</code>（卡片分類法與內容模型、電商後台專案範例）。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="slides.html">回到 Unit 05 簡報</a>
+  <a href="exercises.html#ex1">課堂練習：卡片分類法</a>
+  <a href="exercises.html#hw">回家作業：Sitemap 分析</a>
+  <a href="https://www.figma.com/board/KtPtouN73pY8SBP90Uz1j2" target="_blank" rel="noopener">課堂練習板</a>
+  <a href="https://www.figma.com/board/K0a0hIcnHdfyH09bRjhIeW/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E" target="_blank" rel="noopener">FigJam 範例 1</a>
+  <a href="https://www.figma.com/board/Dx2liUBXBgKuXg8psCjN4a/%E5%8D%A1%E7%89%87%E5%88%86%E9%A1%9E-2" target="_blank" rel="noopener">FigJam 範例 2</a>
+  <a href="https://www.youtube.com/watch?v=v39z0JPeIc8" target="_blank" rel="noopener">指定影片</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+
+(function () {
+  document.querySelectorAll('.prompt').forEach(prompt => {
+    const btn = prompt.querySelector('.copy-btn');
+    const pre = prompt.querySelector('pre');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = '已複製';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = '複製';
+          btn.classList.remove('done');
+        }, 1400);
+      } catch (error) {
+        btn.textContent = '複製失敗';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
