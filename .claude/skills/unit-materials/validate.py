@@ -89,12 +89,13 @@ def check_file(unit_dir, name, problems, notes):
         if frag and f'id="{frag}"' not in other:
             problems.append(f'{name}：錨點不存在 "{href}"')
 
-    # CSS class
+    # CSS class（排除 <script>：JS 會用字串拼接 class，會造成誤報）
     if '<style>' in src:
         css = src.split('<style>')[1].split('</style>')[0]
         defined = set(re.findall(r'\.([a-zA-Z][\w-]*)', css))
+        markup = re.sub(r'<script.*?</script>', ' ', src, flags=re.S)
         used = set()
-        for attr in re.findall(r'class="([^"]+)"', src):
+        for attr in re.findall(r'class="([^"]+)"', markup):
             used.update(attr.split())
         missing = sorted(used - defined)
         if missing:
