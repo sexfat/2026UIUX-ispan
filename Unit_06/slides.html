@@ -382,6 +382,18 @@ h2 {
 .flow-dia .x { color: var(--accent3); font-weight: 700; }
 .flow-dia .c { color: var(--muted); }
 
+.slide-img {
+  display: block;
+  max-width: 100%;
+  max-height: 52vh;
+  width: auto;
+  margin: 22px auto 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  object-fit: contain;
+}
+.slide.dark .slide-img { border-color: #3a3a3c; }
+
 /* 線框示意 */
 .wf-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
 .wf {
@@ -649,19 +661,9 @@ h2 {
       <p class="overline">Wireflow</p>
       <h1>Wireflow：把畫面塞進流程圖</h1>
       <h2>節點不再是抽象的方塊，而是那個畫面本身。箭頭從「你點的那顆按鈕」出發，指向點完之後看到的東西。</h2>
-      <div class="flow-dia">┌──────────┐            ┌──────────┐            ┌──────────┐
-│ <span class="n">商品列表</span> │            │ <span class="n">商品詳情</span> │            │ <span class="n">購物車</span>   │
-│          │  <span class="c">點商品卡</span>  │          │  <span class="c">點加入</span>    │          │
-│ ▤ ▤ ▤  │ ─────────▶ │ ▣        │ ─────────▶ │ ▤ 1 件   │
-│ ▤ ▤ ▤  │            │ [加入購物車] │          │ [結帳]   │
-└──────────┘            └──────────┘            └──────────┘
-                                                      │
-                                             <span class="x">未登入</span> │
-                                                      ▼
-                                                ┌──────────┐
-                                                │ <span class="n">登入頁</span>   │
-                                                └──────────┘</div>
-      <div class="note">箭頭一定要標<span class="hl">是點了哪個元件</span>，不能只畫一條線。低保真高保真都能畫——草圖階段拿來想，規格階段拿來交付。</div>
+      <img class="slide-img" src="resources/wireflow-example.jpg"
+           alt="Wireflow 範例：存錢目標 App 的六個畫面，以箭頭標示觸發的互動" loading="lazy">
+      <div class="note">看箭頭上的標籤：<span class="hl">Select safe category</span>、<span class="hl">Button enabled</span>、<span class="hl">Choose avatar</span>——每條線都寫了是什麼互動觸發的，不是只畫一條線。<br>也看編號：<span class="hl2">1 → 1.2</span> 是同一個畫面選了分類之後的狀態，<span class="hl2">2 → 2.1 → 2.2</span> 也是。用小數點區分「新畫面」與「同一畫面的不同狀態」，這是 Wireflow 最好用的地方。更多圖例見 <a class="ilink" href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">NN/g 原文</a>。</div>
     </div>
     <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
   </section>
@@ -699,7 +701,7 @@ h2 {
         <div class="mini-card"><strong>◇ 判斷點</strong><span>系統或使用者要做選擇的地方。裡面寫成是非題：「已登入？」</span></div>
         <div class="mini-card"><strong>→ 路徑</strong><span>從判斷點出去的每條線都要標條件：是／否、成功／失敗。</span></div>
       </div>
-      <div class="note">最常見的錯：<span class="warn-text">判斷點只畫「是」那條線</span>。菱形只要有一條線出去，那它就不該是菱形。</div>
+      <div class="note">最常見的錯：<span class="warn-text">判斷點只畫「是」那條線</span>。菱形只要有一條線出去，那它就不該是菱形。<br>範例板：<a class="ilink" href="https://www.figma.com/board/3spteOmEz92MCnVtpi2wxC/Flow-Chart--%E6%B5%81%E7%A8%8B%E5%9C%96--%E7%AF%84%E4%BE%8B?node-id=0-1" target="_blank" rel="noopener">Flow Chart 流程圖範例</a>——有符號說明，以及「鬧鐘」與「會員登入」兩個完整流程可以照著看。（那份多示範了一個「資料輸出／輸入」的平行四邊形，你們用不到，看到不用理它。）</div>
     </div>
     <div class="slide-foot"><span class="course-label">介面設計流程（上）：Flowchart 到 Wireframe</span><div class="dots"></div></div>
   </section>
@@ -1108,6 +1110,10 @@ h2 {
         <a class="res-link" href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">
           <strong>課堂練習檔 ②（Figma）</strong>
           <span>Auto Layout 素材與 3 個空白 Wireframe 畫框</span>
+        </a>
+        <a class="res-link" href="https://www.figma.com/board/3spteOmEz92MCnVtpi2wxC/Flow-Chart--%E6%B5%81%E7%A8%8B%E5%9C%96--%E7%AF%84%E4%BE%8B?node-id=0-1" target="_blank" rel="noopener">
+          <strong>Flow Chart 流程圖範例</strong>
+          <span>符號說明 + 鬧鐘、會員登入兩個完整流程</span>
         </a>
         <a class="res-link" href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">
           <strong>Wireframe Web UI Kit</strong>

@@ -177,6 +177,20 @@ code {
   border-radius: 5px;
 }
 
+.fig { margin: 24px 0; }
+.fig img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.fig figcaption {
+  margin-top: 10px;
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
 ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
 ul.bullets li, ol.steps li {
   font-size: 1rem;
@@ -536,21 +550,15 @@ tr:last-child td { border-bottom: none; }
       </div>
     </div>
     <p>Wireflow 就是為了補這兩個洞而出現的：它把 wireframe 風格的版面設計，跟簡化過的流程圖式互動表示法結合起來。用畫面設計取代抽象符號，讓討論的焦點留在使用者實際會操作的東西上。</p>
-    <div class="dia">┌──────────┐            ┌──────────┐            ┌──────────┐
-│ <span class="n">商品列表</span> │            │ <span class="n">商品詳情</span> │            │ <span class="n">購物車</span>   │
-│          │  <span class="c">點商品卡</span>  │          │  <span class="c">點加入</span>    │          │
-│ ▤ ▤ ▤  │ ─────────▶ │ ▣        │ ─────────▶ │ ▤ 1 件   │
-│ ▤ ▤ ▤  │            │ [加入購物車] │          │ [結帳]   │
-└──────────┘            └──────────┘            └──────────┘
-                                                      │
-                                             <span class="x">未登入</span> │
-                                                      ▼
-                                                ┌──────────┐
-                                                │ <span class="n">登入頁</span>   │
-                                                └──────────┘</div>
+    <figure class="fig">
+      <img src="resources/wireflow-example.jpg"
+           alt="Wireflow 範例：存錢目標 App 的六個畫面，以箭頭標示觸發的互動" loading="lazy">
+      <figcaption>一份存錢目標 App 的 Wireflow。注意兩件事：箭頭上都寫了觸發的互動（Select safe category、Button enabled、Choose avatar），不是只拉一條線；編號用 1 / 1.2、2 / 2.1 / 2.2 區分「新畫面」與「同一畫面的不同狀態」。</figcaption>
+    </figure>
     <p>畫 Wireflow 有幾個要注意的地方：每個節點呈現的是<strong>畫面狀態</strong>，可以是整個畫面，也可以只畫有變動的區塊；箭頭要從<strong>具體可點的 UI 元件</strong>出發，不能只拉一條線；桌機因為畫面大，建議只畫變動的部分，不然圖會大到看不完。</p>
     <div class="callout green">
-      Wireflow 低保真、高保真都能畫。草圖階段拿來想事情，規格階段拿來交付給工程師。它最早是行動 App 團隊發展出來的作法，每個步驟就是一張完整的手機畫面。
+      Wireflow 低保真、高保真都能畫。草圖階段拿來想事情，規格階段拿來交付給工程師。它最早是行動 App 團隊發展出來的作法，每個步驟就是一張完整的手機畫面。<br><br>
+      上面那張是簡化過的示意圖。想看真實的 Wireflow 長什麼樣，<a href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">NN/g 原文</a>裡有實際的圖例；<a href="https://www.uxtweak.com/ux-glossary/wireflow/" target="_blank" rel="noopener">UXtweak 的詞條</a>也有一份簡短說明可以對照。
     </div>
   </section>
 
@@ -585,6 +593,11 @@ tr:last-child td { border-bottom: none; }
         </tbody>
       </table>
     </div>
+    <div class="callout green">
+      <strong>範例板：</strong><a href="https://www.figma.com/board/3spteOmEz92MCnVtpi2wxC/Flow-Chart--%E6%B5%81%E7%A8%8B%E5%9C%96--%E7%AF%84%E4%BE%8B?node-id=0-1" target="_blank" rel="noopener">Flow Chart 流程圖範例</a>。裡面有符號說明區，以及「鬧鐘」與「會員登入」兩個畫完整的流程——後者含忘記密碼、驗證碼、密碼錯三次這些分支，正好可以看例外路徑怎麼接。<br><br>
+      注意那份多示範了一個「資料輸出／輸入」的平行四邊形（工程流程圖的符號）。你們畫使用者流程用不到，看到不用理它。
+    </div>
+
     <div class="callout warn">
       <strong>最常見的錯：</strong>菱形只畫「是」那一條線出去。如果一個判斷點只有一條路徑，那它就不該是判斷點——把它改成矩形，或者去想清楚「否」的時候會怎樣。
     </div>
@@ -924,7 +937,8 @@ tr:last-child td { border-bottom: none; }
 <div class="refs">
   <h2>參考資料</h2>
   <ul>
-    <li><a href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">Wireflows: A UX Deliverable for Workflows and Apps</a> — NN/g，Wireflow 定義與實作準則。</li>
+    <li><a href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">Wireflows: A UX Deliverable for Workflows and Apps</a> — NN/g，Wireflow 定義、實作準則與實際圖例。</li>
+    <li><a href="https://www.figma.com/board/3spteOmEz92MCnVtpi2wxC/Flow-Chart--%E6%B5%81%E7%A8%8B%E5%9C%96--%E7%AF%84%E4%BE%8B?node-id=0-1" target="_blank" rel="noopener">Flow Chart 流程圖範例</a> — 課堂使用的流程圖範例板。</li>
     <li><a href="https://www.nngroup.com/articles/user-journeys-vs-user-flows/" target="_blank" rel="noopener">User Journeys vs. User Flows</a> — NN/g，兩種尺度的定義與對照。</li>
     <li><a href="https://www.nngroup.com/articles/ux-prototype-hi-lo-fidelity/" target="_blank" rel="noopener">UX Prototypes: Low Fidelity vs. High Fidelity</a> — NN/g，保真度三維度與取捨。</li>
     <li><a href="https://www.nngroup.com/articles/ux-deliverables-glossary/" target="_blank" rel="noopener">UX Deliverables: Glossary</a> — NN/g，產出物名詞定義。</li>

@@ -9,6 +9,7 @@
 - `resources/guide.md` — NN/g 與 Figma 官方文件的中文整理，本單元教材的溯源依據。
 - 課堂練習檔 ①：[FigJam · 流程圖](https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy)（符號庫、動作便利貼、例外路徑檢查表）。
 - 課堂練習檔 ②：[Figma · Auto Layout 與 Wireframe](https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt)（卡片素材、3 個空白畫框、六題檢查清單）。
+- 流程圖範例：[Flow Chart 流程圖範例](https://www.figma.com/board/3spteOmEz92MCnVtpi2wxC/Flow-Chart--%E6%B5%81%E7%A8%8B%E5%9C%96--%E7%AF%84%E4%BE%8B?node-id=0-1)（符號說明 + 鬧鐘、會員登入兩個完整流程）。
 - 線框元件庫：[Wireframe Web UI Kit](https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1)（現成區塊，桌機 1440 與手機 375；供 Exercise 03–04 取用與參考）。
 
 ## 單元目標
