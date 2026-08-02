@@ -279,7 +279,7 @@ td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
     <span class="band-tag">課堂練習 · 80 分鐘</span>
     <h2>從 IA 圖到 3 個 Wireframe</h2>
   </div>
-  <p class="band-note"><strong>課堂用檔已經建好了</strong>：<a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">練習檔 ①（FigJam）</a> 給 Exercise 01–02 的流程圖，<a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">練習檔 ②（Figma）</a> 給 Exercise 03–04 的 Auto Layout 與 Wireframe。各自複製一份再開始。<br>個人作業，用自己的專題。開始前先把 Unit 05 的 IA 圖與功能清單打開。四個階段合計 80 分鐘，之後另有 15 分鐘成果分享與作業說明——抽點 3–4 位同學，每人 3 分鐘。全程只能用黑白灰，要標重點就用一個藍色。</p>
+  <p class="band-note"><strong>課堂用檔已經建好了</strong>：<a href="https://www.figma.com/board/80weQpwuu9BGHrlos8Emhy" target="_blank" rel="noopener">練習檔 ①（FigJam）</a> 給 Exercise 01–02 的流程圖，<a href="https://www.figma.com/design/3rw5NBkNFX2ZOHvJGXS2Mt" target="_blank" rel="noopener">練習檔 ②（Figma）</a> 給 Exercise 03–04 的 Auto Layout 與 Wireframe。各自複製一份再開始。另外附一份 <a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">Wireframe Web UI Kit</a>，畫 Wireframe 時可以拿裡面的區塊來用（用法見 Exercise 04）。<br>個人作業，用自己的專題。開始前先把 Unit 05 的 IA 圖與功能清單打開。四個階段合計 80 分鐘，之後另有 15 分鐘成果分享與作業說明——抽點 3–4 位同學，每人 3 分鐘。全程只能用黑白灰，要標重點就用一個藍色。</p>
 
   <div class="exercise" id="ex1">
     <div class="exercise-head">
@@ -410,6 +410,9 @@ td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
         <strong>記住這條：</strong>Hug 只能給容器，Fill 只能給子元件；而且<strong>只要有一個子元件是 Fill，父容器那個軸向就自動變 Fixed</strong>。之後遇到「我明明設了 Hug 怎麼沒反應」，九成是這個。
       </div>
 
+      <h3>看別人怎麼做</h3>
+      <p>做完之後可以去 <a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">Wireframe Web UI Kit</a> 挑一個卡片或列表區塊，拆開看它的 Auto Layout 是怎麼疊的：哪一層是容器、哪一層用 Hug、哪一層用 Fill。看別人的結構比自己硬想快很多。</p>
+
       <h3>Step 4 · 加上 min / max（有時間再做）</h3>
       <p>回家作業要做拉寬拉窄的壓力測試，會爆版的地方通常就是少了這兩個：</p>
       <ul>
@@ -449,6 +452,24 @@ td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
         <li><strong>第 2、3 張先排骨架</strong>：方塊擺對位置、順序對就好，Auto Layout 留到回家補。</li>
         <li>如果某個畫面只有一小塊變動（例如篩選之後只有列表更新），<strong>只畫那一塊就好</strong>，不用整頁重畫一次。</li>
       </ul>
+
+      <h3>可以用現成的 Wireframe 元件</h3>
+      <p>不用每個方塊都自己畫。<a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">Wireframe Web UI Kit</a> 裡有大量現成區塊——導覽列、Hero、卡片列表、表單、頁尾都有，桌機（1440）與手機（375）兩種尺寸，命名方式是「類型＿編號＿寬度」，例如 <code>Header_3_1440</code>、<code>Hero_10_375</code>。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>可以怎麼用</th><th>做法</th></tr></thead>
+          <tbody>
+            <tr><td class="good">✓ 當零件來源</td><td>找到接近的區塊，複製到你的畫框，再依你的內容改文字與增減欄位。</td></tr>
+            <tr><td class="good">✓ 當參考</td><td>卡住的時候翻一翻「這種頁面通常有哪些區塊」，看完關掉，回來畫自己的。</td></tr>
+            <tr><td class="good">✓ 當 Auto Layout 範例</td><td>拆開別人做好的區塊，看它的容器怎麼疊、哪一層用 Hug 哪一層用 Fill。</td></tr>
+            <tr><td class="bad">✗ 直接拼一頁交差</td><td>拖三個區塊湊成一頁，跟你的 Flow 沒有關係——這樣等於跳過這堂課要練的東西。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn">
+        <strong>順序不能反過來。</strong>先看你的流程圖決定這一頁要放什麼，再去 Kit 裡面找對應的區塊；不是先看 Kit 有什麼，再回頭決定頁面長怎樣。判斷方式很簡單：如果你選某個區塊的理由是「它看起來不錯」而不是「我的流程需要這個東西」，那就是反過來了。
+      </div>
+      <p>Kit 裡的區塊多半比低保真再精緻一點。複製過來之後<strong>把顏色拿掉、圖片換成灰方塊加一個叉</strong>，維持黑白灰。</p>
 
       <h3>畫的規則</h3>
       <ul>
@@ -584,6 +605,7 @@ td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
     <a href="article.html">回到講義</a>
     <a href="article.html#s5">講義：例外路徑</a>
     <a href="article.html#s10">講義：Auto Layout</a>
+    <a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">Wireframe UI Kit</a>
     <a href="https://help.figma.com/hc/en-us/articles/360040451373-Guide-to-auto-layout" target="_blank" rel="noopener">Figma Auto Layout 官方文件</a>
     <a href="../index.html">回到課程總覽</a>
   </div>
