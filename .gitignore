@@ -7,7 +7,9 @@
 .vscode/
 
 # Claude Code
-.claude/
+# 排除 .claude 底下的內容，但保留專案 skill（教材製作流程與驗收腳本）
+.claude/*
+!.claude/skills/
 
 # Temporary files
 *.tmp
