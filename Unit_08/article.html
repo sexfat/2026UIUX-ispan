@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>風格發想與建立 · 完整教材 · Unit 08</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+
+.fig { margin: 24px 0; }
+.fig img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.fig figcaption {
+  margin-top: 10px;
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+.callout.warn {
+  background: rgba(194,65,12,.06);
+  border-color: rgba(194,65,12,.2);
+  border-left-color: var(--accent3);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 { margin: 0 0 8px; font-size: 1rem; }
+.card p { margin: 0; font-size: .93rem; color: var(--muted); line-height: 1.65; }
+
+.dia {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin: 22px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.85;
+  color: #2c2c2e;
+  white-space: pre;
+  overflow-x: auto;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 22px 0;
+}
+.sw {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.sw .chip { display: block; height: 56px; }
+.sw .lbl {
+  display: block;
+  padding: 9px 11px 11px;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.sw .lbl b { display: block; font-size: .82rem; color: var(--dark); font-weight: 800; }
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .swatches { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 40px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">風格不是挑顏色</a></li>
+    <li><a href="#s2">市場風格分析</a></li>
+    <li><a href="#s3">風格故事化</a></li>
+    <li><a href="#s4">版面：網格與留白</a></li>
+    <li><a href="#s5">排版：字級與階層</a></li>
+    <li><a href="#s6">色彩：顏色的工作</a></li>
+    <li><a href="#s7">一致性</a></li>
+    <li><a href="#s8">完形心理學</a></li>
+    <li><a href="#s9">Laws of UX</a></li>
+    <li><a href="#s10">Style Tile 與 Moodboard</a></li>
+    <li><a href="#s11">設計系統</a></li>
+    <li><a href="#s12">課堂練習與作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="slides.html">回到投影片</a>
+  <span class="unit-pill">Unit 08</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Visual Direction · 完整教材</p>
+  <h1>風格發想與建立</h1>
+  <p class="lead">前面七個單元你都在處理結構：使用者是誰、資訊怎麼分類、流程怎麼走、畫面上要放什麼。Unit 06、07 交出來的 Wireframe 到現在還是黑白灰的方塊，這份講義開始處理它們看起來該長什麼樣。內容從市場風格分析與風格故事化出發，接著把網格、留白、排版與色彩這幾樣視覺基礎各自管什麼講清楚，再用完形心理學與 Laws of UX 回頭檢查風格有沒有真的幫到理解。今天結束時你手上會多一份風格板——Unit 10 畫 Mockup 可以直接查的規格，以及它在 Figma 裡建成的樣式與元件，也就是設計系統的第一塊。</p>
+  <div class="meta">
+    <span>閱讀時間約 30 分鐘</span><span class="d"></span>
+    <span>搭配 Unit 08 投影片</span><span class="d"></span>
+    <span>對應作業 6：風格板</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">風格不是挑你喜歡的顏色</a></li>
+    <li><a href="#s2">市場風格分析：把競品的視覺語言拆出來</a></li>
+    <li><a href="#s3">風格故事化：用形容詞把方向講清楚</a></li>
+    <li><a href="#s4">版面：網格、留白、對齊</a></li>
+    <li><a href="#s5">排版：字級、行距、階層</a></li>
+    <li><a href="#s6">色彩：給每個顏色一個工作</a></li>
+    <li><a href="#s7">一致性：風格板真正在解決的問題</a></li>
+    <li><a href="#s8">完形心理學：畫面是怎麼被分組的</a></li>
+    <li><a href="#s9">Laws of UX：四條會影響風格決策的定律</a></li>
+    <li><a href="#s10">Style Tile 與 Moodboard</a></li>
+    <li><a href="#s11">從風格板長成設計系統</a></li>
+    <li><a href="#s12">課堂練習與回家作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</div>
+
+<div class="article">
+
+  <section class="section" id="s1">
+    <p class="sec-num">01</p>
+    <h2 class="sec-title">風格不是挑你喜歡的顏色</h2>
+    <p>學生做風格板最常見的做法是這樣：打開 Pinterest，找幾張看起來很潮的圖，抓幾個順眼的顏色，選一個 Google Fonts 上排前面的字體，排一排交出去。</p>
+    <p>問題不在於好不好看，而在於<strong>沒有人能問你為什麼</strong>。老師問「為什麼用這個綠」，答案是「我覺得比較舒服」；客戶問「可以換成藍的嗎」，你沒有理由說不行，因為你當初也沒有理由說要用綠的。</p>
+    <p>風格決策的來源有四個，全部都在你前面幾個單元的作業裡：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>來源</th><th>它決定什麼</th><th>你手上已經有的東西</th></tr></thead>
+        <tbody>
+          <tr><td>產品定位</td><td>這個產品在市場上想被當成什麼——便宜好用？專業可信？有質感？</td><td>Unit 03 競品分析的洞察</td></tr>
+          <tr><td>使用情境</td><td>什麼時候、在哪裡用——通勤路上單手滑？在辦公室久坐操作？</td><td>Unit 04 用戶旅程地圖</td></tr>
+          <tr><td>目標族群</td><td>誰在用——年齡、對介面的熟悉度、對什麼視覺語言有反應</td><td>Unit 03 Persona</td></tr>
+          <tr><td>競品差異</td><td>怎麼不撞衫——同類產品都長一樣的時候，你憑什麼被記得</td><td>Unit 03 競品分析表</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>所以這堂課要練的能力，是把上面這四件事<strong>翻譯</strong>成視覺決策，並且每一個決策都講得出翻譯的過程。「主色用深藍」不是決策，「因為使用者要在裡面填自己的身分證字號，深藍在同類金融服務裡是可信任的共同語言，所以主色用深藍」才是。</p>
+    <div class="callout warn">
+      <strong>要小心的地方：</strong>顏色的意義不是全世界通用的。同一個顏色在不同文化、不同產業裡的聯想差很多——白色在西方是婚禮，在部分亞洲文化是喪禮。所以理由不能只寫「藍色代表信任」，要寫「在<em>我的目標族群常用的同類產品裡</em>，藍色是共同語言」。前者是背來的，後者是你查得出證據的。
+    </div>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">02</p>
+    <h2 class="sec-title">市場風格分析：把競品的視覺語言拆出來</h2>
+    <p>Unit 03 的競品分析看的是功能：誰有什麼、誰沒有什麼。這裡要再看一次同一批競品，但只看外觀。</p>
+    <p>看的時候不要寫「這個好看」「那個很醜」——那是評價，不能拿來設計。要寫的是<strong>可以被複製或被閃避的具體特徵</strong>。</p>
+
+    <h3>拆解的六個欄位</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>看什麼</th><th>要記下來的東西</th></tr></thead>
+        <tbody>
+          <tr><td>主色與用色量</td><td>主色大概是什麼色系？整個畫面有幾種顏色？滿版彩色還是大面積留白？</td></tr>
+          <tr><td>字體與字重</td><td>黑體還是明體？標題字重多粗？中英文混排怎麼處理？</td></tr>
+          <tr><td>資訊密度</td><td>一個畫面塞多少東西？卡片之間的間距是緊還是鬆？</td></tr>
+          <tr><td>圖像策略</td><td>用實拍照片、插畫、還是純色塊？照片是去背商品圖還是情境照？</td></tr>
+          <tr><td>圓角與陰影</td><td>直角、小圓角還是大圓角？有沒有陰影？陰影重不重？</td></tr>
+          <tr><td>品牌語氣</td><td>按鈕與提示文字怎麼寫——「立即搶購」跟「加入收藏」是兩種人格</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>一個實際的對照</h3>
+    <p>拿兩個你們手機裡大概都有的 App 來看：<strong>蝦皮</strong>與 <strong>Pinkoi</strong>。兩個都是網購，視覺語言完全不同——你自己打開來滑一分鐘就能驗證下面這張表。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>蝦皮</th><th>Pinkoi</th></tr></thead>
+        <tbody>
+          <tr><td>用色</td><td>高飽和橘為主，紅、黃、綠的促銷標籤同時出現</td><td>大量白底，彩色幾乎只出現在商品照片本身</td></tr>
+          <tr><td>密度</td><td>高，一屏塞入輪播、分類、限時特賣、商品牆</td><td>低，商品卡之間留白多，一屏看到的商品數少</td></tr>
+          <tr><td>圖像</td><td>去背商品圖、紅字大標的促銷banner</td><td>情境攝影為主，構圖與色調偏一致</td></tr>
+          <tr><td>語氣</td><td>急促、數量與倒數（「限時」「剩 N 件」）</td><td>平緩、描述性（設計師、材質、故事）</td></tr>
+          <tr><td>你會感覺到</td><td>怕買貴、怕錯過</td><td>慢慢逛、看質感</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>這兩種都不是錯的，它們對應不同的產品策略。蝦皮要的是<em>促成當下這一筆交易</em>，所以視覺上把稀缺感放到最大；Pinkoi 要的是<em>建立品味上的信任</em>，所以把干擾減到最少。<strong>你的風格要選哪一邊，取決於你的產品靠什麼賺錢、你的使用者在什麼心情下打開它。</strong></p>
+    <h3>常見版面模式：分出「類別慣例」與「這家的風格」</h3>
+    <p>拆完視覺特徵，再看一次版面。方法是把同類的 3 個競品的<strong>同一種頁面</strong>擺在一起看——三個購物 App 的商品詳情頁、三個新聞網的首頁——然後把重複出現的區塊順序抄下來。</p>
+    <p>例如電商的商品詳情頁，大多是這個順序：商品圖輪播 → 價格與標題 → 規格選擇 → 賣家資訊 → 評價 → 推薦商品，底部固定一條「加入購物車 / 立即購買」。三家都這樣排，那就不是巧合。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>看到什麼</th><th>怎麼判斷</th><th>你該怎麼做</th></tr></thead>
+        <tbody>
+          <tr><td>三個競品都有，順序也一樣</td><td>類別慣例，使用者已經預期</td><td>照著排。改它要有明確理由</td></tr>
+          <tr><td>只有一家這樣做</td><td>那家的品牌選擇，或是它的特殊策略</td><td>先問「它為什麼要這樣做」，再決定要不要學</td></tr>
+          <tr><td>三家都有但長相差很多</td><td>功能是慣例，表現方式是風格空間</td><td>這裡就是你可以做出差異的地方</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>這張表的價值在於把「一定要有的東西」跟「可以自由發揮的東西」分開。做風格最容易出的意外剛好是反過來：在慣例的地方發揮創意（把購物車藏起來），卻在該有差異的地方原封照抄（配色跟競品一模一樣）。</p>
+    <div class="callout green">
+      分析競品的時候順便問一句：<strong>這個類別裡大家都在做的事，有哪些是我不能不做的？</strong>例如購物車圖示放右上角、主要按鈕用產品主色。這些是使用者的既有習慣（下面第 9 節的 Jakob's Law 會再談），不是可以隨便創新的地方。真正要差異化的，是氣質與情緒，不是操作慣例。
+    </div>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">03</p>
+    <h2 class="sec-title">風格故事化：用形容詞把方向講清楚</h2>
+    <p>「風格故事化」聽起來很虛，實際上是一個很具體的動作：<strong>在動手選顏色之前，先用文字把方向寫死。</strong></p>
+    <p>這個做法來自 Style Tiles 的原始流程。設計師在開始畫之前，會先用問卷或訪談問利害關係人一些問題，把回答裡反覆出現的形容詞整理出來，形成一段「線上品牌願景」的敘述，之後所有視覺決策都對著這段敘述檢查。</p>
+
+    <h3>三個好用的提問法</h3>
+    <ol class="steps">
+      <li><strong>比喻題。</strong>「如果這個產品是一輛車，它會是什麼車？」回答「機車」跟回答「休旅車」，導出來的視覺完全不同。也可以換成餐廳、店面、一個人。</li>
+      <li><strong>語意差異量表。</strong>給幾組相反的形容詞，讓人在中間畫一個點：現代 ←→ 傳統、活潑 ←→ 沉穩、親切 ←→ 專業、繁複 ←→ 簡潔。這比直接問「你想要什麼風格」有用得多，因為它逼人做取捨。</li>
+      <li><strong>反向題。</strong>「你絕對不想被誤認成哪一個競品？為什麼？」排除法通常比正面表列更快收斂。</li>
+    </ol>
+
+    <h3>從形容詞到風格故事</h3>
+    <p>整理完形容詞之後，寫成一段話。這段話就是<strong>風格故事</strong>，也是作業 6 要交的說明文字。它有固定的骨架：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>欄位</th><th>要寫什麼</th><th>範例：校園二手書交易 App</th></tr></thead>
+        <tbody>
+          <tr><td>給誰</td><td>目標族群，一句話</td><td>在通勤路上單手操作、對介面沒耐性的大學生</td></tr>
+          <tr><td>在什麼情境</td><td>什麼時候、在哪裡用</td><td>在校車上或排隊時，快速確認某本二手書還在不在</td></tr>
+          <tr><td>要感覺到</td><td>三到五個形容詞</td><td>乾淨、可靠、像跟同學面交一樣沒有壓力</td></tr>
+          <tr><td>而不是</td><td>每個形容詞的對照</td><td>熱鬧、促銷感、像在拍賣場搶標</td></tr>
+          <tr><td>所以視覺上</td><td>可以直接執行的決策</td><td>大面積留白、單一主色、字體選圓一點的黑體、不用紅色與倒數計時、按鈕做大、圓角明顯</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>最後一列是關鍵。<strong>形容詞如果不接到具體的視覺決策，等於沒寫。</strong>「乾淨」是形容詞，「大面積留白、只用一個主色」才是可以執行的。</p>
+    <div class="callout warn">
+      <strong>最常見的問題：</strong>形容詞挑了一堆互相打架的。「專業又活潑又溫暖又高級又年輕」——這種風格故事等於沒有方向，因為任何設計都符合。<strong>三到五個形容詞就夠，而且要能寫出對應的「而不是」。</strong>寫不出「而不是」的形容詞，通常是廢話（沒有人會說自己的產品要「難用」）。
+    </div>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">04</p>
+    <h2 class="sec-title">版面：網格、留白、對齊</h2>
+    <p>網格、留白與對齊在 Wireframe 階段你已經碰過一點，但那時候只求「東西有排好」。到了風格階段，這三樣要變成<strong>風格板上寫得出來、後面每一頁都要遵守的規格</strong>——接下來三節談的視覺基礎都是這樣。</p>
+
+    <h3>網格：先決定骨架，再決定裝飾</h3>
+    <p>網格是把版面切成固定的欄與間隔，讓每個區塊有地方對齊。Web 常見的做法是 12 欄，因為 12 可以被 2、3、4、6 整除，一列要放兩張、三張還是四張卡都排得下。</p>
+    <p>間距則建議鎖在一組固定數值上，最常見的做法是<strong>用 4 或 8 的倍數</strong>：4、8、12、16、24、32、48、64。這不是什麼定律，而是一個實用的自我約束——一旦決定只用這幾個值，你就不會出現 13px、17px、21px 這種「憑感覺調」的間距，畫面自然會整齊，交給工程師的時候也好溝通。</p>
+    <div class="callout">
+      <strong>寫在風格板上：</strong>基準單位（4 或 8）、欄數、區塊之間的標準間距（例如區塊間 48、卡片內 16）。有這三個數字，Unit 09 排多斷點版面的時候就不用重猜一次。
+    </div>
+
+    <h3>留白不是沒放東西</h3>
+    <p>留白是設計決策，不是版面沒填滿。它至少在做三件事：讓眼睛知道哪些東西是一組的（下面第 8 節的接近性）、讓重要的東西有呼吸空間所以顯得重要、以及降低一次要處理的資訊量。</p>
+    <p>一個好認的症狀是<strong>留白平均分配</strong>：所有東西之間都空 16px。結果就是畫面很整齊，但看不出哪裡是一組、哪裡是分界。<strong>留白要有大小差異</strong>——同一組裡面空 8，組跟組之間空 32，分組關係一眼就看得出來。</p>
+
+    <h3>對齊：一條看不見的線</h3>
+    <p>對齊的判斷方式很簡單：把畫面瞇著眼看，或直接在 Figma 裡拉幾條輔助線，看每個元素的左邊緣是不是落在同一條線上。中文介面絕大多數情況用<strong>左對齊</strong>，因為每一行的起點固定，眼睛掃讀最快。置中適合短標題與空狀態，不適合整段內文——每一行起點都不一樣，讀起來會累。</p>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">05</p>
+    <h2 class="sec-title">排版：字級、行距、階層</h2>
+    <p>介面上絕大部分的內容是文字。字排不好，配色再漂亮也救不回來。</p>
+
+    <h3>字級：做一組級距，不要每次現調</h3>
+    <p>不要每次要放標題就隨手打一個數字。先定好一組固定的字級，之後只能從裡面選。一組夠用的級距長這樣：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>角色</th><th>大小（參考值）</th><th>用在哪</th></tr></thead>
+        <tbody>
+          <tr><td>大標</td><td>28–32</td><td>頁面標題，一頁只有一個</td></tr>
+          <tr><td>小標</td><td>20–24</td><td>區塊標題、卡片標題</td></tr>
+          <tr><td>內文</td><td>16</td><td>說明文字、清單項目</td></tr>
+          <tr><td>輔助</td><td>13–14</td><td>時間、標籤、次要說明</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>行動裝置上內文<strong>不要小於 14</strong>，16 是比較安全的起點。這不是美感問題，是能不能讀的問題。</p>
+
+    <h3>行距：跟著字級走</h3>
+    <p>行距太擠，一行會黏到下一行；太鬆，段落會散開變成一堆獨立的句子。內文的行高抓字級的 <strong>1.5 到 1.75 倍</strong>是常見的安全範圍，標題因為字大，可以收到 1.2 到 1.3。中文因為字面方正、沒有英文的字母高低起伏，通常需要比英文再鬆一點。</p>
+
+    <h3>階層：靠對比，不是靠尺寸一直加</h3>
+    <p>視覺階層是引導眼睛依照重要性的順序看過去。做出階層的手段有四種，可以疊加使用：大小、字重、顏色深淺、以及周圍的留白。</p>
+    <div class="callout warn">
+      <strong>要小心的症狀：</strong>每個東西都想強調，所以標題加大、加粗、換顏色，副標也加粗，重要提示再加個底色。結果全部都在喊，等於都沒有喊。這個階段先用一條嚴格一點的自我限制：<strong>一個畫面只留一個最強調的東西</strong>——先問「如果使用者只看到一樣，那應該是哪一樣」。等到做儀表板那種一頁多任務的畫面時，可以有多個局部焦點，但那是各區塊內部各自有一個焦點，不是全部一起喊。
+    </div>
+    <p>另一個實用的限制：<strong>字體最多兩種</strong>。一種標題、一種內文，或者乾脆同一種字體用不同字重去分。字體種類一多，畫面就會散，而且中英文混排時要處理的組合會爆炸。</p>
+  </section>
+
+  <section class="section" id="s6">
+    <p class="sec-num">06</p>
+    <h2 class="sec-title">色彩：給每個顏色一個工作</h2>
+    <p>配色不是挑幾個好看的顏色湊在一起，是<strong>給每個顏色一個工作</strong>。定義好工作之後，畫新頁面的時候就不用再猶豫「這裡該用什麼顏色」。</p>
+
+    <div class="swatches">
+      <div class="sw"><span class="chip" style="background:#0066cc"></span><span class="lbl"><b>品牌主色</b>識別、大面積品牌表面、導覽列</span></div>
+      <div class="sw"><span class="chip" style="background:#0f766e"></span><span class="lbl"><b>強調色</b>主要動作按鈕、連結、當前選取狀態</span></div>
+      <div class="sw"><span class="chip" style="background:#c2410c"></span><span class="lbl"><b>語意色</b>成功、警告、錯誤、危險動作</span></div>
+      <div class="sw"><span class="chip" style="background:linear-gradient(90deg,#1d1d1f 0 33%,#6e6e73 33% 66%,#f5f5f7 66%)"></span><span class="lbl"><b>中性色</b>文字、背景、分隔線、停用狀態</span></div>
+    </div>
+
+    <h3>每個角色在管什麼</h3>
+    <ul class="bullets">
+      <li><strong>品牌主色。</strong>整個產品最會被記住的顏色，也是識別的核心。它<strong>可以</strong>大面積使用——鋪滿導覽列、當登入頁背景、當品牌區塊的底色都很常見。</li>
+      <li><strong>強調色（互動色）。</strong>專門標記「這裡可以點」的顏色：主要按鈕、連結、被選中的分頁。這個才是<strong>要省著用</strong>的——一個畫面上到處都是強調色，主要動作就浮不出來了。</li>
+      <li><strong>兩者可以是同一個顏色，但要想清楚。</strong>很多產品的品牌主色就是強調色，這沒問題；問題出在你把主色大面積鋪在背景上，同時又拿它當按鈕色——按鈕會直接消失在背景裡。共用一色的話，就得靠深淺差異或反白按鈕把互動區分出來。</li>
+      <li><strong>輔助色。</strong>做次要的區分，例如不同分類的標籤、圖表的分組。一到兩個就夠。</li>
+      <li><strong>語意色。</strong>成功綠、警告黃、錯誤紅。這組不要拿來玩創意，因為使用者對它們已經有既定認知。要特別注意<strong>不能只靠顏色傳達訊息</strong>——色盲使用者分不出紅綠，錯誤訊息旁邊要有圖示或文字說明。</li>
+      <li><strong>中性色。</strong>用量其實最大：文字、背景、卡片邊框、分隔線、停用狀態。至少準備深、中、淺三階，例如深灰放主要文字、中灰放次要文字、淺灰放背景與分隔線。</li>
+    </ul>
+
+    <h3>用量的分配</h3>
+    <p>常聽到的 <strong>60-30-10</strong>：60% 中性（大面積背景）、30% 次要色塊、10% 重點色。這是幫助你收斂的經驗法則，不是規定——它真正在提醒的是「強調色是拿來點的，不是拿來鋪的」。</p>
+
+    <h3>對比：這一項有硬標準</h3>
+    <p>前面的都是判斷，這一項有可以量的門檻。WCAG 對文字與背景的對比度要求是：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>對象</th><th>最低對比度</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>一般文字</td><td>4.5 : 1</td><td>未加粗且小於 18pt，或加粗但小於 14pt</td></tr>
+          <tr><td>大型文字</td><td>3 : 1</td><td>未加粗但 18pt 以上，或加粗且 14pt 以上</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>最常不及格的兩種情況：<strong>淺灰字放在白底上</strong>，還有<strong>把文字直接壓在照片上</strong>。前者用檢測工具一測就知道不及格；後者因為照片每個區域亮度不同，要加半透明遮罩或色塊才能穩定達標。</p>
+    <div class="callout">
+      <strong>怎麼檢查：</strong>Figma 有對比度檢測的外掛（搜尋 contrast / A11y 相關的 plugin），或直接把前景與背景的色碼貼進線上的 contrast checker。風格板上的每一組「文字色 + 背景色」都測一次，測過的組合才寫上去。
+    </div>
+  </section>
+
+  <section class="section" id="s7">
+    <p class="sec-num">07</p>
+    <h2 class="sec-title">一致性：風格板真正在解決的問題</h2>
+    <p>假設沒有風格板，你直接開始畫五個頁面。第一頁的按鈕圓角 8、主色 #2E7D32；第三頁畫的時候忘記了，圓角變成 12、綠色調成 #388E3C；第五頁又改了一次。</p>
+    <p>單獨看每一頁都沒問題，放在一起看就會覺得「不像同一個產品」。而且要修的時候，你得一頁一頁找出來改。</p>
+    <p><strong>一致性的價值不只在於美觀，更在於降低使用者的學習成本。</strong>當所有「可以點的東西」都長同一個樣子，使用者學一次就會了；當每一頁的主要按鈕位置都在同樣的地方，他不用每一頁重新找。</p>
+
+    <h3>一致性要一致到什麼程度</h3>
+    <div class="cards">
+      <div class="card">
+        <h3>要一致的</h3>
+        <p>同一種元件的長相（所有主要按鈕）、同一種資訊的位置（價格永遠在標題下面）、互動的回饋方式（點下去都會變暗）、詞彙（別一下叫「收藏」一下叫「加入最愛」）。</p>
+      </div>
+      <div class="card">
+        <h3>可以不一致的</h3>
+        <p>刻意要被注意到的東西。危險動作（刪除）本來就該長得跟一般按鈕不一樣；空狀態頁面可以用插畫打破規律。<strong>不一致要是刻意的，而且說得出理由。</strong></p>
+      </div>
+    </div>
+    <div class="callout green">
+      風格板就是把「要一致的那些」寫成一份可以查的規格。Unit 10 畫 Mockup 時，你不是憑印象回想上次用什麼綠，而是回來看風格板上寫的色碼。這也是為什麼風格板上一定要有<strong>具體數值</strong>——色碼、字級、圓角、間距，寫「深綠色」是沒有用的。<br><br>
+      再往前一步，是把這份規格變成 Figma 裡真的可以套用的東西，讓一致性不靠你記得，而是靠工具保證——那就是第 11 節的設計系統。
+    </div>
+  </section>
+
+  <section class="section" id="s8">
+    <p class="sec-num">08</p>
+    <h2 class="sec-title">完形心理學：畫面是怎麼被分組的</h2>
+    <p>完形（Gestalt）原則講的是：人看畫面的時候，不是一個一個元素分開看，而是自動把它們組成一個整體。<strong>你不決定使用者怎麼分組，他也會自己分——所以你最好讓他分對。</strong></p>
+    <p>所以風格做完之後，拿下面這五條回頭檢查：你的視覺決策到底在幫使用者分組，還是在誤導他。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>原則</th><th>人怎麼看</th><th>介面上怎麼用</th></tr></thead>
+        <tbody>
+          <tr><td>接近性 Proximity</td><td>靠得近的東西被當成同一組</td><td>欄位標籤貼近它的輸入框；卡片內部的間距要小於卡片之間的間距</td></tr>
+          <tr><td>相似性 Similarity</td><td>長得像的東西被當成同一類</td><td>所有可點的連結用同一個顏色；同一層級的標題用同一個字級</td></tr>
+          <tr><td>連續性 Continuity</td><td>眼睛傾向沿著平順的線、曲線或排列方向繼續看下去，並把同一條路徑上的東西當成相關的</td><td>把元素對齊成一條線，引導視線走完一段；商品列表橫向排列時露出半張卡，同時暗示「這排還沒完」與「可以滑」</td></tr>
+          <tr><td>封閉性 Closure</td><td>圖形沒畫完，大腦會自動補起來</td><td>圖示可以用簡化的線條；進度環沒接起來也看得懂是圓形</td></tr>
+          <tr><td>共同區域 Common Region</td><td>在同一個框線或底色範圍內的東西是一組</td><td>卡片、面板、分隔區塊；用底色把工具列跟內容區分開</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>接近性最常被違反</h3>
+    <p>表單是重災區。標籤跟自己的輸入框距離，如果大於等於它跟上一個輸入框的距離，使用者就會看錯——他會以為那個標籤是在說明上面那一格。修法很簡單：把標籤跟它的欄位靠緊，欄位與欄位之間拉開。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>做法</th><th>標籤到它的欄位</th><th>欄位到下一個欄位</th><th>使用者看到的結果</th></tr></thead>
+        <tbody>
+          <tr><td class="bad">✗ 平均分配</td><td>16</td><td>16</td><td>兩段距離一樣，看不出「電話」這個標籤是在說明上面那格還是下面那格</td></tr>
+          <tr><td class="hl2">✓ 有大小差異</td><td>8</td><td>32</td><td>標籤明顯屬於下面那一格，一眼就對得起來</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>共同區域很強，但不要濫用</h3>
+    <p>共同區域的強度<strong>可以壓過接近性與相似性</strong>——兩個東西就算靠得很近，只要中間有框線把它們分到不同的框裡，人就會當成兩組。所以當留白已經分不清楚的時候，加框或加底色是有效的手段。</p>
+    <div class="callout warn">
+      <strong>但反過來就是問題。</strong>什麼都加框、什麼都做成卡片，畫面會變得很吵，而且容易做出「假底部」——一條橫跨整個畫面的分隔線或色塊，會讓使用者以為頁面到這裡就結束了，不再往下捲。<strong>順序是：先用留白分組，留白不夠才加框線。</strong>
+    </div>
+  </section>
+
+  <section class="section" id="s9">
+    <p class="sec-num">09</p>
+    <h2 class="sec-title">Laws of UX：四條會影響風格決策的定律</h2>
+    <p><a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a> 收了二十幾條心理學原則。這裡挑四條跟這堂課最有關的——它們會直接影響你在風格板上決定的東西。</p>
+
+    <h3>Hick's Law：選項越多，決定越慢</h3>
+    <p>定義是「做決定所需的時間，會隨著選項的數量與複雜度增加」。</p>
+    <p>對風格的影響：三個顏色一樣、大小一樣的按鈕擺在一起，使用者要花時間一個一個比較；把其中一個做成主要按鈕、另外兩個降成文字連結，他一眼就知道該按哪個。</p>
+    <p>講精確一點：<strong>調視覺階層並不會減少選項的數量，減少的是「比較與辨識」的成本。</strong>要跟 Hick's Law 直接扯上關係，得是那幾個東西真的是使用者必須二選一的互斥選項。原始研究談的也是這種情況下的反應時間，所以不要把它當成「選項一律要少」的絕對規則——官方的提醒裡有一條是<strong>「不要簡化到變得抽象」</strong>，把功能藏起來只是把問題換個地方。</p>
+
+    <h3>Fitts's Law：目標越小越遠，越難點</h3>
+    <p>定義是「取得目標所需的時間，是目標距離與大小的函數」。三個實作重點：<strong>點擊目標要夠大、彼此要有足夠間距、要放在容易到達的位置。</strong></p>
+    <p>具體的數字：WCAG 2.2 要求指標輸入的目標至少 <code>24 × 24</code> CSS px（有間距等例外條款）；Apple 的介面指南建議可點擊元素至少 <code>44 × 44</code> pt。手機上還要考慮拇指範圍——單手握持時，畫面上方角落是最難按到的地方，所以主要動作通常放在下方。</p>
+    <div class="callout">
+      這條直接影響風格板：<strong>按鈕高度要在風格板上寫死</strong>。如果你的風格追求「輕巧細緻」，很容易把按鈕做得又扁又小，做出來就是使用者按不到。輕巧可以靠字重與留白達成，不必靠縮小點擊面積。
+    </div>
+
+    <h3>Miller's Law：7±2 這個數字是怎麼被用壞的</h3>
+    <p>1956 年 Miller 的研究發現，人一次能記住的資訊單位大約是 7±2 個。這條是四條裡最常被誤用的——<strong>它不是「選單最多放七項」，也不是任何介面的硬性上限。</strong>Laws of UX 上的第一條提醒就是「不要拿『神奇數字七』來合理化不必要的設計限制」。</p>
+    <p>真正能用的是<strong>分塊（chunking）</strong>：把長串資訊拆成小塊，人比較好處理。手機號碼寫成 <code>0912-345-678</code> 比 <code>0912345678</code> 好記；一個有二十個欄位的表單，分成三段各附小標，比一路排到底好填。而且能記多少因人而異，跟這個人原本懂多少、當下在什麼情境都有關——所以那個數字本身不能拿來當設計規格。</p>
+
+    <h3>Jakob's Law：使用者大部分時間都在別人的網站上</h3>
+    <p>定義是使用者會期待你的產品跟他已經熟悉的其他產品運作方式一樣。</p>
+    <p>這條是<strong>風格創新的煞車</strong>。使用者已經知道：右上角的購物車圖示可以看購物車、底部那排 tab 是主要分頁、底線的藍字可以點。這些期待是他從別的產品帶過來的，你把它改掉，得到的通常不是「有創意」，是使用者找不到東西。</p>
+    <p>但這不等於慣例完全不能動。<strong>正確的說法是：慣例優先沿用；要偏離，得說得出是哪個任務需求逼你偏離，而且要拿去測。</strong>純粹因為「想做得不一樣」而換掉的慣例，幾乎都會付出代價。</p>
+    <div class="callout green">
+      實務上的分工是：<strong>操作慣例先照沿用，視覺氣質才是你做自己的地方。</strong>圖示的意思、主要元件的位置、互動的方式，先跟著大家走；顏色、字體、留白、圖像風格、文案語氣，是你差異化的空間。第 2 節的競品分析剛好可以拿來對照——那張表裡的「主色、圖像、語氣」是你可以不一樣的，「購物車在哪裡」要改就得有理由。
+    </div>
+  </section>
+
+  <section class="section" id="s10">
+    <p class="sec-num">10</p>
+    <h2 class="sec-title">Style Tile 與 Moodboard</h2>
+    <p>課綱把作業 6 寫成「風格板（Style Tile / Moodboard）」，兩種形式都收。但它們解決的問題不一樣，選之前先搞清楚差別。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Moodboard 情緒板</th><th>Style Tile 風格板</th></tr></thead>
+        <tbody>
+          <tr><td>在做什麼</td><td>收集參考、定調氣氛</td><td>把氣氛翻譯成介面元素</td></tr>
+          <tr><td>上面有什麼</td><td>圖片、材質、色調、字體氛圍、任何有感覺的東西</td><td>色票與色碼、字體與字級、按鈕、輸入框、標籤等介面元素</td></tr>
+          <tr><td>什麼時候做</td><td>更前面，方向還在收斂的時候</td><td>方向定了，要把它變成可執行規格的時候</td></tr>
+          <tr><td>拿來幹嘛</td><td>對齊感覺：「我們講的是同一種氣質嗎」</td><td>對齊執行：「所以按鈕到底長這樣對嗎」</td></tr>
+          <tr><td>弱點</td><td>主觀，同一張圖不同人解讀不同</td><td>還不是完整頁面，看不出版面組合起來的效果</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <strong>兩者不是二選一，是前後關係。</strong>正常的做法是先做 Moodboard 收斂方向，再把方向翻譯成 Style Tile。所以作業 6 如果你交的是 Moodboard，就要<strong>另外附一份最小規格</strong>：色碼、字級、按鈕長相。少了這些，Unit 10 畫 Mockup 的時候沒有東西可以查，等於每一頁又要重新猜一次。
+    </div>
+
+    <h3>怎麼做一張有用的 Moodboard</h3>
+    <p>Moodboard 的難處不是找圖，是<strong>找完之後別人不知道你在指哪裡</strong>。同一張咖啡廳照片，你看到的是木頭的溫暖，別人看到的是暗色調的高級感。修法有三個：</p>
+    <ol class="steps">
+      <li><strong>先有形容詞，再找圖。</strong>拿第 3 節寫好的 3–5 個形容詞當關鍵字去找，不要先滑到喜歡的圖再回頭湊形容詞——那樣找到的是你的個人品味，不是產品的方向。</li>
+      <li><strong>每張圖標註你在指什麼。</strong>圖旁邊寫一句：「取這張的<em>配色</em>，不是取它的排版」。這一句話就是 Moodboard 跟 Pinterest 收藏夾的差別。</li>
+      <li><strong>放反例。</strong>另外挑 2–3 張「絕對不要變成這樣」的圖，一樣標理由。排除的方向通常比嚮往的方向更快讓人對齊。</li>
+    </ol>
+    <p>圖的數量控制在 <strong>10–15 張</strong>就好。收一百張的結果是每個方向都沾一點，看完還是不知道要往哪走。找完之後把明顯不同調的挑掉——留下來的圖擺在一起應該要像同一個世界。</p>
+
+    <h3>Style Tile 卡在中間是刻意的</h3>
+    <p>Style Tile 的原始定義是「一份參照網站介面元素的設計交付物，透過字體、色彩與樣式的組合來呈現」——它<strong>比 Moodboard 具體，但比 Mockup 抽象</strong>，而且這個位置是故意選的。</p>
+    <p>直接畫完整 Mockup 給人看，會有兩個副作用：對方以為設計快做完了；以及對方開始東挑西選——「我要 A 版的配色配 B 版的排版加 C 版的按鈕」，拼出一個沒有整體邏輯的<em>Frankencomp</em>（縫合怪稿）。Style Tile 把討論限縮在元素上——它可以用小範圍的組合示意元素之間的關係，但不承諾完整的頁面配置，剛好避開這件事。</p>
+
+    <h3>一張 Style Tile 上該有什麼</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>區塊</th><th>要放什麼</th><th>旁邊那句說明要寫什麼</th></tr></thead>
+        <tbody>
+          <tr><td>風格故事</td><td>三到五個形容詞 + 一段說明</td><td>這些形容詞是從哪一份研究推出來的</td></tr>
+          <tr><td>色票</td><td>品牌主色、強調色、語意色、中性三階，全部標色碼</td><td>每個顏色負責什麼工作</td></tr>
+          <tr><td>字體</td><td>標題字體與字級、內文字體與字級／行距</td><td>為什麼是這個字體、這組級距</td></tr>
+          <tr><td>介面元素</td><td>主要／次要按鈕、停用狀態、輸入框（一般 + 錯誤）、標籤、卡片</td><td>圓角與高度是依哪個決策訂的</td></tr>
+          <tr><td>質感規格</td><td>圓角、陰影、間距基準單位</td><td>基準單位是 4 還是 8，為什麼</td></tr>
+          <tr><td>圖像方向</td><td>兩三張示意圖</td><td>為什麼是這種圖：實拍、插畫，還是圖示加色塊</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>注意最後一欄。<strong>每一區旁邊都要寫一句話說明理由</strong>，這是風格板跟拼貼圖的差別。沒有說明文字的風格板，交出去只會得到「我不喜歡這個顏色」這種沒辦法討論的回饋。</p>
+
+    <h3>圖片方向怎麼決定</h3>
+    <p>「圖片方向」是風格板上最容易被跳過的一欄，但它決定了 Mockup 上面積最大的那塊東西長什麼樣。先做一個選擇：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>選項</th><th>什麼時候適合</th><th>代價</th></tr></thead>
+        <tbody>
+          <tr><td>實拍照片</td><td>賣的是真實存在的東西（商品、餐點、空間、人）；要建立可信度</td><td>沒有品質一致的圖來源就會很慘——每張色調光線都不一樣，畫面立刻散掉</td></tr>
+          <tr><td>插畫</td><td>講的是抽象的東西（流程、概念、情緒）；要柔化嚴肅或尷尬的情境（錯誤、空狀態、金融）</td><td>風格一致的插畫很貴，混用不同來源會很明顯</td></tr>
+          <tr><td>圖示 + 色塊</td><td>工具型、資訊型產品；資訊密度高，圖片會變成干擾</td><td>畫面容易變單調，要靠排版與留白撐起來</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>選完之後，在風格板上放兩三張示意圖，並寫下<strong>可以被檢查的規則</strong>，例如：「商品照一律去背白底、正方形」「情境照色溫偏暖、人物不看鏡頭」「插畫只用兩個顏色、線條粗細一致」。</p>
+    <div class="callout warn">
+      示意圖如果是網路上抓的，<strong>在風格板上要註明是暫用參考</strong>。這一步不寫，很容易一路帶進 Mockup、甚至帶進作品集——那就變成用了別人的作品。自己拍、用有授權的免費圖庫、或用 AI 生圖，都要在旁邊寫清楚來源。
+    </div>
+
+    <h3>做兩到三版，不要只做一版</h3>
+    <p>Style Tile 的原始流程就是提出兩到三個版本，各自代表對同一段風格故事的不同詮釋，讓對方選、讓對方指出偏好，再收斂成最終版。</p>
+    <div class="callout">
+      <strong>兩三版怎麼分才有意義：</strong>不要做「同一個方向的三個微調版」（主色深一點、淺一點、再淺一點），那不是選項。要做<strong>取捨不同</strong>的版本，例如 A 版把「可靠」放最大（深色、方正、資訊密）、B 版把「沒壓力」放最大（淺色、圓角、大留白）。對方選了哪一版，你才知道他真正在意的是什麼。
+    </div>
+  </section>
+
+  <section class="section" id="s11">
+    <p class="sec-num">11</p>
+    <h2 class="sec-title">從風格板長成設計系統</h2>
+    <p>風格板做完，你手上有一組色碼、一組字級、幾個元件的長相。如果這個產品只做五頁，到這裡就夠了。但如果它要繼續長大——多人一起畫、頁面越來越多、之後還要交給工程師——就需要把這些決策變成一套<strong>可以被重複使用、而且改一次全部跟著改</strong>的東西。那就是設計系統。</p>
+
+    <h3>設計系統、Style Guide、風格板，差在哪</h3>
+    <p>NN/g 對設計系統的定義是「一整套用來在規模化的情況下管理設計的標準，做法是透過可重複使用的元件與模式」。關鍵字是<em>規模化</em>與<em>可重複使用</em>——它要解決的是「東西一多就開始走鐘」這件事。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>在回答什麼問題</th><th>形式</th></tr></thead>
+        <tbody>
+          <tr><td>風格板</td><td>這個產品應該長什麼樣？</td><td>一張圖，給人看方向</td></tr>
+          <tr><td>Style Guide 樣式指南</td><td>這些樣式該怎麼用？</td><td>文件：色彩、字體、Logo、語氣、互動規則</td></tr>
+          <tr><td>元件庫</td><td>這個按鈕實際上長怎樣、有哪些狀態？</td><td>可以直接拿來用的元件，含說明與規格</td></tr>
+          <tr><td>設計系統</td><td>以上全部，加上「誰維護、怎麼更新」</td><td>標準 + 元件庫 + 文件，是一個持續運作的東西</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>所以順序是這樣的：<strong>風格板是設計系統的第一塊。</strong>你在風格板上決定的主色與字級，之後就是系統裡最底層的那組值；你畫的按鈕，之後就是元件庫裡的第一個元件。</p>
+
+    <h3>三層結構</h3>
+    <p>不管規模大小，設計系統大致都是這三層疊起來的。上面一層一定是用下面一層做出來的——這就是「改一次全部跟著改」的來源。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>層</th><th>裡面有什麼</th><th>它在整套系統裡的角色</th></tr></thead>
+        <tbody>
+          <tr><td>③ 規範</td><td>什麼時候用哪個、不能怎麼用</td><td>文件，管的是使用方式</td></tr>
+          <tr><td>② 元件</td><td>按鈕、輸入框、卡片、導覽列</td><td>用 ① 組出來，拿來組頁面</td></tr>
+          <tr><td>① Token</td><td>色彩、字級、間距、圓角、陰影</td><td>最小的決策單位，其他兩層都建在它上面</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="bullets">
+      <li><strong>① Token（設計代幣）。</strong>Figma 的說法是「儲存團隊核心設計決策的具名數值」。白話講就是：不要在畫面上直接填 <code>#2E7D32</code>，而是給它一個名字，畫面上用名字。改的時候改一個地方就好。</li>
+      <li><strong>② 元件。</strong>用 Token 組成的可重複使用單位。同一個按鈕不管出現在哪一頁，都是同一個東西的複製品。</li>
+      <li><strong>③ 規範。</strong>光有元件不夠——還要寫清楚「主要按鈕一頁只能有一個」「破壞性操作用紅色，而且要有二次確認」。沒有這層，每個人拿同一套元件還是會拼出不一樣的東西。</li>
+    </ul>
+
+    <h3>Token 為什麼要取名字：原始值與語意層</h3>
+    <p>Token 有兩種寫法，差別很大。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>層</th><th>長什麼樣</th><th>它在說什麼</th></tr></thead>
+        <tbody>
+          <tr><td>原始值 raw</td><td><code>green-600 = #2E7D32</code><br><code>gray-900 = #1A1A1A</code></td><td>只交代「這個顏色叫什麼」，不說它拿來幹嘛</td></tr>
+          <tr><td>語意層 semantic</td><td><code>button-primary-bg → green-600</code><br><code>text-primary → gray-900</code></td><td>不存顏色，指向原始值，並說明它的用途</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>語意層不存顏色，它<strong>指向</strong>原始值，並且說明這個顏色是拿來幹嘛的。這一層看起來多餘，但它是兩件事的關鍵：</p>
+    <ul class="bullets">
+      <li><strong>換色。</strong>之後主色從綠改成藍，你只要把 <code>button-primary-bg</code> 指到 <code>blue-600</code>，所有按鈕一起變。如果當初到處填的是 <code>green-600</code>，你得一個一個找出哪些綠是按鈕、哪些綠是成功訊息。</li>
+      <li><strong>深色模式。</strong><code>text-primary</code> 在淺色模式指向深灰、在深色模式指向淺灰——名字不變，值換掉。這就是深色模式能做得動的原理。</li>
+    </ul>
+
+    <h3>Figma 上怎麼做</h3>
+    <p>上面三層在 Figma 各有對應的功能。你在這堂課要用到的是前兩層。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>你風格板上的東西</th><th>Figma 功能</th><th>做完之後</th></tr></thead>
+        <tbody>
+          <tr><td>色票</td><td>Color Styles（或 Variables）</td><td>右側面板點一下就上色，不用再複製色碼</td></tr>
+          <tr><td>字級與行距</td><td>Text Styles</td><td>選好文字點一下，字體字級行距一次到位</td></tr>
+          <tr><td>陰影</td><td>Effect Styles</td><td>陰影不會每次都調得不一樣</td></tr>
+          <tr><td>按鈕、輸入框、卡片</td><td>Component（元件）</td><td>改主元件，所有實例一起改</td></tr>
+          <tr><td>按鈕的各種版本</td><td>Variants（變體）</td><td>主要／次要、一般／停用收成一個元件，用下拉選單切換</td></tr>
+          <tr><td>之後要換色或做深色模式</td><td>Variables + Modes</td><td>同一個名字，切換模式就換一整套值</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Styles 與 Variables 該用哪個</h3>
+    <p>兩個都能存色彩，功能有重疊，所以很多人卡在這裡。差別是：<strong>Styles 適合排版、漸層這種比較複雜的樣式；Variables 適合色彩與間距這種單一數值，而且只有 Variables 能做模式切換（深色模式）與直接對接程式碼。</strong></p>
+    <div class="callout">
+      這堂課的建議：<strong>色彩用 Variables，文字用 Text Styles。</strong>色彩之後最可能要換、也最可能要做深色模式；文字樣式牽涉字體、字級、行距、字重一整組，用 Styles 比較單純。如果覺得 Variables 太複雜，全部先用 Styles 也可以——重點是<strong>不要直接填色碼</strong>。
+    </div>
+
+    <h3>Component 與 Variants</h3>
+    <p>把一組圖層選起來按 <code>⌥ ⌘ K</code>（Windows 是 <code>Ctrl Alt K</code>）就變成<strong>主元件（main component）</strong>。之後複製出去用的每一個都是<strong>實例（instance）</strong>，主元件一改，所有實例跟著改。實例上可以個別改文字、改圖片這類覆寫，改壞了可以重設回主元件的樣子。</p>
+    <p><strong>Variants（變體）</strong>則是把同一個元件的不同版本收進一個容器裡。主要按鈕、次要按鈕、停用中的按鈕，不必做成三個各自獨立的元件，而是一個元件加上幾個屬性。用的時候在右側面板換選項就好。</p>
+    <p>注意這裡有<strong>兩個不同維度</strong>：主要／次要是這顆按鈕的<em>種類</em>，一般／停用是它<em>當下的狀態</em>。兩件事不一樣，所以要開成兩個屬性——<code>Type</code>（主要／次要）與 <code>State</code>（一般／停用）。開對了，兩兩組合就涵蓋四種情況；開錯了，之後想要「次要的停用版」就得再補一個值。</p>
+    <div class="callout warn">
+      <strong>設定屬性時最常搞錯的地方：</strong>把好幾個維度塞進同一個屬性。不要做一個叫 <code>Style</code> 的屬性，值寫成「主要大顆」「次要小顆」——這樣兩個維度綁死，之後想要「次要大顆」就得再開一個值。<strong>拆成 <code>Type</code>（主要／次要／文字）與 <code>Size</code>（大／中／小）兩個屬性</strong>，能組合出來的就是所有情況。<br><br>
+      另外，同一個變體容器裡的所有變體，要用同一組屬性；每個變體必須是這些屬性的一種獨特組合，不能重複。
+    </div>
+
+    <h3>什麼時候該把一個東西變成元件</h3>
+    <p>不是所有東西都要做成元件。做元件是有成本的——要命名、要維護、改的時候要想會不會影響到別的地方。判斷標準有兩個，符合任一個就值得做：</p>
+    <ol class="steps">
+      <li><strong>出現三次以上。</strong>第一次畫，第二次複製，第三次再複製的時候就該停下來做成元件。這時候你已經確定它會重複，而且還沒多到要改很多份。</li>
+      <li><strong>它有多種狀態。</strong>就算只出現一次，只要它有一般／停用／錯誤／選中這些狀態要管，做成帶 Variants 的元件比較不會漏掉其中一種。</li>
+    </ol>
+    <div class="callout green">
+      <strong>學生專題不需要做完整的設計系統。</strong>NN/g 也講得很直接：設計系統需要有人專職維護、需要花時間教別人怎麼用，公司如果把每個案子當一次性專案，這件事根本推不動。你一個人做一份專題，維護成本大於收益。<br><br>
+      這堂課要你做到的是<strong>最小可用的那一層</strong>：色彩建成 Color Styles 或 Variables、字級建成 Text Styles，按鈕做成一個帶 Variants 的元件。這樣 Unit 10 畫 Mockup 的時候，你改一次主色，所有頁面一起變——這個好處你馬上就感受得到，其他的等真的需要再說。
+    </div>
+  </section>
+
+  <section class="section" id="s12">
+    <p class="sec-num">12</p>
+    <h2 class="sec-title">課堂練習與回家作業</h2>
+    <p>這堂課 3 小時，時間大致是：講述 70 分、課堂練習 80 分、成果分享 15 分、休息 15 分。</p>
+
+    <div class="callout">
+      <strong>課前要準備好的東西：</strong>2 個競品的截圖（各抓首頁與一個內頁）、你的 Persona 摘要、以及一份空白的 Style Tile 骨架檔。這三樣沒帶，80 分鐘會全部花在找素材上。
+    </div>
+
+    <h3>課堂練習：從競品拆到風格板雛形（80 分鐘）</h3>
+    <p>個人作業，用自己的專題。課堂上只做<strong>一個方向的核心版</strong>，完整元件狀態與第二版留到回家做。四階段結束後另有 15 分鐘各組互相看成果。</p>
+    <ol class="steps">
+      <li><strong>競品視覺拆解（20 分）</strong>：用第 2 節的六個欄位拆 2 個競品，再比對同一種頁面的版面順序，標出哪些是類別慣例。不要寫好看難看，只寫具體特徵。</li>
+      <li><strong>形容詞與風格故事（15 分）</strong>：用第 3 節的三個提問法收斂出 3–5 個形容詞，寫成一段風格故事，每個形容詞都要配一個「而不是」。個人專題沒有客戶可訪，就拿你的 Persona 當回答的人——回答時要指得出是根據研究裡的哪一段，不是你自己的偏好。</li>
+      <li><strong>色彩與字體（20 分）</strong>：定出品牌主色、強調色、語意色、中性三階，全部標色碼；選 1–2 個字體，定出四級字級。時間不夠時，優先測「內文色＋背景色」這一組的對比度，其餘留到回家補。</li>
+      <li><strong>組出 Style Tile（25 分）</strong>：把上面的東西放進第 10 節的骨架，加上按鈕與輸入框兩種元件，每一區寫一句理由。</li>
+    </ol>
+    <div class="callout green">
+      <strong>最後 15 分鐘的分享怎麼進行：</strong>兩人一組互看，只問三題——① 你看到的前三個形容詞是什麼？② 這一版最想被記住的是哪個決策？③ 哪一項你看不出理由？<br><br>第一題是重點：<strong>對方講出來的形容詞，如果跟作者寫在風格故事裡的對不起來，就代表這個風格沒有傳達到。</strong>這比「好不好看」有用得多，因為它可以被驗證。
+    </div>
+
+    <h3>回家作業：作業 6 風格板</h3>
+    <ol class="steps">
+      <li>把課堂上的<strong>風格板補完整</strong>——不管你用 Style Tile 還是「Moodboard + 最小規格」的形式，下面這些都要有：色票、字體字級、按鈕（主要／次要，各含一般與停用）、輸入框（一般／錯誤）、標籤、卡片，質感規格（圓角、陰影、間距基準），以及圖片方向與其規則。</li>
+      <li>再做<strong>第二版</strong>，取捨方向要跟第一版明顯不同，不是微調。</li>
+      <li>寫風格故事說明：給誰、什麼情境、要感覺到什麼、而不是什麼、所以視覺上怎麼做。每個形容詞都要接到具體決策。</li>
+      <li><strong>在風格板上就能查的</strong>：對比度、相似性（可點的東西有沒有共用特徵）、元件的各種狀態、按鈕與輸入框的高度夠不夠好按、色彩角色有沒有分清楚。逐項檢查並記下你改了什麼。</li>
+      <li><strong>要套回畫面才查得出來的</strong>：把風格套到 Unit 07 其中一張 Wireframe 上（不用做到精緻，換色換字換間距即可），再用接近性、共同區域、連續性、Hick's Law、Jakob's Law 各檢查一次。</li>
+      <li>對比度全部測過，把不及格的組合改掉——這一項沒過，風格板等於不能用。</li>
+      <li>把風格板上的<strong>色票建成 Color Styles 或 Color Variables、字級建成 Text Styles</strong>；按鈕做成一個 <strong>Component</strong>，開 <code>Type</code>（主要／次要）與 <code>State</code>（一般／停用）兩個 <strong>Variants</strong> 屬性。做完之後試著改一次主色，確認所有用到的地方都跟著變。</li>
+    </ol>
+    <div class="callout green">
+      第 4 步跟第 5 步分開，是因為<strong>有些原則在只有元件的風格板上根本看不出來</strong>。「選項會不會太多」「分組清不清楚」要有完整版面才有得判斷。這也是 Style Tile 的先天限制——它保證了元素的一致，但保證不了組合起來的效果。
+    </div>
+    <div class="callout">
+      <strong>繳交：</strong>依課綱作業 6 的規格，交<strong>風格板 + 風格故事說明</strong>。風格板上的每個決策都要有具體數值（色碼、字級、圓角、間距），寫形容詞不算。
+    </div>
+    <div class="callout warn">
+      <strong>兩個不及格的樣子：</strong>一是<strong>拼貼圖</strong>——一堆網路上抓的漂亮圖片，沒有色碼、沒有元件、沒有說明；二是<strong>跟研究脫鉤</strong>——風格故事裡的使用者，跟你 Unit 03 的 Persona 對不起來。評圖的時候這兩件事最容易被問，因為一眼就看得出來。
+    </div>
+  </section>
+
+  <section class="section" id="s13">
+    <p class="sec-num">13</p>
+    <h2 class="sec-title">AI 協作提示詞</h2>
+    <p>AI 在這個階段可以幫你<strong>整理形容詞、檢查一致性、找出你沒想到的取捨</strong>，但不能幫你決定風格——它沒看過你的使用者，也沒看過你的競品。下面每一段都要先貼上你自己的東西再問。</p>
+
+    <h3>① 從研究資料整理出風格形容詞</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我的專題資料：
+Persona 摘要：[貼上]
+使用情境（來自旅程地圖）：[貼上，包含情緒起伏最大的段落]
+競品分析的洞察：[貼上]
+
+請幫我：
+1. 從這些資料裡歸納 5 個形容詞，描述這個產品應該給人的感覺，
+   每個都要標出它是從哪一段資料推出來的。
+2. 每個形容詞配一個「而不是⋯⋯」的對照詞。
+3. 指出哪幾個形容詞彼此有衝突，需要我做取捨。
+
+只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+
+    <h3>② 檢查風格故事有沒有接到具體決策</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我寫的風格故事與視覺決策：
+風格故事：[貼上整段]
+視覺決策清單：[一行一項，例如「主色 #2E7D32」「按鈕圓角 12」
+「內文 16／行高 1.6」「大量留白」]
+
+請幫我檢查：
+1. 哪些形容詞沒有對應到任何一項具體決策？
+2. 哪些決策我講不出是從哪個形容詞來的？
+3. 有沒有哪兩項決策互相矛盾（例如同時追求「輕巧」跟「資訊密集」）？
+4. 如果只留三項最能代表這個風格的決策，你會留哪三項？為什麼？
+
+把「明確缺少的」跟「你的推測」分開列。
+只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+
+    <h3>③ 用完形原則與 Laws of UX 檢查風格板</h3>
+    <div class="prompt">
+      <button class="copy-btn" type="button">複製</button>
+      <pre>以下是我風格板上的規格：
+色彩：[主色／輔助／語意／中性各階，附色碼]
+字體與字級：[貼上]
+間距與圓角：[基準單位、常用間距、圓角值]
+元件：[按鈕高度、輸入框高度、卡片內距]
+
+請幫我檢查：
+1. 接近性：我設的間距階層，分得出「同一組」跟「不同組」嗎？
+2. 相似性：可點擊的元素有沒有共用一個可辨識的特徵？
+3. 連續性：我的對齊與間距，會把視線帶往我希望的順序嗎？
+4. 封閉性：圓角、框線、卡片有沒有哪裡「開口」開得太大，
+   讓人看不出那是一個完整的區塊？
+5. 共同區域：框線會不會用太多，或做出讓人不想往下捲的假底部？
+6. Fitts's Law：按鈕與輸入框的高度，在手機上夠好按嗎？
+7. Hick's Law：同一畫面上被同等強調的元素會不會太多？
+8. 對比度：請先依字級與字重判斷每一組文字適用 4.5:1 還是 3:1，
+   再標出哪幾組可能不及格，讓我實測。
+
+第 3、5、7 題如果光看規格判斷不了，請直接說「需要完整畫面才能判斷」，
+不要用猜的。
+
+只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+
+    <div class="callout warn">
+      <strong>使用界線：</strong>不要叫 AI 直接生一套配色或一張風格板。它給你的會是「這類產品通常長這樣」的平均值，跟你前面四個單元做的研究完全脫鉤——而風格板要被檢驗的，正好就是「你憑什麼這樣選」。AI 產出的東西，你答不出這一題。
+    </div>
+  </section>
+
+</div><!-- /.article -->
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li><a href="https://alistapart.com/article/style-tiles-and-how-they-work/" target="_blank" rel="noopener">Style Tiles and How They Work</a> — A List Apart，Samantha Warren，Style Tile 的定義、訪談流程與為什麼做兩三版。</li>
+    <li><a href="https://styletil.es/" target="_blank" rel="noopener">Style Tiles</a> — Style Tile 官方網站與範本下載。</li>
+    <li><a href="https://www.nngroup.com/articles/gestalt-proximity/" target="_blank" rel="noopener">Proximity Principle in Visual Design</a> — NN/g，接近性與分組。</li>
+    <li><a href="https://www.nngroup.com/articles/gestalt-similarity/" target="_blank" rel="noopener">Similarity Principle in Visual Design</a> — NN/g，相似性。</li>
+    <li><a href="https://www.nngroup.com/articles/principle-closure/" target="_blank" rel="noopener">Principle of Closure in Visual Design</a> — NN/g，封閉性。</li>
+    <li><a href="https://www.nngroup.com/articles/common-region/" target="_blank" rel="noopener">The Principle of Common Region: Containers Create Groupings</a> — NN/g，共同區域、它壓過其他原則的強度，以及假底部的警告。</li>
+    <li><a href="https://www.nngroup.com/videos/continuation-gestalt/" target="_blank" rel="noopener">Continuation: Gestalt Principle for User Interface Design</a> — NN/g，連續性。</li>
+    <li><a href="https://www.nngroup.com/articles/principles-visual-design/" target="_blank" rel="noopener">5 Principles of Visual Design in UX</a> — NN/g，比例、視覺階層、平衡、對比與完形。</li>
+    <li><a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a> — 本單元四條定律的出處；各條的 takeaways 值得直接讀。</li>
+    <li><a href="https://lawsofux.com/millers-law/" target="_blank" rel="noopener">Miller's Law</a> — 特別注意第一條提醒：不要拿「神奇數字七」當設計限制的藉口。</li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — Contrast (Minimum)</a> — 4.5:1 與 3:1 的門檻與大型文字定義。</li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — Target Size (Minimum)</a> — 24×24 CSS px 與例外條款。</li>
+    <li><a href="https://developer.apple.com/design/human-interface-guidelines/accessibility" target="_blank" rel="noopener">Apple Human Interface Guidelines — Accessibility</a> — 44×44 pt 可點擊區域建議。</li>
+    <li><a href="https://m3.material.io/foundations/layout/grids-spacing/spacing" target="_blank" rel="noopener">Material Design 3 — Grids &amp; spacing</a> — 網格與間距系統的完整範例。</li>
+    <li><a href="https://www.nngroup.com/articles/design-systems-101/" target="_blank" rel="noopener">Design Systems 101</a> — NN/g，設計系統的定義、Style Guide／元件庫／模式庫的差別，以及維護成本。</li>
+    <li><a href="https://www.figma.com/resource-library/design-tokens/" target="_blank" rel="noopener">Design Tokens: How to Sync Design and Code in Figma</a> — Figma，Token 的定義、Variables 與 Modes 的關係、Styles 與 Variables 的取捨。</li>
+    <li><a href="https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma" target="_blank" rel="noopener">Guide to components in Figma</a> — Figma 官方文件，主元件與實例、覆寫與重設。</li>
+    <li><a href="https://help.figma.com/hc/en-us/articles/360056440594-Create-and-use-variants" target="_blank" rel="noopener">Create and use variants</a> — Figma 官方文件，變體屬性與值的設定原則。</li>
+    <li><a href="https://help.figma.com/hc/en-us/articles/15343816063383-Modes-for-variables" target="_blank" rel="noopener">Modes for variables</a> — Figma 官方文件，模式切換與深色模式。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="slides.html">回到 Unit 08 簡報</a>
+  <a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a>
+  <a href="https://styletil.es/" target="_blank" rel="noopener">Style Tiles 範本</a>
+  <a href="../Unit_06/article.html">Unit 06 講義：Flowchart 到 Wireframe</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+
+(function () {
+  document.querySelectorAll('.prompt').forEach(prompt => {
+    const btn = prompt.querySelector('.copy-btn');
+    const pre = prompt.querySelector('pre');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = '已複製';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = '複製';
+          btn.classList.remove('done');
+        }, 1400);
+      } catch (error) {
+        btn.textContent = '複製失敗';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

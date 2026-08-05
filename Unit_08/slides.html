@@ -1,47 +1,1203 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>單元 8：元件、樣式與設計系統概念</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f4f4f4; color: #222; }
-    .slide { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px 80px; border-bottom: 2px solid #ddd; background: #fff; }
-    .slide:nth-child(even) { background: #f9f9f9; }
-    .slide-number { font-size: 12px; color: #aaa; margin-bottom: 16px; align-self: flex-start; }
-    h1 { font-size: 48px; font-weight: 700; color: #111; margin-bottom: 16px; text-align: center; }
-    h2 { font-size: 32px; font-weight: 600; color: #333; margin-bottom: 24px; }
-    p { font-size: 18px; line-height: 1.8; color: #555; max-width: 720px; text-align: center; }
-    ul { font-size: 18px; line-height: 2; color: #444; max-width: 680px; padding-left: 24px; align-self: flex-start; }
-    .tag { font-size: 13px; background: #222; color: #fff; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 08 · 風格發想與建立</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --positive: #0f766e;
+  --negative: #c2410c;
+  --surface: #f5f5f7;
+  --card: #ffffff;
+  --border: #d2d2d7;
+  --px: clamp(44px, 7vw, 108px);
+  --py: 52px;
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
+#deck { position: relative; width: 100%; height: 100vh; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+}
+
+.slide-head, .slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+}
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.slide-num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.course-label { font-size: 11px; color: #a1a1a6; }
+
+.dots { display: flex; gap: 5px; align-items: center; }
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.dot.on { width: 16px; border-radius: 3px; background: var(--accent); }
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.divider {
+  width: 42px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 8px 0 26px;
+}
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+h2 {
+  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 900px;
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+.cover-title {
+  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover-sub {
+  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+.cover-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 38px;
+}
+.agenda-card, .mini-card {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.a-time, .mini-card strong {
+  font-size: clamp(.9rem, 1.25vw, 1.08rem);
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.35;
+}
+.a-desc, .mini-card span {
+  font-size: clamp(.78rem, 1.05vw, .94rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.blist li {
+  font-size: clamp(.88rem, 1.25vw, 1.08rem);
+  color: var(--dark);
+  line-height: 1.58;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.blist li::before {
+  content: attr(data-n);
+  min-width: 30px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.blist.plain li::before {
+  content: '';
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  padding: 0;
+  margin-top: .6em;
+}
+.blist.compact { gap: 8px; margin-top: 18px; }
+.blist.compact li { padding: 9px 13px; font-size: clamp(.78rem, 1.02vw, .94rem); }
+.hl { color: var(--accent); font-weight: 700; }
+.hl2 { color: var(--accent2); font-weight: 700; }
+.warn-text { color: var(--accent3); font-weight: 700; }
+
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(130px, 21vw, 250px);
+  font-weight: 800;
+  color: var(--surface);
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.matrix.c3 { grid-template-columns: repeat(3, 1fr); }
+.matrix.c4 { grid-template-columns: repeat(4, 1fr); }
+.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
+.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
+
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  font-size: clamp(.72rem, .98vw, .92rem);
+}
+.cmp-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.45;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child { font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+.note {
+  margin-top: 17px;
+  font-size: clamp(.72rem, .92vw, .86rem);
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 11px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+}
+.note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.note a:hover { text-decoration: underline; }
+
+.chain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+}
+.chain.c5 { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.chain-step {
+  position: relative;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.chain-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+}
+.chain-step b { display: block; color: var(--accent); font-size: .78rem; margin-bottom: 8px; }
+.chain-step span { display: block; color: var(--muted); line-height: 1.5; font-size: .86rem; }
+
+.stat-row { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 32px; }
+.stat b { display: block; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1; color: var(--accent); }
+.stat span { display: block; margin-top: 9px; color: var(--muted); line-height: 1.5; font-size: .9rem; }
+
+/* 流程圖 */
+.flow-dia {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 20px 22px;
+  font-size: clamp(.68rem, .92vw, .85rem);
+  line-height: 1.85;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  color: var(--dark);
+  white-space: pre;
+  overflow-x: auto;
+}
+.flow-dia .n { color: var(--accent); font-weight: 700; }
+.flow-dia .d { color: var(--accent2); font-weight: 700; }
+.flow-dia .x { color: var(--accent3); font-weight: 700; }
+.flow-dia .c { color: var(--muted); }
+
+.slide-img {
+  display: block;
+  max-width: 100%;
+  max-height: 52vh;
+  width: auto;
+  margin: 22px auto 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  object-fit: contain;
+}
+.slide.dark .slide-img { border-color: #3a3a3c; }
+
+/* 線框示意 */
+.wf-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+.wf {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 250px;
+}
+.wf .bar { background: var(--surface); border-radius: 3px; }
+.wf .bar.h { height: 26px; }
+.wf .bar.t { height: 13px; width: 62%; }
+.wf .bar.s { height: 9px; width: 88%; }
+.wf .bar.box { flex: 1; }
+.wf .bar.btn { height: 22px; width: 44%; background: rgba(0,102,204,.16); }
+.wf-cap { font-size: .78rem; color: var(--muted); margin-top: 9px; text-align: center; }
+
+/* 色票 */
+.sw-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.sw-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card);
+}
+.sw-chip { display: block; height: clamp(40px, 7vh, 60px); }
+.sw-lbl {
+  display: block;
+  padding: 12px 15px 14px;
+  font-size: clamp(.72rem, .96vw, .87rem);
+  color: var(--muted);
+  line-height: 1.55;
+}
+.sw-lbl b {
+  display: block;
+  margin-bottom: 5px;
+  font-size: clamp(.8rem, 1.06vw, .96rem);
+  font-weight: 800;
+  color: var(--dark);
+}
+
+.res-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.res-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color .2s, transform .2s;
+}
+.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.res-link strong { font-size: .94rem; color: var(--dark); }
+.res-link span { font-size: .75rem; color: var(--muted); }
+
+.slide-body a.ilink {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,102,204,.35);
+}
+.slide-body a.ilink:hover { border-bottom-color: var(--accent); }
+
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+#ctrls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+
+.slide.dark { background: #1d1d1f; }
+.slide.dark h1 { color: #f5f5f7; }
+.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
+.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
+.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
+.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
+.slide.dark .bg-n { color: #2c2c2e; }
+.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card,
+.slide.dark .chain-step, .slide.dark .flow-dia, .slide.dark .wf, .slide.dark .sw-item {
+  background: rgba(255,255,255,.055);
+  color: #f5f5f7;
+  border-color: #3a3a3c;
+}
+.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
+.slide.dark .mini-card strong, .slide.dark .a-time, .slide.dark .chain-step span { color: #f5f5f7; }
+.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
+.slide.dark .chain-step b, .slide.dark .flow-dia .n { color: #58a6ff; }
+.slide.dark .flow-dia .c, .slide.dark .wf-cap { color: #a1a1a6; }
+.slide.dark .wf .bar { background: rgba(255,255,255,.10); }
+.slide.dark .wf .bar.btn { background: rgba(88,166,255,.28); }
+.slide.dark .sw-lbl { color: #a1a1a6; }
+.slide.dark .sw-lbl b { color: #f5f5f7; }
+.slide.dark .stat b { color: #58a6ff; }
+.slide.dark .stat span { color: #a1a1a6; }
+.slide.dark .dot { background: #3a3a3c; }
+.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .note a { color: #58a6ff; }
+.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
+.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .res-link strong { color: #f5f5f7; }
+.slide.dark .res-link span { color: #a1a1a6; }
+.slide.dark .slide-body a.ilink { color: #58a6ff; border-bottom-color: rgba(88,166,255,.42); }
+.slide.dark .slide-body a.ilink:hover { border-bottom-color: #58a6ff; }
+
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding: 12px 0; }
+  .agenda-grid, .matrix, .matrix.c3, .matrix.c4,
+  .res-links, .chain, .chain.c5, .wf-row, .sw-row { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .chain-step:not(:last-child)::after { display: none; }
+  .cmp-table { display: block; overflow-x: auto; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 20px; }
+  .cover-sub { margin-bottom: 22px; }
+  .bg-n, .course-label, .dots { display: none; }
+}
+</style>
 </head>
 <body>
-  <section class="slide">
-    <span class="tag">單元 8</span>
-    <h1>元件、樣式與設計系統概念</h1>
-    <p>UI 設計實作課程｜Figma × UX 原則 × AI 整合</p>
+
+<div id="prog"></div>
+
+<div id="deck">
+
+  <!-- 01 Cover -->
+  <section class="slide active">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
+      <h1 class="cover-title">風格發想<br>與建立</h1>
+      <p class="cover-sub">市場風格分析 × 風格故事化 × 視覺基礎 × 完形與 Laws of UX × 風格板與設計系統</p>
+      <div class="cover-meta">
+        <span>08/06 下午</span><span class="meta-dot"></span><span>26 張投影片</span><span class="meta-dot"></span><span>含 Figma 實作</span>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
-  <section class="slide">
-    <span class="slide-number">02</span>
-    <h2>本堂課目標</h2>
-    <p>（內容待補充）</p>
+
+  <!-- 02 Agenda -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Agenda</p>
+      <h1>今天開始，畫面可以上色了</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="a-step">Part 1 · 20 min</span>
+          <span class="a-time">風格從哪裡來</span>
+          <span class="a-desc">風格不是挑喜歡的顏色。市場風格分析怎麼拆競品，再把產品定位寫成一段風格故事。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 2 · 20 min</span>
+          <span class="a-time">視覺基礎</span>
+          <span class="a-desc">網格、留白、對齊、字級、行距、色彩角色與對比度，最後談一致性。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 3 · 15 min</span>
+          <span class="a-time">完形與 Laws of UX</span>
+          <span class="a-desc">畫面是怎麼被分組的，以及四條會影響風格決策的定律——含兩條最常被用壞的。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 4 · 15 min</span>
+          <span class="a-time">風格板與設計系統</span>
+          <span class="a-desc">Style Tile 與 Moodboard 的差別、一張風格板該有什麼，以及它怎麼長成設計系統。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 5 · 95 min</span>
+          <span class="a-time">實作與分享</span>
+          <span class="a-desc">課堂練習四階段共 80 分，做出風格板雛形；最後 15 分各組互相看成果。</span>
+        </div>
+      </div>
+      <div class="note">講述 70 分 + 實作與分享 95 分 + 休息 15 分 = 180 分，休息穿插在 Part 2 與 Part 3 之間。<br>開始前先把 Unit 06、07 的 Wireframe 與 Unit 03 的 Persona、競品分析開起來，等一下要用。今天結束時你手上會多一份風格板，也就是<span class="hl">作業 6</span> 的交件。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
+
+  <!-- 03 風格不是挑顏色 -->
   <section class="slide">
-    <span class="slide-number">03</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Where Style Comes From</p>
+      <h1>「我覺得這個綠比較舒服」不是理由</h1>
+      <h2>這句話的問題不是好不好看，是<span class="hl">你沒有一個可以被檢驗的理由</span>。客戶說要換成藍的，你也沒辦法說不行。</h2>
+      <div class="matrix c4">
+        <div class="mini-card"><strong>產品定位</strong><span>想被當成什麼——便宜好用？專業可信？有質感？<br><br>來自 Unit 03 競品分析的洞察。</span></div>
+        <div class="mini-card"><strong>使用情境</strong><span>什麼時候、在哪裡用——通勤單手滑？辦公室久坐？<br><br>來自 Unit 04 旅程地圖。</span></div>
+        <div class="mini-card"><strong>目標族群</strong><span>誰在用——年齡、對介面的熟悉度。<br><br>來自 Unit 03 Persona。</span></div>
+        <div class="mini-card"><strong>競品差異</strong><span>同類產品都長一樣的時候，你憑什麼被記得。<br><br>來自 Unit 03 競品分析表。</span></div>
+      </div>
+      <div class="note">「主色用深藍」不是決策。<span class="hl">「因為使用者要在裡面填身分證字號，深藍在同類金融服務裡是可信任的共同語言，所以主色用深藍」</span>才是。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
+
+  <!-- 04 市場風格分析 六欄 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Market Analysis</p>
+      <h1>再看一次競品，但只看外觀</h1>
+      <h2>不要寫「這個好看」「那個很醜」——那是評價，不能拿來設計。要寫的是可以被複製或被閃避的<span class="hl">具體特徵</span>。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>看什麼</th><th>要記下來的東西</th></tr></thead>
+        <tbody>
+          <tr><td>主色與用色量</td><td>主色是什麼色系？整個畫面有幾種顏色？滿版彩色還是大面積留白？</td></tr>
+          <tr><td>字體與字重</td><td>黑體還是明體？標題多粗？中英文混排怎麼處理？</td></tr>
+          <tr><td>資訊密度</td><td>一個畫面塞多少東西？卡片之間是緊還是鬆？</td></tr>
+          <tr><td>圖像策略</td><td>實拍、插畫、還是純色塊？去背商品圖還是情境照？</td></tr>
+          <tr><td>圓角與陰影</td><td>直角、小圓角還是大圓角？陰影重不重？</td></tr>
+          <tr><td>品牌語氣</td><td>按鈕與提示怎麼寫——「立即搶購」跟「加入收藏」是兩種人格</td></tr>
+        </tbody>
+      </table>
+      <div class="note">六個欄位在講義<a class="ilink" href="article.html#s2" target="_blank" rel="noopener">第 2 節</a>有完整說明。等一下練習第一階段就是用這張表拆兩個競品。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 05 蝦皮 vs Pinkoi -->
   <section class="slide">
-    <span class="slide-number">04</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Case Study</p>
+      <h1>兩個都是網購，長得完全不一樣</h1>
+      <h2>手機裡有其中一個的，現在打開滑一分鐘；沒有的看截圖也行。下面這張表你自己驗證得了。</h2>
+      <table class="cmp-table">
+        <thead><tr><th></th><th>蝦皮</th><th>Pinkoi</th></tr></thead>
+        <tbody>
+          <tr><td>用色</td><td>高飽和橘為主，紅黃綠促銷標籤同時出現</td><td>大量白底，彩色幾乎只出現在商品照片本身</td></tr>
+          <tr><td>密度</td><td>高，一屏塞入輪播、分類、限時特賣、商品牆</td><td>低，商品卡之間留白多，一屏看到的商品數少</td></tr>
+          <tr><td>圖像</td><td>去背商品圖、紅字大標的促銷 banner</td><td>情境攝影為主，構圖與色調偏一致</td></tr>
+          <tr><td>語氣</td><td>急促、數量與倒數（「限時」「剩 N 件」）</td><td>平緩、描述性（設計師、材質、故事）</td></tr>
+          <tr><td>你會感覺到</td><td>怕買貴、怕錯過</td><td>慢慢逛、看質感</td></tr>
+        </tbody>
+      </table>
+      <div class="note">兩種都不是錯的，它們對應不同的產品策略。<span class="hl">蝦皮要促成當下這一筆交易，所以把稀缺感放到最大；Pinkoi 要建立品味上的信任，所以把干擾減到最少。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
+
+  <!-- 06 常見版面模式 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Layout Patterns</p>
+      <h1>哪些一定要照做，哪些可以做自己</h1>
+      <h2>把 3 個競品的<span class="hl">同一種頁面</span>擺在一起看，把重複出現的區塊順序抄下來。三家都這樣排，那就不是巧合。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>你看到什麼</th><th>怎麼判斷</th><th>你該怎麼做</th></tr></thead>
+        <tbody>
+          <tr><td>三家都有，順序也一樣</td><td>類別慣例，使用者已經預期</td><td>照著排，改它要有明確理由</td></tr>
+          <tr><td>只有一家這樣做</td><td>那家的品牌選擇或特殊策略</td><td>先問「它為什麼要這樣做」，再決定要不要學</td></tr>
+          <tr><td>三家都有但長相差很多</td><td>功能是慣例，表現方式是風格空間</td><td>這裡就是你可以做出差異的地方</td></tr>
+        </tbody>
+      </table>
+      <div class="note">最容易出的意外剛好是反過來：<span class="warn-text">在慣例的地方發揮創意</span>（把購物車藏起來），卻<span class="warn-text">在該有差異的地方原封照抄</span>（配色跟競品一模一樣）。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 07 風格故事化 三個提問法 -->
   <section class="slide">
-    <span class="slide-number">05</span>
-    <h2>本堂小結</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Storytelling</p>
+      <h1>動手選顏色之前，先用文字把方向說清楚</h1>
+      <h2>這是 Style Tiles 原始流程裡的第一步：先問出一堆形容詞，整理成一段敘述，之後所有視覺決策都對著它檢查。</h2>
+      <div class="matrix c3">
+        <div class="mini-card">
+          <strong>① 比喻題</strong>
+          <span>「如果這個產品是一輛車，會是什麼車？」<br><br>回答「機車」跟「休旅車」，導出來的視覺完全不同。也可以換成餐廳、店面、一個人。</span>
+        </div>
+        <div class="mini-card">
+          <strong>② 語意差異量表</strong>
+          <span>給幾組相反的形容詞，在中間畫一個點：<br><br>現代 ←→ 傳統<br>活潑 ←→ 沉穩<br>親切 ←→ 專業<br>繁複 ←→ 簡潔<br><br>它逼人做取捨。</span>
+        </div>
+        <div class="mini-card">
+          <strong>③ 反向題</strong>
+          <span>「你絕對不想被誤認成哪一個競品？為什麼？」<br><br>排除法通常比正面表列更快收斂。</span>
+        </div>
+      </div>
+      <div class="note">個人專題沒有客戶可以訪，就<span class="hl">拿你的 Persona 當回答的人</span>——但回答時要指得出是根據研究裡的哪一段，不是你自己的偏好。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
+
+  <!-- 08 風格故事骨架 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Template</p>
+      <h1>風格故事長這樣</h1>
+      <table class="cmp-table">
+        <thead><tr><th>欄位</th><th>要寫什麼</th><th>範例：校園二手書交易 App</th></tr></thead>
+        <tbody>
+          <tr><td>給誰</td><td>目標族群，一句話</td><td>在通勤路上單手操作、對介面沒耐性的大學生</td></tr>
+          <tr><td>在什麼情境</td><td>什麼時候、在哪裡用</td><td>在校車上或排隊時，快速確認某本二手書還在不在</td></tr>
+          <tr><td>要感覺到</td><td>三到五個形容詞</td><td>乾淨、可靠、像跟同學面交一樣沒有壓力</td></tr>
+          <tr><td>而不是</td><td>每個形容詞的對照</td><td>熱鬧、促銷感、像在拍賣場搶標</td></tr>
+          <tr><td>所以視覺上</td><td>可以直接執行的決策</td><td>大面積留白、單一主色、圓一點的黑體、不用紅色與倒數、按鈕做大</td></tr>
+        </tbody>
+      </table>
+      <div class="note">最後一行是關鍵。<span class="hl">形容詞如果不接到具體的視覺決策，等於沒寫。</span>「乾淨」是形容詞，「大面積留白、只用一個主色」才是可以執行的。<br><span class="warn-text">最常見的問題：</span>形容詞挑了一堆互相打架的——「專業又活潑又溫暖又高級又年輕」。三到五個就夠，而且每個都要寫得出「而不是」。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 09 版面：網格與間距 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Layout</p>
+      <h1>網格與間距：先決定骨架</h1>
+      <h2>這些在 Wireframe 階段只求「東西有排好」。到了風格階段，它們要變成<span class="hl">風格板上寫得出來、每一頁都要遵守的規格</span>。</h2>
+      <div class="matrix">
+        <div class="mini-card">
+          <strong>網格</strong>
+          <span>Web 常見 12 欄，因為 12 可以被 2、3、4、6 整除——一列放兩張、三張還是四張卡都排得下。</span>
+        </div>
+        <div class="mini-card accent">
+          <strong>間距基準</strong>
+          <span>鎖在 <b>4 或 8 的倍數</b>：4、8、12、16、24、32、48、64。<br><br>這不是定律，是自我約束——一旦只用這幾個值，就不會出現 13、17、21 這種「憑感覺調」的間距。</span>
+        </div>
+      </div>
+      <div class="note">寫在風格板上的三個數字：<span class="hl">基準單位、欄數、標準間距</span>（例如區塊間 48、卡片內 16）。有這三個，Unit 09 排多斷點版面就不用重猜一次。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 10 留白與對齊 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Whitespace</p>
+      <h1>留白不是版面沒填滿</h1>
+      <h2>留白是設計決策。它在做三件事：讓眼睛知道哪些是一組的、讓重要的東西有呼吸空間所以顯得重要、降低一次要處理的資訊量。</h2>
+      <ul class="blist plain">
+        <li>一個好認的症狀：<span class="warn-text">留白平均分配</span>——所有東西之間都空 16px，畫面很整齊，但看不出哪裡是一組、哪裡是分界。</li>
+        <li><span class="hl">留白要有大小差異</span>：同一組裡面空 8，組跟組之間空 32，分組關係一眼就看得出來。</li>
+        <li>對齊怎麼檢查：瞇著眼看，或拉幾條輔助線，看每個元素的左邊緣是不是落在同一條線上。</li>
+        <li>中文介面絕大多數用<span class="hl">左對齊</span>。置中適合短標題與空狀態，<span class="warn-text">不適合整段內文</span>——每行起點都不一樣，讀起來會累。</li>
+      </ul>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 11 排版 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Typography</p>
+      <h1>做一組字級，不要每次現調</h1>
+      <h2>介面上絕大部分的內容是文字。字排不好，配色再漂亮也救不回來。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>角色</th><th>大小（參考值）</th><th>用在哪</th></tr></thead>
+        <tbody>
+          <tr><td>大標</td><td>28–32</td><td>頁面標題，一頁只有一個</td></tr>
+          <tr><td>小標</td><td>20–24</td><td>區塊標題、卡片標題</td></tr>
+          <tr><td>內文</td><td>16</td><td>說明文字、清單項目</td></tr>
+          <tr><td>輔助</td><td>13–14</td><td>時間、標籤、次要說明</td></tr>
+        </tbody>
+      </table>
+      <div class="note">行動裝置上內文<span class="warn-text">不要小於 14</span>，16 是安全起點——這不是美感問題，是能不能讀的問題。<br>行距：內文抓字級的 <span class="hl">1.5–1.75 倍</span>，標題可以收到 1.2–1.3。中文字面方正，通常要比英文再鬆一點。<br>字體<span class="hl">最多兩種</span>，或同一種用不同字重去分。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 12 色彩角色 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Color</p>
+      <h1>給每個顏色一個工作</h1>
+      <h2>配色不是挑幾個好看的湊在一起。定義好工作之後，畫新頁面就不用再猶豫「這裡該用什麼顏色」。</h2>
+      <div class="sw-row">
+        <div class="sw-item"><span class="sw-chip" style="background:#0066cc"></span><span class="sw-lbl"><b>品牌主色</b>識別的核心。<b style="display:inline;font-weight:800">可以</b>大面積用——導覽列、登入頁背景、品牌區塊。</span></div>
+        <div class="sw-item"><span class="sw-chip" style="background:#0f766e"></span><span class="sw-lbl"><b>強調色</b>標記「這裡可以點」：主要按鈕、連結、選中的分頁。這個才要省著用。</span></div>
+        <div class="sw-item"><span class="sw-chip" style="background:#c2410c"></span><span class="sw-lbl"><b>語意色</b>成功、警告、錯誤。不要拿來玩創意，使用者已有既定認知。</span></div>
+        <div class="sw-item"><span class="sw-chip" style="background:linear-gradient(90deg,#1d1d1f 0 33%,#6e6e73 33% 66%,#f5f5f7 66%)"></span><span class="sw-lbl"><b>中性色</b>用量最大：文字、背景、分隔線、停用狀態。至少深中淺三階。</span></div>
+      </div>
+      <div class="note"><span class="warn-text">兩者可以是同一個顏色，但要想清楚。</span>如果你把主色大面積鋪在背景上，又拿它當按鈕色，按鈕會直接消失在背景裡。共用一色就得靠深淺差異或反白按鈕把互動區分出來。<br>語意色還有一條：<span class="hl">不能只靠顏色傳達訊息</span>——色盲使用者分不出紅綠，錯誤訊息旁邊要有圖示或文字。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 13 對比度 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="bg-n">!</span>
+      <p class="overline">Contrast</p>
+      <h1>這一項有硬標準</h1>
+      <h2>前面講的都是判斷，這一項有可以量的門檻。WCAG 對文字與背景的對比度要求：</h2>
+      <div class="stat-row">
+        <div class="stat"><b>4.5:1</b><span>一般文字<br>未加粗且小於 18pt，<br>或加粗但小於 14pt</span></div>
+        <div class="stat"><b>3:1</b><span>大型文字<br>未加粗但 18pt 以上，<br>或加粗且 14pt 以上</span></div>
+      </div>
+      <div class="note">最常不及格的兩種：<span class="warn-text">淺灰字放在白底上</span>、<span class="warn-text">把文字直接壓在照片上</span>。前者用檢測工具一測就知道；後者因為照片每個區域亮度不同，要加半透明遮罩或色塊才能穩定達標。<br>在 Figma 上換算：<span class="hl">18pt = 24px、14pt ≈ 18.7px</span>，「加粗」指粗體（字重約 700 以上）。<br>怎麼測：Figma 的 contrast 外掛，或把色碼貼進線上的 contrast checker。<span class="hl">風格板上每一組「文字色 + 背景色」都要測過才寫上去。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 14 一致性 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Consistency</p>
+      <h1>沒有風格板，五個頁面會長成五種樣子</h1>
+      <h2>第一頁按鈕圓角 8、主色 #2E7D32；第三頁忘記了，圓角變 12、綠色調成 #388E3C；第五頁又改一次。單獨看都沒問題，放在一起就是「不像同一個產品」。</h2>
+      <div class="matrix">
+        <div class="mini-card accent">
+          <strong>要一致的</strong>
+          <span>同一種元件的長相（所有主要按鈕）<br>同一種資訊的位置（價格永遠在標題下面）<br>互動的回饋方式（點下去都會變暗）<br>詞彙（別一下「收藏」一下「加入最愛」）</span>
+        </div>
+        <div class="mini-card warn">
+          <strong>可以不一致的</strong>
+          <span>刻意要被注意到的東西。<br><br>危險動作（刪除）本來就該長得不一樣；空狀態可以用插畫打破規律。<br><br><b>不一致要是刻意的，而且說得出理由。</b></span>
+        </div>
+      </div>
+      <div class="note">一致性的價值不只在美觀，更在<span class="hl">降低學習成本</span>——所有「可以點的東西」都長同一個樣子，使用者學一次就會了。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 15 完形五原則 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Gestalt</p>
+      <h1>你不決定使用者怎麼分組，他也會自己分</h1>
+      <h2>所以你最好讓他分對。風格做完之後，拿這五條回頭檢查：你的視覺決策在幫使用者分組，還是在誤導他。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>原則</th><th>人怎麼看</th><th>介面上怎麼用</th></tr></thead>
+        <tbody>
+          <tr><td>接近性</td><td>靠得近的被當成同一組</td><td>標籤貼近它的輸入框；卡片內間距小於卡片之間</td></tr>
+          <tr><td>相似性</td><td>長得像的被當成同一類</td><td>所有可點的連結用同一個顏色</td></tr>
+          <tr><td>連續性</td><td>眼睛沿著平順的線與排列繼續看下去</td><td>對齊成一條線引導視線；橫向列表露出半張卡</td></tr>
+          <tr><td>封閉性</td><td>圖形沒畫完，大腦會自動補起來</td><td>圖示可以用簡化線條；進度環沒接起來也看得懂</td></tr>
+          <tr><td>共同區域</td><td>同一個框線或底色內的是一組</td><td>卡片、面板；用底色把工具列跟內容分開</td></tr>
+        </tbody>
+      </table>
+      <div class="note">完整說明與例子見講義<a class="ilink" href="article.html#s8" target="_blank" rel="noopener">第 8 節</a>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 16 接近性 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Proximity</p>
+      <h1>表單最容易違反接近性</h1>
+      <h2>標籤跟自己輸入框的距離，如果大於等於它跟上一個輸入框的距離，使用者就會看錯——他會以為那個標籤在說明上面那一格。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>做法</th><th>標籤到它的欄位</th><th>欄位到下一個欄位</th><th>使用者看到的結果</th></tr></thead>
+        <tbody>
+          <tr><td><span class="warn-text">✗ 平均分配</span></td><td>16</td><td>16</td><td>兩段距離一樣，看不出「電話」是在說明上面那格還是下面那格</td></tr>
+          <tr><td><span class="hl2">✓ 有大小差異</span></td><td>8</td><td>32</td><td>標籤明顯屬於下面那一格，一眼就對得起來</td></tr>
+        </tbody>
+      </table>
+      <div class="note">修法很簡單：<span class="hl">把標籤跟它的欄位靠緊，欄位與欄位之間拉開。</span>這跟前面講的「留白要有大小差異」是同一件事。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 17 共同區域 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Common Region</p>
+      <h1>框線很強，所以更要省著用</h1>
+      <div class="matrix">
+        <div class="mini-card accent">
+          <strong>它的強度</strong>
+          <span>共同區域<b>可以壓過接近性與相似性</b>。<br><br>兩個東西就算靠得很近，只要中間有框線把它們分到不同的框裡，人就會當成兩組。<br><br>所以當留白已經分不清楚的時候，加框或加底色是有效的手段。</span>
+        </div>
+        <div class="mini-card warn">
+          <strong>反過來就是問題</strong>
+          <span>什麼都加框、什麼都做成卡片，畫面會變得很吵。<br><br>而且容易做出<b>假底部</b>——一條橫跨整個畫面的分隔線或色塊，會讓使用者以為頁面到這裡就結束了，不再往下捲。</span>
+        </div>
+      </div>
+      <div class="note">順序是：<span class="hl">先用留白分組，留白不夠才加框線。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 18 Laws of UX -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Laws of UX</p>
+      <h1>四條會影響風格決策的定律</h1>
+      <div class="matrix c4">
+        <div class="mini-card">
+          <strong>Hick's Law</strong>
+          <span>選項越多、越複雜，決定越慢。<br><br>三個同等強調的按鈕擺在一起，使用者要一個一個比較；把一個做成主要按鈕、另外兩個降成文字連結，他一眼就知道按哪個。<br><br><b>但講精確一點：</b>調階層不會減少選項數，減少的是比較與辨識的成本。要跟這條直接相關，得是真的必須二選一的互斥選項。</span>
+        </div>
+        <div class="mini-card">
+          <strong>Fitts's Law</strong>
+          <span>目標越小越遠，越難點。<br><br>WCAG 2.2 要求至少 <b>24 × 24</b> CSS px；Apple 建議 <b>44 × 44</b> pt。手機主要動作放下方，上方角落最難按到。</span>
+        </div>
+        <div class="mini-card">
+          <strong>Miller's Law</strong>
+          <span>短期記憶大約 7±2 個單位。<br><br>但這條最常被用壞——見下一頁。</span>
+        </div>
+        <div class="mini-card">
+          <strong>Jakob's Law</strong>
+          <span>使用者大部分時間都在別人的網站上，所以會期待你的產品跟他熟悉的一樣運作。<br><br>這是風格創新的煞車。</span>
+        </div>
+      </div>
+      <div class="note">Fitts's Law 直接影響風格板：<span class="hl">按鈕高度要寫死</span>。追求「輕巧細緻」很容易把按鈕做得又扁又小，做出來就是使用者按不到——輕巧可以靠字重與留白達成，不必靠縮小點擊面積。全部定律見 <a class="ilink" href="https://lawsofux.com/" target="_blank" rel="noopener">lawsofux.com</a>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 19 兩條最常被用壞的 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Misuse</p>
+      <h1>這兩條最常被用壞</h1>
+      <div class="matrix">
+        <div class="mini-card warn">
+          <strong>Miller's Law ≠ 選單最多七項</strong>
+          <span>官方第一條提醒就是「<b>不要拿神奇數字七來合理化不必要的設計限制</b>」。<br><br>真正能用的是<b>分塊</b>：0912-345-678 比 0912345678 好記；二十個欄位的表單分成三段各附小標，比一路排到底好填。<br><br>而且能記多少因人而異，所以那個數字本身不能當設計規格。</span>
+        </div>
+        <div class="mini-card warn">
+          <strong>Jakob's Law ≠ 慣例完全不能動</strong>
+          <span>正確說法是：<b>慣例優先沿用；要偏離，得說得出是哪個任務需求逼你偏離，而且要拿去測。</b><br><br>純粹因為「想做得不一樣」而換掉的慣例，幾乎都會付出代價。</span>
+        </div>
+      </div>
+      <div class="note">實務上的分工：<span class="hl">操作慣例先照沿用，視覺氣質才是你做自己的地方。</span>圖示的意思、主要元件的位置、互動方式，先跟著大家走；顏色、字體、留白、圖像風格、文案語氣，是你差異化的空間。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 20 Style Tile vs Moodboard -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Deliverables</p>
+      <h1>Style Tile 與 Moodboard 差在哪</h1>
+      <h2>課綱把作業 6 寫成「風格板（Style Tile / Moodboard）」，兩種形式都收。但它們解決的問題不一樣。</h2>
+      <table class="cmp-table">
+        <thead><tr><th></th><th>Moodboard 情緒板</th><th>Style Tile 風格板</th></tr></thead>
+        <tbody>
+          <tr><td>在做什麼</td><td>收集參考、定調氣氛</td><td>把氣氛翻譯成介面元素</td></tr>
+          <tr><td>上面有什麼</td><td>圖片、材質、色調、任何有感覺的東西</td><td>色票與色碼、字體字級、按鈕、輸入框、標籤</td></tr>
+          <tr><td>什麼時候做</td><td>更前面，方向還在收斂的時候</td><td>方向定了，要變成可執行規格的時候</td></tr>
+          <tr><td>拿來幹嘛</td><td>對齊感覺：「我們講的是同一種氣質嗎」</td><td>對齊執行：「所以按鈕到底長這樣對嗎」</td></tr>
+          <tr><td>弱點</td><td>主觀，同一張圖不同人解讀不同</td><td>還不是完整頁面，看不出組合起來的效果</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="hl">兩者不是二選一，是前後關係。</span>先做 Moodboard 收斂方向，再翻譯成 Style Tile。如果你交的是 Moodboard，要另外附一份最小規格（色碼、字級、按鈕長相），否則 Unit 10 沒有東西可以查。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 21 Style Tile 骨架 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Anatomy</p>
+      <h1>一張 Style Tile 上該有什麼</h1>
+      <table class="cmp-table">
+        <thead><tr><th>區塊</th><th>要放什麼</th><th>旁邊那句說明要寫什麼</th></tr></thead>
+        <tbody>
+          <tr><td>風格故事</td><td>三到五個形容詞 + 一段說明</td><td>這些形容詞從哪份研究推出來的</td></tr>
+          <tr><td>色票</td><td>品牌主色、強調色、語意色、中性三階，全部標色碼</td><td>每個顏色負責什麼工作</td></tr>
+          <tr><td>字體</td><td>標題與內文的字體、字級、行距</td><td>為什麼是這個字體、這組級距</td></tr>
+          <tr><td>介面元素</td><td>主要／次要按鈕、停用狀態、輸入框（一般 + 錯誤）、標籤、卡片</td><td>圓角與高度依哪個決策訂的</td></tr>
+          <tr><td>質感規格</td><td>圓角、陰影、間距基準單位</td><td>基準是 4 還是 8，為什麼</td></tr>
+          <tr><td>圖像方向</td><td>兩三張示意圖</td><td>為什麼是實拍／插畫／圖示色塊</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="hl">每一區旁邊都要寫一句話說明理由</span>——這是風格板跟拼貼圖的差別。沒有說明文字的風格板，交出去只會得到「我不喜歡這個顏色」這種沒辦法討論的回饋。<br>另外要做<span class="hl">兩到三版</span>，而且要取捨不同（A 版把「可靠」放最大、B 版把「沒壓力」放最大），不是同一方向的三個微調版。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 22 設計系統三層 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Design System</p>
+      <h1>風格板是設計系統的第一塊</h1>
+      <h2>NN/g 的定義是「一整套用來在規模化的情況下管理設計的標準，做法是透過可重複使用的元件與模式」。關鍵字是<span class="hl">規模化</span>與<span class="hl">可重複使用</span>。</h2>
+      <div class="chain c5">
+        <div class="chain-step"><b>① Token</b><span>色彩、字級、間距、圓角、陰影<br><br>最小的決策單位</span></div>
+        <div class="chain-step"><b>② 元件</b><span>按鈕、輸入框、卡片、導覽列<br><br>用 Token 組出來的</span></div>
+        <div class="chain-step"><b>③ 規範</b><span>什麼時候用哪個、不能怎麼用<br><br>沒有這層，同一套元件還是會拼出不一樣的東西</span></div>
+        <div class="chain-step"><b>你今天做的</b><span>風格板 = ① 的內容 + ② 的雛形</span></div>
+        <div class="chain-step"><b>Unit 10</b><span>拿它畫 Mockup，改一次主色全部跟著變</span></div>
+      </div>
+      <div class="note">Token 要取名字，而且要分兩層：<span class="hl">原始值</span>（green-600 = #2E7D32）與<span class="hl">語意層</span>（button-primary-bg → green-600）。語意層看起來多餘，但它是「換色」與「深色模式」能做得動的原理——名字不變，值換掉。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 23 Figma 對應 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">In Figma</p>
+      <h1>風格板上的東西，在 Figma 叫什麼</h1>
+      <table class="cmp-table">
+        <thead><tr><th>你風格板上的東西</th><th>Figma 功能</th><th>做完之後</th></tr></thead>
+        <tbody>
+          <tr><td>色票</td><td>Color Styles 或 Variables</td><td>點一下就上色，不用再複製色碼</td></tr>
+          <tr><td>字級與行距</td><td>Text Styles</td><td>選好文字點一下，字體字級行距一次到位</td></tr>
+          <tr><td>按鈕、輸入框、卡片</td><td>Component 元件</td><td>改主元件，所有實例一起改</td></tr>
+          <tr><td>按鈕的各種版本</td><td>Variants 變體</td><td>主要／次要、一般／停用收成一個元件，下拉切換</td></tr>
+          <tr><td>之後要換色或做深色模式</td><td>Variables + Modes</td><td>同一個名字，切換模式換一整套值</td></tr>
+        </tbody>
+      </table>
+      <div class="note">建元件：選好圖層按 <span class="hl">⌥ ⌘ K</span>（Windows 是 <span class="hl">Ctrl Alt K</span>）。<br><span class="warn-text">設定變體屬性最常錯的地方：</span>把好幾個維度塞進同一個屬性。不要做一個 <b>Style</b> 屬性、值寫成「主要大顆」「次要小顆」——要拆成 <b>Type</b>（主要／次要／文字）與 <b>Size</b>（大／中／小）兩個屬性。<br><span class="hl">學生專題不需要做完整設計系統</span>——它要有人專職維護。今天只要做到最小可用那一層。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 24 課堂練習 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">課堂練習 · 80 分鐘</span>
+      <h1>從競品拆到風格板雛形</h1>
+      <h2>個人作業，用自己的專題。課堂上只做<span class="hl">一個方向的核心版</span>，完整元件狀態與第二版留到回家做。四階段結束後另有 15 分鐘各組互相看成果。</h2>
+      <div class="chain">
+        <div class="chain-step"><b>Step 1 · 20 min</b><span>用六個欄位拆 2 個競品，再比對同一種頁面的版面順序，標出哪些是類別慣例。</span></div>
+        <div class="chain-step"><b>Step 2 · 15 min</b><span>用三個提問法收斂出 3–5 個形容詞，寫成風格故事，每個都要配「而不是」。</span></div>
+        <div class="chain-step"><b>Step 3 · 20 min</b><span>定出品牌主色、強調色、語意色、中性三階，全部標色碼；選 1–2 個字體，定四級字級。</span></div>
+        <div class="chain-step"><b>Step 4 · 25 min</b><span>把上面的放進 Style Tile 骨架，加上按鈕與輸入框兩種元件，每一區寫一句理由。</span></div>
+      </div>
+      <div class="note"><span class="warn-text">課前要準備好：</span>2 個競品的截圖（各抓首頁與一個內頁）、你的 Persona 摘要、一份空白的 Style Tile 骨架檔。這三樣沒帶，80 分鐘會全部花在找素材上。<br>最後 15 分鐘的分享，兩人一組互看，只問三題：<span class="hl">① 你看到的前三個形容詞是什麼？② 這一版最想被記住的是哪個決策？③ 哪一項你看不出理由？</span>對方講的形容詞跟作者寫的對不起來，就是風格故事沒傳達到。<br>時間不夠時，Step 3 優先測「內文色 + 背景色」這一組的對比度，其餘留到回家補。詳細步驟見講義<a class="ilink" href="article.html#s12" target="_blank" rel="noopener">第 12 節</a>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 25 回家作業 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">回家作業 · 作業 6</span>
+      <h1>風格板 + 風格故事說明</h1>
+      <ul class="blist compact">
+        <li data-n="01">把<span class="hl">風格板補完整</span>——不管用 Style Tile 還是「Moodboard + 最小規格」的形式，這些都要有：色票、字體字級、按鈕（主要／次要，各含一般與停用）、輸入框（一般／錯誤）、標籤、卡片、質感規格，以及圖片方向與規則。</li>
+        <li data-n="02">再做<span class="hl">第二版</span>，取捨方向要跟第一版明顯不同，不是微調。</li>
+        <li data-n="03">寫風格故事說明：給誰、什麼情境、要感覺到什麼、而不是什麼、所以視覺上怎麼做。<span class="hl">每個形容詞都要接到具體決策。</span></li>
+        <li data-n="04"><span class="hl2">在風格板上就能查的</span>：對比度、相似性、元件狀態、按鈕與輸入框高度、色彩角色有沒有分清楚。</li>
+        <li data-n="05"><span class="hl2">要套回畫面才查得出來的</span>：把風格套到 Unit 07 一張 Wireframe 上，再用接近性、共同區域、連續性、Hick's、Jakob's 各檢查一次。</li>
+        <li data-n="06">對比度全部測過。<span class="warn-text">這一項沒過，風格板等於不能用。</span></li>
+        <li data-n="07">色票建成 <span class="hl">Color Styles 或 Variables</span>、字級建成 <span class="hl">Text Styles</span>；按鈕做成 <span class="hl">Component</span>，開 <b>Type</b>（主要／次要）與 <b>State</b>（一般／停用）兩個 <span class="hl">Variants</span> 屬性。做完改一次主色，確認全部跟著變。</li>
+      </ul>
+      <div class="note"><span class="warn-text">兩個不及格的樣子：</span>一是<b>拼貼圖</b>——一堆網路抓的漂亮圖片，沒色碼、沒元件、沒說明；二是<b>跟研究脫鉤</b>——風格故事裡的使用者，跟你 Unit 03 的 Persona 對不起來。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 26 資源 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Resources</p>
+      <h1>延伸資源</h1>
+      <div class="res-links">
+        <a class="res-link" href="article.html" target="_blank" rel="noopener">
+          <strong>Unit 08 完整教材</strong>
+          <span>市場分析、視覺基礎、完形、Laws of UX、風格板與設計系統全文</span>
+        </a>
+        <a class="res-link" href="article.html#s13" target="_blank" rel="noopener">
+          <strong>AI 協作提示詞</strong>
+          <span>整理風格形容詞 · 檢查風格故事 · 用完形與定律檢查風格板</span>
+        </a>
+        <a class="res-link" href="https://alistapart.com/article/style-tiles-and-how-they-work/" target="_blank" rel="noopener">
+          <strong>Style Tiles and How They Work</strong>
+          <span>A List Apart · Style Tile 的定義、訪談流程與為什麼做兩三版</span>
+        </a>
+        <a class="res-link" href="https://styletil.es/" target="_blank" rel="noopener">
+          <strong>Style Tiles 官方網站</strong>
+          <span>範本下載</span>
+        </a>
+        <a class="res-link" href="https://lawsofux.com/" target="_blank" rel="noopener">
+          <strong>Laws of UX</strong>
+          <span>本單元四條定律的出處 · 各條的 takeaways 值得直接讀</span>
+        </a>
+        <a class="res-link" href="https://www.nngroup.com/articles/common-region/" target="_blank" rel="noopener">
+          <strong>The Principle of Common Region</strong>
+          <span>NN/g · 共同區域的強度與假底部的警告</span>
+        </a>
+        <a class="res-link" href="https://www.nngroup.com/articles/design-systems-101/" target="_blank" rel="noopener">
+          <strong>Design Systems 101</strong>
+          <span>NN/g · 設計系統的定義與維護成本</span>
+        </a>
+        <a class="res-link" href="https://www.figma.com/resource-library/design-tokens/" target="_blank" rel="noopener">
+          <strong>Design Tokens in Figma</strong>
+          <span>Figma · Token 的定義、Variables 與 Modes</span>
+        </a>
+        <a class="res-link" href="https://help.figma.com/hc/en-us/articles/360056440594-Create-and-use-variants" target="_blank" rel="noopener">
+          <strong>Create and use variants</strong>
+          <span>Figma 官方文件 · 變體屬性與值的設定原則</span>
+        </a>
+        <a class="res-link" href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">
+          <strong>WCAG 2.2 — Contrast (Minimum)</strong>
+          <span>4.5:1 與 3:1 的門檻與大型文字定義</span>
+        </a>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+</div><!-- /#deck -->
+
+<div id="ctrls">
+  <button id="prev" aria-label="上一頁">&#8592;</button>
+  <button id="next" aria-label="下一頁">&#8594;</button>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const prog = document.getElementById('prog');
+  const ctrls = document.getElementById('ctrls');
+  const dotContainers = Array.from(document.querySelectorAll('.dots'));
+  let cur = 0;
+
+  slides.forEach((slide, i) => {
+    const num = slide.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
+  dotContainers.forEach(container => {
+    slides.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === 0 ? ' on' : '');
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('aria-label', '前往第 ' + (i + 1) + ' 頁');
+      dot.addEventListener('click', () => go(i));
+      container.appendChild(dot);
+    });
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    prog.style.width = ((cur + 1) / total * 100) + '%';
+    ctrls.classList.toggle('on-dark', slides[cur].classList.contains('dark'));
+    dotContainers.forEach(container => {
+      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
+    });
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') {
+      event.preventDefault();
+      go(cur + 1);
+    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+      event.preventDefault();
+      go(cur - 1);
+    } else if (event.key === 'Home') {
+      go(0);
+    } else if (event.key === 'End') {
+      go(total - 1);
+    }
+  });
+
+  prog.style.width = (1 / total * 100) + '%';
+  ctrls.classList.toggle('on-dark', slides[0].classList.contains('dark'));
+})();
+</script>
 </body>
 </html>
