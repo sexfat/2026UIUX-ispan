@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 07 · 課堂練習與回家作業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code: #1d1d1f;
+  --max-w: 860px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 28px 22px 88px;
+  line-height: 1.72;
+}
+.page { max-width: var(--max-w); margin: 0 auto; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 42px;
+}
+.back-link { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+.back-link::before { content: '← '; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.hero { padding-bottom: 34px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
+.overline {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 14px; }
+.lead { color: var(--muted); max-width: 720px; font-size: 1rem; }
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+.toc h2 {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.toc ol { list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 8px 0; }
+.toc a { color: var(--dark); text-decoration: none; display: flex; gap: 10px; font-size: .95rem; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--accent);
+  font-size: .75rem;
+  font-weight: 800;
+  padding-top: 3px;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 46px 0 6px;
+  padding-top: 26px;
+  border-top: 2px solid var(--border);
+}
+.band-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+.band-tag.home { background: var(--accent2); }
+.band h2 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); }
+.band-note { color: var(--muted); font-size: .9rem; margin: 6px 0 4px; }
+
+.exercise {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.exercise.home { border-color: rgba(15,118,110,.28); }
+.exercise-head { padding: 18px 22px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.exercise.home .exercise-head { background: rgba(15,118,110,.05); border-bottom-color: rgba(15,118,110,.2); }
+.exercise-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.exercise.home .exercise-tag { color: var(--accent2); }
+h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); line-height: 1.25; }
+.exercise-body { padding: 20px 22px 24px; }
+h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+p { color: #2c2c2e; margin-bottom: 12px; }
+ul, ol { padding-left: 1.1rem; margin: 8px 0 16px; }
+li { margin-bottom: 8px; color: #2c2c2e; }
+strong { color: var(--dark); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+.good { color: var(--accent2); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.16);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.exercise.home .chip { color: var(--accent2); background: rgba(15,118,110,.07); border-color: rgba(15,118,110,.18); }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: .92rem; }
+th {
+  text-align: left;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: #2c2c2e; vertical-align: top; }
+td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
+
+.dia {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.85;
+  white-space: pre;
+  overflow-x: auto;
+  color: #2c2c2e;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.prompt {
+  background: var(--code);
+  color: #f5f5f7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 14px 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.7;
+}
+.callout {
+  background: rgba(0,102,204,.05);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #2c2c2e;
+}
+.callout.green { background: rgba(15,118,110,.06); border-left-color: var(--accent2); }
+.callout.warn { background: rgba(194,65,12,.06); border-left-color: var(--accent3); }
+.callout a { color: var(--accent); font-weight: 700; }
+
+.check { list-style: none; padding-left: 0; }
+.check li { position: relative; padding-left: 28px; }
+.check li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .45em;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+
+.foot-nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.foot-nav a {
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media print {
+  body { background: #fff; padding: 0; }
+  .topbar, .toc, .foot-nav { display: none; }
+  .exercise { break-inside: avoid; }
+}
+@media (max-width: 700px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .band { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back-link" href="article.html">回到 Unit 07 講義</a>
+    <span class="unit-pill">Unit 07</span>
+  </div>
+
+  <div class="hero">
+    <p class="overline">Practice &amp; Homework</p>
+    <h1>把 Wireframe 補成能被檢核的一份</h1>
+    <p class="lead">課堂練習用 85 分鐘，把上一堂交出來的 Flowchart 與 3 個 Wireframe，補上空狀態、錯誤狀態與載入狀態，接成一張 Wireflow，最後拿去給不認識你專題的同學問一輪。回家作業把它收成可以交的版本，就是作業 5 的下半部。</p>
+  </div>
+
+  <div class="toc">
+    <h2>本頁內容</h2>
+    <ol>
+      <li><a href="#ex1">Exercise 01 · 狀態盤點（15 分）</a></li>
+      <li><a href="#ex2">Exercise 02 · 補畫三種狀態（25 分）</a></li>
+      <li><a href="#ex3">Exercise 03 · 接成 Wireflow 並標註（20 分）</a></li>
+      <li><a href="#ex4">Exercise 04 · 兩人互相檢核（25 分）</a></li>
+      <li><a href="#hw">回家作業 · 作業 5（下半）</a></li>
+      <li><a href="#submit">繳交清單與評分配分</a></li>
+    </ol>
+  </div>
+
+  <div class="callout">
+    <strong>開始前先準備好：</strong>上一堂的 Flowchart（含六種例外路徑）、3 個低保真 Wireframe、Unit 03 的 Persona 一句話、Unit 04 旅程地圖上的主要痛點、Unit 05 的 IA 圖。這五樣東西等一下每一階段都會用到，先全部開起來，不要等到要用才找。<br><br>另外開一份<a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener"><strong>課堂範本檔</strong></a>，裡面四個區塊對應下面四個階段（盤點表、三種狀態範本、標註格式、修正紀錄表）。<strong>把需要的區塊複製到你自己那個 Unit 06 的檔案裡再填</strong>，不要直接在範本檔上寫——那是全班共用的。交件時交你自己的檔案連結。<br><br><strong>先挑一條流程。</strong>用自己專題的流程可以，也可以直接用範本檔<a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3?node-id=6-2" target="_blank" rel="noopener">「作業題目」分頁</a>的三題其中一題：<strong>① 會員註冊與登入</strong>（Unit 06 練過的基準題）、<strong>② 結帳付款出錯</strong>（練錯誤狀態的四種層級）、<strong>③ 中途離開與返回</strong>（練五種往回的方式）。題目卡上有情境、Persona、必須畫出的狀態、容易踩的坑與交件清單，還有五個空白畫框。題目之間沒有分數差別，挑你講得出使用者情境的那一條。
+  </div>
+
+  <div class="band">
+    <span class="band-tag">課堂練習 · 85 分鐘</span>
+    <h2>從初版畫面到被問過的 Wireflow</h2>
+  </div>
+  <p class="band-note">四個階段接著做，中間不停。全程黑白灰，這個階段還是不上色。</p>
+
+  <div class="exercise" id="ex1">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 01</p>
+      <h2>狀態盤點：你的畫面還缺哪幾張</h2>
+      <div class="meta"><span class="chip">15 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">範本檔 · 區塊 ①</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p>不要急著畫。先把缺的東西列出來，你才知道這 25 分鐘要花在哪。</p>
+
+      <h3>步驟</h3>
+      <ol>
+        <li>在 Figma 上你那三張 Wireframe 旁邊，開一個空白區域，拉一張表格（或用便利貼排成表格也行）。</li>
+        <li>每一張畫面一列，橫向欄位是下面那五種狀態。</li>
+        <li>已經畫好的打勾，沒畫的留白。留白的格子就是你等一下的工作清單。</li>
+        <li>把 Flowchart 攤在旁邊對一次：流程圖上有的節點，是不是每一個都找得到對應的畫面？</li>
+      </ol>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>畫面</th><th>正常</th><th>空的</th><th>出錯</th><th>載入中</th><th>回上一步</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>範例：搜尋結果頁</td><td>✓ 已畫</td><td>缺</td><td>缺</td><td>缺</td><td>—</td></tr>
+            <tr><td>範例：填寫表單頁</td><td>✓ 已畫</td><td>—</td><td>缺</td><td>—</td><td>缺</td></tr>
+            <tr><td>你的畫面 1</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>你的畫面 2</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>你的畫面 3</td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>判斷「—」還是「缺」</h3>
+      <ul class="check">
+        <li><strong>空的：</strong>這一頁上有列表、清單或任何會列出多筆東西的區塊嗎？有就不能填「—」。</li>
+        <li><strong>出錯：</strong>這一頁有輸入欄位、或會呼叫外部服務（付款、簡訊、地圖）嗎？有就不能填「—」。</li>
+        <li><strong>載入中：</strong>這一頁的資料是打完 API 才會出現的嗎？如果預期會超過 2 秒，就不能填「—」。</li>
+        <li><strong>回上一步：</strong>這一頁有多步驟流程嗎？有就要想「按上一頁時，已填的東西還在不在」。</li>
+      </ul>
+
+      <div class="callout"><strong>交件：</strong>一張填滿的盤點表，至少標出 3 個「缺」。<br>盤點完舉手，我會過去看你的「—」有沒有填得太寬鬆——十個格子只缺一個的，通常是漏看了。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 02</p>
+      <h2>補畫三種狀態，每一張都要過檢查</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">範本檔 · 區塊 ②</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p>從盤點表的「缺」裡挑，<strong>空狀態、錯誤狀態、載入狀態各至少畫一張</strong>。時間有限，先畫這三張，剩下的回家補。</p>
+
+      <h3>① 空狀態（大約 10 分）</h3>
+      <p>先確定你畫的是哪一種：</p>
+      <ul>
+        <li><strong>還沒有</strong>——使用者第一次進來，資料本來就是空的。</li>
+        <li><strong>找不到</strong>——他篩選或搜尋了，但沒命中。</li>
+      </ul>
+      <p>兩種的文案不一樣。畫完逐條檢查：</p>
+      <ul class="check">
+        <li>有沒有講清楚現在是什麼狀態（不是一片空白）？</li>
+        <li>有沒有順便教這個功能怎麼用？</li>
+        <li>有沒有一個可以直接點的下一步？</li>
+        <li>如果是「找不到」，有沒有重述目前的篩選條件、給放寬條件的方法？</li>
+      </ul>
+
+      <h3>② 錯誤狀態（大約 10 分）</h3>
+      <p>挑一個表單畫面，畫出「使用者填錯一格」的樣子。訊息要貼著那一格，不要跳 modal。</p>
+      <p>寫完訊息逐條檢查五要件：</p>
+      <ul class="check">
+        <li><span class="good">明確</span>——有指出是哪一格、哪裡不對嗎？</li>
+        <li><span class="good">看得懂</span>——有沒有出現錯誤代碼或技術術語？</li>
+        <li><span class="good">有禮貌</span>——有沒有在指責使用者（「你輸入了無效的…」）？</li>
+        <li><span class="good">精準</span>——「不符合規定」這種模糊的話刪掉了嗎？</li>
+        <li><span class="good">給下一步</span>——他看完知道怎麼修嗎？</li>
+      </ul>
+      <div class="callout warn"><span class="bad">會被退回重畫的三種：</span>一顆寫著「錯誤，請重新填寫」的 modal；只有頁首寫「有 3 個欄位錯誤」而欄位旁邊沒標；用 tooltip 藏錯誤訊息。</div>
+
+      <h3>③ 載入狀態（大約 5 分）</h3>
+      <p>挑一個要等的地方，先估「大概要等幾秒」，再決定畫什麼：</p>
+      <ul>
+        <li>1 秒以內 —— 不用畫。</li>
+        <li>2–10 秒 —— 畫一個循環動畫（圈圈）的位置。</li>
+        <li>10 秒以上 —— 畫百分比進度條，而且要有取消的方法。</li>
+      </ul>
+      <p>畫的是<strong>那個畫面存在</strong>，不是把動畫做出來。旁邊標註預期秒數。</p>
+
+      <div class="callout"><strong>交件：</strong>3 張新畫面（空／錯誤／載入各一），每張旁邊寫一行「這張在什麼情況下會出現」。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 03</p>
+      <h2>接成 Wireflow，補上標註</h2>
+      <div class="meta"><span class="chip">20 分鐘</span><span class="chip">個人</span><span class="chip"><a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">範本檔 · 區塊 ③</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <p>現在你有六張左右的畫面，但它們還是散的。這一段把它們接起來，並且寫上別人看不出來的規則。</p>
+
+      <h3>接線（大約 12 分）</h3>
+      <ol>
+        <li>把畫面在畫布上由左到右排開，主線放中間那一排。</li>
+        <li>先接主線：入口 → 中間 → 完成。用 Figma 的連接線工具拉。</li>
+        <li><strong>箭頭要從具體可點的元件出發</strong>——那顆按鈕、那一列、那個連結，不要從整張畫面的邊緣拉。</li>
+        <li>再接例外：從主線的哪個元件會岔到空狀態／錯誤狀態／載入狀態？岔出去之後回得來嗎？</li>
+        <li>最後檢查有沒有斷掉的箭頭：指向空白處的、或某個畫面進得去出不來的。</li>
+      </ol>
+
+      <h3>標註（大約 8 分）</h3>
+      <p>格式與空白欄在範本檔區塊 ③。課堂上時間有限，<strong>每張畫面先寫 1 條最關鍵的</strong>，整份至少要有一條「刻意不做的事」。回家再補到每張 3 條。從下面五類挑：</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>類型</th><th>寫法範例</th></tr></thead>
+          <tbody>
+            <tr><td>資料從哪來</td><td>此列表依上架時間排序，一次載入 20 筆，捲到底自動載入下一批</td></tr>
+            <tr><td>什麼條件才出現</td><td>僅登入且已完成實名認證的使用者看得到這個區塊</td></tr>
+            <tr><td>互動之後會怎樣</td><td>按下收藏後圖示由空心變實心，不跳頁，右下角出現 2 秒提示</td></tr>
+            <tr><td>狀態與樣式的意圖</td><td>此處為錯誤狀態，之後用紅色加圖示標示；顏色於風格板階段決定</td></tr>
+            <tr><td>刻意不做的事</td><td>這一版不做批次刪除，因為訪談中沒有人提到有這個需求</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>寫的時候記住四件事：一條標註講一件事、寫規則不要寫感想、盡量帶數字、編號放畫面上說明放旁邊。</p>
+
+      <div class="callout"><strong>交件：</strong>一張接起來的 Wireflow，沒有斷掉的箭頭；每張畫面至少 1 條標註，整份至少 1 條是「刻意不做的事」。（回家作業要補到每張 3 條。）</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex4">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 04</p>
+      <h2>兩人互相檢核</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">兩人一組</span><span class="chip">跨組配對</span><span class="chip"><a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">範本檔 · 區塊 ④</a></span></div>
+    </div>
+    <div class="exercise-body">
+      <div class="callout warn"><strong>配對規則：去隔壁組找一個人。</strong>不要跟同專題的人互看——他已經知道你的來龍去脈，會自動幫你補上圖上沒有的東西，問不出外人真的會卡住的地方。</div>
+
+      <h3>時間切法</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>時段</th><th>誰在做什麼</th></tr></thead>
+          <tbody>
+            <tr><td>0–10 分</td><td>A 提案、B 提問。B 全程記錄，A 不要辯解</td></tr>
+            <tr><td>10–20 分</td><td>換手，B 提案、A 提問</td></tr>
+            <tr><td>20–25 分</td><td>各自整理自己的修正清單，不討論</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>提案的人：開場先講這三句</h3>
+      <ol>
+        <li>「我的使用者是 ______，他最痛的是 ______。」（Persona 加旅程地圖的痛點，一句話）</li>
+        <li>「這條流程要讓他完成的是 ______。」（核心任務）</li>
+        <li>「<strong>我今天想聽的是 ______。</strong>」（指定回饋範圍，例如「流程有沒有斷」「狀態夠不夠」）</li>
+      </ol>
+      <p>然後快速走一次流程，<strong>不要替每個決策辯解</strong>。你花在辯解的時間，就是對方不能提問的時間。被問倒不是壞事——那就是你今天來上課想拿到的東西。</p>
+
+      <h3>提問的人：從這張清單挑，不要憑感覺</h3>
+      <ul class="check">
+        <li>流程：從入口走到完成，中間有沒有斷掉的箭頭？有沒有哪個畫面進得去出不來？</li>
+        <li>例外：六種例外路徑（沒資料、找不到、沒權限、出錯、要等、反悔）在 Wireflow 上都找得到對應畫面嗎？</li>
+        <li>空狀態：是「還沒有」還是「找不到」？文案有沒有寫成同一句？有沒有給下一步？</li>
+        <li>錯誤：訊息貼著欄位嗎？看得懂嗎？說得出怎麼修嗎？有沒有用 modal 或 tooltip？</li>
+        <li>載入：預估幾秒？畫的指示型別對得上那個秒數嗎？超過 10 秒能不能取消？</li>
+        <li>反悔：按上一步，剛剛填的東西還在嗎？</li>
+        <li>標註：畫面上看不出來的規則有寫嗎？有沒有寫「刻意不做的事」？</li>
+        <li>依據：挑一個版面決策問「為什麼這樣排」，聽他能不能指回研究裡的哪一段。</li>
+      </ul>
+
+      <h3>提問的口氣：改寫成對著目標的問題</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>不要這樣講</th><th>改成</th></tr></thead>
+          <tbody>
+            <tr><td><span class="bad">「這顆按鈕位置不對。」</span></td><td><span class="good">「如果目標是讓人快速完成註冊，按鈕放這裡會不會讓錯的東西變顯眼？」</span></td></tr>
+            <tr><td><span class="bad">「欄位太多了吧。」</span></td><td><span class="good">「這幾個欄位裡，哪幾個是這個任務當下非填不可的？」</span></td></tr>
+            <tr><td><span class="bad">「我覺得應該改成分頁。」</span></td><td><span class="good">「使用者要一次看幾筆？捲動跟分頁哪個比較貼近他們的情境？」</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>也要講對的地方。只講缺點，對方下一版可能把做對的部分一起改掉。</p>
+
+      <div class="callout warn"><span class="bad">兩件現場禁止的事：</span>① 聽到一半就開始拉元件改圖——回饋先全部收完再說；② 一直說「這個我本來想做但沒時間」——那不是回應，把它寫進修正清單第二欄。</div>
+
+      <h3>最後 5 分鐘：整理修正清單</h3>
+      <p>用範本檔區塊 ④ 的表格，每一則回饋照四步寫：<strong>原話 → 決定 → 理由 → 下一步</strong>。原話要照抄，不要抄你的摘要——摘要會不小心把你不想面對的部分濾掉。</p>
+
+      <div class="callout"><strong>交件：</strong>一份修正清單，至少 5 則，每則四欄都填滿。不採用的也要寫，而且理由要接得回研究或設計目標。</div>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="band-tag home">回家作業 · 作業 5（下半）</span>
+    <h2>把 Wireflow 收成可以交的一份</h2>
+  </div>
+  <p class="band-note">預估 3 小時。交件對齊課綱作業 5：1 張 Flow + 3–5 個 Wireframe。上一堂交的是初版，這次交的是接起來、補完狀態、被問過也改過的版本。</p>
+
+  <div class="exercise home" id="hw">
+    <div class="exercise-head">
+      <p class="exercise-tag">Homework</p>
+      <h2>完整 Wireflow、狀態補齊與修正紀錄</h2>
+      <div class="meta"><span class="chip">約 3 小時</span><span class="chip">個人</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+      <ol>
+        <li><strong>核心畫面補到 3–5 張。</strong>「3–5 張」算的是<strong>核心畫面</strong>（不同的頁）。空／錯誤／載入是同一個核心畫面的不同狀態版本，<strong>不另外計數</strong>，但整組畫面裡三種狀態要至少各出現一次。所以一份合格的交件通常是 3–5 個核心畫面、加起來 6–9 張圖。</li>
+        <li><strong>接成一張完整的 Wireflow。</strong>Unit 06 Flowchart 上的每一條例外路徑，在 Wireflow 上都要找得到對應的畫面，不能有斷掉的箭頭。</li>
+        <li><strong>每張畫面至少 3 條標註。</strong>資料來源、出現條件、互動結果三類各一條起跳，整份至少要有一條「刻意不做的事」。</li>
+        <li><strong>修正紀錄至少 5 則。</strong>課堂上收到的回饋，用四步範本寫完：原話、決定、理由、下一步。決定「不改」的也要寫。</li>
+        <li><strong>一段設計說明。</strong>挑三個版面決策，各寫一句「因為研究裡的 ______，所以 ______」。指得出是 Unit 03–05 哪一份產出的哪一段。</li>
+        <li><strong>（加分，非必要）</strong>把其中一條流程做成 Figma 的可點原型，讓人可以自己走一次。斷掉的地方會立刻現形。</li>
+      </ol>
+
+      <h3>交件前自己跑一次這個檢查</h3>
+      <ul class="check">
+        <li>找一個沒看過你專題的人，讓他用手指沿著箭頭從入口走到完成。走得完嗎？</li>
+        <li>每一張空狀態，都答得出「這是還沒有，還是找不到」嗎？</li>
+        <li>每一則錯誤訊息，五要件都過嗎？有沒有殘留 modal 或 tooltip？</li>
+        <li>每一個載入畫面，旁邊有標預估秒數嗎？型別對得上嗎？</li>
+        <li>修正紀錄裡的「理由」欄，有沒有出現「我覺得」？有的話改成研究依據，或老實寫「這是我的偏好」。</li>
+      </ul>
+
+      <h3>AI 使用界線</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>可以</th><th>不可以</th></tr></thead>
+          <tbody>
+            <tr><td>盤點</td><td>把畫面清單與流程圖貼給 AI，讓它列出你漏掉的狀態</td><td>讓 AI 決定哪些狀態該做、哪些不用做</td></tr>
+            <tr><td>文案</td><td>讓 AI 用五要件與三準則檢查你寫好的訊息，指出哪一條沒過</td><td>讓 AI 直接生一整套錯誤訊息文案</td></tr>
+            <tr><td>回饋整理</td><td>讓 AI 把回饋分類、列出正反理由</td><td>讓 AI 替你決定改或不改</td></tr>
+            <tr><td>畫面</td><td>用 AI 生假資料填進 Wireframe（商品名、人名、地址）</td><td>讓 AI 生 Wireframe 版面</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>界線的邏輯是同一條：<strong>AI 可以幫你檢查與整理，不能幫你做判斷。</strong>它沒有做過你的使用者研究，所有跟「這個使用者需要什麼」有關的決定，都得你自己下。三個現成的提示詞在<a href="article.html#s13">講義第 13 節</a>。</p>
+
+      <div class="callout green"><strong>交件方式：</strong>一份 Figma 連結（Wireflow、畫面、標註、修正紀錄、設計說明放在同一個檔案的不同區塊），權限設為可檢視。下次上課抽點分享。</div>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="band-tag home">繳交</span>
+    <h2>繳交清單與評分配分</h2>
+  </div>
+
+  <div class="exercise home" id="submit">
+    <div class="exercise-head">
+      <p class="exercise-tag">Submission</p>
+      <h2>對應階段作業 5（下半）</h2>
+      <div class="meta"><span class="chip">Figma 連結 1 份</span><span class="chip">下次上課抽點分享</span></div>
+    </div>
+    <div class="exercise-body">
+      <h3>要交的東西</h3>
+      <ul class="check">
+        <li>1 張完整 Wireflow（含 Unit 06 的 Flowchart 對照）</li>
+        <li>3–5 個核心畫面（狀態版本不另計），整組含空狀態、錯誤狀態、載入狀態各至少一張</li>
+        <li>每張畫面至少 3 條標註，整份至少 1 條「刻意不做的事」</li>
+        <li>修正紀錄至少 5 則，四欄填滿</li>
+        <li>設計說明 3 條，每條指得回研究</li>
+      </ul>
+
+      <h3>配分</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>項目</th><th>配分</th><th>通過的樣子</th><th>不及格的樣子</th></tr></thead>
+          <tbody>
+            <tr><td>流程完整性</td><td>25</td><td>Flowchart 上每條路徑都找得到對應畫面，從入口走得到完成，例外走得回主線</td><td>有斷掉的箭頭；例外路徑在 Flowchart 上有、Wireflow 上找不到對應畫面；某個畫面進得去出不來</td></tr>
+            <tr><td>狀態設計</td><td>25</td><td>三種狀態齊備；空狀態分得出「還沒有」與「找不到」；錯誤訊息五要件都過；載入型別對得上預估秒數</td><td>三種狀態沒補齊；空狀態只寫「查無資料」；錯誤訊息用 modal 或 tooltip、看不出哪一格錯、沒說怎麼修；載入畫的型別跟預估秒數對不上</td></tr>
+            <tr><td>標註品質</td><td>20</td><td>每張畫面 3 條以上，涵蓋資料來源、出現條件、互動結果，帶得出數字，整份有「刻意不做的事」</td><td>標註寫成感想（「這裡放大比較好看」）；一條裡塞三個規則；沒有數字；整份沒有「刻意不做的事」</td></tr>
+            <tr><td>修正紀錄</td><td>20</td><td>5 則以上，原話照抄，決定講死，理由接得回研究或設計目標，下一步寫得出改哪一張</td><td>不到 5 則；原話被改寫成摘要；「決定」欄寫「再想想」；不採用的理由只寫「沒時間」</td></tr>
+            <tr><td>設計說明</td><td>10</td><td>三條都指得出是哪一份研究產出的哪一段；是偏好的有老實標明</td><td>三條都是「我覺得比較順」；指不出是哪一份研究產出的哪一段，卻寫得像研究結論</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><strong>特別說明：</strong>修正紀錄裡寫「不改」不會扣分，<span class="bad">寫不出理由才會</span>。這一項要看的是你有沒有能力判斷哪些回饋該收、哪些不該收——全部照改跟全部不改，通常都代表沒有在判斷。</div>
+    </div>
+  </div>
+
+  <div class="foot-nav">
+    <a href="slides.html" target="_blank" rel="noopener">回到 Unit 07 簡報</a>
+    <a href="article.html" target="_blank" rel="noopener">Unit 07 完整講義</a>
+    <a href="article.html#s10" target="_blank" rel="noopener">講義第 10 節：同儕檢核怎麼開</a>
+    <a href="article.html#s13" target="_blank" rel="noopener">講義第 13 節：AI 協作提示詞</a>
+    <a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener">課堂範本檔</a>
+    <a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3?node-id=6-2" target="_blank" rel="noopener">三個作業題目</a>
+    <a href="../Unit_06/exercises.html" target="_blank" rel="noopener">Unit 06 練習：作業 5 上半</a>
+    <a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">線框元件庫</a>
+    <a href="../index.html" target="_blank" rel="noopener">回到課程總覽</a>
+  </div>
+</div>
+</body>
+</html>

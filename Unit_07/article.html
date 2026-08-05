@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe 實作延伸 · 完整教材 · Unit 07</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a {
+  font-size: .92rem;
+  color: var(--dark);
+  text-decoration: none;
+  display: flex;
+  gap: 10px;
+}
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+
+ul.bullets, ol.steps {
+  margin: 4px 0 20px;
+  padding-left: 0;
+  list-style: none;
+}
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li {
+  counter-increment: step;
+  padding-left: 38px;
+}
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .94rem;
+  min-width: 560px;
+}
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child {
+  font-weight: 800;
+  color: var(--muted);
+  font-size: .9em;
+  white-space: nowrap;
+}
+tr:last-child td { border-bottom: none; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 22px 0;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+.card p {
+  margin: 0;
+  font-size: .93rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol {
+  list-style: none;
+  counter-reset: sidenav;
+  border-left: 2px solid var(--border);
+}
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active {
+  color: var(--accent);
+  font-weight: 700;
+  border-left-color: var(--accent);
+}
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) {
+  .side-nav { display: block; }
+}
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">你畫的那幾張，都假設一次就成功</a></li>
+    <li><a href="#s2">空狀態：不要留全空白</a></li>
+    <li><a href="#s3">錯誤訊息要同時做到五件事</a></li>
+    <li><a href="#s4">表單出錯的十條準則</a></li>
+    <li><a href="#s5">載入狀態：0.1 秒、1 秒、10 秒</a></li>
+    <li><a href="#s6">指示器、驗證、通知</a></li>
+    <li><a href="#s7">把散裝畫面接成 Wireflow</a></li>
+    <li><a href="#s8">標註：畫不出來的用文字寫</a></li>
+    <li><a href="#s9">設計說明：決策要指得回研究</a></li>
+    <li><a href="#s10">同儕檢核怎麼開</a></li>
+    <li><a href="#s11">檢核之後：修正紀錄</a></li>
+    <li><a href="#s12">課堂練習與回家作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="slides.html">回到投影片</a>
+  <span class="unit-pill">Unit 07</span>
+</div>
+
+<div class="hero">
+  <p class="overline">介面設計流程（下）· 完整教材</p>
+  <h1>Wireframe 實作延伸</h1>
+  <p class="lead">上一堂交出來的是一張 Flowchart 加三個 Wireframe，那是最順的那一條路。這堂課要把它補成真的能被別人打開來看的東西：空的時候長什麼樣、出錯的時候怎麼講、要等的時候畫什麼，然後把散裝畫面接成一張 Wireflow，寫上標註，最後拿去給不認識你專題的人問一輪。結束時你手上會多一張接起來的 Wireflow、各種狀態的畫面，以及一份被問出來的修正清單。</p>
+  <div class="meta">
+    <span>閱讀時間約 20 分鐘</span><span class="d"></span>
+    <span>搭配 Unit 07 投影片</span><span class="d"></span>
+    <span>含練習、作業與 AI 提示詞</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">你畫的那幾張，都假設一次就成功</a></li>
+    <li><a href="#s2">空狀態：不要留全空白</a></li>
+    <li><a href="#s3">錯誤訊息要同時做到五件事</a></li>
+    <li><a href="#s4">表單出錯的十條準則</a></li>
+    <li><a href="#s5">載入狀態：0.1 秒、1 秒、10 秒</a></li>
+    <li><a href="#s6">指示器、驗證、通知</a></li>
+    <li><a href="#s7">把散裝畫面接成 Wireflow</a></li>
+    <li><a href="#s8">標註：畫不出來的用文字寫</a></li>
+    <li><a href="#s9">設計說明：決策要指得回研究</a></li>
+    <li><a href="#s10">同儕檢核怎麼開</a></li>
+    <li><a href="#s11">檢核之後：修正紀錄</a></li>
+    <li><a href="#s12">課堂練習與回家作業</a></li>
+    <li><a href="#s13">AI 協作提示詞</a></li>
+  </ol>
+</div>
+
+<div class="article">
+
+  <section class="section" id="s1">
+    <p class="sec-num">01</p>
+    <h2 class="sec-title">你畫的那幾張，都假設一次就成功</h2>
+    <p>把上一堂畫的 Wireframe 打開看一眼。商品列表上大概有十幾筆資料、表單每一格都填好了、資料好像瞬間就出現了、使用者一路往前沒有回頭。</p>
+    <p>這是<strong>最順的那一條路</strong>。它當然要畫，但真實使用裡，人會篩到沒東西、會填錯、會在訊號差的地方等，也會填到一半按上一頁。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>你畫的</th><th>使用者實際會遇到的</th></tr></thead>
+        <tbody>
+          <tr><td>商品列表有 12 筆</td><td>剛註冊，一筆都沒有；或篩了三個條件，命中 0 筆</td></tr>
+          <tr><td>表單每格都填好了</td><td>手機號碼少一碼、驗證碼過期、按了送出才發現有必填沒填</td></tr>
+          <tr><td>資料立刻出現</td><td>訊號差轉了八秒；第三方付款要等十幾秒</td></tr>
+          <tr><td>使用者一路往前</td><td>填到一半按上一頁、按了返回鍵、切出去接電話再切回來</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>上一堂在 Flowchart 上其實已經把這些畫成節點了——就是那六種例外路徑。當時只要求「有畫到這個節點」，這堂課要把節點畫成真的畫面。一個 Flowchart 上的菱形，通常會展開成兩三張長得不一樣的畫面。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Unit 06 的例外路徑</th><th>Unit 07 要畫成</th><th>本講義哪一節</th></tr></thead>
+        <tbody>
+          <tr><td>沒資料 · 找不到</td><td>空狀態</td><td>第 2 節</td></tr>
+          <tr><td>出錯 · 沒權限</td><td>錯誤狀態</td><td>第 3、4 節</td></tr>
+          <tr><td>要等</td><td>載入狀態</td><td>第 5 節</td></tr>
+          <tr><td>反悔</td><td>回到前一個畫面，且保留已填內容</td><td>第 3 節末</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">「反悔」不是一張新畫面，是<span class="hl">同一張畫面帶著使用者剛剛填的東西</span>。最常見的錯誤做法是按上一步就把表單清空，等於逼人重打一次。</div>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">02</p>
+    <h2 class="sec-title">空狀態：不要留全空白</h2>
+    <p><strong>空狀態</strong>指的是一個容器、畫面或面板還沒有內容、或是無法顯示內容時的樣子。它最常出現在兩個時刻：剛註冊完的頭幾分鐘，以及篩選條件沒有命中任何資料的時候。</p>
+    <p>NN/g 的建議講得很直接：<strong>不要預設留全空白。</strong>因為使用者分不出來這是「還在載入」「壞掉了」還是「真的沒東西」。他會多按幾次、重新整理，最後直接離開。</p>
+
+    <h3>三條準則</h3>
+    <ol class="steps">
+      <li><strong>講清楚系統狀態。</strong>流程跑完但沒東西可顯示，就直說。像是「目前所選日期區間沒有紀錄」——這句話同時告訴使用者「查詢有成功執行」，他才會相信這個結果。</li>
+      <li><strong>順便教這個功能怎麼用。</strong>「把喜歡的項目加星號，就會列在這裡」。這種提示比開場的導覽有效，因為它是使用者真的碰到這個區塊的時候才出現的，不是一開始就硬塞給他的。</li>
+      <li><strong>給一條直達關鍵任務的路。</strong>不要只寫「沒有資料」，要放可以直接點的東西：一顆「新增第一筆」按鈕，或一個「用示範資料先看看」的連結。</li>
+    </ol>
+    <p>三條不是三選一。好的空狀態通常同時做到——一句狀態說明、一句用法提示、一顆按鈕。</p>
+
+    <h3>「還沒有」跟「找不到」要寫不一樣的話</h3>
+    <p>最常見的做法是兩種情況都寫「查無資料」。但使用者的處境完全不同，該給的下一步也不同。</p>
+    <div class="cards">
+      <div class="card">
+        <h3>還沒有（第一次使用）</h3>
+        <p>資料本來就是空的。使用者不知道這個功能能幹嘛，也不知道怎麼開始。<br><br>要給：這個區塊的用途一句話，加一顆開始按鈕。<br><br>例：「你這學期還沒有加選任何課程」＋「開始選課」。</p>
+      </div>
+      <div class="card">
+        <h3>找不到（篩選或搜尋沒命中）</h3>
+        <p>使用者知道自己要什麼，但條件沒撈到東西。他需要知道是哪個條件太嚴。<br><br>要給：重述目前的條件，加上放寬條件的方法。<br><br>例：「找不到符合『星期一 早上 通識』的課程，要不要拿掉時段限制？」</p>
+      </div>
+    </div>
+    <div class="callout green">空狀態出現的時機，剛好是使用者決定要不要繼續用下去的時候。那塊空白是產品最好的教學位置，別浪費。</div>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">03</p>
+    <h2 class="sec-title">錯誤訊息要同時做到五件事</h2>
+    <p>NN/g 把錯誤訊息定義成「系統主動打斷使用者流程，告知他現在的狀況不完整、不相容或不理想」。既然是打斷，那就要換得起這個打斷——一句好的錯誤訊息要同時做到五件事。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>要件</th><th>意思</th><th>✕ 不好的</th><th>✓ 好的</th></tr></thead>
+        <tbody>
+          <tr><td>明確</td><td>指出到底哪裡有問題</td><td>「輸入有誤」</td><td>「手機號碼要 10 碼，你輸入了 9 碼」</td></tr>
+          <tr><td>看得懂</td><td>不要丟系統術語與代碼</td><td>「Error 422: unprocessable entity」</td><td>「這個信箱已經註冊過了」</td></tr>
+          <tr><td>有禮貌</td><td>不要指責使用者</td><td>「你輸入了無效的資料」</td><td>「這個日期已經過了，請選今天以後的日期」</td></tr>
+          <tr><td>精準</td><td>講具體，不要模糊帶過</td><td>「密碼不符合規定」</td><td>「密碼還差一個數字」</td></tr>
+          <tr><td>給下一步</td><td>告訴他怎麼修</td><td>「此欄位為空白」</td><td>「請填寫收件地址」</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>還有三件常被忘記的</h3>
+    <ul class="bullets">
+      <li><strong>位置貼近出錯的地方，樣式要看得見。</strong>NN/g 的建議是粗體、高對比、紅色，並且搭配圖示。</li>
+      <li><strong>保留使用者已經填好的內容。</strong>出錯不該讓整張表單清空。這一條同時解決 Unit 06 的「反悔」路徑——按上一步回去的時候，剛剛填的東西要還在。</li>
+      <li><strong>主動偵測常見失誤。</strong>與其等使用者按了送出才報錯，不如在他犯錯的當下就攔下來——信件內文寫了「附件」卻沒有附檔、收件地址的縣市與郵遞區號對不上。這一類提醒放在按鈕旁邊，比事後的錯誤訊息有用得多。</li>
+      <li><strong>區分嚴重程度。</strong>「這個優惠碼過期了，但你還是可以結帳」跟「信用卡被拒絕，無法完成訂單」不該長成同一個樣子。前者是警告，後者是真的擋住流程。</li>
+    </ul>
+    <div class="callout">NN/g 有一句話值得記起來：<span class="hl">使用者犯錯不是他的錯，錯誤是在指出設計的缺陷。</span>同一個錯誤如果重複出現，要回頭看那個欄位的規則是不是根本沒講清楚，而不是把訊息寫得更兇。</div>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">04</p>
+    <h2 class="sec-title">表單出錯的十條準則</h2>
+    <p>表單是最容易出錯、也最容易做壞的地方。NN/g 整理了十條，五條該做、五條不要做。</p>
+
+    <h3>該做的五條</h3>
+    <ol class="steps">
+      <li><strong>盡量用 inline 驗證。</strong>使用者填完一格、游標離開之後，就在旁邊顯示結果，不要等到按送出才一次全部報出來。</li>
+      <li><strong>難填的欄位，填對了也要說。</strong>密碼、統一編號、信用卡號這種有規則的欄位，出現一個綠色勾勾，可以省掉使用者的猜測。</li>
+      <li><strong>訊息貼著欄位放。</strong>使用者要能一邊看訊息一邊改。把所有錯誤集中在頁首，他得先記住訊息再捲下去找欄位，記憶負擔全丟給他。</li>
+      <li><strong>用顏色分狀態。</strong>紅色是錯誤、橘或黃是警告、綠或藍是成功。整張表單要一致。</li>
+      <li><strong>顏色之外再加一個圖示。</strong>訊息左邊放一個驚嘆號圖示。這不只是好看——<strong>色盲的使用者只靠紅色是看不出來的</strong>。</li>
+    </ol>
+
+    <h3>不要做的五條</h3>
+    <ol class="steps">
+      <li><strong>不要動不動就跳 modal。</strong>它打斷流程，而且使用者關掉之後還得記住剛剛寫了什麼，才回得去改。</li>
+      <li><strong>不要在人家還沒填完就報錯。</strong>信箱才打到「abc@」就跳紅字說格式錯誤——他知道，他還沒打完。等他離開這一格再說。</li>
+      <li><strong>不要只放頁首的彙總訊息。</strong>「有 3 個欄位填寫錯誤」會逼使用者自己去找是哪三個。彙總可以放，但欄位旁邊也一定要標。</li>
+      <li><strong>不要用 tooltip 報錯。</strong>警示小圖示在資訊密的畫面裡很難被注意到，何況還要 hover 才看得到內容——手機上根本沒有 hover 這回事。</li>
+      <li><strong>同一個錯誤重複出現，要給額外協助。</strong>同一格連錯三次以上，別再重播同一句訊息——補上輸入範例或規則說明，同時回去查根因。三次不是規定，是一個提醒你「這裡設計有問題」的訊號。</li>
+    </ol>
+
+    <div class="callout">Wireframe 階段沒有顏色，第 4、5 條要怎麼畫？<span class="hl">用標註寫</span>：「此處為錯誤狀態，之後用紅色加驚嘆號圖示標示，顏色於風格板階段決定」。狀態本身要畫出來，配色留到 Unit 08。</div>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">05</p>
+    <h2 class="sec-title">載入狀態：0.1 秒、1 秒、10 秒</h2>
+    <p>要不要畫載入狀態、要畫哪一種，取決於使用者要等多久。這三個數字是 Nielsen 在 1993 年就寫下來的，到今天沒有變過——因為變的是機器，不是人的注意力。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>門檻</th><th>使用者的感受</th><th>介面該給什麼</th></tr></thead>
+        <tbody>
+          <tr><td>0.1 秒</td><td>覺得系統是「立刻」在反應</td><td>不用畫任何回饋，直接出結果</td></tr>
+          <tr><td>1 秒</td><td>思緒還接得上，但已經察覺到延遲</td><td>還是不用特別畫，但別再更久</td></tr>
+          <tr><td>10 秒</td><td>注意力的上限，再久就會分心</td><td>一定要有進度指示，而且要能中斷</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>超過 10 秒，使用者會想去做別的事。這時候要告訴他<strong>大概什麼時候會好</strong>，而不是讓他盯著一顆轉不停的圈圈。</p>
+
+    <h3>進度指示的三種型別</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>畫什麼</th><th>用在多長的等待</th><th>為什麼</th></tr></thead>
+        <tbody>
+          <tr><td>什麼都不畫</td><td>1 秒以內</td><td>閃一下的 spinner 比不畫還干擾</td></tr>
+          <tr><td>循環動畫（spinner）</td><td>2–10 秒</td><td>告訴使用者系統還活著。但它沒有「進度」的資訊，等太久人會覺得沒在前進</td></tr>
+          <tr><td>百分比進度條</td><td>10 秒以上</td><td>使用者要看得到自己在前進。速度要穩定，或先慢後快——中途變慢會被察覺，滿意度直接掉</td></tr>
+          <tr><td>只寫「Loading…」</td><td>都不要用</td><td>資訊量太少，該換成上面任何一種</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">NN/g 引的研究：看得到動態進度回饋的人，<span class="hl2">願意等的時間平均是沒有回饋的三倍</span>。同樣的等待時間，畫不畫差這麼多。</div>
+    <p>Wireframe 上怎麼表現？畫一個灰色的區塊，中間放一個圈圈或一條進度條，旁邊標註「載入時間預期 3–5 秒，超過 10 秒改為顯示預估剩餘時間並提供取消」。要畫的是<strong>那個畫面存在</strong>，不是把動畫做出來。</p>
+  </section>
+
+  <section class="section" id="s6">
+    <p class="sec-num">06</p>
+    <h2 class="sec-title">指示器、驗證、通知</h2>
+    <p>這三種東西都是「系統想跟使用者說一件事」，但觸發的原因、範圍和該有的強度都不一樣。用錯了，使用者不是漏看就是被煩到。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>指示器 Indicator</th><th>驗證 Validation</th><th>通知 Notification</th></tr></thead>
+        <tbody>
+          <tr><td>誰觸發的</td><td>內容變動了</td><td>使用者剛輸入的東西</td><td>系統發生的事</td></tr>
+          <tr><td>要不要使用者動作</td><td>不用</td><td>要，他得回去改</td><td>看類型</td></tr>
+          <tr><td>範圍</td><td>某個元件旁邊</td><td>某個輸入欄旁邊</td><td>可能局部，也可能全域</td></tr>
+          <tr><td>長什麼樣</td><td>紅點、粗體、顏色、大小、小動畫</td><td>貼著欄位的訊息</td><td>徽章數字、橫幅、彈窗</td></tr>
+          <tr><td>例子</td><td>訊息列表上的未讀藍點</td><td>「密碼還差一個數字」</td><td>「你的訂單已出貨」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>指示器有一個特性值得記：它是<strong>有條件才出現的</strong>——不是一直都在，而是在某些狀況下才冒出來或改變樣子。所以 Wireframe 上要標註「什麼條件下這個紅點會出現」。</p>
+    <p>通知還要再分兩類。<strong>需要動作的</strong>通常比較急，可以做得強勢一點，例如 modal；<strong>不急的</strong>就要低調，常見做法是一個 badge（角落的小紅點或數字）。</p>
+    <div class="callout">用錯的代價：NN/g 記錄過一位行動裝置的受測者<span class="hl">花了五分鐘等內容載入，只因為她沒注意到那個小小的錯誤訊息</span>——那則錯誤被做成一閃即逝的提示。反過來，把該當指示器的資訊做成通知，使用者會直接忽略，還覺得你很煩。</div>
+  </section>
+
+  <section class="section" id="s7">
+    <p class="sec-num">07</p>
+    <h2 class="sec-title">把散裝畫面接成 Wireflow</h2>
+    <p>畫面補齊之後，你手上會有一疊圖，但它們是散的。別人打開你的 Figma 只會看到十幾個框，不知道誰接誰、點哪裡會過去。</p>
+    <p><strong>Wireflow</strong> 的定義（NN/g）是「wireframe 式的版面設計，加上簡化過的、流程圖式的互動表示法」。它補的是兩邊各自的缺口：Flowchart 能記錄複雜流程但缺少畫面脈絡，Wireframe 擅長表達版面但不擅長記錄互動。</p>
+
+    <h3>四條實作準則</h3>
+    <ol class="steps">
+      <li><strong>節點是畫面「狀態」，不是畫面。</strong>同一頁的空狀態、正常狀態、錯誤狀態，在 Wireflow 上是三個節點。這也是為什麼要先做完第 2 到第 5 節的東西才能接。</li>
+      <li><strong>箭頭要從具體可點的元件出發。</strong>不要從整張畫面的邊緣拉一條線出去，要從那顆按鈕、那一列、那個連結拉出去。看的人才知道是點哪裡才會過去。</li>
+      <li><strong>結果畫面要明確。</strong>包含確認彈窗、顏色變化這類視覺回饋，也算一種結果，要畫出來。</li>
+      <li><strong>桌機不用每個節點都畫整頁。</strong>畫面大，只畫有變動的區塊就好，不然一張圖根本塞不下。手機因為畫面小，一個節點畫一整張剛剛好——Wireflow 最早就是行動 App 團隊在用的。</li>
+    </ol>
+
+    <h3>接的時候的順序</h3>
+    <ol class="steps">
+      <li>把 Unit 06 的 Flowchart 攤在旁邊當清單，一條路徑一條路徑對。</li>
+      <li>先接主線：入口 → 中間 → 完成。確認這條走得完。</li>
+      <li>再接例外：從主線的哪一個元件會岔出去？岔出去之後要回得來，還是就結束了？</li>
+      <li>最後檢查有沒有<strong>斷掉的箭頭</strong>——指向空白處，或某個節點進得去出不來。</li>
+    </ol>
+    <div class="callout green">檢查方法：找一個沒看過你專題的人，讓他從入口用手指沿著箭頭走一次。走到卡住的地方，就是斷點。</div>
+  </section>
+
+  <section class="section" id="s8">
+    <p class="sec-num">08</p>
+    <h2 class="sec-title">標註：畫不出來的用文字寫</h2>
+    <p>Wireframe 是靜態的。時間、條件、規則、動態行為這四類東西，怎麼畫都畫不出來，只能寫。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>標什麼</th><th>寫法範例</th></tr></thead>
+        <tbody>
+          <tr><td>資料從哪來</td><td>「此列表依上架時間排序，一次載入 20 筆，捲到底自動載入下一批」</td></tr>
+          <tr><td>什麼條件才出現</td><td>「僅登入且已完成實名認證的使用者看得到這個區塊」</td></tr>
+          <tr><td>互動之後會怎樣</td><td>「按下收藏後圖示由空心變實心，不跳頁，右下角出現 2 秒提示」</td></tr>
+          <tr><td>狀態與樣式的意圖</td><td>「此處為錯誤狀態，之後用紅色加圖示標示；顏色於風格板階段決定」</td></tr>
+          <tr><td>刻意不做的事</td><td>「這一版不做批次刪除，因為訪談中沒有人提到有這個需求」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>最後一列很多人不寫，但它最有用。<strong>寫下你決定不做什麼，別人就不會一直問你為什麼沒做</strong>，你也不用每次都重新解釋一遍。</p>
+
+    <h3>標註的寫法</h3>
+    <ul class="bullets">
+      <li>編號放在畫面上，說明寫在畫面旁邊的欄位裡。不要把長句子直接壓在版面上，會遮住結構。</li>
+      <li>一條標註講一件事。一條裡面塞三個規則，別人只會記得第一個。</li>
+      <li>寫規則，不要寫感想。「這裡放大一點比較好看」不是標註。</li>
+      <li>用數字。「一次 20 筆」「2 秒後消失」「最多 5 個標籤」——沒有數字的規則沒辦法被實作，也沒辦法被檢查。</li>
+    </ul>
+  </section>
+
+  <section class="section" id="s9">
+    <p class="sec-num">09</p>
+    <h2 class="sec-title">設計說明：決策要指得回研究</h2>
+    <p>等一下同學會問你版面決策。「我覺得這樣比較順」撐不過第三個問題。撐得住的答案長這樣：<strong>這個決策 ← 來自研究裡的哪一段 ← 所以會有什麼結果</strong>。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>被問到</th><th>撐不住的回答</th><th>撐得住的回答</th></tr></thead>
+        <tbody>
+          <tr><td>欄位順序</td><td>「這樣排比較順」</td><td>「Persona 是通勤中單手操作，所以最常用的搜尋放在拇指構得到的下方」</td></tr>
+          <tr><td>多一個步驟</td><td>「多一個確認比較安全」</td><td>「旅程地圖上『付款前反悔』是痛點，所以送出前加一頁摘要，而且可以往回改」</td></tr>
+          <tr><td>砍掉一個功能</td><td>「太複雜了先拿掉」</td><td>「IA 圖上它在第三層，訪談 6 個人沒有人提過，這一版不做，標註寫進去」</td></tr>
+          <tr><td>用這種導覽</td><td>「別人都這樣做」</td><td>「卡片分類結果有 5 群，超過底部標籤列能放的數量，所以第 5 群收進『更多』」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>右欄的共同點：每一句都指得出是 Unit 03 到 Unit 05 哪一份產出的哪一段。訪談逐字稿、旅程地圖上的痛點、卡片分類的分群結果、IA 圖的層級——這些就是你的證據。</p>
+    <div class="callout">指不出來的決策，就是你自己的偏好。<span class="hl">那不是不行，但要老實說是偏好</span>，不要包裝成研究結論。偏好被推翻不痛，假的研究結論被拆穿才難看。</div>
+  </section>
+
+  <section class="section" id="s10">
+    <p class="sec-num">10</p>
+    <h2 class="sec-title">同儕檢核怎麼開</h2>
+    <p><strong>Design critique</strong>（設計檢核）的定義是：分析一份設計、判斷它有沒有達成<strong>它自己設定的目標</strong>。NN/g 的說法是「一場以改善設計為最終目的的群體對話」。</p>
+    <p>要跟 <strong>design review</strong> 分開。Review 是依據一套 heuristic 做評估，常常帶有核可性質——過或不過。Critique 沒有在打分數，唯一的目的是讓這份設計變好。學生一被檢核就進入防衛狀態，通常就是誤以為在被評分。</p>
+
+    <h3>要有用，得先有三件事</h3>
+    <ol class="steps">
+      <li><strong>清楚的範圍。</strong>今天只看流程完整性與狀態設計。沒有界線的檢核會失控——十分鐘後大家會在吵字體。</li>
+      <li><strong>講好的設計目標。</strong>要判斷一份設計有沒有達成目標，得先對「要解決什麼問題」有共識。所以提案者要先講 persona、痛點與使用者任務。</li>
+      <li><strong>是對話不是命令。</strong>用命令的口氣講話，會把討論關掉。要問問題，不要下指令。</li>
+    </ol>
+
+    <h3>開場之前，引導者要先做完的事</h3>
+    <p>檢核當場才開始講規則就來不及了。這幾件事要在開始前完成：</p>
+    <ul class="bullets">
+      <li>事前把範圍與議程發出去，讓大家知道哪些該談、哪些不該談。</li>
+      <li>事先把作品發給參與者。當場才第一次看到，收到的會是反射式的第一印象，不是想過的意見。</li>
+      <li>訂好規則與期待——例如「今天不討論配色」「先收完回饋再討論解法」。</li>
+      <li>確認大家對 persona、痛點與使用者任務有共識。沒有這個共識，後面每一句都只是個人品味。</li>
+    </ul>
+    <p>課堂上的兩人互評時間短，這幾件事由提案者自己在開場的一分鐘內講完。</p>
+
+    <h3>角色</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>角色</th><th>做什麼</th></tr></thead>
+        <tbody>
+          <tr><td>提案者</td><td>先重述目標與 persona，講作品的來龍去脈，然後指定你要哪一種回饋</td></tr>
+          <tr><td>評論者</td><td>對著設計目標問問題，不講個人偏好</td></tr>
+          <tr><td>記錄者</td><td>當場公開記錄，讓大家看得到、可以即時補充</td></tr>
+          <tr><td>引導者</td><td>控制範圍與時間，把偏掉的意見拉回目標上</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>提案者最重要的一句話是<strong>「我今天想聽的是 ______」</strong>。沒講的話，你會收到一堆你現在還用不到的意見。另外，講快一點，不要一直替每個決策辯解——你花在辯解的時間，就是別人不能提問的時間。</p>
+
+    <h3>把「我覺得不好」改寫成對著目標的問題</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>你原本想講的</th><th>改寫成</th></tr></thead>
+        <tbody>
+          <tr><td>「這顆按鈕位置不對。」</td><td>「如果目標是讓人快速完成註冊，按鈕放這裡會不會讓錯的東西變顯眼？」</td></tr>
+          <tr><td>「哇……這版面。」</td><td>「這個版面怎麼幫使用者又快又順地完成他要做的事？」</td></tr>
+          <tr><td>「欄位太多了吧。」</td><td>「這幾個欄位裡，哪幾個是這個任務當下非填不可的？」</td></tr>
+          <tr><td>「我覺得應該改成分頁。」</td><td>「使用者要一次看幾筆？捲動跟分頁哪個比較貼近他們的使用情境？」</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>左欄不是壞人，是<strong>沒辦法接下去做事</strong>。「位置不對」對方只能問「那要放哪」，然後你們開始互相猜。右欄的每一句都把討論拉回這份設計自己設定的目標，提案者可以自己判斷要不要改、怎麼改。</p>
+
+    <h3>兩種帶法</h3>
+    <ul class="bullets">
+      <li><strong>Round robin：</strong>每個人輪流講一輪，確保安靜的人也有出聲。</li>
+      <li><strong>Quotas：</strong>引導者要求每人講固定數量的正面與負面意見，例如「兩好一壞」。用來破冰特別有效。</li>
+    </ul>
+
+    <h3>五個常見失敗</h3>
+    <ul class="bullets">
+      <li>沒先講好 persona 與目標——接下來每一句都只是個人品味的比拚。</li>
+      <li>一場開太久，品質會掉。今天每人十分鐘，剛好。</li>
+      <li>把回饋當成針對自己。被問的是那張圖，不是你。</li>
+      <li>急著在現場把問題解掉。檢核是把問題攤開，不是當場改圖——聽到一半就開始拉元件，後面的意見你一句都不會聽進去。</li>
+      <li>只講缺點。什麼地方做對了也要講，不然對方下一版可能把對的那部分一起改掉。</li>
+    </ul>
+  </section>
+
+  <section class="section" id="s11">
+    <p class="sec-num">11</p>
+    <h2 class="sec-title">檢核之後：修正紀錄</h2>
+    <p>檢核不是散會就結束。收到的每一則回饋，不管採不採用，都用同一個四步交代清楚。</p>
+    <ol class="steps">
+      <li><strong>點名。</strong>把那則回饋的原話寫下來，不要寫你的摘要——摘要會不小心把你不想面對的部分濾掉。</li>
+      <li><strong>決定。</strong>改、不改、還是之後再說。講死，不要寫「再想想」。</li>
+      <li><strong>理由。</strong>為什麼。不採用也要有理由，而且理由要接得回研究或設計目標。</li>
+      <li><strong>下一步。</strong>要改的話，改哪一張、什麼時候改。</li>
+    </ol>
+    <p>這個範本對「有道理但這次不做」跟「被使用者測試數據推翻」都適用，不用換寫法。</p>
+
+    <h3>什麼時候要回頭交代</h3>
+    <p>不是每一則回饋都要立刻回覆，但這三個時刻一定要：</p>
+    <ol class="steps">
+      <li><strong>設計有重大改動之後。</strong>把改動前後的截圖發出去，並註明是誰的意見促成的。</li>
+      <li><strong>交給開發之前。</strong>讓相關的人在 demo 或上線前就知道最終決定，不要讓他們在成品裡才發現。</li>
+      <li><strong>某則回饋影響了大方向的時候。</strong>把當初那句話與後來的決策明確接起來。</li>
+    </ol>
+    <p>收尾的方式有兩種，可以搭配用。<strong>即時摘要</strong>是散會後一則短訊息，寫「我們要往前做的是什麼、還在查的是什麼、決定不做的是什麼」；<strong>後續文件</strong>是比較長的一份，把每一項改動接回當時的對話。</p>
+
+    <h3>紀錄表長這樣</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>回饋原話</th><th>決定</th><th>理由</th><th>下一步</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>「搜尋沒結果的時候我不知道要幹嘛。」</td><td>改</td><td>空狀態只寫了「查無資料」，沒給放寬條件的方法</td><td>改 P3 空狀態，加「清除篩選」按鈕，今晚做</td></tr>
+          <tr><td>2</td><td>「應該要有收藏夾分類功能。」</td><td>不改</td><td>訪談 6 人沒有人提到分類需求，超出這一版範圍</td><td>寫進標註「刻意不做」欄</td></tr>
+          <tr><td>3</td><td>「付款那邊等很久會不會有問題？」</td><td>改</td><td>超過 10 秒的等待沒有畫進度指示</td><td>補一張載入狀態畫面，標註預估時間與取消</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout green">NN/g 有一句話很好記：<span class="hl2">「這裡改了，因為你當時說了那句話」——這樣才算把回饋接回去。</span>不然給回饋的人會覺得白講了，下一次就不講真話。</div>
+  </section>
+
+  <section class="section" id="s12">
+    <p class="sec-num">12</p>
+    <h2 class="sec-title">課堂練習與回家作業</h2>
+    <h3>先挑一條流程</h3>
+    <p>今天整堂都在改同一條流程。你可以用自己專題的流程，也可以直接用下面三個指定題目其中一題——<strong>題目本身沒有分數差別</strong>，挑你比較有把握說得出使用者情境的那一條。題目卡在<a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3?node-id=6-2" target="_blank" rel="noopener">課堂範本檔的「作業題目」分頁</a>，裡面有情境、Persona、必須畫出的狀態、容易踩的坑與交件清單，還有空白畫框可以直接畫。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>題目</th><th>情境</th><th>這題在練什麼</th></tr></thead>
+        <tbody>
+          <tr><td>1 · 會員註冊與登入</td><td>校園二手書交易 App，從商品頁被導去註冊，到第一次登入成功</td><td>Unit 06 練過的基準題。信箱已被註冊、密碼規則、驗證碼過期，加上註冊完要回得到他原本要買的那一頁</td></tr>
+          <tr><td>2 · 結帳付款出錯</td><td>外送 App 結帳，人在捷運上趕著到站前點完</td><td><strong>錯誤狀態</strong>。四種錯誤不能長成同一個樣子：inline 驗證、可繼續的警告、擋住流程的失敗、系統狀態改變。再加一段超過 10 秒的付款等待</td></tr>
+          <tr><td>3 · 中途離開與返回</td><td>學校活動報名的三步驟表單，在校車上填，會被打斷三次</td><td><strong>返回與反悔</strong>。五種「往回」不是同一件事：上一步、手機返回鍵、切出去再切回來、按取消、送出後想改。哪幾種要攔他、哪幾種不要</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">題目 2 與 3 是這個單元新出的，各自對著今天講最久的兩件事——<span class="hl">錯誤狀態</span>與<span class="hl">反悔路徑</span>。用自己專題的人也先看一眼那兩張題目卡的「容易踩的坑」，那幾條你八成也會踩。</div>
+
+    <h3>課堂四階段</h3>
+    <p>課堂 85 分鐘分四段，完整步驟、檢查表與配分在<a href="exercises.html">練習與作業頁</a>。四個階段各有對應的空白範本，在<a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener">課堂範本檔</a>裡——把區塊複製到你自己的 Figma 檔再填。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>階段</th><th>時間</th><th>做什麼</th></tr></thead>
+        <tbody>
+          <tr><td><a href="exercises.html#ex1">Exercise 01</a></td><td>15 分</td><td>狀態盤點：把上一堂的 Wireframe 攤開，逐頁列出還缺哪些狀態</td></tr>
+          <tr><td><a href="exercises.html#ex2">Exercise 02</a></td><td>25 分</td><td>補畫空狀態、錯誤狀態、載入狀態各至少一張</td></tr>
+          <tr><td><a href="exercises.html#ex3">Exercise 03</a></td><td>20 分</td><td>接成 Wireflow，補上標註</td></tr>
+          <tr><td><a href="exercises.html#ex4">Exercise 04</a></td><td>25 分</td><td>兩人一組互相檢核，各 10 分鐘，最後 5 分鐘整理修正清單</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>第四階段<strong>要跟不同專題的人配對</strong>。同組的人已經知道你的來龍去脈，問不出外人會卡住的地方。</p>
+    <p><a href="exercises.html#hw">回家作業</a>是把課堂上的東西收成可以交的一份，對齊課綱作業 5：1 張 Flow 加 3–5 個 Wireframe。上一堂交的是初版，這次交的是接起來、補完狀態、被問過也改過的版本。配分與「不及格的樣子」在<a href="exercises.html#submit">繳交清單</a>。</p>
+  </section>
+
+  <section class="section" id="s13">
+    <p class="sec-num">13</p>
+    <h2 class="sec-title">AI 協作提示詞</h2>
+    <p>這三個提示詞是拿來<strong>檢查你已經做出來的東西</strong>，不是拿來生成畫面的。AI 沒有做過你的使用者研究，它生出來的 Wireframe 跟你的研究沒有關係。</p>
+
+    <h3>① 盤點缺漏的狀態</h3>
+    <div class="prompt">
+      <button class="copy-btn">複製</button>
+      <pre>我在做一個 [產品類型] 的 Wireframe。以下是我目前畫好的畫面清單，每一行是「畫面名稱：畫面上有什麼」：
+
+[貼上你的畫面清單]
+
+以下是我的流程圖上有的路徑：
+
+[貼上 Flowchart 上的節點與例外路徑]
+
+請幫我逐一比對，列出：
+1. 流程圖上有、但我還沒畫成畫面的節點。
+2. 我畫的畫面裡，哪些頁面應該要有空狀態、錯誤狀態或載入狀態，但清單上沒有。
+3. 每一個缺漏，用一句話說明使用者會在什麼情況下遇到它。
+
+用表格回答。只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+
+    <h3>② 檢查錯誤訊息與空狀態的寫法</h3>
+    <div class="prompt">
+      <button class="copy-btn">複製</button>
+      <pre>以下是我 Wireframe 上寫的錯誤訊息與空狀態文案：
+
+[貼上你的文案，一行一則，註明出現在哪個畫面]
+
+請用下列標準逐條檢查，每一條指出通過或沒通過，沒通過的說明原因：
+
+錯誤訊息五要件：明確（指出哪裡有問題）、看得懂（沒有技術術語）、有禮貌（不指責使用者）、精準（不模糊帶過）、給下一步（說得出怎麼修）。
+
+空狀態三準則：有講清楚系統狀態、有教這個功能怎麼用、有給一條直達關鍵任務的路。
+
+另外請指出：哪幾則是「還沒有資料」的情況，哪幾則是「篩選找不到」的情況，兩者的文案是不是被寫成一樣了。
+
+不要幫我改寫，只要指出問題在哪。只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+
+    <h3>③ 把課堂回饋整理成修正清單</h3>
+    <div class="prompt">
+      <button class="copy-btn">複製</button>
+      <pre>以下是同學在設計檢核時給我的回饋原話：
+
+[逐條貼上回饋，盡量保留原句]
+
+以下是我這個專題的設計目標與研究依據摘要：
+
+[貼上 persona 一句話、主要痛點、核心任務]
+
+請把每一則回饋整理成四欄的表格：
+1. 回饋原話（照抄，不要改寫）
+2. 這則回饋是在質疑哪一個設計目標或哪一段流程
+3. 如果要採用，具體要改哪裡
+4. 如果不採用，可以用哪一段研究依據來說明理由
+
+請不要替我決定改或不改，只要把兩邊的理由都列出來。只能根據我提供的內容分析，不要自行補充不存在的資訊。</pre>
+    </div>
+  </section>
+
+</div>
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li><a href="https://www.nngroup.com/articles/empty-state-interface-design/" target="_blank" rel="noopener">Designing Empty States in Complex Applications: 3 Guidelines</a> — NN/g，第 2 節空狀態三條準則的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/error-message-guidelines/" target="_blank" rel="noopener">Error-Message Guidelines</a> — NN/g，第 3 節錯誤訊息五要件的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/errors-forms-design-guidelines/" target="_blank" rel="noopener">10 Design Guidelines for Reporting Errors in Forms</a> — NN/g，第 4 節十條準則的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/response-times-3-important-limits/" target="_blank" rel="noopener">Response Times: The 3 Important Limits</a> — NN/g，第 5 節三個時間門檻的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/progress-indicators/" target="_blank" rel="noopener">Progress Indicators Make a Slow System Less Insufferable</a> — NN/g，第 5 節進度指示三型別的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/indicators-validations-notifications/" target="_blank" rel="noopener">Indicators, Validations, and Notifications</a> — NN/g，第 6 節的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/wireflows/" target="_blank" rel="noopener">Wireflows: A UX Deliverable for Workflows and Apps</a> — NN/g，第 7 節 Wireflow 定義與四條準則的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/design-critiques/" target="_blank" rel="noopener">Design Critiques: Encourage a Positive Culture to Improve Products</a> — NN/g，第 10 節的出處。</li>
+    <li><a href="https://www.nngroup.com/articles/after-design-critique/" target="_blank" rel="noopener">Closing the Loop: What to Do After a Design Critique Ends</a> — NN/g，第 11 節四步範本的出處。</li>
+    <li>本單元的中文來源整理：Unit_07/resources/guide.md。</li>
+    <li>第 7 節 Wireflow 的來源整理沿用 Unit_06/resources/guide.md 第 1 節。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="slides.html">回到 Unit 07 簡報</a>
+  <a href="exercises.html#ex1">開啟課堂練習</a>
+  <a href="exercises.html#hw">開啟回家作業</a>
+  <a href="https://www.figma.com/design/X0nEWewUts2YSRElqN6dE3" target="_blank" rel="noopener">課堂範本檔</a>
+  <a href="../Unit_06/article.html">Unit 06 講義：Flowchart 到 Wireframe</a>
+  <a href="https://www.figma.com/design/XKrTQ38VaU4PZeuwT0uocp/Wireframe_Web_UI_Kit-%E5%88%87%E7%89%88%E7%9A%84100%E7%A8%AE%E7%B7%B4%E7%BF%92?node-id=0-1" target="_blank" rel="noopener">線框元件庫</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+
+(function () {
+  document.querySelectorAll('.prompt').forEach(prompt => {
+    const btn = prompt.querySelector('.copy-btn');
+    const pre = prompt.querySelector('pre');
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText);
+        btn.textContent = '已複製';
+        btn.classList.add('done');
+        setTimeout(() => {
+          btn.textContent = '複製';
+          btn.classList.remove('done');
+        }, 1400);
+      } catch (error) {
+        btn.textContent = '複製失敗';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
