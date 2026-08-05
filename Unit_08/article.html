@@ -371,6 +371,12 @@ tr:last-child td { border-bottom: none; }
   color: var(--muted);
   margin-bottom: 16px;
 }
+.refs h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin: 26px 0 12px;
+}
 .refs ul { list-style: none; }
 .refs li {
   font-size: .9rem;
@@ -406,6 +412,30 @@ tr:last-child td { border-bottom: none; }
 }
 .foot-nav a:hover { background: rgba(0,102,204,.14); }
 .foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.pin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.pin-embed {
+  min-height: 360px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.pin-embed h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+.pin-note {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
 
 .side-nav {
   display: none;
@@ -461,6 +491,7 @@ tr:last-child td { border-bottom: none; }
   .toc ol { columns: 1; }
   .cards { grid-template-columns: 1fr; }
   .swatches { grid-template-columns: repeat(2, 1fr); }
+  .pin-grid { grid-template-columns: 1fr; }
   .hero { padding: 40px 0 32px; }
 }
 </style>
@@ -757,6 +788,9 @@ tr:last-child td { border-bottom: none; }
     <p class="sec-num">08</p>
     <h2 class="sec-title">完形心理學：畫面是怎麼被分組的</h2>
     <p>完形（Gestalt）原則講的是：人看畫面的時候，不是一個一個元素分開看，而是自動把它們組成一個整體。<strong>你不決定使用者怎麼分組，他也會自己分——所以你最好讓他分對。</strong></p>
+    <div class="callout">
+      中文延伸閱讀：<a href="https://www.71next.com/userDoc/%e5%ae%8c%e5%bd%a2%e5%bf%83%e7%90%86%e5%ad%b8%ef%bc%88gestalt-psychology%ef%bc%89-%e5%a6%82%e4%bd%95%e5%a2%9e%e5%8a%a0%e8%a8%ad%e8%a8%88%e7%9a%84%e5%a5%bd%e6%84%9f%e5%ba%a6/" target="_blank" rel="noopener">71NEXT：完形心理學如何增加設計的好感度</a>。這篇適合先快速看中文案例，再回來用本節的檢查表套到自己的畫面。
+    </div>
     <p>所以風格做完之後，拿下面這五條回頭檢查：你的視覺決策到底在幫使用者分組，還是在誤導他。</p>
 
     <div class="tbl-wrap">
@@ -795,6 +829,9 @@ tr:last-child td { border-bottom: none; }
     <p class="sec-num">09</p>
     <h2 class="sec-title">Laws of UX：四條會影響風格決策的定律</h2>
     <p><a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a> 收了二十幾條心理學原則。這裡挑四條跟這堂課最有關的——它們會直接影響你在風格板上決定的東西。</p>
+    <div class="callout">
+      中文延伸閱讀：<a href="https://www.71next.com/userDoc/category/ui/laws-of-ux/" target="_blank" rel="noopener">71NEXT：使用者介面定律 / Laws of UX</a>。這個分類可以當作中文入口；正式定義仍以 lawsofux.com 與各條定律原始來源為準。
+    </div>
 
     <h3>Hick's Law：選項越多，決定越慢</h3>
     <p>定義是「做決定所需的時間，會隨著選項的數量與複雜度增加」。</p>
@@ -825,6 +862,21 @@ tr:last-child td { border-bottom: none; }
     <p class="sec-num">10</p>
     <h2 class="sec-title">Style Tile 與 Moodboard</h2>
     <p>課綱把作業 6 寫成「風格板（Style Tile / Moodboard）」，兩種形式都收。但它們解決的問題不一樣，選之前先搞清楚差別。</p>
+    <div class="pin-grid">
+      <div class="pin-embed">
+        <h3>UI Design - Style Tiles</h3>
+        <a data-pin-do="embedBoard" data-pin-board-width="340" data-pin-scale-height="320" data-pin-scale-width="100" href="https://www.pinterest.com/nbradystudio/ui-design-style-tiles/"></a>
+        <p class="pin-note">觀察重點：色票、字體、元件與說明文字是否組成可執行規格。</p>
+      </div>
+      <div class="pin-embed">
+        <h3>Style Tiles, Mood Boards, Branding</h3>
+        <a data-pin-do="embedBoard" data-pin-board-width="340" data-pin-scale-height="320" data-pin-scale-width="100" href="https://www.pinterest.com/kingside/style-tiles-mood-boards-branding/"></a>
+        <p class="pin-note">觀察重點：Moodboard 怎麼收斂情緒，再轉成品牌與介面元素。</p>
+      </div>
+    </div>
+    <div class="callout warn">
+      <strong>使用界線：</strong>Pinterest 內嵌圖只作課堂觀察與引用來源入口。交作業或放作品集時，不要把 Pinterest 圖片當成自己的素材；要改用自己拍攝、有授權圖庫、AI 生成素材，或明確標註「暫用參考」。
+    </div>
 
     <div class="tbl-wrap">
       <table>
@@ -1111,6 +1163,17 @@ Persona 摘要：[貼上]
 
 <div class="refs">
   <h2>參考資料</h2>
+  <h3>設計靈感與工具</h3>
+  <ul>
+    <li><a href="https://webdesignclip.com/" target="_blank" rel="noopener">Web Design Clip</a> — 日本網站設計案例庫，適合找視覺風格、版面與分類案例。</li>
+    <li><a href="https://responsive-jp.com/" target="_blank" rel="noopener">Responsive Web Design JP</a> — 日本響應式網站案例，可觀察桌機與手機版面如何轉換。</li>
+    <li><a href="https://colorhunt.co/" target="_blank" rel="noopener">Color Hunt</a> — 配色靈感與色票收藏，適合做風格板初步色彩探索。</li>
+    <li><a href="https://materialui.co/" target="_blank" rel="noopener">Material UI Colors</a> — Material / Flat color palette 與色彩素材。</li>
+    <li><a href="https://hao.uisdc.com/" target="_blank" rel="noopener">優設導航</a> — 設計資源入口，含靈感、工具、素材與文章。</li>
+    <li><a href="https://designsystemsrepo.com/" target="_blank" rel="noopener">Design Systems Repo</a> — 設計系統案例、文章、工具與資源集合。</li>
+    <li><a href="https://ant.design/index-cn/" target="_blank" rel="noopener">Ant Design</a> — 企業級 UI 設計語言與 React 元件庫，可參考元件規範與設計原則的寫法。</li>
+  </ul>
+  <h3>概念與官方文件</h3>
   <ul>
     <li><a href="https://alistapart.com/article/style-tiles-and-how-they-work/" target="_blank" rel="noopener">Style Tiles and How They Work</a> — A List Apart，Samantha Warren，Style Tile 的定義、訪談流程與為什麼做兩三版。</li>
     <li><a href="https://styletil.es/" target="_blank" rel="noopener">Style Tiles</a> — Style Tile 官方網站與範本下載。</li>
@@ -1120,7 +1183,9 @@ Persona 摘要：[貼上]
     <li><a href="https://www.nngroup.com/articles/common-region/" target="_blank" rel="noopener">The Principle of Common Region: Containers Create Groupings</a> — NN/g，共同區域、它壓過其他原則的強度，以及假底部的警告。</li>
     <li><a href="https://www.nngroup.com/videos/continuation-gestalt/" target="_blank" rel="noopener">Continuation: Gestalt Principle for User Interface Design</a> — NN/g，連續性。</li>
     <li><a href="https://www.nngroup.com/articles/principles-visual-design/" target="_blank" rel="noopener">5 Principles of Visual Design in UX</a> — NN/g，比例、視覺階層、平衡、對比與完形。</li>
+    <li><a href="https://www.71next.com/userDoc/%e5%ae%8c%e5%bd%a2%e5%bf%83%e7%90%86%e5%ad%b8%ef%bc%88gestalt-psychology%ef%bc%89-%e5%a6%82%e4%bd%95%e5%a2%9e%e5%8a%a0%e8%a8%ad%e8%a8%88%e7%9a%84%e5%a5%bd%e6%84%9f%e5%ba%a6/" target="_blank" rel="noopener">完形心理學如何增加設計的好感度</a> — 71NEXT，中文說明接近性、相似性、封閉性、連續性、圖形與背景、共通命運等 UI 應用。</li>
     <li><a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a> — 本單元四條定律的出處；各條的 takeaways 值得直接讀。</li>
+    <li><a href="https://www.71next.com/userDoc/category/ui/laws-of-ux/" target="_blank" rel="noopener">使用者介面定律 / Laws of UX</a> — 71NEXT，中文 Laws of UX 相關文章分類入口。</li>
     <li><a href="https://lawsofux.com/millers-law/" target="_blank" rel="noopener">Miller's Law</a> — 特別注意第一條提醒：不要拿「神奇數字七」當設計限制的藉口。</li>
     <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — Contrast (Minimum)</a> — 4.5:1 與 3:1 的門檻與大型文字定義。</li>
     <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener">WCAG 2.2 — Target Size (Minimum)</a> — 24×24 CSS px 與例外條款。</li>
@@ -1199,5 +1264,6 @@ Persona 摘要：[貼上]
   });
 })();
 </script>
+<script async defer src="https://assets.pinterest.com/js/pinit.js"></script>
 </body>
 </html>

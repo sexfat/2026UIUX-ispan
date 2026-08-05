@@ -254,6 +254,57 @@ h2 {
 .hl { color: var(--accent); font-weight: 700; }
 .hl2 { color: var(--accent2); font-weight: 700; }
 .warn-text { color: var(--accent3); font-weight: 700; }
+.tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 2px dotted currentColor;
+  cursor: help;
+  outline: none;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  width: min(420px, 72vw);
+  transform: translateX(-50%) translateY(4px);
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #1d1d1f;
+  color: #f5f5f7;
+  font-size: clamp(.74rem, .92vw, .86rem);
+  font-weight: 500;
+  line-height: 1.55;
+  box-shadow: 0 14px 32px rgba(0,0,0,.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 40;
+}
+.tip::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  width: 10px;
+  height: 10px;
+  background: #1d1d1f;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity .16s ease;
+  z-index: 39;
+}
+.tip:hover::after,
+.tip:focus-visible::after,
+.tip:hover::before,
+.tip:focus-visible::before {
+  opacity: 1;
+}
+.tip:hover::after,
+.tip:focus-visible::after {
+  transform: translateX(-50%) translateY(0);
+}
 
 .bg-n {
   position: absolute;
@@ -463,6 +514,28 @@ h2 {
 .res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
 .res-link strong { font-size: .94rem; color: var(--dark); }
 .res-link span { font-size: .75rem; color: var(--muted); }
+.pin-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 22px;
+}
+.pin-panel {
+  min-height: 360px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  overflow: hidden;
+}
+.pin-panel h3 {
+  margin: 0 0 10px;
+  font-size: clamp(.86rem, 1.05vw, 1rem);
+  color: var(--dark);
+}
+.slide.dark .pin-panel { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .pin-panel h3 { color: #f5f5f7; }
 
 .slide-body a.ilink {
   color: var(--accent);
@@ -529,6 +602,7 @@ h2 {
 .slide.dark .res-link span { color: #a1a1a6; }
 .slide.dark .slide-body a.ilink { color: #58a6ff; border-bottom-color: rgba(88,166,255,.42); }
 .slide.dark .slide-body a.ilink:hover { border-bottom-color: #58a6ff; }
+.slide.drop { display: none; }
 
 @media (max-width: 768px) {
   :root { --px: 20px; --py: 20px; }
@@ -536,6 +610,7 @@ h2 {
   .slide-body { justify-content: flex-start; padding: 12px 0; }
   .agenda-grid, .matrix, .matrix.c3, .matrix.c4,
   .res-links, .chain, .chain.c5, .wf-row, .sw-row { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .pin-showcase { grid-template-columns: 1fr; }
   .chain-step:not(:last-child)::after { display: none; }
   .cmp-table { display: block; overflow-x: auto; }
   .blist { margin-top: 16px; gap: 8px; }
@@ -559,7 +634,7 @@ h2 {
       <h1 class="cover-title">風格發想<br>與建立</h1>
       <p class="cover-sub">市場風格分析 × 風格故事化 × 視覺基礎 × 完形與 Laws of UX × 風格板與設計系統</p>
       <div class="cover-meta">
-        <span>08/06 下午</span><span class="meta-dot"></span><span>26 張投影片</span><span class="meta-dot"></span><span>含 Figma 實作</span>
+        <span>08/06 下午</span><span class="meta-dot"></span><span>21 張投影片</span><span class="meta-dot"></span><span>含範例觀察與 Figma 實作</span>
       </div>
     </div>
     <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
@@ -578,19 +653,19 @@ h2 {
           <span class="a-desc">風格不是挑喜歡的顏色。市場風格分析怎麼拆競品，再把產品定位寫成一段風格故事。</span>
         </div>
         <div class="agenda-card">
-          <span class="a-step">Part 2 · 20 min</span>
+          <span class="a-step">Part 2 · 25 min</span>
+          <span class="a-time">看範例，拆規則</span>
+          <span class="a-desc">用 Pinterest 與競品案例觀察 Moodboard / Style Tile 的差異，拆出顏色、字體、圖像與元件。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 3 · 20 min</span>
           <span class="a-time">視覺基礎</span>
-          <span class="a-desc">網格、留白、對齊、字級、行距、色彩角色與對比度，最後談一致性。</span>
+          <span class="a-desc">只抓今天會用到的：間距、字級、色彩角色、對比度與一致性。</span>
         </div>
         <div class="agenda-card">
-          <span class="a-step">Part 3 · 15 min</span>
-          <span class="a-time">完形與 Laws of UX</span>
-          <span class="a-desc">畫面是怎麼被分組的，以及四條會影響風格決策的定律——含兩條最常被用壞的。</span>
-        </div>
-        <div class="agenda-card">
-          <span class="a-step">Part 4 · 15 min</span>
-          <span class="a-time">風格板與設計系統</span>
-          <span class="a-desc">Style Tile 與 Moodboard 的差別、一張風格板該有什麼，以及它怎麼長成設計系統。</span>
+          <span class="a-step">Part 4 · 10 min</span>
+          <span class="a-time">檢查清單</span>
+          <span class="a-desc">完形、Laws of UX 與設計系統只保留成風格板檢查表，不展開成理論課。</span>
         </div>
         <div class="agenda-card">
           <span class="a-step">Part 5 · 95 min</span>
@@ -598,7 +673,7 @@ h2 {
           <span class="a-desc">課堂練習四階段共 80 分，做出風格板雛形；最後 15 分各組互相看成果。</span>
         </div>
       </div>
-      <div class="note">講述 70 分 + 實作與分享 95 分 + 休息 15 分 = 180 分，休息穿插在 Part 2 與 Part 3 之間。<br>開始前先把 Unit 06、07 的 Wireframe 與 Unit 03 的 Persona、競品分析開起來，等一下要用。今天結束時你手上會多一份風格板，也就是<span class="hl">作業 6</span> 的交件。</div>
+      <div class="note">講述與範例 70 分 + 實作與分享 95 分 + 休息 15 分 = 180 分。<br>開始前先把 Unit 06、07 的 Wireframe 與 Unit 03 的 Persona、競品分析開起來，等一下要用。今天結束時你手上會多一份風格板，也就是<span class="hl">作業 6</span> 的交件。</div>
     </div>
     <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
@@ -661,7 +736,7 @@ h2 {
           <tr><td>你會感覺到</td><td>怕買貴、怕錯過</td><td>慢慢逛、看質感</td></tr>
         </tbody>
       </table>
-      <div class="note">兩種都不是錯的，它們對應不同的產品策略。<span class="hl">蝦皮要促成當下這一筆交易，所以把稀缺感放到最大；Pinkoi 要建立品味上的信任，所以把干擾減到最少。</span></div>
+      <div class="note">兩種都不是錯的，它們對應不同的產品策略。<span class="hl">蝦皮要促成當下這一筆交易，所以把 <span class="tip" tabindex="0" role="note" aria-label="稀缺感：當人們面對金錢、時間、商品或機會等資源覺得不夠、有限或很難得到時，心裡產生的一種匱乏與急迫的感覺，越少越珍貴" data-tip="當人們面對金錢、時間、商品或機會等資源覺得不夠、有限或很難得到時，心裡產生的一種匱乏與急迫的感覺">稀缺感</span> 放到最大；Pinkoi 要建立品味上的信任，所以把干擾減到最少。</span></div>
     </div>
     <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
@@ -682,6 +757,28 @@ h2 {
         </tbody>
       </table>
       <div class="note">最容易出的意外剛好是反過來：<span class="warn-text">在慣例的地方發揮創意</span>（把購物車藏起來），卻<span class="warn-text">在該有差異的地方原封照抄</span>（配色跟競品一模一樣）。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 07 Pinterest 範例怎麼看 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Reference Reading</p>
+      <h1>Pinterest 直接拿來看，但不要直接拿來交</h1>
+      <h2>下面是內嵌的 Pinterest 看板。看範例時不要先問「喜不喜歡」，先問它把哪些視覺決策固定下來。</h2>
+      <div class="pin-showcase">
+        <div class="pin-panel">
+          <h3>UI Design - Style Tiles</h3>
+          <a data-pin-do="embedBoard" data-pin-board-width="420" data-pin-scale-height="260" data-pin-scale-width="120" href="https://www.pinterest.com/nbradystudio/ui-design-style-tiles/"></a>
+        </div>
+        <div class="pin-panel">
+          <h3>Style Tiles, Mood Boards, Branding</h3>
+          <a data-pin-do="embedBoard" data-pin-board-width="420" data-pin-scale-height="260" data-pin-scale-width="120" href="https://www.pinterest.com/kingside/style-tiles-mood-boards-branding/"></a>
+        </div>
+      </div>
+      <div class="note"><span class="warn-text">不要直接把 Pinterest 圖片放進作品集。</span>課堂上可以拿來分析；交作業時，圖片要標註暫用參考或改用自己拍攝、有授權圖庫、AI 生成素材。</div>
     </div>
     <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
@@ -756,7 +853,7 @@ h2 {
   </section>
 
   <!-- 10 留白與對齊 -->
-  <section class="slide dark">
+  <section class="slide dark drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Whitespace</p>
@@ -851,7 +948,7 @@ h2 {
   </section>
 
   <!-- 15 完形五原則 -->
-  <section class="slide">
+  <section class="slide drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Gestalt</p>
@@ -873,7 +970,7 @@ h2 {
   </section>
 
   <!-- 16 接近性 -->
-  <section class="slide dark">
+  <section class="slide dark drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Proximity</p>
@@ -892,7 +989,7 @@ h2 {
   </section>
 
   <!-- 17 共同區域 -->
-  <section class="slide">
+  <section class="slide drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Common Region</p>
@@ -913,7 +1010,7 @@ h2 {
   </section>
 
   <!-- 18 Laws of UX -->
-  <section class="slide dark">
+  <section class="slide dark drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Laws of UX</p>
@@ -942,7 +1039,7 @@ h2 {
   </section>
 
   <!-- 19 兩條最常被用壞的 -->
-  <section class="slide">
+  <section class="slide drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Misuse</p>
@@ -1007,7 +1104,7 @@ h2 {
   </section>
 
   <!-- 22 設計系統三層 -->
-  <section class="slide dark">
+  <section class="slide dark drop">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="overline">Design System</p>
@@ -1084,7 +1181,48 @@ h2 {
     <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
   </section>
 
-  <!-- 26 資源 -->
+  <!-- 26 設計資源 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Design References</p>
+      <h1>找範例、配色與設計系統</h1>
+      <div class="res-links">
+        <a class="res-link" href="https://webdesignclip.com/" target="_blank" rel="noopener">
+          <strong>Web Design Clip</strong>
+          <span>日本網站設計案例庫，適合找視覺風格與版面參考。</span>
+        </a>
+        <a class="res-link" href="https://responsive-jp.com/" target="_blank" rel="noopener">
+          <strong>Responsive Web Design JP</strong>
+          <span>日本響應式網站案例，可觀察多斷點版面處理。</span>
+        </a>
+        <a class="res-link" href="https://colorhunt.co/" target="_blank" rel="noopener">
+          <strong>Color Hunt</strong>
+          <span>配色靈感與色票收藏，適合做初步色彩探索。</span>
+        </a>
+        <a class="res-link" href="https://materialui.co/" target="_blank" rel="noopener">
+          <strong>Material UI Colors</strong>
+          <span>Material / Flat color palette 與色彩素材。</span>
+        </a>
+        <a class="res-link" href="https://hao.uisdc.com/" target="_blank" rel="noopener">
+          <strong>優設導航</strong>
+          <span>設計師常用資源入口，含靈感、工具、素材與文章。</span>
+        </a>
+        <a class="res-link" href="https://designsystemsrepo.com/" target="_blank" rel="noopener">
+          <strong>Design Systems Repo</strong>
+          <span>設計系統案例、文章、工具與資源集合。</span>
+        </a>
+        <a class="res-link" href="https://ant.design/index-cn/" target="_blank" rel="noopener">
+          <strong>Ant Design</strong>
+          <span>企業級 UI 設計語言與 React 元件庫，可看規範寫法。</span>
+        </a>
+      </div>
+      <div class="note">使用方式：先看 3 到 5 個同類案例，拆出共同慣例；再用色彩工具試方向；最後對照設計系統範例，把自己的色彩、字級與元件命名成可重複使用的規格。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">風格發想與建立</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 27 資源 -->
   <section class="slide dark">
     <div class="slide-head"><span class="unit-pill">Unit 08</span><span class="slide-num"></span></div>
     <div class="slide-body">
@@ -1107,6 +1245,14 @@ h2 {
           <strong>Style Tiles 官方網站</strong>
           <span>範本下載</span>
         </a>
+        <a class="res-link" href="https://www.pinterest.com/search/pins/?q=ui%20style%20tile%20moodboard" target="_blank" rel="noopener">
+          <strong>Pinterest：UI style tile moodboard</strong>
+          <span>課堂找範例用，只作觀察與分析，不直接搬圖。</span>
+        </a>
+        <a class="res-link" href="https://www.pinterest.com/search/pins/?q=app%20design%20moodboard" target="_blank" rel="noopener">
+          <strong>Pinterest：App design moodboard</strong>
+          <span>看產品情緒、圖像方向與色調整理。</span>
+        </a>
         <a class="res-link" href="https://lawsofux.com/" target="_blank" rel="noopener">
           <strong>Laws of UX</strong>
           <span>本單元四條定律的出處 · 各條的 takeaways 值得直接讀</span>
@@ -1114,6 +1260,14 @@ h2 {
         <a class="res-link" href="https://www.nngroup.com/articles/common-region/" target="_blank" rel="noopener">
           <strong>The Principle of Common Region</strong>
           <span>NN/g · 共同區域的強度與假底部的警告</span>
+        </a>
+        <a class="res-link" href="https://www.71next.com/userDoc/%e5%ae%8c%e5%bd%a2%e5%bf%83%e7%90%86%e5%ad%b8%ef%bc%88gestalt-psychology%ef%bc%89-%e5%a6%82%e4%bd%95%e5%a2%9e%e5%8a%a0%e8%a8%ad%e8%a8%88%e7%9a%84%e5%a5%bd%e6%84%9f%e5%ba%a6/" target="_blank" rel="noopener">
+          <strong>71NEXT：完形心理學</strong>
+          <span>中文案例 · 接近性、相似性、封閉性、連續性、圖形背景、共通命運</span>
+        </a>
+        <a class="res-link" href="https://www.71next.com/userDoc/category/ui/laws-of-ux/" target="_blank" rel="noopener">
+          <strong>71NEXT：Laws of UX</strong>
+          <span>中文使用者介面定律分類入口，適合課後延伸閱讀</span>
         </a>
         <a class="res-link" href="https://www.nngroup.com/articles/design-systems-101/" target="_blank" rel="noopener">
           <strong>Design Systems 101</strong>
@@ -1138,6 +1292,8 @@ h2 {
 
 </div><!-- /#deck -->
 
+<script async defer src="https://assets.pinterest.com/js/pinit.js"></script>
+
 <div id="ctrls">
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
@@ -1145,7 +1301,7 @@ h2 {
 
 <script>
 (function () {
-  const slides = Array.from(document.querySelectorAll('.slide'));
+      const slides = Array.from(document.querySelectorAll('.slide:not(.drop)'));
   const total = slides.length;
   const prog = document.getElementById('prog');
   const ctrls = document.getElementById('ctrls');
