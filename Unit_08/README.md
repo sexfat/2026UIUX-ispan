@@ -3,7 +3,7 @@
 
 ## 相關檔案
 
-- `slides.html` — 課堂簡報（21 張）。
+- `slides.html` — 課堂簡報（29 張，其中 7 張為備用補充頁）。
 - `article.html` — 完整教材（13 節）。
 
 ## 時間分配（3 小時 / 180 分鐘）
@@ -52,3 +52,12 @@
 
 - 對應 `資展課程大綱.md` 第五節階段作業表：
 - 作業 6：風格板（Style Tile / Moodboard），交件為風格板 + 風格故事說明。
+
+## 參考資料
+
+- [好的設計表單與按鈕](https://spiny-cheese-0b2.notion.site/e7e379c1c6814148906e17a8bbd0e9ff) — 按鈕層級與回饋、表單分組及欄位設計。
+- [導覽列的設計](https://spiny-cheese-0b2.notion.site/678dcf6e6cb6462392a44f80333795af) — 導覽可見性、當前位置、麵包屑與分頁。
+- [圖卡的設計](https://spiny-cheese-0b2.notion.site/41c4e8daa2bd45009b61a88296ba378b) — 圖卡結構、資訊層級、網格與互動狀態。
+- [內容設計](https://spiny-cheese-0b2.notion.site/e5b6a66d1e7e4c8c84d3f7090aea3c8d) — 輪播、版型、表格、對話框與頁尾。
+- [按鈕設計](https://spiny-cheese-0b2.notion.site/5838d84fa2074405b83f7345c4480e0b) — 按鈕用途、文字、可點範圍與狀態。
+- [表單設計](https://spiny-cheese-0b2.notion.site/fcc0fa71afe647258576c11e0640f56e) — 表單控制項、標籤、錯誤訊息與操作按鈕。

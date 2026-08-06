@@ -679,6 +679,32 @@ tr:last-child td { border-bottom: none; }
       <strong>寫在風格板上：</strong>基準單位（4 或 8）、欄數、區塊之間的標準間距（例如區塊間 48、卡片內 16）。有這三個數字，Unit 09 排多斷點版面的時候就不用重猜一次。
     </div>
 
+    <h3>先把版型與導覽的位置定下來</h3>
+    <p>網格不只拿來排卡片，也要先決定頁面的固定骨架：頁首、主要內容、側欄與頁尾各占哪裡。主要功能不多、需要把內容寬度留給畫面時，常見做法是頂部導覽；功能多、層級深，而且使用者需要在不同模組間頻繁切換時，側邊導覽通常更容易掃讀。這不是二選一的公式，還要回到內容量與使用情境判斷。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>導覽檢查</th><th>要確認的事</th></tr></thead>
+        <tbody>
+          <tr><td>位置與可見性</td><td>大畫面不要把常用選項全部藏起來；Logo、主要選單、登入或購物車放在使用者熟悉的位置。</td></tr>
+          <tr><td>現在在哪裡</td><td>目前選單要有清楚的選取狀態；層級較深時，用麵包屑補充返回路徑，而且中間層級應可點擊。</td></tr>
+          <tr><td>互動回饋</td><td>連結要看得出可以點，並補上 hover、focus 與選取狀態；手機版則確認選單圖示容易辨識。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>常見內容區塊各有一個核心任務</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>區塊</th><th>風格階段要先決定</th></tr></thead>
+        <tbody>
+          <tr><td>輪播</td><td>目前位置、前後控制與暫停方式要看得見；圖片先壓縮，文字不要壓在難讀的背景上。</td></tr>
+          <tr><td>表格</td><td>欄位對齊、排序、搜尋、分頁與行動按鈕的層級；窄螢幕要決定橫向捲動或改成卡片。</td></tr>
+          <tr><td>對話框</td><td>只留完成當下任務需要的內容，關閉方式要清楚，主要動作不能被次要按鈕搶走。</td></tr>
+          <tr><td>頁尾</td><td>放次要導覽、聯絡或訂閱、社群、版權與隱私資訊；不要跟主要內容搶視覺焦點。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <h3>留白不是沒放東西</h3>
     <p>留白是設計決策，不是版面沒填滿。它至少在做三件事：讓眼睛知道哪些東西是一組的（下面第 8 節的接近性）、讓重要的東西有呼吸空間所以顯得重要、以及降低一次要處理的資訊量。</p>
     <p>一個好認的症狀是<strong>留白平均分配</strong>：所有東西之間都空 16px。結果就是畫面很整齊，但看不出哪裡是一組、哪裡是分界。<strong>留白要有大小差異</strong>——同一組裡面空 8，組跟組之間空 32，分組關係一眼就看得出來。</p>
@@ -778,6 +804,11 @@ tr:last-child td { border-bottom: none; }
         <p>刻意要被注意到的東西。危險動作（刪除）本來就該長得跟一般按鈕不一樣；空狀態頁面可以用插畫打破規律。<strong>不一致要是刻意的，而且說得出理由。</strong></p>
       </div>
     </div>
+    <h3>圖卡要一致，但也要能承受不同內容</h3>
+    <p>圖卡很容易在範例資料裡看起來整齊，換成真實內容就壞掉。先固定圖片、標題、摘要、標籤與行動按鈕的順序，再測試長標題、沒有圖片、不同數量標籤等情況。卡片內間距要小於卡片之間的間距；框線與陰影只要足以表示邊界，不要每張都做成浮很高的物件。</p>
+    <div class="callout">
+      <strong>放進風格板的圖卡規格：</strong>網格欄數、卡片內距、圖片比例、標題最多幾行、內容超長時怎麼處理，以及 default、hover、focus、selected 等需要的互動狀態。固定高度可以讓列表整齊，但要先決定截斷規則，不能讓文字直接溢出。
+    </div>
     <div class="callout green">
       風格板就是把「要一致的那些」寫成一份可以查的規格。Unit 10 畫 Mockup 時，你不是憑印象回想上次用什麼綠，而是回來看風格板上寫的色碼。這也是為什麼風格板上一定要有<strong>具體數值</strong>——色碼、字級、圓角、間距，寫「深綠色」是沒有用的。<br><br>
       再往前一步，是把這份規格變成 Figma 裡真的可以套用的東西，讓一致性不靠你記得，而是靠工具保證——那就是第 11 節的設計系統。
@@ -802,6 +833,20 @@ tr:last-child td { border-bottom: none; }
           <tr><td>連續性 Continuity</td><td>眼睛傾向沿著平順的線、曲線或排列方向繼續看下去，並把同一條路徑上的東西當成相關的</td><td>把元素對齊成一條線，引導視線走完一段；商品列表橫向排列時露出半張卡，同時暗示「這排還沒完」與「可以滑」</td></tr>
           <tr><td>封閉性 Closure</td><td>圖形沒畫完，大腦會自動補起來</td><td>圖示可以用簡化的線條；進度環沒接起來也看得懂是圓形</td></tr>
           <tr><td>共同區域 Common Region</td><td>在同一個框線或底色範圍內的東西是一組</td><td>卡片、面板、分隔區塊；用底色把工具列跟內容區分開</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>表單除了間距，還要把狀態與控制項選對</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>檢查項目</th><th>做法</th></tr></thead>
+        <tbody>
+          <tr><td>欄位與標籤</td><td>保留清楚、持續可見的標籤；提示文字用來補格式範例，不要拿 placeholder 取代標籤。</td></tr>
+          <tr><td>控制項</td><td>少量互斥選項可直接用 radio；選項較多再用下拉選單。多選用 checkbox，開關即時生效時才用 toggle。</td></tr>
+          <tr><td>狀態</td><td>至少檢查一般、聚焦、已填、錯誤與停用；focus 要看得出鍵盤目前停在哪個欄位。</td></tr>
+          <tr><td>錯誤回饋</td><td>錯誤訊息貼近對應欄位，說明哪裡錯、怎麼改；不要只靠紅色框線。</td></tr>
+          <tr><td>完成負擔</td><td>刪掉非必要欄位，能自動帶入就不要重填；長表單分段並顯示進度，送出後給立即回饋。</td></tr>
         </tbody>
       </table>
     </div>
@@ -1027,6 +1072,18 @@ tr:last-child td { border-bottom: none; }
     <h3>Component 與 Variants</h3>
     <p>把一組圖層選起來按 <code>⌥ ⌘ K</code>（Windows 是 <code>Ctrl Alt K</code>）就變成<strong>主元件（main component）</strong>。之後複製出去用的每一個都是<strong>實例（instance）</strong>，主元件一改，所有實例跟著改。實例上可以個別改文字、改圖片這類覆寫，改壞了可以重設回主元件的樣子。</p>
     <p><strong>Variants（變體）</strong>則是把同一個元件的不同版本收進一個容器裡。主要按鈕、次要按鈕、停用中的按鈕，不必做成三個各自獨立的元件，而是一個元件加上幾個屬性。用的時候在右側面板換選項就好。</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>按鈕狀態</th><th>要讓使用者知道什麼</th></tr></thead>
+        <tbody>
+          <tr><td>Normal / Hover / Pressed</td><td>按鈕可以操作、游標已經移到上面，以及動作已被按下。</td></tr>
+          <tr><td>Loading</td><td>系統正在處理；避免重複送出，同時保留動作文字或足以辨識任務的提示。</td></tr>
+          <tr><td>Disabled</td><td>目前不能操作；若原因不明，要在附近說明還缺哪個條件。</td></tr>
+          <tr><td>Focus</td><td>鍵盤焦點目前停在這裡，焦點樣式不能只依賴滑鼠 hover。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>按鈕文字要直接說動作，例如「儲存草稿」「送出申請」，不要只寫「確定」。主要與次要按鈕可用色彩、填色與視覺重量拉開層級，但同一個產品裡的用法要一致。</p>
     <p>注意這裡有<strong>兩個不同維度</strong>：主要／次要是這顆按鈕的<em>種類</em>，一般／停用是它<em>當下的狀態</em>。兩件事不一樣，所以要開成兩個屬性——<code>Type</code>（主要／次要）與 <code>State</code>（一般／停用）。開對了，兩兩組合就涵蓋四種情況；開錯了，之後想要「次要的停用版」就得再補一個值。</p>
     <div class="callout warn">
       <strong>設定屬性時最常搞錯的地方：</strong>把好幾個維度塞進同一個屬性。不要做一個叫 <code>Style</code> 的屬性，值寫成「主要大顆」「次要小顆」——這樣兩個維度綁死，之後想要「次要大顆」就得再開一個值。<strong>拆成 <code>Type</code>（主要／次要／文字）與 <code>Size</code>（大／中／小）兩個屬性</strong>，能組合出來的就是所有情況。<br><br>
@@ -1163,6 +1220,15 @@ Persona 摘要：[貼上]
 
 <div class="refs">
   <h2>參考資料</h2>
+  <h3 id="ui-component-refs">UI 元件與內容設計｜重要參考</h3>
+  <ul>
+    <li><a href="https://spiny-cheese-0b2.notion.site/e7e379c1c6814148906e17a8bbd0e9ff" target="_blank" rel="noopener">好的設計表單與按鈕</a> — 按鈕層級、即時回饋、欄位分組與表單檢核原則。</li>
+    <li><a href="https://spiny-cheese-0b2.notion.site/678dcf6e6cb6462392a44f80333795af" target="_blank" rel="noopener">導覽列的設計</a> — 導覽可見性、當前位置、麵包屑與分頁。</li>
+    <li><a href="https://spiny-cheese-0b2.notion.site/41c4e8daa2bd45009b61a88296ba378b" target="_blank" rel="noopener">圖卡的設計</a> — 圖卡結構、資訊層級、網格、內容長度與互動狀態。</li>
+    <li><a href="https://spiny-cheese-0b2.notion.site/e5b6a66d1e7e4c8c84d3f7090aea3c8d" target="_blank" rel="noopener">內容設計</a> — 輪播、版型、表格、對話框與頁尾的設計檢核。</li>
+    <li><a href="https://spiny-cheese-0b2.notion.site/5838d84fa2074405b83f7345c4480e0b" target="_blank" rel="noopener">按鈕設計</a> — 按鈕用途、文字、可點範圍與常見狀態。</li>
+    <li><a href="https://spiny-cheese-0b2.notion.site/fcc0fa71afe647258576c11e0640f56e" target="_blank" rel="noopener">表單設計</a> — 表單控制項、標籤、錯誤訊息與操作按鈕。</li>
+  </ul>
   <h3>設計靈感與工具</h3>
   <ul>
     <li><a href="https://webdesignclip.com/" target="_blank" rel="noopener">Web Design Clip</a> — 日本網站設計案例庫，適合找視覺風格、版面與分類案例。</li>
@@ -1201,6 +1267,7 @@ Persona 摘要：[貼上]
 
 <div class="foot-nav">
   <a href="slides.html">回到 Unit 08 簡報</a>
+  <a href="#ui-component-refs">UI 元件與內容設計｜重要</a>
   <a href="https://lawsofux.com/" target="_blank" rel="noopener">Laws of UX</a>
   <a href="https://styletil.es/" target="_blank" rel="noopener">Style Tiles 範本</a>
   <a href="../Unit_06/article.html">Unit 06 講義：Flowchart 到 Wireframe</a>
