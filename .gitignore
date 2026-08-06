@@ -11,6 +11,10 @@
 .claude/*
 !.claude/skills/
 
+# Codex plugin 產生的檔案（AGENTS.md 是 CLAUDE.md 的複本）
+.agents/
+AGENTS.md
+
 # Temporary files
 *.tmp
 *.log
