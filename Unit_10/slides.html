@@ -1,47 +1,1269 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>單元 10：主要頁面 UI 設計實作（含 AI 輔助）</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f4f4f4; color: #222; }
-    .slide { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px 80px; border-bottom: 2px solid #ddd; background: #fff; }
-    .slide:nth-child(even) { background: #f9f9f9; }
-    .slide-number { font-size: 12px; color: #aaa; margin-bottom: 16px; align-self: flex-start; }
-    h1 { font-size: 48px; font-weight: 700; color: #111; margin-bottom: 16px; text-align: center; }
-    h2 { font-size: 32px; font-weight: 600; color: #333; margin-bottom: 24px; }
-    p { font-size: 18px; line-height: 1.8; color: #555; max-width: 720px; text-align: center; }
-    ul { font-size: 18px; line-height: 2; color: #444; max-width: 680px; padding-left: 24px; align-self: flex-start; }
-    .tag { font-size: 13px; background: #222; color: #fff; padding: 4px 12px; border-radius: 20px; margin-bottom: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 10 · UI 設計精度提升：Mockup 細節</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --positive: #0f766e;
+  --negative: #c2410c;
+  --surface: #f5f5f7;
+  --card: #ffffff;
+  --border: #d2d2d7;
+  --px: clamp(44px, 7vw, 108px);
+  --py: 52px;
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  z-index: 200;
+}
+
+#deck { position: relative; width: 100%; height: 100vh; }
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--py) var(--px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  overflow: hidden;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+}
+
+.slide-head, .slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+}
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.slide-num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.course-label { font-size: 11px; color: #a1a1a6; }
+
+.dots { display: flex; gap: 5px; align-items: center; }
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.dot.on { width: 16px; border-radius: 3px; background: var(--accent); }
+
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.divider {
+  width: 42px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 8px 0 26px;
+}
+h1 {
+  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+h2 {
+  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 900px;
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.cover-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+}
+.cover-title {
+  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 22px;
+}
+.cover-sub {
+  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 44px;
+}
+.cover-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 38px;
+}
+.agenda-card, .mini-card {
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.a-step {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.a-time, .mini-card strong {
+  font-size: clamp(.9rem, 1.25vw, 1.08rem);
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.35;
+}
+.a-desc, .mini-card span {
+  font-size: clamp(.78rem, 1.05vw, .94rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.blist li {
+  font-size: clamp(.88rem, 1.25vw, 1.08rem);
+  color: var(--dark);
+  line-height: 1.58;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.blist li::before {
+  content: attr(data-n);
+  min-width: 30px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.blist.plain li::before {
+  content: '';
+  min-width: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  padding: 0;
+  margin-top: .6em;
+}
+.blist.compact { gap: 8px; margin-top: 18px; }
+.blist.compact li { padding: 9px 13px; font-size: clamp(.78rem, 1.02vw, .94rem); }
+.hl { color: var(--accent); font-weight: 700; }
+.hl2 { color: var(--accent2); font-weight: 700; }
+.warn-text { color: var(--accent3); font-weight: 700; }
+.tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 2px dotted currentColor;
+  cursor: help;
+  outline: none;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  width: min(420px, 72vw);
+  transform: translateX(-50%) translateY(4px);
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #1d1d1f;
+  color: #f5f5f7;
+  font-size: clamp(.74rem, .92vw, .86rem);
+  font-weight: 500;
+  line-height: 1.55;
+  box-shadow: 0 14px 32px rgba(0,0,0,.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 40;
+}
+.tip::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  width: 10px;
+  height: 10px;
+  background: #1d1d1f;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity .16s ease;
+  z-index: 39;
+}
+.tip:hover::after,
+.tip:focus-visible::after,
+.tip:hover::before,
+.tip:focus-visible::before {
+  opacity: 1;
+}
+.tip:hover::after,
+.tip:focus-visible::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+.bg-n {
+  position: absolute;
+  right: calc(var(--px) - 16px);
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(130px, 21vw, 250px);
+  font-weight: 800;
+  color: var(--surface);
+  line-height: 1;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+}
+.layer-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.matrix.c3 { grid-template-columns: repeat(3, 1fr); }
+.matrix.c4 { grid-template-columns: repeat(4, 1fr); }
+.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
+.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
+
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  font-size: clamp(.72rem, .98vw, .92rem);
+}
+.cmp-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.45;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child { font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+.note {
+  margin-top: 17px;
+  font-size: clamp(.72rem, .92vw, .86rem);
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 11px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  border-radius: 0 8px 8px 0;
+}
+.note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.note a:hover { text-decoration: underline; }
+
+.chain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+}
+.chain.c5 { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.chain-step {
+  position: relative;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.chain-step:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+}
+.chain-step b { display: block; color: var(--accent); font-size: .78rem; margin-bottom: 8px; }
+.chain-step span { display: block; color: var(--muted); line-height: 1.5; font-size: .86rem; }
+
+.stat-row { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 32px; }
+.stat b { display: block; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1; color: var(--accent); }
+.stat span { display: block; margin-top: 9px; color: var(--muted); line-height: 1.5; font-size: .9rem; }
+
+/* 流程圖 */
+.flow-dia {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 20px 22px;
+  font-size: clamp(.68rem, .92vw, .85rem);
+  line-height: 1.85;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  color: var(--dark);
+  white-space: pre;
+  overflow-x: auto;
+}
+.flow-dia .n { color: var(--accent); font-weight: 700; }
+.flow-dia .d { color: var(--accent2); font-weight: 700; }
+.flow-dia .x { color: var(--accent3); font-weight: 700; }
+.flow-dia .c { color: var(--muted); }
+
+.slide-img {
+  display: block;
+  max-width: 100%;
+  max-height: 52vh;
+  width: auto;
+  margin: 22px auto 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  object-fit: contain;
+}
+.slide.dark .slide-img { border-color: #3a3a3c; }
+
+/* 線框示意 */
+.wf-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+.wf {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 250px;
+}
+.wf .bar { background: var(--surface); border-radius: 3px; }
+.wf .bar.h { height: 26px; }
+.wf .bar.t { height: 13px; width: 62%; }
+.wf .bar.s { height: 9px; width: 88%; }
+.wf .bar.box { flex: 1; }
+.wf .bar.btn { height: 22px; width: 44%; background: rgba(0,102,204,.16); }
+.wf-cap { font-size: .78rem; color: var(--muted); margin-top: 9px; text-align: center; }
+
+/* 色票 */
+.sw-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+}
+.sw-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card);
+}
+.sw-chip { display: block; height: clamp(40px, 7vh, 60px); }
+.sw-lbl {
+  display: block;
+  padding: 12px 15px 14px;
+  font-size: clamp(.72rem, .96vw, .87rem);
+  color: var(--muted);
+  line-height: 1.55;
+}
+.sw-lbl b {
+  display: block;
+  margin-bottom: 5px;
+  font-size: clamp(.8rem, 1.06vw, .96rem);
+  font-weight: 800;
+  color: var(--dark);
+}
+
+.res-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.res-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color .2s, transform .2s;
+}
+.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.res-link strong { font-size: .94rem; color: var(--dark); }
+.res-link span { font-size: .75rem; color: var(--muted); }
+.pin-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 22px;
+}
+.pin-panel {
+  min-height: 360px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  overflow: hidden;
+}
+.pin-panel h3 {
+  margin: 0 0 10px;
+  font-size: clamp(.86rem, 1.05vw, 1rem);
+  color: var(--dark);
+}
+.slide.dark .pin-panel { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .pin-panel h3 { color: #f5f5f7; }
+
+.slide-body a.ilink {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,102,204,.35);
+}
+.slide-body a.ilink:hover { border-bottom-color: var(--accent); }
+
+#ctrls {
+  position: fixed;
+  bottom: 28px;
+  right: clamp(36px, 5vw, 80px);
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+#ctrls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(29,29,31,.06);
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background .2s, transform .15s;
+}
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
+#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+
+.slide.dark { background: #1d1d1f; }
+.slide.dark h1 { color: #f5f5f7; }
+.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
+.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
+.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
+.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
+.slide.dark .bg-n { color: #2c2c2e; }
+.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card,
+.slide.dark .chain-step, .slide.dark .flow-dia, .slide.dark .wf, .slide.dark .sw-item {
+  background: rgba(255,255,255,.055);
+  color: #f5f5f7;
+  border-color: #3a3a3c;
+}
+.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
+.slide.dark .mini-card strong, .slide.dark .a-time, .slide.dark .chain-step span { color: #f5f5f7; }
+.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
+.slide.dark .chain-step b, .slide.dark .flow-dia .n { color: #58a6ff; }
+.slide.dark .flow-dia .c, .slide.dark .wf-cap { color: #a1a1a6; }
+.slide.dark .wf .bar { background: rgba(255,255,255,.10); }
+.slide.dark .wf .bar.btn { background: rgba(88,166,255,.28); }
+.slide.dark .sw-lbl { color: #a1a1a6; }
+.slide.dark .sw-lbl b { color: #f5f5f7; }
+.slide.dark .stat b { color: #58a6ff; }
+.slide.dark .stat span { color: #a1a1a6; }
+.slide.dark .dot { background: #3a3a3c; }
+.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
+.slide.dark .note a { color: #58a6ff; }
+.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
+.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
+.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .res-link strong { color: #f5f5f7; }
+.slide.dark .res-link span { color: #a1a1a6; }
+.slide.dark .slide-body a.ilink { color: #58a6ff; border-bottom-color: rgba(88,166,255,.42); }
+.slide.dark .slide-body a.ilink:hover { border-bottom-color: #58a6ff; }
+.slide.drop { display: none; }
+
+@media (max-width: 768px) {
+  :root { --px: 20px; --py: 20px; }
+  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .slide-body { justify-content: flex-start; padding: 12px 0; }
+  .agenda-grid, .matrix, .matrix.c3, .matrix.c4,
+  .res-links, .chain, .chain.c5, .wf-row, .sw-row { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .pin-showcase { grid-template-columns: 1fr; }
+  .chain-step:not(:last-child)::after { display: none; }
+  .cmp-table { display: block; overflow-x: auto; }
+  .blist { margin-top: 16px; gap: 8px; }
+  .stat-row { gap: 24px; margin-top: 20px; }
+  .cover-sub { margin-bottom: 22px; }
+  .bg-n, .course-label, .dots { display: none; }
+}
+
+/* 圖例（Unit 10 新增） */
+.img-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+  align-items: start;
+}
+.img-row.c1 { grid-template-columns: 1fr; max-width: 760px; margin-left: auto; margin-right: auto; }
+.img-row.c3 { grid-template-columns: repeat(3, 1fr); }
+.fig { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.fig img {
+  display: block;
+  width: 100%;
+  max-height: 30vh;
+  object-fit: contain;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+.fig figcaption {
+  font-size: clamp(.68rem, .86vw, .8rem);
+  color: var(--muted);
+  line-height: 1.5;
+}
+.fig figcaption b { color: var(--dark); font-weight: 700; }
+.slide.dark .fig img { border-color: #3a3a3c; }
+.slide.dark .fig figcaption { color: #a1a1a6; }
+.slide.dark .fig figcaption b { color: #f5f5f7; }
+
+/* 十大易用性的單條版面：標題收小，把空間讓給圖 */
+.slide.h-slide h1 { font-size: clamp(1.45rem, 2.5vw, 2.25rem); }
+.slide.h-slide h2 { font-size: clamp(.85rem, 1.2vw, 1.05rem); margin-top: 10px; }
+.slide.h-slide .note { margin-top: 14px; }
+
+/* 正反例對照 */
+.vs-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
+.vs-item { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card); }
+.vs-item img { display: block; width: 100%; max-height: 24vh; object-fit: contain; background: #fff; }
+.vs-item p {
+  padding: 10px 14px 12px;
+  font-size: clamp(.72rem, .92vw, .85rem);
+  line-height: 1.55;
+  color: var(--muted);
+}
+.vs-item p b { display: block; margin-bottom: 4px; font-size: clamp(.78rem, 1vw, .92rem); }
+.vs-item.bad { border-color: rgba(194,65,12,.3); }
+.vs-item.bad p b { color: var(--accent3); }
+.vs-item.good { border-color: rgba(15,118,110,.3); }
+.vs-item.good p b { color: var(--accent2); }
+.slide.dark .vs-item { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
+.slide.dark .vs-item p { color: #a1a1a6; }
+.slide.dark .vs-item.bad { border-color: rgba(194,65,12,.45); }
+.slide.dark .vs-item.good { border-color: rgba(15,118,110,.5); }
+
+/* 十條總表 */
+.h-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; margin-top: 22px; }
+.h-list li {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--surface);
+  border-radius: 8px;
+  font-size: clamp(.74rem, .95vw, .88rem);
+  line-height: 1.5;
+  color: var(--dark);
+}
+.h-list li b {
+  flex-shrink: 0;
+  min-width: 22px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--accent);
+  background: rgba(0,102,204,.1);
+  border-radius: 5px;
+  padding: 3px 6px;
+  text-align: center;
+  margin-top: 1px;
+}
+.slide.dark .h-list li { background: rgba(255,255,255,.055); color: #f5f5f7; }
+.slide.dark .h-list li b { color: #58a6ff; background: rgba(88,166,255,.15); }
+
+@media (max-width: 768px) {
+  .img-row, .img-row.c3, .vs-pair, .h-list { grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+  .fig img { max-height: 40vh; }
+  .vs-item img { max-height: 34vh; }
+}
+</style>
 </head>
 <body>
-  <section class="slide">
-    <span class="tag">單元 10</span>
-    <h1>主要頁面 UI 設計實作（含 AI 輔助）</h1>
-    <p>UI 設計實作課程｜Figma × UX 原則 × AI 整合</p>
+
+<div id="prog"></div>
+
+<div id="deck">
+
+  <!-- 01 Cover -->
+  <section class="slide active">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
+      <h1 class="cover-title">UI 設計<br>精度提升</h1>
+      <p class="cover-sub">從 Wireframe 到高保真 Mockup × 十大易用性原則檢查 × AI 補內容</p>
+      <div class="cover-meta">
+        <span>08/10 下午</span><span class="meta-dot"></span><span>22 張投影片</span><span class="meta-dot"></span><span>課堂練習 85 分</span>
+      </div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
   </section>
-  <section class="slide">
-    <span class="slide-number">02</span>
-    <h2>本堂課目標</h2>
-    <p>（內容待補充）</p>
+
+  <!-- 02 Agenda -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Agenda</p>
+      <h1>今天要把畫面做到「可以交出去」</h1>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="a-step">Part 1 · 25 min</span>
+          <span class="a-time">精度差在哪</span>
+          <span class="a-desc">同一張畫面，Wireframe 跟 Mockup 的差別不是上色。間距、狀態、內容這三件事沒補完，就還不算高保真。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 2 · 40 min</span>
+          <span class="a-time">十大易用性原則</span>
+          <span class="a-desc">Nielsen 的十條，一條一條配真實介面看。這是檢查表，用來找出畫面哪裡壞掉。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">休息 · 15 min</span>
+          <span class="a-time">中場</span>
+          <span class="a-desc">休息後直接進實作，會用到 Unit 08 的風格板與 Unit 09 的版面。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 3 · 85 min</span>
+          <span class="a-time">課堂練習</span>
+          <span class="a-desc">四階段：補狀態 20 分 → 逐條檢查 25 分 → 改稿 25 分 → 兩人互檢 15 分。</span>
+        </div>
+        <div class="agenda-card">
+          <span class="a-step">Part 4 · 15 min</span>
+          <span class="a-time">成果分享</span>
+          <span class="a-desc">各組分享一個改動最大的地方，說清楚它對應哪一條原則。</span>
+        </div>
+      </div>
+      <div class="note">講述 65 分 + 休息 15 分 + 實作 85 分 + 分享 15 分 = 180 分。<br>實作會用到 <span class="hl">Unit 08 的風格板</span>與 <span class="hl">Unit 09 的多斷點版面</span>。今天結束時會多出 1–2 個主要頁面的高保真版本，也就是<span class="hl">作業 8</span> 的交件。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
   </section>
+
+  <!-- 03 精度是什麼 -->
   <section class="slide">
-    <span class="slide-number">03</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Fidelity</p>
+      <h1>Mockup 不是把 Wireframe 上色</h1>
+      <h2>把風格板的顏色套上去，畫面會變好看，但它還是一張 Wireframe。真正的差別在下面三件事——<span class="hl">這三件沒補完，工程師就接不下去</span>。</h2>
+      <div class="matrix c3">
+        <div class="mini-card">
+          <strong>① 間距與對齊</strong>
+          <span>風格板上寫的 8 的倍數，最後要能在畫面上量到。<br><br>「看起來差不多」在 Figma 裡量出來常常是 13、17、22。</span>
+        </div>
+        <div class="mini-card">
+          <strong>② 狀態</strong>
+          <span>一顆按鈕不是只有一種樣子。<br><br>使用者滑過去、按下去、不能按的時候，各自需要明確狀態。</span>
+        </div>
+        <div class="mini-card">
+          <strong>③ 真實內容</strong>
+          <span>假字換成真的會出現的字。<br><br>Lorem ipsum 跟「王小明」很難暴露真實內容造成的爆版。</span>
+        </div>
+      </div>
+      <div class="note">判斷標準很簡單：<span class="hl">把這張圖給工程師，他能不能不問就開始做。</span>如果還會出現「這個按鈕按下去會變什麼顏色」這類問題，就代表狀態沒畫完。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
   </section>
+
+  <!-- 04 間距 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Spacing</p>
+      <h1>間距是量出來的，不是喬到順眼為止</h1>
+      <h2>Unit 08 的風格板上寫了基準單位（多半是 4 或 8 的倍數）。Mockup 階段的工作，是讓畫面上每一個間距都真的是那幾個數字。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>常見症狀</th><th>使用者看到的結果</th><th>怎麼修</th></tr></thead>
+        <tbody>
+          <tr><td>間距平均分配</td><td>卡片內 16、卡片間也 16，看不出哪些是一組</td><td>組內縮到 8，組間拉到 32，用大小差異做分組</td></tr>
+          <tr><td>出現 13、17、22</td><td>單看沒問題，整頁掃過去會覺得「有點歪但說不上來」</td><td>回到風格板的階梯，就近選一個合法值</td></tr>
+          <tr><td>左邊緣沒對齊</td><td>標題、內文、按鈕各差幾 px，畫面像沒排好</td><td>Figma 拉輔助線，或全選按對齊</td></tr>
+          <tr><td>邊界留白不一致</td><td>這頁左右各 24、下一頁各 20，換頁時畫面會跳</td><td>版心邊界寫進風格板，所有頁面共用</td></tr>
+        </tbody>
+      </table>
+      <div class="note">在 Figma 裡按住 <span class="hl">Option</span>（Windows 是 Alt）再把游標移到另一個元件上，就會直接標出兩者的距離。<span class="warn-text">改稿前的量測通常會暴露 13、17、22 這類不在階梯上的數字。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 05 狀態 -->
   <section class="slide">
-    <span class="slide-number">04</span>
-    <h2>課程內容</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">States</p>
+      <h1>一顆按鈕至少要畫五種樣子</h1>
+      <h2>Wireframe 只需要一顆方框寫「送出」。Mockup 要回答的是：滑過去會怎樣、按下去會怎樣、不能按的時候長什麼樣。<br>下面列的是<span class="hl">最該被判斷過</span>的狀態，不是每個元件都一定有這幾種。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>元件</th><th>常見狀態</th><th>最常被漏掉的那個</th></tr></thead>
+        <tbody>
+          <tr><td>按鈕</td><td>一般、hover、按下、停用、處理中</td><td><span class="warn-text">停用</span>——表單沒填完時按鈕該長什麼樣</td></tr>
+          <tr><td>輸入框</td><td>一般、focus、已填、錯誤、停用</td><td><span class="warn-text">focus</span>——用鍵盤 Tab 的人靠它知道游標在哪</td></tr>
+          <tr><td>清單／卡片</td><td>一般、hover、選中、載入中、空狀態</td><td><span class="warn-text">空狀態</span>——Unit 07 畫過的版本，在這裡延伸成高保真狀態</td></tr>
+          <tr><td>導覽</td><td>一般、hover、當前頁</td><td><span class="warn-text">當前頁</span>——使用者靠它知道自己在哪</td></tr>
+        </tbody>
+      </table>
+      <div class="note">在 Figma 裡這件事有現成做法：把按鈕做成 <span class="hl">Component</span>，用 <span class="hl">Variants</span> 把每個狀態掛成同一個元件的不同版本（Unit 08 講義<a class="ilink" href="../Unit_08/article.html#s11" target="_blank" rel="noopener">第 11 節</a>）。這樣改一次主色，所有頁面的按鈕一起變。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
   </section>
+
+  <!-- 06 真實內容 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Real Content</p>
+      <h1>假字會掩蓋真實版面問題</h1>
+      <h2>Lorem ipsum 每個字都差不多長，中文假資料如果只打「王小明」「商品名稱」，很難發現版面在真實資料下會爆掉。</h2>
+      <div class="matrix">
+        <div class="mini-card warn">
+          <strong>用假字看不出來的問題</strong>
+          <span>· 商品名稱超過兩行會不會把價格擠掉<br>· 「歐陽子瑜」比「王小明」多兩個字，頭像旁邊會不會擠<br>· 價格從 $99 變成 $128,000 時，欄位夠不夠寬<br>· 一整排卡片的標題長度不一，高度會不會參差不齊</span>
+        </div>
+        <div class="mini-card accent">
+          <strong>換成真的會出現的內容</strong>
+          <span>· 競品網站的真實商品名稱<br>· 2 到 5 個字的姓名各一筆<br>· 金額的最小值與最大值兩種<br>· <b>每種列表至少一筆刻意很長的資料</b>，那才是會出事的那一筆</span>
+        </div>
+      </div>
+      <div class="note">這一步做完，畫面通常會醜掉——那是好事。<span class="hl">現在醜掉，好過上線後才發現。</span>發現爆版時，改動會回到元件本身：加省略號、限制行數、或把版面改成可以撐開。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 07 Part 2 開場 -->
   <section class="slide">
-    <span class="slide-number">05</span>
-    <h2>本堂小結</h2>
-    <p>（內容待補充）</p>
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Part 2 · Usability Heuristics</p>
+      <h1>十大易用性原則：一張抓問題用的檢查表</h1>
+      <h2>Jakob Nielsen 在 1994 年整理出來的十條，到今天還是業界最常用的介面檢查工具。</h2>
+      <div class="matrix c3">
+        <div class="mini-card accent">
+          <strong>它能做的</strong>
+          <span>十條逐項掃過畫面後，「怪怪的但說不出來」會變成「第 5 條，刪除沒有二次確認」。<br><br><b>它讓問題可以被說出口。</b></span>
+        </div>
+        <div class="mini-card warn">
+          <strong>它不能做的</strong>
+          <span>它不會決定按鈕該放哪、主色該用什麼。<br><br><b>Heuristic 的意思是「經驗法則」</b>，不是規格書，更不是打分數的量表。</span>
+        </div>
+        <div class="mini-card">
+          <strong>怎麼用</strong>
+          <span>單人檢查容易漏，兩人互檢可以補上盲點。<br><br>每個問題都需要寫下<b>違反第幾條</b>、<b>在哪個畫面</b>、<b>怎麼改</b>。</span>
+        </div>
+      </div>
+      <div class="note">接下來十張，每一條都配一張真實介面的圖。內容與中文標題整理自 <a class="ilink" href="https://www.71next.com/userDoc/10-usability-heuristics/" target="_blank" rel="noopener">71NEXT：使用者介面設計的10大易用性</a>，原始出處是 <a class="ilink" href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener">NN/g</a>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
   </section>
+
+  <!-- 08 #1 -->
+  <section class="slide dark h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 01 · Visibility of System Status</span>
+      <h1>系統狀態的可見性</h1>
+      <h2>設計應始終透過在合理的時間內提供適當的回饋，讓使用者了解正在發生的事情。當使用者知道當前的系統狀態，他們才知道剛剛那一下有沒有成功、接下來該做什麼。</h2>
+      <div class="img-row">
+        <figure class="fig">
+          <img src="resources/heuristics/h01-visibility-loading.gif" alt="底部分頁列切換時，目前所在的分頁會亮起並顯示文字標籤" loading="lazy">
+          <figcaption><b>看目前所在的分頁</b>：切到哪一頁，那個圖示就亮起來並長出文字。使用者不用回想自己在哪。</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="resources/heuristics/h01-visibility-progress.jpg" alt="九種進度指示器樣式：進度條、百分比、步驟條、環形進度、圓點" loading="lazy">
+          <figcaption><b>看進度怎麼表達</b>：「25%、剩 5 秒」比只轉圈圈更清楚；「第 2 步、共 3 步」比讓人猜還有多久更具體。</figcaption>
+        </figure>
+      </div>
+      <div class="note">Mockup 上要檢查的：<span class="hl">送出後有沒有回饋</span>、<span class="hl">載入中畫面有沒有畫</span>、<span class="hl">目前在哪一頁看不看得出來</span>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 09 #2 -->
+  <section class="slide h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 02 · Match Between System and the Real World</span>
+      <h1>連結真實世界</h1>
+      <h2>設計應該遵守使用者的語言。使用使用者熟悉的單字、短語和概念，而不是內部術語；並遵循現實世界的慣例，讓資訊以自然、符合邏輯的順序出現。</h2>
+      <div class="img-row c1">
+        <figure class="fig">
+          <img src="resources/heuristics/h02-real-world-icons.jpg" alt="檔案管理員工具列，每個功能都是圖示加上中文字：檔案、資料夾、複製、移動、上傳、下載、刪除、還原、重新命名、編輯" loading="lazy">
+          <figcaption><b>看每個功能怎麼標</b>：圖示配上「複製／移動／上傳／下載／刪除」這種日常用語，而不是「執行 sync 作業」。原文的 Tip 就是這一條：<b>善用 icon 來表示功能</b>。注意「還原」是灰的——那是停用狀態，順便對到上一頁講的狀態。</figcaption>
+        </figure>
+      </div>
+      <div class="note">最常犯的是把資料庫欄位名直接搬到畫面上：<span class="warn-text">「訂單狀態：PENDING」</span>、<span class="warn-text">「user_id」</span>。使用者不知道 PENDING 是什麼，真正需要的是<span class="hl">「賣家還沒出貨」</span>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 10 #3 -->
+  <section class="slide dark h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 03 · User Control and Freedom</span>
+      <h1>讓使用者有控制權及自由度</h1>
+      <h2>使用者經常會錯誤地執行操作。他們需要一個明確標記的「回到上一頁或是跳出服務」來離開不需要的行動，而不必經歷漫長的過程。</h2>
+      <div class="img-row">
+        <figure class="fig">
+          <img src="resources/heuristics/h03-user-control.jpg" alt="iOS 的 BBC News 通知設定頁，可以逐項開關通知、鎖定畫面、通知中心與橫幅" loading="lazy">
+          <figcaption><b>看使用者能關掉多少東西</b>：通知不是只有全開或全關，鎖定畫面、通知中心、橫幅可以各自決定，連要不要顯示預覽都能選。</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="resources/heuristics/h09-error-404.jpg" alt="404 錯誤頁面，中央有插圖與 Go back home 按鈕" loading="lazy">
+          <figcaption><b>看走錯路怎麼回來</b>：連 404 這種死路都要給一個「回首頁」的出口，不能讓使用者只剩下按瀏覽器上一頁。<br>（這張在來源文章屬於<b>第 9 條</b>的例子，這裡借來說明第 3 條——同一張畫面通常同時被好幾條原則管到。）</figcaption>
+        </figure>
+      </div>
+      <div class="note">71next 舉的例子：<span class="hl">Airbnb 挑房間可以切換地圖或列表</span>、<span class="hl">booking.com 訂票可以改日期跟航班</span>。Mockup 上要檢查的是：每個畫面都找得到返回或取消嗎？做到一半離開，資料會不會全部不見？</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 11 #4 -->
+  <section class="slide h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 04 · Consistency and Standards</span>
+      <h1>一致性與標準</h1>
+      <h2>人們大部分時間都花在使用你的產品之外的數位產品上。他們對其他產品的體驗決定了他們的期望——不一致會迫使使用者學新東西，增加認知負擔。</h2>
+      <div class="img-row c1">
+        <figure class="fig">
+          <img src="resources/heuristics/h04-consistency-styleguide.jpg" alt="AfterShip 的 StyleGuide，一頁列出字體、色票、按鈕、控制項、表單、圖示與導覽列規格" loading="lazy">
+          <figcaption><b>看一致性怎麼被保存下來</b>：字體、色票、按鈕各狀態、表單、圖示全部集中在一張 StyleGuide 上。這正是 Unit 08 做的風格板長大後的樣子——有這張，第五個頁面才不會長成另一個產品。</figcaption>
+        </figure>
+      </div>
+      <div class="note">兩種一致性都很重要：<span class="hl">產品內部</span>（同一種按鈕在每一頁都長一樣）與<span class="hl">產品外部</span>（購物車放右上角、返回箭頭放左上角，因為所有人都這樣做）。<span class="warn-text">在慣例的地方發揮創意，是最常見的災難。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 12 #5 -->
+  <section class="slide dark h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 05 · Error Prevention</span>
+      <h1>預防錯誤</h1>
+      <h2>良好的錯誤訊息很重要，但最好的設計首先會仔細防止問題發生。消除容易出錯的情況，或是在使用者按下去之前給他一個確認的機會。</h2>
+      <div class="img-row">
+        <figure class="fig">
+          <img src="resources/heuristics/h05-error-prevention-confirm.png" alt="Twitter 註冊表單，電話號碼與密碼欄位在送出前就標紅並說明原因" loading="lazy">
+          <figcaption><b>看錯誤在什麼時候被抓到</b>：不是等按了 Sign up 才說錯，而是打完那一格當場就講「Please enter a valid phone number」。</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="resources/heuristics/h05-error-prevention-github.png" alt="GitHub 刪除 repository 的 Danger Zone 區塊與二次確認對話框" loading="lazy">
+          <figcaption><b>看高成本的動作怎麼擋</b>：刪除 repo 被放進 Danger Zone、按鈕做成紅色，按下去還要再確認一次。刪掉就回不來的動作，值得多擋一層。</figcaption>
+        </figure>
+      </div>
+      <div class="note">原文特別區分兩種錯：<span class="hl">失誤（slip）</span>是注意力不集中造成的無意識錯誤——手滑按錯；<span class="hl">錯誤（mistake）</span>是使用者的心理模型跟設計對不上造成的有意識錯誤——他以為那顆按鈕是別的意思。<br>三個 Tip：優先防高成本的錯、設好預設值、重大動作給警告。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 13 #6 -->
+  <section class="slide h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 06 · Recognition Rather Than Recall</span>
+      <h1>用認知方式而非記憶</h1>
+      <h2>透過讓元素、操作和選項都看得見，把使用者要記的東西降到最低。人是靠認出來的，不是靠背下來的。</h2>
+      <div class="img-row">
+        <figure class="fig">
+          <img src="resources/heuristics/h06-recognition-netflix.jpg" alt="Netflix 繼續觀賞列，每張影片縮圖下方有紅色進度條" loading="lazy">
+          <figcaption><b>看使用者不用記什麼</b>：Netflix 自動記住每部片看到哪，縮圖下面那條紅線就是進度。使用者不必想「我上次看到第幾集」。</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="resources/heuristics/h06-recognition-folders.png" alt="左邊是 Terminal 命令列打字介面標示叉，右邊是 Finder 圖像化資料夾標示勾" loading="lazy">
+          <figcaption><b>看兩種介面的差別</b>：左邊要記得指令才做得了事，右邊看到資料夾圖示就知道點哪個。同一件事，記憶 vs 認知。</figcaption>
+        </figure>
+      </div>
+      <div class="note">Mockup 上常見的違反：<span class="warn-text">上一頁填過的資料，下一頁要重打一次</span>；<span class="warn-text">錯誤訊息出現時把使用者填的東西清空</span>；<span class="warn-text">篩選條件套用後，畫面上看不出目前篩了什麼</span>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 14 #7 -->
+  <section class="slide dark h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 07 · Flexibility and Efficiency of Use</span>
+      <h1>具備使用靈活性和效率</h1>
+      <h2>靈活的流程可以透過不同的方式進行，讓人選擇適合自己的方法。新手照著一步一步走，熟手有捷徑可以抄。</h2>
+      <div class="img-row">
+        <figure class="fig">
+          <img src="resources/heuristics/h07-flexibility-nike.jpg" alt="Nike 男鞋列表頁，左側有性別、價格、促銷與尺寸的篩選條件" loading="lazy">
+          <figcaption><b>看同一個目標有幾條路</b>：491 雙鞋，可以慢慢滑，也可以直接從左邊勾價格區間跟尺寸。不用篩選的人不會被擋到。</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="resources/heuristics/h07-flexibility-shortcuts.png" alt="Google 圖片搜尋的 Search tools 展開後可依 Size、Color、Type、Time、Usage rights 篩選" loading="lazy">
+          <figcaption><b>看進階功能藏在哪</b>：一般人直接搜尋就好，需要細篩的人才點開 Search tools。進階選項預設收起來，不干擾多數人。</figcaption>
+        </figure>
+      </div>
+      <div class="note">三個 Tip：<span class="hl">加速器</span>（鍵盤快速鍵、滑動手勢）、<span class="hl">個人化</span>（依使用者調整內容）、<span class="hl">可自訂</span>（讓使用者自己決定產品怎麼運作）。學生專題最容易做到的是<span class="hl">記住上次的選擇</span>——常用的篩選條件下次自動帶入。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 15 #8 -->
+  <section class="slide h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 08 · Aesthetic and Minimalist Design</span>
+      <h1>設計美觀與極簡</h1>
+      <h2>避免提供不必要的元素和資訊，以免分散使用者注意力。畫面上的視覺元素應該只服務使用者的主要目標。</h2>
+      <div class="img-row c1">
+        <figure class="fig">
+          <img src="resources/heuristics/h08-minimalist.png" alt="Google 首頁，畫面中央只有 logo、搜尋框與兩顆按鈕，其餘留白" loading="lazy">
+          <figcaption><b>看被拿掉了什麼</b>：Google 首頁只有一個搜尋框跟兩顆按鈕。不是它做不出更多功能，是其他東西全被移到角落或次要頁面——主要目標只有一個，畫面就只留那一個。</figcaption>
+        </figure>
+      </div>
+      <div class="note"><span class="warn-text">極簡不等於東西少，也不等於把東西藏起來。</span>判斷順序是：這個元素是否支援使用者的主要目標；不支援就移除，支援次要目標的才考慮降階（字級調小、收進次選單）。<br>專題首頁常見的反例：首頁同時推薦、公告、活動、排行榜，結果每一區都不顯眼。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 16 #9 -->
+  <section class="slide dark h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 09 · User-Friendly Error Handling and Feedback</span>
+      <h1>易於使用的錯誤處理和回饋</h1>
+      <h2>錯誤訊息應該用簡單的語言（沒有錯誤代碼）表達，準確地指出問題，並建設性地提出解決方案。</h2>
+      <div class="vs-pair">
+        <div class="vs-item bad">
+          <img src="resources/heuristics/h10-help-docs-a.png" alt="錯誤對話框寫著 The operation couldn't be completed. ErrorDomain error 20." loading="lazy">
+          <p><b>✗ 這樣寫沒人看得懂</b>「操作無法完成（ErrorDomain error 20）」——錯在哪？我要做什麼？使用者只能按 OK 然後重試一次。</p>
+        </div>
+        <div class="vs-item good">
+          <img src="resources/heuristics/h10-help-docs-b.png" alt="錯誤對話框寫著 The file you tried to upload is a type we don't understand. Supported image formats are JPEG, PNG, and GIF." loading="lazy">
+          <p><b>✓ 這樣寫可以自己解決</b>講清楚哪裡錯（檔案格式不支援），也講了怎麼改（改用 JPEG、PNG、GIF）。使用者關掉視窗就知道下一步。</p>
+        </div>
+      </div>
+      <div class="note">三個 Tip：用<span class="hl">傳統的錯誤視覺</span>（粗體、紅字）、用<span class="hl">使用者聽得懂的話</span>說出哪裡錯、<span class="hl">給一條能立刻解決的捷徑</span>。<br>連整頁出錯也一樣：寫「<span class="hl">Oh no! 出了點問題，我們正在處理</span>」再配一顆回首頁按鈕，比丟一行 500 Internal Server Error 有用得多（例子見講義<a class="ilink" href="article.html#s8" target="_blank" rel="noopener">第 8 節</a>）。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 17 #10 -->
+  <section class="slide h-slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="layer-badge">Heuristic 10 · Help and Documentation</span>
+      <h1>教學指示與幫助</h1>
+      <h2>介面提供簡易教學，讓新的使用者迅速上手。最理想的狀況是系統不需要任何額外解釋，但有時候還是得提供文件，幫使用者完成他的任務。</h2>
+      <div class="matrix c3">
+        <div class="mini-card">
+          <strong>① 找得到</strong>
+          <span>幫助文件要能被搜尋。<br><br>藏在三層選單底下的說明頁，等於不存在。</span>
+        </div>
+        <div class="mini-card accent">
+          <strong>② 出現在需要的地方</strong>
+          <span>盡可能<b>在使用者需要的當下、在他所在的畫面上</b>給說明。<br><br>欄位旁邊一行灰字，勝過另開一個說明中心。</span>
+        </div>
+        <div class="mini-card">
+          <strong>③ 講具體步驟</strong>
+          <span>列出要執行的動作，第一步、第二步。<br><br>比起「請至設定頁完成綁定」，具體步驟更有用。</span>
+        </div>
+      </div>
+      <div class="note">這一條的順位其實是<span class="hl">最後</span>——需要寫一大篇說明才會用的介面，代表前面九條沒做好。Mockup 階段能做的：<span class="hl">在複雜欄位旁補一行提示</span>（例如「身分證字號：請輸入英文開頭共 10 碼」），以及 Unit 07 畫的空狀態，本身就是最好的教學位置。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 18 檢查表 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Checklist</p>
+      <h1>十條收成一張檢查表</h1>
+      <h2>練習會用這十條逐項掃過 Mockup。<span class="hl">每個問題都需要寫出違反第幾條、在哪個畫面、打算怎麼改。</span></h2>
+      <ul class="h-list">
+        <li><b>01</b>送出、載入、目前位置，畫面上看得出來嗎？</li>
+        <li><b>02</b>有沒有把系統術語直接寫在畫面上？</li>
+        <li><b>03</b>每一頁都找得到返回或取消嗎？</li>
+        <li><b>04</b>同一種元件在每一頁長得一樣嗎？</li>
+        <li><b>05</b>刪除、送出這類動作有沒有先擋一下？</li>
+        <li><b>06</b>有沒有要使用者記住上一頁的東西？</li>
+        <li><b>07</b>熟手有沒有捷徑可以抄？</li>
+        <li><b>08</b>畫面上每個元素都有工作嗎？</li>
+        <li><b>09</b>錯誤訊息講得出哪裡錯、怎麼改嗎？</li>
+        <li><b>10</b>複雜的地方有沒有就地說明？</li>
+      </ul>
+      <div class="note">可直接複製的版本在<a class="ilink" href="exercises.html#ex2" target="_blank" rel="noopener">課堂練習第二階段</a>；每一條的完整說明與案例在講義<a class="ilink" href="article.html#s6" target="_blank" rel="noopener">第 6 節</a>到<a class="ilink" href="article.html#s8" target="_blank" rel="noopener">第 8 節</a>。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 19 AI 輔助 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">AI Assist</p>
+      <h1>AI 適合補內容，不適合幫你做決定</h1>
+      <h2>Mockup 階段最花時間的往往不是畫圖，是「這個空狀態要寫什麼字」「這裡塞哪些假資料」。這兩件事交給 AI 很划算。</h2>
+      <div class="matrix">
+        <div class="mini-card accent">
+          <strong>可以交給 AI</strong>
+          <span>· 產一批符合情境的假資料（商品名、姓名、金額、日期）<br>· 依語氣要求改寫按鈕與提示文案<br>· 空狀態、錯誤訊息的候選寫法各給三個版本<br>· 把英文介面術語翻成台灣使用者說的話</span>
+        </div>
+        <div class="mini-card warn">
+          <strong>不適合交給 AI</strong>
+          <span>· 決定畫面上放哪些功能——那是 Unit 05 的資訊架構<br>· 決定主色與字級——那是 Unit 08 的風格板<br>· 判斷違反了哪一條原則——<b>它容易產生聽起來很順、但沒有真正看過畫面的答案</b><br>· 代寫作業說明裡的設計理由</span>
+        </div>
+      </div>
+      <div class="note">講義<a class="ilink" href="article.html#s11" target="_blank" rel="noopener">第 11 節</a>整理了三段提示詞。每一段結尾都加了同一句限制：<span class="hl">「只能根據我提供的內容分析，避免自行補充不存在的資訊。」</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 20 課堂練習 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Workshop · 85 min</p>
+      <h1>課堂練習：把一個頁面做到可以交出去</h1>
+      <h2>對象是自己專題的<span class="hl">一個主要頁面</span>。起點是 Unit 09 的桌機版，重點是細化既有畫面，而不是重畫。</h2>
+      <div class="chain">
+        <div class="chain-step"><b>階段一 · 20 分</b><span>補狀態<br>盤點這頁所有可互動元件，補齊缺少的狀態，做成 Component 與 Variants。</span></div>
+        <div class="chain-step"><b>階段二 · 25 分</b><span>逐條檢查<br>用十條檢查表掃過畫面，至少寫出 5 個問題，每個都記下第幾條、哪個位置。</span></div>
+        <div class="chain-step"><b>階段三 · 25 分</b><span>改稿<br>三個最嚴重的問題完成修正，旁邊標註改了什麼、為什麼。</span></div>
+        <div class="chain-step"><b>階段四 · 15 分</b><span>兩人互檢<br>加入組外視角，因為組內的人已經看過畫面，較容易漏掉說明缺口。</span></div>
+      </div>
+      <div class="note">20 + 25 + 25 + 15 = 85 分。完整說明、檢查表與交件清單在<a class="ilink" href="exercises.html#ex1" target="_blank" rel="noopener">課堂練習頁</a>；Before / After 對照範例在<a class="ilink" href="exercises.html#warmup" target="_blank" rel="noopener">補充練習區</a>。<br><span class="warn-text">階段二只做檢查紀錄。</span>問題全部列完後，改稿放到下一階段。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 21 回家作業 -->
+  <section class="slide">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="overline">Homework · 作業 8</p>
+      <h1>回家作業：高保真 Mockup（主要頁面）</h1>
+      <h2>把課堂上做完的那一頁，加上另一個主要頁面，補到 1–2 個頁面的高保真版本。</h2>
+      <table class="cmp-table">
+        <thead><tr><th>要交什麼</th><th>做到什麼程度才算完成</th></tr></thead>
+        <tbody>
+          <tr><td>1–2 個主要頁面</td><td>間距全部落在風格板的階梯上；沒有一個元素是「大概對齊」</td></tr>
+          <tr><td>元件與狀態</td><td>按鈕、輸入框、卡片做成 Component＋Variants，狀態畫齊</td></tr>
+          <tr><td>真實內容</td><td>沒有 Lorem ipsum，每種列表至少有一筆刻意很長的資料</td></tr>
+          <tr><td>檢查紀錄</td><td>十條逐項打勾，寫出至少 5 個發現與 3 個已修正的項目</td></tr>
+          <tr><td>互檢紀錄</td><td>對方原話、決定、理由、下一步，四欄完整</td></tr>
+        </tbody>
+      </table>
+      <div class="note">配分、每一項的「通過的樣子」與「不及格的樣子」，都寫在<a class="ilink" href="exercises.html#submit" target="_blank" rel="noopener">繳交清單與配分</a>。<span class="hl">檢查紀錄跟畫面一樣重要</span>——沒有紀錄，改了什麼別人看不出來。</div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+  <!-- 22 資源 -->
+  <section class="slide dark">
+    <div class="slide-head"><span class="unit-pill">Unit 10</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <span class="bg-n">10</span>
+      <p class="overline">Resources</p>
+      <h1>本單元的來源與延伸</h1>
+      <div class="res-links">
+        <a class="res-link" href="https://www.71next.com/userDoc/10-usability-heuristics/" target="_blank" rel="noopener"><strong>71NEXT：使用者介面設計的10大易用性 ↗</strong><span>本單元十條的中文標題、原句與案例圖片的來源</span></a>
+        <a class="res-link" href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener"><strong>NN/g：10 Usability Heuristics ↗</strong><span>Jakob Nielsen 1994 年的原始版本，附官方海報下載</span></a>
+        <a class="res-link" href="article.html" target="_blank" rel="noopener"><strong>本單元講義（11 節）↗</strong><span>十條的完整說明、Mockup 精度細節與 AI 協作提示詞</span></a>
+        <a class="res-link" href="exercises.html" target="_blank" rel="noopener"><strong>課堂練習與回家作業 ↗</strong><span>四階段練習、十條檢查表、作業 8 的交件清單與配分</span></a>
+        <a class="res-link" href="../Unit_08/article.html#s11" target="_blank" rel="noopener"><strong>Unit 08：從風格板長成設計系統 ↗</strong><span>Component、Variants 與 Styles 的建法，這裡不重複講</span></a>
+        <a class="res-link" href="../Unit_09/usability-heuristics.html" target="_blank" rel="noopener"><strong>Unit 09 延伸教材：十大易用性與檢查表實務 ↗</strong><span>另一份整理，想再看一次不同講法可以對照</span></a>
+      </div>
+      <div class="note">圖片全部下載在 <span class="hl">resources/heuristics/</span>，出處與對應條目列在 <span class="hl">resources/guide.md</span>。<span class="warn-text">僅作課堂教學引用，不作為作品集素材。</span></div>
+    </div>
+    <div class="slide-foot"><span class="course-label">UI 設計精度提升：Mockup 細節</span><div class="dots"></div></div>
+  </section>
+
+</div><!-- /#deck -->
+
+<div id="ctrls">
+  <button id="prev" aria-label="上一頁">&#8592;</button>
+  <button id="next" aria-label="下一頁">&#8594;</button>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide:not(.drop)'));
+  const total = slides.length;
+  const prog = document.getElementById('prog');
+  const ctrls = document.getElementById('ctrls');
+  const dotContainers = Array.from(document.querySelectorAll('.dots'));
+  let cur = 0;
+
+  slides.forEach((slide, i) => {
+    const num = slide.querySelector('.slide-num');
+    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
+  });
+
+  dotContainers.forEach(container => {
+    slides.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'dot' + (i === 0 ? ' on' : '');
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('aria-label', '前往第 ' + (i + 1) + ' 頁');
+      dot.addEventListener('click', () => go(i));
+      container.appendChild(dot);
+    });
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    prog.style.width = ((cur + 1) / total * 100) + '%';
+    ctrls.classList.toggle('on-dark', slides[cur].classList.contains('dark'));
+    dotContainers.forEach(container => {
+      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
+    });
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') {
+      event.preventDefault();
+      go(cur + 1);
+    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+      event.preventDefault();
+      go(cur - 1);
+    } else if (event.key === 'Home') {
+      go(0);
+    } else if (event.key === 'End') {
+      go(total - 1);
+    }
+  });
+
+  prog.style.width = (1 / total * 100) + '%';
+  ctrls.classList.toggle('on-dark', slides[0].classList.contains('dark'));
+})();
+</script>
 </body>
 </html>

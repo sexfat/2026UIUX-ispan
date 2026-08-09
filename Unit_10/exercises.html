@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 10 · 課堂練習與回家作業｜UI 設計精度提升</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code: #1d1d1f;
+  --max-w: 860px;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 28px 22px 88px;
+  line-height: 1.72;
+}
+.page { max-width: var(--max-w); margin: 0 auto; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 42px;
+}
+.back-link { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+.back-link::before { content: '← '; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+.hero { padding-bottom: 34px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
+.overline {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; margin-bottom: 14px; }
+.lead { color: var(--muted); max-width: 720px; font-size: 1rem; }
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin-bottom: 22px;
+}
+.toc h2 {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.toc ol { list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; margin: 8px 0; }
+.toc a { color: var(--dark); text-decoration: none; display: flex; gap: 10px; font-size: .95rem; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--accent);
+  font-size: .75rem;
+  font-weight: 800;
+  padding-top: 3px;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 46px 0 6px;
+  padding-top: 26px;
+  border-top: 2px solid var(--border);
+}
+.band-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+.band-tag.home { background: var(--accent2); }
+.band h2 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); }
+.band-note { color: var(--muted); font-size: .9rem; margin: 6px 0 4px; }
+
+.exercise {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+.exercise.home { border-color: rgba(15,118,110,.28); }
+.exercise-head { padding: 18px 22px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.exercise.home .exercise-head { background: rgba(15,118,110,.05); border-bottom-color: rgba(15,118,110,.2); }
+.exercise-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.exercise.home .exercise-tag { color: var(--accent2); }
+h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); line-height: 1.25; }
+.exercise-body { padding: 20px 22px 24px; }
+h3 { font-size: 1.02rem; margin: 20px 0 8px; }
+p { color: #2c2c2e; margin-bottom: 12px; }
+ul, ol { padding-left: 1.1rem; margin: 8px 0 16px; }
+li { margin-bottom: 8px; color: #2c2c2e; }
+strong { color: var(--dark); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+.good { color: var(--accent2); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.16);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.exercise.home .chip { color: var(--accent2); background: rgba(15,118,110,.07); border-color: rgba(15,118,110,.18); }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 660px; border-collapse: collapse; font-size: .92rem; }
+th {
+  text-align: left;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: #2c2c2e; vertical-align: top; }
+td:first-child { color: var(--muted); font-weight: 800; white-space: nowrap; }
+
+.dia {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.85;
+  white-space: pre;
+  overflow-x: auto;
+  color: #2c2c2e;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.prompt {
+  background: var(--code);
+  color: #f5f5f7;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 14px 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.7;
+}
+.callout {
+  background: rgba(0,102,204,.05);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  color: #2c2c2e;
+}
+.callout.green { background: rgba(15,118,110,.06); border-left-color: var(--accent2); }
+.callout.warn { background: rgba(194,65,12,.06); border-left-color: var(--accent3); }
+.callout a { color: var(--accent); font-weight: 700; }
+
+.check { list-style: none; padding-left: 0; }
+.check li { position: relative; padding-left: 28px; }
+.check li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .45em;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+}
+
+.foot-nav { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.foot-nav a {
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media print {
+  body { background: #fff; padding: 0; }
+  .topbar, .toc, .foot-nav { display: none; }
+  .exercise { break-inside: avoid; }
+}
+@media (max-width: 700px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .band { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <a class="back-link" href="article.html">回到 Unit 10 講義</a>
+    <span class="unit-pill">Unit 10</span>
+  </div>
+
+  <div class="hero">
+    <p class="overline">Practice &amp; Homework</p>
+    <h1>把一個頁面做到可以交出去</h1>
+    <p class="lead">課堂練習用 85 分鐘，以自己專題的一個主要頁面為對象：補齊缺少的狀態、用十大易用性原則逐條檢查、修正最嚴重的三個問題，最後加入組外視角的互檢紀錄。回家作業延伸成 1–2 個主要頁面的高保真版本，也就是作業 8。</p>
+  </div>
+
+  <div class="toc">
+    <h2>本頁內容</h2>
+    <ol>
+      <li><a href="#warmup">補充練習 · Before / After 範例（課外自習）</a></li>
+      <li><a href="#ex1">Exercise 01 · 補狀態（20 分）</a></li>
+      <li><a href="#ex2">Exercise 02 · 十條逐條檢查（25 分）</a></li>
+      <li><a href="#ex3">Exercise 03 · 改稿並標註（25 分）</a></li>
+      <li><a href="#ex4">Exercise 04 · 兩人互相檢查（15 分）</a></li>
+      <li><a href="#hw">回家作業 · 作業 8</a></li>
+      <li><a href="#submit">繳交清單與評分配分</a></li>
+    </ol>
+  </div>
+
+  <div class="callout">
+    <strong>開始前的材料：</strong>Unit 08 的風格板（色票、字級、間距基準單位、圓角）、Unit 09 的多斷點版面、Unit 07 的空狀態／錯誤狀態／載入狀態畫面、Unit 03 的 Persona 一句話。這四樣會貫穿每個階段。<br><br><strong>頁面選擇：</strong>以專題裡<strong>互動最多</strong>的一頁為主——通常是表單頁、結帳頁或搜尋結果頁。純展示的關於我們頁狀態較少，不適合這次四階段練習。<br><br><strong>改稿起點：</strong>從 Unit 09 的桌機版延伸，不重新畫一張新頁面。這次工作的重點是把既有畫面做細；旁邊保留一份改前版本，方便後續對照。<br><br><strong>表格使用方式：</strong>下面每個階段的表格都可複製到 Google 試算表或 Figma 裡填寫，現場時間主要留給改畫面。
+  </div>
+
+  <div class="exercise" id="warmup">
+    <div class="exercise-head">
+      <p class="exercise-tag">Supplement</p>
+      <h2>Before / After 範例：一張故意有問題的稿</h2>
+      <div class="meta"><span class="chip">8–12 分鐘</span><span class="chip">課前或課後自習</span><span class="chip">範例觀察</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+      <div class="callout warn"><strong>這一節不佔用課堂的 85 分鐘。</strong>當天的時間是 Part 1 講述 25 分＋Part 2 講述 40 分＋休息 15 分＋課堂練習 85 分＋成果分享 15 分＝180 分，已經排滿。這份 Before / After 範例適合<strong>課前先看過</strong>（進教室就知道要找什麼），或<strong>課後對照</strong>自己的改稿結果。</div>
+
+      <p>這份 Figma 補充檔用同一張商品列表頁對照 Before / After。Before 保留幾個常見問題：間距不在階梯上、狀態缺漏、內容太剛好、錯誤訊息不可執行。After 則呈現修到可交付版本時，畫面上應該多出哪些證據。</p>
+
+      <div class="callout green"><strong>Figma 補充練習檔：</strong><a href="https://www.figma.com/design/IBEAN5cWo0U4IZLBOjOqlM" target="_blank" rel="noopener">Unit 10 補充練習：Mockup 精度與易用性檢查</a><br>檔案內有 `01 Before：找問題`、`02 After：改稿參考`、`03 Components：狀態最低集合`、`04 Checklist：檢查紀錄模板`。</div>
+
+      <h3>觀察順序</h3>
+      <ol>
+        <li>`01 Before：找問題`：畫面觀察與問題定位，畫面維持不修改。</li>
+        <li>問題紀錄：每一則問題都包含「位置」與「為什麼」。</li>
+        <li>`02 After：改稿參考`：對照間距、狀態、真實內容與錯誤訊息的修正結果。</li>
+        <li>`03 Components：狀態最低集合`：Button / Input 以狀態集合管理，而不是複製貼上多個獨立元件。</li>
+        <li>`04 Checklist：檢查紀錄模板`：紀錄寫到能直接轉成改稿。</li>
+      </ol>
+
+      <h3>這份範例涵蓋的問題</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>類型</th><th>Before 的問題</th><th>After 的修正方向</th></tr></thead>
+          <tbody>
+            <tr><td>間距</td><td>卡片內距 17、列表間距 13，數字不在 8pt 階梯上</td><td>16、24、32 間距與 3 組實測值標註</td></tr>
+            <tr><td>狀態</td><td>主要按鈕只有一般樣子，輸入框缺 focus / error</td><td>Button 5 states、Input 4 states 與元件狀態集合</td></tr>
+            <tr><td>真實內容</td><td>商品名稱與價格太剛好，看不出長資料會不會爆版</td><td>長商品名與 `$128,000` 這類極端值測試版面</td></tr>
+            <tr><td>易用性</td><td>錯誤訊息只寫「發生錯誤 E-402」，篩選後也看不出目前條件</td><td>「哪裡錯 + 怎麼改」的錯誤訊息，以及列表上方的目前篩選條件</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><strong>補充說明文件：</strong><a href="resources/supplement-examples.md">resources/supplement-examples.md</a> 整理了本單元可補強的 6 類範例。</div>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="band-tag">課堂練習 · 85 分鐘</span>
+    <h2>從「看起來完成」到「真的可以交」</h2>
+  </div>
+  <p class="band-note">四個階段連續進行。這個階段可以上色，顏色以專題風格板為準，不臨時新增一套色彩。</p>
+
+  <div class="exercise" id="ex1">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 01</p>
+      <h2>補狀態：把每個能點的東西都畫完</h2>
+      <div class="meta"><span class="chip">20 分鐘</span><span class="chip">個人</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+      <p>這一階段以盤點開始，再進入改稿。頁面上所有<strong>可以點、可以輸入、會變化</strong>的元件都列入清單，20 分鐘的優先順序才會清楚。</p>
+
+      <h3>流程</h3>
+      <ol>
+        <li>畫面旁邊保留一塊空白區，表格一列一個元件，橫向是狀態。</li>
+        <li>已經畫好的打勾，沒畫的留白。留白就是後續工作清單。</li>
+        <li>優先項目是<strong>最常被使用的元件</strong>——通常是主要按鈕跟輸入框，不是頁尾的次要連結。</li>
+        <li>主要按鈕與輸入框至少整理成 <strong>Component</strong>，用 <strong>Variants</strong> 管理狀態。其他元件來不及做成元件時，保留狀態樣式即可。</li>
+      </ol>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>元件</th><th>一般</th><th>hover</th><th>按下／focus</th><th>停用</th><th>錯誤／空／載入</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>範例：主要按鈕「送出」</td><td>✓ 已畫</td><td>缺</td><td>缺</td><td>缺</td><td>缺（處理中）</td></tr>
+            <tr><td>範例：Email 輸入框</td><td>✓ 已畫</td><td>—</td><td>缺</td><td>缺</td><td>缺（錯誤）</td></tr>
+            <tr><td>範例：商品卡片列表</td><td>✓ 已畫</td><td>缺</td><td>—</td><td>—</td><td>缺（空狀態）</td></tr>
+            <tr><td>元件 1</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>元件 2</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>元件 3</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td>元件 4</td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>什麼時候可以填「—」</h3>
+      <p>「—」的意思是<strong>這個狀態在這個元件上不存在</strong>，不是「不想畫」。例如純展示的文字不會有 hover，不會被停用的按鈕不需要停用狀態。<span class="bad">如果一整張表超過一半都是「—」，通常代表盤點不夠完整</span>，需要重新檢查每個可互動元件。</p>
+
+      <div class="callout warn"><span class="bad">三個最常被漏掉的狀態：</span>① 表單沒填完時<strong>按鈕的停用樣子</strong>；② 用鍵盤 Tab 時<strong>輸入框的 focus 樣子</strong>；③ 列表<strong>沒有資料時的空狀態</strong>（Unit 07 畫過，這裡把它上色）。</div>
+
+      <h3>20 分鐘做不完的話，照這個順序</h3>
+      <p>互動多的頁面，20 分鐘不可能每個元件都做成元件庫。<strong>課堂上的最低完成度是這樣：</strong></p>
+      <ol>
+        <li><strong>最低完成度：</strong>主要按鈕與主要輸入框，做成 Component＋Variants，狀態畫齊。</li>
+        <li><strong>其次：</strong>其他元件只要把盤點表填完，再挑<strong>1 個風險最高的狀態</strong>畫出來就好（風險最高＝使用者卡住會做錯事的那個，通常是錯誤或空狀態）。</li>
+        <li><strong>回家作業延伸：</strong>盤點表上留白的格子就是待辦清單，不需要在現場全部完成。</li>
+      </ol>
+
+      <div class="callout"><strong>交件：</strong>一張填滿的盤點表；主要按鈕與主要輸入框做成 Component＋Variants，點開能看到所有狀態；其他元件至少各補 1 個高風險狀態。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 02</p>
+      <h2>十條逐條檢查，問題列完再改稿</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">個人</span><span class="chip">十大易用性原則</span></div>
+    </div>
+    <div class="exercise-body">
+      <div class="callout warn"><strong>這個階段只做檢查紀錄。</strong>邊找邊改會讓 25 分鐘全部耗在第一個問題上，剩下九條容易被跳過。<span class="bad">問題全部列完後，改稿放到下一階段。</span></div>
+
+      <h3>流程</h3>
+      <ol>
+        <li>下面十條照順序逐項檢查，<strong>一條配畫面看一次</strong>。</li>
+        <li>每個問題旁邊放一張便利貼，內容包含：<strong>違反第幾條</strong>、<strong>在哪個位置</strong>、<strong>為什麼是問題</strong>。</li>
+        <li>最低數量是 <strong>5 個</strong>。少於 5 個通常代表檢查不夠細，尤其是第 1、5、9 這三條。</li>
+      </ol>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>對著畫面問這個問題</th><th>找到問題就寫在哪</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td>送出、載入、目前位置，畫面上看得出來嗎？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>02</td><td>有沒有把系統術語直接寫在畫面上？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>03</td><td>每一頁都找得到返回或取消嗎？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>04</td><td>同一種元件在每一頁長得一樣嗎？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>05</td><td>刪除、送出這類動作是否有二次確認或復原機制？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>06</td><td>有沒有要使用者記住上一頁的東西？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>07</td><td>熟手有沒有捷徑可以抄？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>08</td><td>畫面上每個元素都有工作嗎？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>09</td><td>錯誤訊息講得出哪裡錯、怎麼改嗎？</td><td>位置：＿＿＿＿＿</td></tr>
+            <tr><td>10</td><td>複雜的地方有沒有就地說明？</td><td>位置：＿＿＿＿＿</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>寫法：可改稿的紀錄長相</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>寫法</th></tr></thead>
+          <tbody>
+            <tr><td class="bad">✗ 不足</td><td>「第 9 條有問題」「錯誤訊息不太好」「這裡怪怪的」</td></tr>
+            <tr><td class="good">✓ 可改稿</td><td>「違反第 9 條：結帳頁信用卡欄位驗證失敗時只顯示紅框，沒有文字說明是卡號錯還是有效期限錯，使用者不知道要改哪一格」</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout"><strong>交件：</strong>至少 5 張便利貼（或一份清單），每一則都寫齊「第幾條＋位置＋為什麼是問題」。十條全部看過的打勾，沒問題的條目也要標「已檢查、無發現」。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 03</p>
+      <h2>改稿：挑三個最嚴重的動手</h2>
+      <div class="meta"><span class="chip">25 分鐘</span><span class="chip">個人</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+      <p>上一階段列出的問題不會全部改得完，也不需要。這 25 分鐘只做三個。</p>
+
+      <h3>三個優先項目的判斷方式</h3>
+      <ol>
+        <li><strong>會讓使用者做錯事或做不下去的，最優先。</strong>刪除沒有確認、錯誤訊息看不懂、送出後沒有任何回饋，通常排在最前面。</li>
+        <li><strong>改一次能修好很多地方的，優先。</strong>按鈕如果是 Component，改一次全站都好；問題如果只出現在一個角落，順位往後。</li>
+        <li><strong>純美觀的往後排。</strong>「這裡間距有點擠」不會讓人做錯事，留到回家作業。</li>
+      </ol>
+
+      <h3>改完標註</h3>
+      <p>每個改過的地方旁邊都需要一張三欄標註。<strong>沒有標註的改動等於沒改</strong>——別人看不出動了什麼、為什麼動。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>改了什麼</th><th>為什麼（違反第幾條）</th><th>改完之後使用者會怎樣</th></tr></thead>
+          <tbody>
+            <tr><td>範例：刪除按鈕加上二次確認 Modal</td><td>第 5 條，高成本動作沒有攔截，手滑就刪掉且無法復原</td><td>手滑按到還有一次機會取消</td></tr>
+            <tr><td>範例：付款失敗訊息改寫</td><td>第 9 條，原本只寫「交易失敗（E-402）」，看不出要改什麼</td><td>使用者知道是卡號輸入錯誤，可以直接改那一格</td></tr>
+            <tr><td>改動 1</td><td></td><td></td></tr>
+            <tr><td>改動 2</td><td></td><td></td></tr>
+            <tr><td>改動 3</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><span class="bad">改稿時最容易犯的兩件事：</span>① <strong>順手把整個版面重排</strong>——那不是改問題，是製造新問題，而且時間一定不夠；② <strong>改完忘了同步 Component</strong>——如果改的是實例（Instance）而不是主元件，其他頁面不會跟著變。</div>
+
+      <div class="callout"><strong>交件：</strong>3 個改完的地方，每個旁邊都有三欄標註。改動前版本保留在旁邊，用於互檢與交作業對照。</div>
+    </div>
+  </div>
+
+  <div class="exercise" id="ex4">
+    <div class="exercise-head">
+      <p class="exercise-tag">Exercise 04</p>
+      <h2>兩人互相檢查</h2>
+      <div class="meta"><span class="chip">15 分鐘</span><span class="chip">2 人一組</span><span class="chip">組外視角</span></div>
+    </div>
+    <div class="exercise-body">
+      <div class="callout warn"><strong>配對規則：組外互檢。</strong>組內的人已經一起討論過這個流程，他們腦袋裡有畫面上沒有的資訊，所以看不出哪裡缺說明。組外視角更容易問出真正卡住的地方。</div>
+
+      <h3>時間切法</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>時間</th><th>做什麼</th></tr></thead>
+          <tbody>
+            <tr><td>0–6 分</td><td>A 的畫面：A 講三句開場，B 邊看邊問，A <strong>只記錄不解釋</strong></td></tr>
+            <tr><td>6–12 分</td><td>換 B 的畫面，同樣做法</td></tr>
+            <tr><td>12–15 分</td><td>各自整理修正清單，把剛剛收到的問題寫成四欄</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>提案的人：開場三句</h3>
+      <ol>
+        <li>「這個產品是給＿＿＿（Persona 一句話）用的。」</li>
+        <li>「這一頁是他要完成＿＿＿這件事的地方。」</li>
+        <li>「我剛剛改了這三個地方。」</li>
+      </ol>
+      <p><strong>開場後進入觀察。</strong>對方開始看的時候，畫面本身要承擔說明責任；真實產品裡不會有人站在使用者旁邊講解。</p>
+
+      <h3>提問方向：以目標為準</h3>
+      <ul>
+        <li>如果我按下這顆按鈕，我怎麼知道成功了？</li>
+        <li>這個欄位要填什麼格式？我從畫面上看得出來嗎？</li>
+        <li>我按錯了想反悔，要點哪裡？</li>
+        <li>這句話（指某個文案）是什麼意思？</li>
+        <li>如果這個列表一筆資料都沒有，我會看到什麼？</li>
+        <li>這裡如果出錯，錯誤訊息會告訴我怎麼辦嗎？</li>
+      </ul>
+
+      <h3>提問方向：目標優先，品味其次</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>說法</th></tr></thead>
+          <tbody>
+            <tr><td class="bad">✗ 對著品味</td><td>「我覺得這個藍色不好看」「按鈕太大了吧」</td></tr>
+            <tr><td class="good">✓ 對著目標</td><td>「這頁的主要動作是結帳，但第一眼看到的是右邊的優惠 banner，這樣符合原本目標嗎？」</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>最後 3 分鐘：整理修正清單</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>對方原話</th><th>我的決定</th><th>理由</th><th>下一步</th></tr></thead>
+          <tbody>
+            <tr><td>「按了送出好像沒反應」</td><td>採用</td><td>第 1 條，處理中狀態沒畫</td><td>回家補按鈕的 loading 樣子</td></tr>
+            <tr><td>「這個綠色我不喜歡」</td><td>不採用</td><td>主色是風格板依產品定位決定的，個人偏好不構成理由</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><span class="bad">互檢時最容易破壞紀錄的兩件事：</span>① 聽到一半就開始拉元件改圖，導致回饋沒有收完；② 一直說「這個我本來想做但沒時間」，但沒有寫進清單第四欄。</div>
+
+      <div class="callout"><strong>交件：</strong>現場至少寫完 <strong>3 則</strong>，四欄都填滿；回家補齊到 <strong>4 則</strong>（作業配分看的是 4 則）。<strong>不採用的項目也需要紀錄</strong>，理由接得回研究、設計目標或風格板，不能只寫「我覺得不用」。<br>3 分鐘寫不完是正常的，現場保留<strong>對方原話</strong>最重要，其他三欄可回家補。原話不完整，回家就很難還原對方卡在哪。</div>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="band-tag home">回家作業 · 作業 8</span>
+    <h2>補到可以交的高保真版本</h2>
+  </div>
+  <p class="band-note">課堂上做完一頁，回家補到 1–2 個主要頁面。</p>
+
+  <div class="exercise home" id="hw">
+    <div class="exercise-head">
+      <p class="exercise-tag">Homework</p>
+      <h2>高保真 Mockup（主要頁面）</h2>
+      <div class="meta"><span class="chip">約 3 小時</span><span class="chip">個人</span><span class="chip">Figma</span></div>
+    </div>
+    <div class="exercise-body">
+      <h3>完成範圍</h3>
+      <ol>
+        <li><strong>課堂頁面收尾。</strong>互檢清單裡標「採用」的項目完成修正；課堂上沒時間改的次要問題在這裡處理。</li>
+        <li><strong>第二個主要頁面。</strong>流程上的下一頁（例如結帳頁之後的付款成功頁）套用同一組 Component 與樣式。</li>
+        <li><strong>真實內容替換。</strong>所有 Lorem ipsum 與「商品名稱」這類佔位字都被真實內容取代。每一種列表至少有一筆刻意很長的資料，用來檢查版面承載能力；爆版時回到元件層修正。</li>
+        <li><strong>間距量測與 3 組標註。</strong>Figma Option 量測後，數字都落在風格板的階梯上；畫面旁邊有 <strong>3 組實測值</strong>：版心左右邊界、卡片內距、列表項目之間各 1 組。</li>
+      </ol>
+
+      <h3>交件前檢查</h3>
+      <ul>
+        <li>沒看過畫面的人是否還會問「這個按鈕按下去會怎樣」？如果會，狀態還沒畫完。</li>
+        <li>主要按鈕與輸入框點開，是 Component 嗎？改一次主色，兩個頁面會不會一起變？</li>
+        <li>畫面上還找得到 Lorem ipsum 或「王小明」嗎？</li>
+        <li>十條檢查表全部標記過了嗎？「已檢查、無發現」也算，空著不算。</li>
+        <li>每個改動旁邊都有標註寫「改了什麼、違反第幾條」嗎？</li>
+      </ul>
+
+      <h3>AI 使用界線</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>項目</th><th>為什麼</th></tr></thead>
+          <tbody>
+            <tr><td class="good">✓ 可以</td><td>產生真實感的假資料（商品名、姓名、金額、日期）</td><td>這是耗時的雜務，不涉及設計判斷</td></tr>
+            <tr><td class="good">✓ 可以</td><td>改寫按鈕文案、提示文字、錯誤訊息</td><td>提供語氣定位與原始文案後，AI 只做改寫</td></tr>
+            <tr><td class="good">✓ 可以</td><td>列出某個元件還缺哪些狀態</td><td>提供已畫清單後，AI 用來比對缺漏</td></tr>
+            <tr><td class="bad">✗ 不適合</td><td>用截圖產生十大易用性檢查</td><td>它會給出「這類介面通常有的問題」，不是畫面上真正的問題。<strong>檢查的價值在逐條看畫面的那 25 分鐘</strong></td></tr>
+            <tr><td class="bad">✗ 不適合</td><td>決定畫面上要放哪些功能</td><td>那是 Unit 05 的資訊架構，已經有依據了</td></tr>
+            <tr><td class="bad">✗ 不適合</td><td>挑主色與字級</td><td>那是 Unit 08 的風格板，要接得回產品定位</td></tr>
+            <tr><td class="bad">✗ 不適合</td><td>代寫設計說明的理由</td><td>這正好是評分要看的東西</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout green"><strong>交件方式：</strong>一份 Figma 連結，Mockup 頁面、元件庫、十條檢查紀錄、互檢修正清單放在同一個檔案的不同區塊，權限設為可檢視。下次上課抽點分享。</div>
+    </div>
+  </div>
+
+  <div class="band">
+    <span class="band-tag home">繳交清單與配分</span>
+    <h2>對應階段作業 8</h2>
+  </div>
+
+  <div class="exercise home" id="submit">
+    <div class="exercise-head">
+      <p class="exercise-tag">Submission</p>
+      <h2>高保真 Mockup（主要頁面）</h2>
+      <div class="meta"><span class="chip">Figma 連結 1 份</span><span class="chip">下次上課抽點分享</span></div>
+    </div>
+    <div class="exercise-body">
+      <h3>交件內容</h3>
+      <ul>
+        <li>1–2 個主要頁面的高保真 Mockup</li>
+        <li>間距標註 3 組：版心左右邊界、卡片內距、列表項目之間</li>
+        <li>元件庫：主要按鈕、輸入框（至少這兩個做成 Component＋Variants）</li>
+        <li>十條檢查紀錄：逐條標記，至少 5 個發現</li>
+        <li>改動標註：至少 3 處，每處寫「改了什麼、違反第幾條、使用者會怎樣」</li>
+        <li>互檢修正清單：至少 4 則，四欄填滿</li>
+      </ul>
+
+      <h3>配分</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>項目</th><th>配分</th><th>通過的樣子</th><th>不及格的樣子</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>間距與對齊</td><td>20</td>
+              <td>交件上<strong>標出 3 組實測間距</strong>（版心左右邊界、卡片內距、列表項目之間各 1 組），數字都落在風格板階梯上；同類元素邊緣對齊</td>
+              <td>沒有任何間距標註；或標了但出現 13、17、22 這種不在階梯上的數字；同一排卡片的邊距各不相同</td>
+            </tr>
+            <tr>
+              <td>狀態完整度</td><td>25</td>
+              <td><strong>主要按鈕</strong>（一般／hover／按下／停用／處理中）與<strong>主要輸入框</strong>（一般／focus／已填／錯誤）這兩個最低集合完整，且做成 Component＋Variants；其他元件至少各補 1 個高風險狀態</td>
+              <td>每個元件只有一種樣子；或狀態用複製貼上做，改一個要改十個；或最低集合缺了停用與 focus</td>
+            </tr>
+            <tr>
+              <td>真實內容</td><td>15</td>
+              <td>沒有佔位假字；每種列表有一筆極端長度的資料，而且版面撐得住</td>
+              <td>還留著 Lorem ipsum 或「商品名稱」；所有資料長度剛好一樣</td>
+            </tr>
+            <tr>
+              <td>十條檢查紀錄</td><td>20</td>
+              <td>十條都標記過；至少 5 個發現都寫齊「第幾條＋位置＋為什麼」</td>
+              <td>只寫「第 9 條有問題」這種沒有位置的紀錄；或只挑好寫的三條交差</td>
+            </tr>
+            <tr>
+              <td>改動標註</td><td>10</td>
+              <td>至少 3 處，接得回原則；看得出改前改後的差別</td>
+              <td>改了但沒標註；或標註只寫「調整了一下比較好看」</td>
+            </tr>
+            <tr>
+              <td>互檢修正清單</td><td>10</td>
+              <td>四欄填滿；不採用的項目理由接得回研究或風格板</td>
+              <td>全部照改，或全部不改；理由只寫「我覺得不用」</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn"><strong>特別說明：</strong>檢查紀錄裡寫「已檢查、無發現」不會扣分，<span class="bad">十條裡有幾條完全空著才會</span>。這一項看的是是否真的逐條檢查過；只挑三條好寫的交差，跟沒做是一樣的。</div>
+
+      <div class="callout"><strong>還有時間的話：</strong>把兩個頁面的手機版也補上（Unit 09 的斷點策略）。這一項不計分，但作品集裡有手機版跟只有桌機版，完成度差很多。</div>
+    </div>
+  </div>
+
+  <div class="foot-nav">
+    <a href="slides.html">回到 Unit 10 簡報</a>
+    <a href="article.html">Unit 10 講義</a>
+    <a href="article.html#s9">講義：十條檢查表</a>
+    <a href="article.html#s11">講義：AI 協作提示詞</a>
+    <a href="https://www.71next.com/userDoc/10-usability-heuristics/" target="_blank" rel="noopener">71NEXT：10 大易用性</a>
+    <a href="../index.html">回到課程總覽</a>
+  </div>
+</div>
+</body>
+</html>
