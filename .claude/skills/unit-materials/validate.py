@@ -112,13 +112,20 @@ def check_file(unit_dir, name, problems, notes):
 def check_slides(src, problems, notes):
     if src is None:
         return
-    slides = len(re.findall(r'<(?:section|div) class="slide[\s"]', src))
-    notes.append(f'slides.html：投影片 {slides} 張')
+    classes = re.findall(r'<(?:section|div) class="(slide(?:\s[^"]*)?)"', src)
+    total = len(classes)
+    # 標了 drop 的是備用頁，CSS 隱藏、翻頁 JS 也跳過，不算進會播的張數
+    dropped = sum(1 for c in classes if 'drop' in c.split())
+    slides = total - dropped
+    if dropped:
+        notes.append(f'slides.html：投影片 {slides} 張（另有 {dropped} 張標了 drop 的備用頁，不列入計數）')
+    else:
+        notes.append(f'slides.html：投影片 {slides} 張')
     declared = re.findall(r'([0-9]{1,3})\s*張投影片', src)
     for d in set(declared):
         if int(d) != slides:
             problems.append(
-                f'slides.html：封面寫「{d} 張投影片」，實際 {slides} 張')
+                f'slides.html：封面寫「{d} 張投影片」，實際會播 {slides} 張')
     if re.search(r'class="slide-num">\s*\d', src):
         notes.append('slides.html：slide-num 是寫死的（舊版寫法）。新做的簡報請留空，改由 JS 自動編號')
     for tag in re.findall(r'<a\b[^>]*href="https?://[^"]*"[^>]*>', src):
