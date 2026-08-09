@@ -13,13 +13,13 @@
 
 在多裝置普及的今天，一套設計稿需要能夠在手機、平板與桌機上都呈現良好的使用體驗。本單元將深入介紹響應式網頁設計（Responsive Web Design，RWD）的完整概念與實作規劃思路。
 
-課程首先從五種 RWD 版面設計模式切入——Mostly Fluid（局部流動）、Column Drop（欄位下移）、Layout Shifter（區塊轉換）、Tiny Tweaks（細微調整）、Off Canvas（超出畫布）——帶領學員理解不同版面如何在不同 viewport 下流暢轉換。
+課程首先從五種 RWD 版面設計模式切入——Mostly Fluid（局部流動）、Column Drop（欄位下移）、Layout Shifter（區塊轉換）、Tiny Tweaks（細微調整）、Off Canvas（超出畫布）——理解不同版面如何在不同 viewport 下流暢轉換。
 
 接著課程將進入「斷點設置規劃」，說明如何依據裝置使用者分佈決定斷點策略，並比較 Desktop First（桌機優先）與 Mobile First（行動優先）兩種開發思路對應的 Media Query 寫法（max-width vs. min-width）。
 
 同時，本單元也涵蓋響應式設計中常被忽略的細節，包括：響應式表格的四種處理方式（隱藏欄位、水平 scroll、CSS/DIV 排版、破壞 Table 排版）、響應式圖片的裁切與縮放策略、相對單位（%）與靜態單位（px）的使用時機、max-width / min-width 的版面控制，以及為何應優先使用 Web 字體與 SVG 向量圖。
 
-課程結束後，學員將能從設計師的視角理解響應式設計的全貌，並在 Figma 中完成具備多裝置版本的設計稿規劃。
+課程結束後，能從設計師的視角理解響應式設計的全貌，並在 Figma 中完成具備多裝置版本的設計稿規劃。
 
 ---
 
@@ -81,6 +81,10 @@
 - 響應式設計展示：https://responsive-jp.com/
 - Media Query 工具：https://mediaqueri.es/
 - 響應式版型參考：https://html5up.net/
+
+## 課堂練習
+
+- Figma 練習檔：[響應式網站](https://www.figma.com/design/ALhYV4EgmwskENfL8I1Akp/響應式網站?node-id=0-1&p=f&t=BCvfoGZgVRkRDnc4-0) — 對應簡報第 14 張「在 Figma 設計多裝置版本」的 Frame、Constraints、Auto Layout 三步驟練習。
 
 ## 對應資展日期與時段
 

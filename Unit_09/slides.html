@@ -6,29 +6,28 @@
 <title>Unit 09 · 響應式網頁設計（RWD）</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #fbfbfd;
-  --dark: #1d1d1f;
-  --muted: #6e6e73;
-  --accent: #0066cc;
-  --accent2: #0f766e;
-  --accent3: #c2410c;
-  --positive: #0f766e;
-  --negative: #c2410c;
+  --bg:      #fbfbfd;
+  --dark:    #1d1d1f;
+  --muted:   #86868b;
+  --accent:  #0066cc;
+  --accent2: #1a7fe0;
+  --accent3: #5aa8ea;
   --surface: #f5f5f7;
-  --card: #ffffff;
-  --border: #d2d2d7;
-  --px: clamp(44px, 7vw, 108px);
+  --card:    #e8e8ed;
+  --border:  #d2d2d7;
+  --px: clamp(48px, 7vw, 112px);
   --py: 52px;
 }
 
 html, body { height: 100%; overflow: hidden; }
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   background: var(--bg);
   color: var(--dark);
   -webkit-font-smoothing: antialiased;
@@ -36,15 +35,16 @@ body {
 
 #prog {
   position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
+  top: 0; left: 0;
+  height: 3px;
   background: var(--accent);
-  transition: width .45s cubic-bezier(.4,0,.2,1);
+  transition: width 0.55s cubic-bezier(.4,0,.2,1);
   z-index: 200;
+  border-radius: 0 2px 2px 0;
 }
 
 #deck { position: relative; width: 100%; height: 100vh; }
+
 .slide {
   position: absolute;
   inset: 0;
@@ -53,87 +53,120 @@ body {
   padding: var(--py) var(--px);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(18px);
-  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+  transform: translateY(20px);
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s .5s;
   overflow: hidden;
 }
+
 .slide.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1), visibility 0s 0s;
+  transition: opacity .5s cubic-bezier(.4,0,.2,1),
+              transform .5s cubic-bezier(.4,0,.2,1),
+              visibility 0s 0s;
 }
 
-.slide-head, .slide-foot {
+.slide-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
   height: 28px;
-  position: relative;
-  z-index: 1;
 }
+
 .slide-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
-  z-index: 1;
+}
+
+.slide-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
 }
 
 .unit-pill {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: .09em;
   text-transform: uppercase;
   color: var(--accent);
-  background: rgba(0,102,204,.09);
+  background: rgba(0,102,204,.1);
   padding: 4px 11px;
-  border-radius: 8px;
+  border-radius: 20px;
 }
-.slide-num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.course-label { font-size: 11px; color: #a1a1a6; }
 
-.dots { display: flex; gap: 5px; align-items: center; }
+.slide-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--border);
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.course-label {
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: .02em;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
 .dot {
-  width: 5px;
-  height: 5px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--border);
+  transition: all .3s cubic-bezier(.4,0,.2,1);
   cursor: pointer;
-  transition: all .25s ease;
 }
-.dot.on { width: 16px; border-radius: 3px; background: var(--accent); }
+.dot.on {
+  background: var(--accent);
+  width: 16px;
+  border-radius: 2.5px;
+}
 
 .overline {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 18px;
 }
+
 .divider {
-  width: 42px;
-  height: 3px;
+  width: 40px; height: 3px;
   background: var(--accent);
   border-radius: 2px;
-  margin: 8px 0 26px;
+  margin-bottom: 26px;
+  margin-top: 4px;
 }
+
 h1 {
-  font-size: clamp(1.9rem, 3.8vw, 3.55rem);
-  font-weight: 800;
-  line-height: 1.12;
+  font-size: clamp(1.9rem, 3.8vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.1;
   color: var(--dark);
 }
+
 h2 {
-  font-size: clamp(.95rem, 1.45vw, 1.25rem);
+  font-size: clamp(.9rem, 1.5vw, 1.3rem);
   font-weight: 400;
   color: var(--muted);
   line-height: 1.65;
+  letter-spacing: -.01em;
   margin-top: 14px;
-  max-width: 900px;
 }
 
 .cover-eyebrow {
@@ -141,291 +174,466 @@ h2 {
   align-items: center;
   gap: 10px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--muted);
   margin-bottom: 28px;
 }
 .cover-eyebrow::before {
   content: '';
   display: block;
-  width: 28px;
-  height: 1px;
+  width: 28px; height: 1px;
   background: var(--muted);
+  flex-shrink: 0;
 }
+
 .cover-title {
-  font-size: clamp(2.35rem, 5.2vw, 5rem);
+  font-size: clamp(2.4rem, 5.2vw, 5rem);
   font-weight: 800;
-  line-height: 1.05;
+  letter-spacing: -.055em;
+  line-height: 1.04;
+  color: var(--dark);
   margin-bottom: 22px;
 }
+
 .cover-sub {
-  font-size: clamp(.95rem, 1.55vw, 1.25rem);
+  font-size: clamp(.9rem, 1.5vw, 1.25rem);
+  font-weight: 400;
   color: var(--muted);
   line-height: 1.6;
-  margin-bottom: 44px;
+  letter-spacing: -.01em;
+  margin-bottom: 48px;
 }
+
 .cover-meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 14px;
   font-size: 12px;
   color: var(--muted);
 }
-.meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
-
-.agenda-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 38px;
-}
-.agenda-card, .mini-card {
-  background: var(--surface);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.a-step {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.a-time, .mini-card strong {
-  font-size: clamp(.9rem, 1.25vw, 1.08rem);
-  font-weight: 700;
-  color: var(--dark);
-  line-height: 1.35;
-}
-.a-desc, .mini-card span {
-  font-size: clamp(.78rem, 1.05vw, .94rem);
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.blist {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 28px;
-}
-.blist li {
-  font-size: clamp(.88rem, 1.25vw, 1.08rem);
-  color: var(--dark);
-  line-height: 1.58;
-  display: flex;
-  align-items: flex-start;
-  gap: 13px;
-  padding: 12px 16px;
-  background: var(--surface);
-  border-radius: 8px;
-}
-.blist li::before {
-  content: attr(data-n);
-  min-width: 30px;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--accent);
-  background: rgba(0,102,204,.1);
-  padding: 2px 7px;
-  border-radius: 5px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.blist.plain li::before {
-  content: '';
-  min-width: 0;
-  width: 6px;
-  height: 6px;
+.meta-dot {
+  width: 3px; height: 3px;
   border-radius: 50%;
-  background: var(--accent);
-  padding: 0;
-  margin-top: .6em;
+  background: var(--border);
 }
-.blist.compact { gap: 8px; margin-top: 18px; }
-.blist.compact li { padding: 9px 13px; font-size: clamp(.78rem, 1.02vw, .94rem); }
-.hl { color: var(--accent); font-weight: 700; }
-.hl2 { color: var(--accent2); font-weight: 700; }
-.warn-text { color: var(--accent3); font-weight: 700; }
 
 .bg-n {
   position: absolute;
   right: calc(var(--px) - 16px);
   top: 50%;
   transform: translateY(-52%);
-  font-size: clamp(130px, 21vw, 250px);
+  font-size: clamp(140px, 21vw, 260px);
   font-weight: 800;
   color: var(--surface);
+  letter-spacing: -.1em;
   line-height: 1;
   z-index: 0;
   user-select: none;
   pointer-events: none;
 }
-.layer-badge {
-  display: inline-flex;
+
+.slide-head, .slide-body, .slide-foot { position: relative; z-index: 1; }
+
+/* ── Bullet list ───────────────────────── */
+.blist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.blist li {
+  font-size: clamp(.85rem, 1.25vw, 1.1rem);
+  color: var(--dark);
+  line-height: 1.65;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 18px;
+  background: var(--surface);
+  border-radius: 12px;
+  transition: background .2s;
+}
+.blist li:hover { background: var(--card); }
+
+.blist li::before {
+  content: attr(data-n);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.12);
+  padding: 2px 7px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: .04em;
+}
+
+.blist.plain li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: .55em;
+  padding: 0;
+}
+
+.blist .hl { color: var(--accent); font-weight: 600; }
+
+/* ── Pattern cards ─────────────────────── */
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.pattern-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1.5px solid transparent;
+  transition: border-color .2s, transform .2s;
+}
+.pattern-card:hover { border-color: var(--accent3); transform: translateY(-2px); }
+
+.p-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(0,102,204,.12);
+  display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.p-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.p-name {
+  font-size: clamp(.8rem, 1.1vw, 1rem);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.3;
+}
+
+.p-sub {
+  font-size: clamp(.72rem, .95vw, .88rem);
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.p-link {
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: 8px;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.pattern-card:hover .p-link { opacity: 1; }
+
+/* ── RWD visual demo ───────────────────── */
+.device-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: 36px;
+  justify-content: center;
+}
+
+.device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.device-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.screen {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.screen.desktop { width: 280px; height: 170px; }
+.screen.tablet  { width: 180px; height: 140px; }
+.screen.mobile  { width: 90px;  height: 160px; }
+
+.screen-inner {
+  width: 100%; height: 100%;
+  display: grid;
+  gap: 3px;
+  padding: 6px;
+  background: #f0f0f2;
+}
+
+.screen-inner.desktop-layout {
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 24px 1fr 24px;
+}
+
+.screen-inner.tablet-layout {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 22px 1fr 1fr;
+}
+
+.screen-inner.mobile-layout {
+  grid-template-columns: 1fr;
+  grid-template-rows: 18px 50px 40px 40px;
+}
+
+.sb { border-radius: 4px; }
+.sb-nav   { background: var(--accent); grid-column: 1/-1; }
+.sb-main  { background: #a9cdf2; }
+.sb-side  { background: #d6e7fb; }
+.sb-foot  { background: var(--card); grid-column: 1/-1; }
+.sb-card  { background: #bdd8f5; border-radius: 4px; }
+.sb-full  { background: #a9cdf2; }
+
+/* ── Two-col layout ────────────────────── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 32px;
+  align-items: start;
+}
+
+.two-col-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+/* ── Comparison cards ──────────────────── */
+.cmp-card {
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 28px 26px;
+  border: 1.5px solid transparent;
+  transition: border-color .2s;
+}
+.cmp-card:hover { border-color: var(--border); }
+
+.cmp-card.accent-card {
+  background: rgba(0,102,204,.07);
+  border-color: rgba(0,102,204,.25);
+}
+
+.cmp-card-title {
+  font-size: clamp(.9rem, 1.3vw, 1.15rem);
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cmp-badge {
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--accent);
-  background: rgba(0,102,204,.08);
-  padding: 5px 12px;
+  background: rgba(0,102,204,.12);
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.cmp-body {
+  font-size: clamp(.78rem, 1.05vw, .95rem);
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.cmp-body b { color: var(--dark); font-weight: 600; }
+
+/* ── Breakpoint chart ──────────────────── */
+.bp-row {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 28px;
+  height: 52px;
+}
+
+.bp-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
-  margin-bottom: 18px;
-  width: fit-content;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  padding: 0 14px;
+  letter-spacing: .03em;
+  white-space: nowrap;
 }
-.matrix {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-top: 26px;
-}
-.matrix.c3 { grid-template-columns: repeat(3, 1fr); }
-.matrix.c4 { grid-template-columns: repeat(4, 1fr); }
-.mini-card.accent { border-color: rgba(15,118,110,.22); background: rgba(15,118,110,.06); }
-.mini-card.warn { border-color: rgba(194,65,12,.22); background: rgba(194,65,12,.06); }
 
-.cmp-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 24px;
-  font-size: clamp(.72rem, .98vw, .92rem);
-}
-.cmp-table th {
-  padding: 10px 12px;
-  text-align: left;
+.bp-seg.mobile  { background: var(--accent); flex: 1; }
+.bp-seg.tablet  { background: var(--accent2); flex: 1.4; }
+.bp-seg.desktop { background: #073a73; flex: 2; }
+.bp-seg.wide    { background: #04264d; flex: 1.2; }
+
+.bp-label {
   font-size: 10px;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: rgba(0,102,204,.06);
-  border-bottom: 2px solid var(--border);
+  color: var(--muted);
+  margin-top: 6px;
+  text-align: center;
+  letter-spacing: .04em;
 }
-.cmp-table td {
-  padding: 11px 12px;
-  border-bottom: 1px solid var(--border);
-  color: var(--dark);
-  line-height: 1.45;
-  vertical-align: top;
-}
-.cmp-table tr:last-child td { border-bottom: none; }
-.cmp-table td:first-child { font-weight: 700; color: var(--muted); white-space: nowrap; }
 
-.note {
-  margin-top: 17px;
+.bp-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  margin-top: 28px;
+}
+
+/* ── Table demo ────────────────────────── */
+.table-strategies {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.table-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--accent);
+}
+
+.tc-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.tc-title {
+  font-size: clamp(.85rem, 1.15vw, 1rem);
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.tc-desc {
+  font-size: clamp(.75rem, .95vw, .88rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.tc-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: 8px;
+  display: inline-block;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.table-card:hover .tc-link,
+.img-card:hover .tc-link { opacity: 1; }
+
+/* ── Image strategy ────────────────────── */
+.img-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.img-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 20px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.img-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.img-title {
+  font-size: clamp(.82rem, 1.1vw, .98rem);
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.img-desc {
   font-size: clamp(.72rem, .92vw, .86rem);
   color: var(--muted);
   line-height: 1.6;
-  padding: 11px 14px;
-  background: var(--surface);
-  border-left: 3px solid var(--accent2);
-  border-radius: 0 8px 8px 0;
 }
-.note a { color: var(--accent); font-weight: 700; text-decoration: none; }
-.note a:hover { text-decoration: underline; }
 
-.chain {
+/* ── Unit concepts row ─────────────────── */
+.concept-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-top: 34px;
+  gap: 14px;
+  margin-top: 28px;
 }
-.chain.c3 { grid-template-columns: repeat(3, 1fr); }
-.chain.c5 { grid-template-columns: repeat(5, 1fr); gap: 16px; }
-.chain-step {
-  position: relative;
-  padding: 22px 20px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--card);
-}
-.chain-step:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  right: -15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 700;
-}
-.chain-step b { display: block; color: var(--accent); font-size: .78rem; margin-bottom: 8px; }
-.chain-step span { display: block; color: var(--muted); line-height: 1.5; font-size: .86rem; }
 
-.stat-row { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 32px; }
-.stat b { display: block; font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1; color: var(--accent); }
-.stat span { display: block; margin-top: 9px; color: var(--muted); line-height: 1.5; font-size: .9rem; }
-
-.slide-img {
-  display: block;
-  max-width: 100%;
-  max-height: 46vh;
-  width: auto;
-  margin: 24px auto 0;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  object-fit: contain;
-  background: #fff;
-}
-.slide.dark .slide-img { border-color: #3a3a3c; }
-
-/* 線框示意 */
-.wf-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
-.wf {
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  background: var(--card);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  min-height: 220px;
-}
-.wf .bar { background: var(--surface); border-radius: 3px; }
-.wf .bar.h { height: 22px; }
-.wf .bar.row { display: flex; gap: 6px; flex: 1; }
-.wf .bar.col { flex: 1; border-radius: 3px; background: var(--surface); }
-.wf .bar.col.accent { background: rgba(0,102,204,.16); }
-.wf .bar.box { flex: 1; }
-.wf-cap { font-size: .78rem; color: var(--muted); margin-top: 9px; text-align: center; }
-
-.res-links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 22px;
-}
-.res-link {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px 18px;
+.concept-card {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  text-decoration: none;
-  transition: border-color .2s, transform .2s;
+  border-radius: 14px;
+  padding: 20px 16px;
+  border-top: 3px solid var(--accent);
 }
-.res-link:hover { border-color: var(--accent); transform: translateY(-2px); }
-.res-link strong { font-size: .94rem; color: var(--dark); }
-.res-link span { font-size: .75rem; color: var(--muted); }
 
-.slide-body a.ilink {
-  color: var(--accent);
+.cc-label {
+  font-size: 10px;
   font-weight: 700;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(0,102,204,.35);
+  color: var(--accent);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
-.slide-body a.ilink:hover { border-bottom-color: var(--accent); }
 
+.cc-title {
+  font-size: clamp(.82rem, 1.1vw, .98rem);
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.cc-body {
+  font-size: clamp(.72rem, .92vw, .86rem);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Controls ──────────────────────────── */
 #ctrls {
   position: fixed;
   bottom: 28px;
@@ -434,68 +642,145 @@ h2 {
   gap: 8px;
   z-index: 100;
 }
+
 #ctrls button {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border-radius: 50%;
   border: none;
   background: rgba(29,29,31,.06);
   color: var(--dark);
   cursor: pointer;
   font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background .2s, transform .15s;
 }
-#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.04); }
-#ctrls.on-dark button { background: rgba(255,255,255,.16); color: #fff; }
+#ctrls button:hover { background: rgba(29,29,31,.12); transform: scale(1.06); }
+#ctrls button:active { transform: scale(.94); }
 
+/* ── Dark slide ────────────────────────── */
 .slide.dark { background: #1d1d1f; }
-.slide.dark h1 { color: #f5f5f7; }
-.slide.dark h2, .slide.dark .course-label, .slide.dark .slide-num { color: #a1a1a6; }
-.slide.dark .overline, .slide.dark .hl, .slide.dark .unit-pill, .slide.dark .layer-badge { color: #58a6ff; }
-.slide.dark .divider, .slide.dark .dot.on { background: #58a6ff; }
-.slide.dark .unit-pill, .slide.dark .layer-badge { background: rgba(88,166,255,.13); }
-.slide.dark .bg-n { color: #2c2c2e; }
-.slide.dark .blist li, .slide.dark .agenda-card, .slide.dark .mini-card,
-.slide.dark .chain-step, .slide.dark .wf {
-  background: rgba(255,255,255,.055);
-  color: #f5f5f7;
-  border-color: #3a3a3c;
-}
-.slide.dark .blist li::before { color: #58a6ff; background: rgba(88,166,255,.15); }
-.slide.dark .mini-card strong, .slide.dark .a-time, .slide.dark .chain-step span { color: #f5f5f7; }
-.slide.dark .mini-card span, .slide.dark .a-desc { color: #a1a1a6; }
-.slide.dark .chain-step b { color: #58a6ff; }
-.slide.dark .wf-cap { color: #a1a1a6; }
-.slide.dark .wf .bar { background: rgba(255,255,255,.10); }
-.slide.dark .wf .bar.col.accent { background: rgba(88,166,255,.28); }
-.slide.dark .stat b { color: #58a6ff; }
-.slide.dark .stat span { color: #a1a1a6; }
-.slide.dark .dot { background: #3a3a3c; }
-.slide.dark .note { background: rgba(255,255,255,.055); color: #a1a1a6; border-left-color: #58a6ff; }
-.slide.dark .note a { color: #58a6ff; }
-.slide.dark .cmp-table th { color: #58a6ff; background: rgba(88,166,255,.1); border-bottom-color: #3a3a3c; }
-.slide.dark .cmp-table td { color: #f5f5f7; border-bottom-color: #3a3a3c; }
-.slide.dark .cmp-table td:first-child { color: #a1a1a6; }
-.slide.dark .res-link { background: rgba(255,255,255,.055); border-color: #3a3a3c; }
-.slide.dark .res-link strong { color: #f5f5f7; }
-.slide.dark .res-link span { color: #a1a1a6; }
-.slide.dark .slide-body a.ilink { color: #58a6ff; border-bottom-color: rgba(88,166,255,.42); }
-.slide.dark .slide-body a.ilink:hover { border-bottom-color: #58a6ff; }
-.slide.drop { display: none; }
+.slide.dark .slide-body h1,
+.slide.dark .slide-body p,
+.slide.dark .overline { color: #f5f5f7; }
+.slide.dark .cover-title { color: #f5f5f7; }
+.slide.dark .cover-sub { color: #86868b; }
+.slide.dark .bg-n { color: #242426; }
 
-@media (max-width: 768px) {
-  :root { --px: 20px; --py: 20px; }
-  .slide { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .slide-body { justify-content: flex-start; padding: 12px 0; }
-  .agenda-grid, .matrix, .matrix.c3, .matrix.c4,
-  .res-links, .chain, .chain.c3, .chain.c5, .wf-row { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
-  .chain-step:not(:last-child)::after { display: none; }
-  .cmp-table { display: block; overflow-x: auto; }
-  .blist { margin-top: 16px; gap: 8px; }
-  .stat-row { gap: 24px; margin-top: 20px; }
-  .cover-sub { margin-bottom: 22px; }
-  .bg-n, .course-label, .dots { display: none; }
+/* ── Comparison table ──────────────────── */
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 28px;
+  font-size: clamp(.78rem, 1.1vw, 1rem);
 }
+.cmp-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.07);
+  border-bottom: 2px solid var(--border);
+}
+.cmp-table th:first-child { color: var(--muted); background: transparent; }
+.cmp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--dark);
+  line-height: 1.6;
+  vertical-align: top;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table td:first-child {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: .88em;
+  white-space: nowrap;
+}
+
+/* ── ext link ──────────────────────────── */
+.ext-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s, transform .15s;
+  margin-top: 16px;
+  width: fit-content;
+}
+.ext-link:hover {
+  background: rgba(0,102,204,.16);
+  border-color: rgba(0,102,204,.4);
+  transform: translateY(-1px);
+}
+.ext-link::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+/* ── Highlight box ─────────────────────── */
+.hl-box {
+  background: rgba(0,102,204,.08);
+  border: 1.5px solid rgba(0,102,204,.22);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-top: 24px;
+  font-size: clamp(.82rem, 1.15vw, 1rem);
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+.hl-box strong { color: var(--accent); }
+
+/* ── VS badge ──────────────────────────── */
+.vs-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--card);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.vs-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-top: 32px;
+}
+
+/* ── Reference images ────────────────────── */
+.ref-img {
+  display: block;
+  max-width: 100%;
+  max-height: 30vh;
+  width: auto;
+  margin: 18px auto 0;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.ref-cred {
+  margin-top: 8px;
+  text-align: center;
+  font-size: .72rem;
+  color: var(--muted);
+}
+.ref-cred a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.ref-cred a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -504,369 +789,833 @@ h2 {
 
 <div id="deck">
 
-  <!-- 01 Cover -->
-  <section class="slide active">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 01 COVER ─────────────────────── -->
+  <section class="slide active" id="s1">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">01 / 16</span>
+    </div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
-      <h1 class="cover-title">響應式網頁設計<br>RWD</h1>
-      <p class="cover-sub">同一套設計稿，在手機、平板、桌機上都要撐得住——版面模式 × 斷點策略 × 表格與圖片規劃 × Figma 實作</p>
+      <div class="cover-title">響應式網頁設計<br>RWD</div>
+      <p class="cover-sub">讓介面在手機、平板、桌機上都呈現完美體驗</p>
       <div class="cover-meta">
-        <span>08/10 上午</span><span class="meta-dot"></span><span>16 張投影片</span><span class="meta-dot"></span><span>Figma 多裝置版面</span>
+        <span>Responsive Web Design</span>
+        <div class="meta-dot"></div>
+        <span>Figma × UX 原則</span>
+        <div class="meta-dot"></div>
+        <span>3 小時</span>
       </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 02 什麼是 RWD -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 02 什麼是 RWD ─────────────────── -->
+  <section class="slide" id="s2">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">02 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">RWD 概念</p>
+      <div class="overline">RWD 概念</div>
+      <div class="divider"></div>
       <h1>什麼是響應式網頁？</h1>
-      <h2>同一套設計稿與同一套 CSS，在不同裝置的螢幕寬度下自動調整版面配置，不需要另外做一套。</h2>
-      <div class="wf-row">
-        <div>
-          <div class="wf">
-            <div class="bar h"></div>
-            <div class="bar col accent" style="height:34px"></div>
-            <div class="bar box"></div>
-            <div class="bar box"></div>
-          </div>
-          <p class="wf-cap">手機：單欄，全部垂直堆疊</p>
-        </div>
-        <div>
-          <div class="wf">
-            <div class="bar h"></div>
-            <div class="bar row">
-              <div class="bar col accent"></div>
-              <div class="bar col"></div>
+      <h2>同一套設計稿，在不同裝置螢幕上自動調整版面配置</h2>
+
+      <div class="device-row">
+        <div class="device">
+          <div class="screen mobile">
+            <div class="screen-inner mobile-layout">
+              <div class="sb sb-nav"></div>
+              <div class="sb sb-full" style="background:#a9cdf2"></div>
+              <div class="sb sb-card"></div>
+              <div class="sb sb-card" style="background:#d6e7fb"></div>
             </div>
-            <div class="bar box"></div>
           </div>
-          <p class="wf-cap">平板：主欄 + 一個側欄</p>
+          <span class="device-label">手機</span>
         </div>
-        <div>
-          <div class="wf">
-            <div class="bar h"></div>
-            <div class="bar row">
-              <div class="bar col accent" style="flex:.6"></div>
-              <div class="bar col" style="flex:1.6"></div>
-              <div class="bar col" style="flex:.6"></div>
+        <div class="device">
+          <div class="screen tablet">
+            <div class="screen-inner tablet-layout">
+              <div class="sb sb-nav"></div>
+              <div class="sb sb-main"></div>
+              <div class="sb sb-side"></div>
+              <div class="sb sb-card"></div>
+              <div class="sb sb-card" style="background:#d6e7fb"></div>
             </div>
-            <div class="bar h" style="height:14px"></div>
           </div>
-          <p class="wf-cap">桌機：三欄 + 頁尾</p>
+          <span class="device-label">平板</span>
+        </div>
+        <div class="device">
+          <div class="screen desktop">
+            <div class="screen-inner desktop-layout">
+              <div class="sb sb-nav"></div>
+              <div class="sb sb-side" style="background:#d6e7fb"></div>
+              <div class="sb sb-main"></div>
+              <div class="sb sb-side"></div>
+              <div class="sb sb-foot"></div>
+            </div>
+          </div>
+          <span class="device-label">桌機</span>
         </div>
       </div>
-      <div class="note"><span class="hl">RWD（Responsive Web Design）</span>指的就是這件事：內容在不同 viewport 下能流動、調整或重新排列，讓每個裝置都拿到一致的好體驗——不是三份設計稿，是一份設計稿的三種排法。</div>
+
+      <div class="hl-box">
+        <strong>RWD（Responsive Web Design）</strong> ── 網頁內容在不同 viewport 下，版面能夠流動、調整或重新排列，提供一致的良好體驗。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 03 五種設計模式 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 03 五種設計模式 ──────────────── -->
+  <section class="slide" id="s3">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">03 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">版面設計模式</p>
+      <div class="overline">版面設計模式</div>
+      <div class="divider"></div>
       <h1>RWD 五種設計模式</h1>
-      <h2>網頁內容在不同 viewport 下有五種常見的流動方式，先認得出來，之後才挑得對。</h2>
-      <table class="cmp-table">
-        <thead><tr><th>模式</th><th>怎麼變化</th><th>示範</th></tr></thead>
-        <tbody>
-          <tr><td>Mostly Fluid<br>局部流動</td><td>寬螢幕側邊加留白，縮小時欄位逐步垂直堆疊</td><td><a class="ilink" href="https://sexfat.github.io/rwd/index.html" target="_blank" rel="noopener">查看 ↗</a></td></tr>
-          <tr><td>Column Drop<br>欄位下移</td><td>螢幕縮小時，最右側欄位依序移到下方</td><td><a class="ilink" href="https://sexfat.github.io/rwd/index2.html" target="_blank" rel="noopener">查看 ↗</a></td></tr>
-          <tr><td>Layout Shifter<br>區塊轉換</td><td>不同尺寸下整體區塊的位置與順序大幅改變</td><td><a class="ilink" href="https://sexfat.github.io/rwd/index3.html" target="_blank" rel="noopener">查看 ↗</a></td></tr>
-          <tr><td>Tiny Tweaks<br>細微調整</td><td>版面結構不變，只微調字級、間距與圖片尺寸</td><td><a class="ilink" href="https://sexfat.github.io/rwd/index4.html" target="_blank" rel="noopener">查看 ↗</a></td></tr>
-          <tr><td>Off Canvas<br>超出畫布</td><td>次要內容（如側邊欄）預設藏在畫布外，手動觸發才顯示</td><td><a class="ilink" href="https://sexfat.github.io/rwd/index5.html" target="_blank" rel="noopener">查看 ↗</a></td></tr>
-        </tbody>
-      </table>
-      <div class="note">五種不互斥，同一個網站常常混用——導覽用 Off Canvas，內容區用 Mostly Fluid。</div>
-    </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
-  </section>
+      <h2>網頁內容在不同 viewport 下的版面配置與流動方式</h2>
 
-  <!-- 04 斷點設置規劃 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
-    <div class="slide-body">
-      <p class="overline">斷點設置規劃</p>
-      <h1>先知道使用者用什麼裝置，再決定斷點</h1>
-      <h2>斷點是版面切換的臨界寬度，常見的四個區間如下——但這只是起點，不是規定。</h2>
-      <div class="matrix c4">
-        <div class="mini-card"><strong>手機</strong><span>≤ 640px</span></div>
-        <div class="mini-card"><strong>平板</strong><span>641–1024px</span></div>
-        <div class="mini-card"><strong>桌機</strong><span>1025–1440px</span></div>
-        <div class="mini-card"><strong>寬螢幕</strong><span>1441px 以上</span></div>
+      <div class="pattern-grid">
+        <div class="pattern-card">
+          <div class="p-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="16" height="4" rx="2" fill="#0066cc"/>
+              <rect x="2" y="8" width="10" height="10" rx="2" fill="#0066cc" opacity=".5"/>
+              <rect x="14" y="8" width="4" height="4" rx="1" fill="#0066cc" opacity=".3"/>
+            </svg>
+          </div>
+          <div class="p-num">01</div>
+          <div class="p-name">Mostly Fluid<br>局部流動</div>
+          <div class="p-sub">寬螢幕加入側邊留白，縮小時欄位逐步垂直堆疊</div>
+          <a class="p-link" href="https://sexfat.github.io/rwd/index.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="pattern-card">
+          <div class="p-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="16" height="4" rx="2" fill="#0066cc"/>
+              <rect x="2" y="8" width="7" height="10" rx="2" fill="#0066cc" opacity=".5"/>
+              <rect x="11" y="8" width="7" height="4" rx="1" fill="#0066cc" opacity=".3"/>
+              <rect x="11" y="14" width="7" height="4" rx="1" fill="#0066cc" opacity=".2"/>
+            </svg>
+          </div>
+          <div class="p-num">02</div>
+          <div class="p-name">Column Drop<br>欄位下移</div>
+          <div class="p-sub">螢幕縮小時，最右側欄位依序移至下方</div>
+          <a class="p-link" href="https://sexfat.github.io/rwd/index2.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="pattern-card">
+          <div class="p-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="7" height="16" rx="2" fill="#0066cc" opacity=".6"/>
+              <rect x="11" y="2" width="7" height="7" rx="2" fill="#0066cc" opacity=".4"/>
+              <rect x="11" y="11" width="7" height="7" rx="2" fill="#0066cc" opacity=".25"/>
+            </svg>
+          </div>
+          <div class="p-num">03</div>
+          <div class="p-name">Layout Shifter<br>區塊轉換</div>
+          <div class="p-sub">不同尺寸下整體區塊位置與順序大幅改變</div>
+          <a class="p-link" href="https://sexfat.github.io/rwd/index3.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="pattern-card">
+          <div class="p-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="16" height="16" rx="2" fill="#0066cc" opacity=".2"/>
+              <rect x="4" y="4" width="12" height="12" rx="1.5" fill="#0066cc" opacity=".5"/>
+            </svg>
+          </div>
+          <div class="p-num">04</div>
+          <div class="p-name">Tiny Tweaks<br>細微調整</div>
+          <div class="p-sub">版面不變，僅微調字型大小、間距與圖片尺寸</div>
+          <a class="p-link" href="https://sexfat.github.io/rwd/index4.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="pattern-card">
+          <div class="p-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="2" width="16" height="16" rx="2" fill="#0066cc" opacity=".15"/>
+              <rect x="-2" y="2" width="8" height="16" rx="2" fill="#0066cc" opacity=".5"/>
+              <rect x="8" y="2" width="12" height="16" rx="2" fill="#0066cc" opacity=".25"/>
+            </svg>
+          </div>
+          <div class="p-num">05</div>
+          <div class="p-name">Off Canvas<br>超出畫布</div>
+          <div class="p-sub">次要內容藏在畫布外，手動觸發才顯示（如側邊欄）</div>
+          <a class="p-link" href="https://sexfat.github.io/rwd/index5.html" target="_blank">查看示範 ↗</a>
+        </div>
       </div>
-      <div class="note">舊網站改版：查 <span class="hl">Google Analytics</span> 的裝置分佈，依主要裝置決定優先順序。全新網站：用 <a href="https://gs.statcounter.com/" target="_blank" rel="noopener" class="ilink">StatCounter ↗</a> 查同類型網站的市場數據再選斷點。</div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 05 行動優先 vs 桌機優先 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 04 斷點設置 ───────────────────── -->
+  <section class="slide" id="s4">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">04 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">斷點設置策略</p>
+      <div class="overline">斷點設置規劃</div>
+      <div class="divider"></div>
+      <h1>如何決定斷點？</h1>
+      <h2>斷點策略取決於主要使用者的裝置分佈</h2>
+
+      <div class="bp-row">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+          <div class="bp-seg mobile">手機 ≤ 640px</div>
+          <div class="bp-label">Mobile</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1.4">
+          <div class="bp-seg tablet">平板 641–1024px</div>
+          <div class="bp-label">Tablet</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:2">
+          <div class="bp-seg desktop">桌機 1025–1440px</div>
+          <div class="bp-label">Desktop</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1.2">
+          <div class="bp-seg wide">寬螢幕 1441px+</div>
+          <div class="bp-label">Wide</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:20px">
+        <div class="hl-box" style="margin-top:0">
+          <strong>舊網站改版</strong><br>
+          查詢 Google Analytics，了解來訪裝置分佈，依主要裝置決定斷點優先順序
+        </div>
+        <div class="hl-box" style="margin-top:0;background:rgba(0,102,204,.04)">
+          <strong>新網站</strong><br>
+          使用 <a href="https://gs.statcounter.com/" target="_blank" style="color:var(--accent);font-weight:600">StatCounter ↗</a> 查詢同類型網站的市場裝置分佈數據，選擇對應斷點
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
+  </section>
+
+  <!-- ─────── 05 行動優先 vs 桌機優先 ──────── -->
+  <section class="slide" id="s5">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">05 / 16</span>
+    </div>
+    <div class="slide-body">
+      <div class="overline">斷點設置策略</div>
+      <div class="divider"></div>
       <h1>行動優先 vs 桌機優先</h1>
-      <h2>兩種思路都是從一端往另一端做，差別在起點跟 Media Query 怎麼寫。</h2>
-      <img class="slide-img" src="resources/originals/desktop-first-vs-mobile-first.png" alt="Desktop First 與 Mobile First 兩種設計順序示意">
-      <div class="note"><span class="hl">Desktop First</span>：桌機 → 平板 → 手機，Media Query 用 <code>max-width</code>。<span class="hl">Mobile First</span>：手機 → 平板 → 桌機，用 <code>min-width</code>。多數團隊兩端都會看過，但 Mobile First 的空間限制通常逼出更精準的決策。</div>
+      <h2>兩種截然不同的設計與開發思路，影響 Media Query 的寫法</h2>
+
+      <img class="ref-img" src="resources/originals/desktop-first-vs-mobile-first.gif" alt="Desktop First 與 Mobile First 兩種設計順序示意">
+
+      <div class="two-col" style="margin-top:16px;gap:32px">
+        <div class="cmp-card accent-card">
+          <div class="cmp-card-title">
+            🖥 Desktop First
+            <span class="cmp-badge">桌機優先</span>
+          </div>
+          <div class="cmp-body">
+            <b>製作順序：</b>桌機 → 平板 → 手機　<b>Media Query：</b><code style="background:rgba(0,102,204,.12);padding:2px 6px;border-radius:4px;font-size:.9em">max-width</code>
+          </div>
+        </div>
+        <div class="cmp-card">
+          <div class="cmp-card-title">
+            📱 Mobile First
+            <span class="cmp-badge" style="background:rgba(0,102,204,.05);color:var(--muted)">行動優先</span>
+          </div>
+          <div class="cmp-body">
+            <b>製作順序：</b>手機 → 平板 → 桌機　<b>Media Query：</b><code style="background:var(--surface);padding:2px 6px;border-radius:4px;font-size:.9em">min-width</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-box" style="margin-top:14px">
+        <strong>真實情況：</strong>大多數團隊同時從兩端設計，選擇適合專案的那一個即可。Mobile First 的限制感能幫助做出更精準的決策。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 06 響應式表格 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 06 響應式表格 ─────────────────── -->
+  <section class="slide" id="s6">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">06 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">表格設置規劃</p>
+      <div class="overline">表格設置規劃</div>
+      <div class="divider"></div>
       <h1>響應式表格的四種策略</h1>
-      <h2>表格在小螢幕最難處理，要依資料性質選對應方案，不是每次都水平捲動了事。</h2>
-      <table class="cmp-table">
-        <thead><tr><th>策略</th><th>做法</th></tr></thead>
-        <tbody>
-          <tr><td>隱藏欄位</td><td>小螢幕隱藏次要欄位，只留核心資訊。適合欄位有明顯主次之分的表</td></tr>
-          <tr><td>水平捲動</td><td>保持完整 Table 結構，讓容器可左右滑動，資料不刪減</td></tr>
-          <tr><td>CSS／DIV 排版</td><td>把 Table 結構轉成 Flexbox／Grid，自己控制每格的排版與尺寸</td></tr>
-          <tr><td>破壞表格排版</td><td>行動端把每一列重排成獨立卡片，欄名用 data attribute 附加</td></tr>
-        </tbody>
-      </table>
-      <div class="note">實作前先問：這張表的欄位有沒有明顯主次？沒有主次的表，隱藏欄位這條路就不能走。綜合參考：<a class="ilink" href="https://elvery.net/demo/responsive-tables/" target="_blank" rel="noopener">elvery.net/demo/responsive-tables ↗</a></div>
+      <h2>表格在小螢幕最難處理，需要依資料性質選擇對應方案</h2>
+
+      <div class="table-strategies">
+        <div class="table-card">
+          <div class="tc-num">策略 01</div>
+          <div class="tc-title">隱藏某些欄位</div>
+          <div class="tc-desc">在小螢幕隱藏次要欄位，只保留最核心的資訊。適合欄位有明顯主次之分的資料表。</div>
+          <a class="tc-link" href="https://sexfat.github.io/rwd/index6.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="table-card">
+          <div class="tc-num">策略 02</div>
+          <div class="tc-title">Table 水平 Scroll</div>
+          <div class="tc-desc">保持完整 Table 結構，讓容器可左右滑動。資料完整呈現，使用者可自行探索所有欄位。</div>
+          <a class="tc-link" href="https://colorlib.com/etc/tb/Table_Fixed_Column/index.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="table-card">
+          <div class="tc-num">策略 03</div>
+          <div class="tc-title">使用 CSS 與 DIV 排版</div>
+          <div class="tc-desc">將 Table 結構轉為 Flexbox / Grid，用 CSS 重新控制每個儲存格的排版位置與尺寸。</div>
+          <a class="tc-link" href="https://colorlib.com/etc/tb/Table_Responsive_v2/index.html" target="_blank">查看示範 ↗</a>
+        </div>
+        <div class="table-card">
+          <div class="tc-num">策略 04</div>
+          <div class="tc-title">破壞 Table 排版</div>
+          <div class="tc-desc">在行動端把每一列資料重新排成獨立的「卡片」形式，標題以 data attribute 附加。</div>
+          <a class="tc-link" href="https://colorlib.com/etc/tb/Table_Responsive_v1/index.html" target="_blank">查看示範 ↗</a>
+        </div>
+      </div>
+
+      <p style="font-size:.8rem;color:var(--muted);margin-top:16px">
+        思考：表格的 HTML / CSS 應該怎麼寫？每種策略的實作複雜度也不同。
+        ／綜合參考：<a href="https://elvery.net/demo/responsive-tables/" target="_blank" style="color:var(--accent)">elvery.net/demo/responsive-tables ↗</a>
+      </p>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 07 響應式圖片 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 07 響應式圖片 ─────────────────── -->
+  <section class="slide" id="s7">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">07 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">響應式圖片規劃</p>
+      <div class="overline">響應式圖片規劃</div>
+      <div class="divider"></div>
       <h1>圖片在各裝置的處理方式</h1>
-      <h2>圖片是網頁最重的資源，處理不好，行動網路的使用者第一個放棄等待。</h2>
-      <table class="cmp-table">
-        <thead><tr><th>做法</th><th>解決什麼</th></tr></thead>
-        <tbody>
-          <tr><td>圖片裁切</td><td>用 <code>&lt;picture&gt;</code> 依裝置顯示不同焦點的裁切版本，手機看特寫、桌機看全圖</td></tr>
-          <tr><td>等比縮小</td><td>設 <code>max-width: 100%</code>，圖片隨容器自動縮放，不超出邊界</td></tr>
-          <tr><td>減少請求數</td><td>合併圖檔、改用 CSS Sprite 或 SVG Icon，降低 HTTP request</td></tr>
-          <tr><td>背景圖換圖</td><td>用 Media Query 在不同斷點切換背景圖，手機不用下載不必要的大圖</td></tr>
-          <tr><td>背景圖裁切</td><td><code>background-size: cover</code> 配 <code>background-position</code> 控制焦點</td></tr>
-          <tr><td>整張換圖</td><td>不同斷點用完全不同的圖（橫幅 vs 直幅），構圖跟著改</td></tr>
-        </tbody>
-      </table>
-      <div class="note">最基礎、最該先做的是「等比縮小」——一行 CSS 就能解決圖片爆版的問題。</div>
+      <h2>圖片是網頁最重的資源，好的響應式策略能同時提升品質與效能</h2>
+
+      <div class="img-grid">
+        <div class="img-card">
+          <div class="img-icon">✂️</div>
+          <div class="img-title">圖片裁切（Art Direction）</div>
+          <div class="img-desc">用 <code style="font-size:.85em;background:var(--surface);padding:1px 5px;border-radius:3px">&lt;picture&gt;</code> 元素依裝置顯示不同焦點的裁切版本，手機顯示特寫、桌機顯示全圖。</div>
+          <a class="tc-link" href="https://web.dev/articles/responsive-images" target="_blank">MDN / web.dev 示範 ↗</a>
+        </div>
+        <div class="img-card">
+          <div class="img-icon">📐</div>
+          <div class="img-title">等比縮小</div>
+          <div class="img-desc">設定 <code style="font-size:.85em;background:var(--surface);padding:1px 5px;border-radius:3px">max-width: 100%</code> 讓圖片隨容器自動縮放，不超出邊界。最基礎的 RWD 圖片寫法。</div>
+          <a class="tc-link" href="https://www.w3schools.com/css/css_rwd_images.asp" target="_blank">W3Schools 示範 ↗</a>
+        </div>
+        <div class="img-card">
+          <div class="img-icon">⚡</div>
+          <div class="img-title">減少瀏覽器請求</div>
+          <div class="img-desc">合併圖檔、使用 CSS Sprite 或 SVG Icon，降低 HTTP request 次數提升載入速度。</div>
+          <a class="tc-link" href="https://css-tricks.com/svg-sprites-use-better-icon-fonts/" target="_blank">CSS-Tricks SVG Sprite ↗</a>
+        </div>
+        <div class="img-card">
+          <div class="img-icon">🖼</div>
+          <div class="img-title">背景圖換行設計</div>
+          <div class="img-desc">利用 Media Query 在不同斷點切換背景圖，避免手機下載不必要的大圖，節省流量。</div>
+          <a class="tc-link" href="https://web.dev/articles/optimize-css-background-images-with-media-queries" target="_blank">web.dev 示範 ↗</a>
+        </div>
+        <div class="img-card">
+          <div class="img-icon">🔄</div>
+          <div class="img-title">背景圖裁切</div>
+          <div class="img-desc">使用 <code style="font-size:.85em;background:var(--surface);padding:1px 5px;border-radius:3px">background-size: cover</code> 配合 <code style="font-size:.85em;background:var(--surface);padding:1px 5px;border-radius:3px">background-position</code> 控制焦點。</div>
+          <a class="tc-link" href="https://www.webfx.com/blog/web-design/responsive-background-image/" target="_blank">WebFX 教學示範 ↗</a>
+        </div>
+        <div class="img-card">
+          <div class="img-icon">🔀</div>
+          <div class="img-title">換圖</div>
+          <div class="img-desc">在不同斷點使用完全不同的圖片（橫幅 vs 直幅），大幅改變視覺構圖與敘事重點。</div>
+          <a class="tc-link" href="https://css-tricks.com/a-guide-to-the-responsive-images-syntax-in-html/" target="_blank">CSS-Tricks 完整指南 ↗</a>
+        </div>
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 08 RWD vs AWD -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 08 RWD vs AWD ─────────────────── -->
+  <section class="slide" id="s8">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">08 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">概念比較</p>
+      <div class="overline">概念比較</div>
+      <div class="divider"></div>
       <h1>RWD 響應式 vs AWD 自適應</h1>
-      <h2>兩者最後看起來都像「會變」，但背後的技術機制完全不同。</h2>
-      <table class="cmp-table">
-        <thead><tr><th>比較</th><th>RWD 響應式</th><th>AWD 自適應</th></tr></thead>
+      <h2>看起來相似，但背後的技術機制完全不同</h2>
+
+      <img class="ref-img" style="max-height:22vh" src="resources/originals/rwd-vs-awd.gif" alt="Responsive 與 Adaptive 兩種版面呈現方式示意">
+
+      <table class="cmp-table" style="margin-top:14px">
+        <thead>
+          <tr>
+            <th>比較維度</th>
+            <th>RWD 響應式設計 — <a href="https://www.pchome.com.tw" target="_blank" style="color:var(--accent);font-weight:700;text-decoration:none">PChome ↗</a></th>
+            <th>AWD 自適應設計 — <a href="https://www.momoshop.com.tw" target="_blank" style="color:#e05b5b;font-weight:700;text-decoration:none">momo ↗</a></th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td>運作方式</td><td>同一套 CSS，依 viewport 流動調整</td><td>偵測裝置類型，載入對應版本</td></tr>
-          <tr><td>版面切換</td><td>平滑漸進，沒有跳動感</td><td>需要切換時間，可能閃一下</td></tr>
-          <tr><td>維護成本</td><td>單一版本，維護簡單</td><td>多套版本，成本較高</td></tr>
-          <tr><td>客製化程度</td><td>較難針對特定裝置大幅客製</td><td>可為每個裝置做最佳化體驗</td></tr>
-          <tr><td>適用情境</td><td>大多數網站的首選</td><td>對效能要求極高的大型產品</td></tr>
+          <tr>
+            <td>運作方式</td>
+            <td>同一套 CSS，依 viewport 流動調整</td>
+            <td>偵測裝置類型，載入對應版本</td>
+          </tr>
+          <tr>
+            <td>版面切換</td>
+            <td>平滑漸進，無跳動感</td>
+            <td>需要切換時間，可能有閃爍</td>
+          </tr>
+          <tr>
+            <td>維護成本</td>
+            <td>單一版本，維護簡單</td>
+            <td>多套版本，維護成本高</td>
+          </tr>
+          <tr>
+            <td>客製化程度</td>
+            <td>較難針對特定裝置大幅客製</td>
+            <td>可為每個裝置提供最佳化體驗</td>
+          </tr>
+          <tr>
+            <td>適用情境</td>
+            <td>大多數網站的首選方案</td>
+            <td>對效能要求極高的大型產品</td>
+          </tr>
         </tbody>
       </table>
-      <div class="note">實例可以自己比：<a class="ilink" href="https://www.pchome.com.tw" target="_blank" rel="noopener">PChome（RWD）↗</a> 與 <a class="ilink" href="https://www.momoshop.com.tw" target="_blank" rel="noopener">momo（AWD）↗</a> 用手機跟桌機各開一次，感受載入行為的差異。現在大部分網站用 RWD 搭配 CSS Grid／Flexbox + Media Query 就能應付。</div>
+
+      <div class="hl-box" style="margin-top:16px">
+        <strong>現代主流：</strong>大部分網站採用 RWD，搭配 CSS Grid / Flexbox + Media Query，即可應對絕大多數的多裝置需求。
+        ／實例：<a href="https://www.pchome.com.tw" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none">PChome（RWD）↗</a> 與 <a href="https://www.momoshop.com.tw" target="_blank" style="color:#e05b5b;font-weight:600;text-decoration:none">momo（AWD）↗</a> 用手機與桌機各開一次，觀察載入行為的差異。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 09 流動性 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 09 流動性 ─────────────────────── -->
+  <section class="slide" id="s9">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">09 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">核心概念 · Flow</p>
+      <div class="overline">核心概念 · Flow</div>
+      <div class="divider"></div>
       <h1>流動性（Flow）</h1>
-      <h2>內容隨螢幕縮小而自然垂直堆疊，這是 CSS 的預設行為，也是 RWD 能成立的基礎。</h2>
-      <img class="slide-img" src="resources/originals/flow-vs-static.png" alt="Flow 流動排版與 Static 固定排版的差異示意">
-      <div class="note">左邊 Flow：螢幕變窄時，下面的元素自動被推下去，依序排列。右邊 Static：用固定 px 定位，小螢幕會超出邊界或互相重疊。<span class="hl">會用相對單位做流動排版，是 RWD 的第一課。</span></div>
+      <h2>內容隨螢幕縮小而垂直堆疊，這稱為「流程（Flow）」</h2>
+
+      <img class="ref-img" src="resources/originals/flow-vs-static.gif" alt="Flow 流動排版與 Static 固定排版的差異示意">
+
+      <div class="two-col" style="margin-top:16px">
+        <div class="cmp-card accent-card">
+          <div class="cmp-card-title">Flow（流動）</div>
+          <div class="cmp-body" style="margin-top:8px">
+            當螢幕變窄，下方的元素會被推下去，依序垂直排列。這是 CSS 的自然行為。
+          </div>
+        </div>
+        <div class="cmp-card">
+          <div class="cmp-card-title">Static（靜態）</div>
+          <div class="cmp-body" style="margin-top:8px">
+            使用固定 px 定位時，元素不會流動，在小螢幕會超出邊界或重疊。
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-box">
+        使用絕對像素（px）定位所有元素時，響應式設計容易出現排版問題。<strong>相對單位與流動排版</strong> 是 RWD 的基礎。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 10 相對單位 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 10 相對單位 ───────────────────── -->
+  <section class="slide" id="s10">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">10 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">核心概念 · Units</p>
+      <div class="overline">核心概念 · Units</div>
+      <div class="divider"></div>
       <h1>相對單位與靜態單位</h1>
-      <h2>知道 % 和 px 各自的使用時機，是寫好 RWD 的基本功。</h2>
-      <img class="slide-img" src="resources/originals/relative-vs-static-units.png" alt="相對單位與靜態單位的示意圖">
-      <div class="note"><span class="hl">相對單位</span>（%、vw、vh、em、rem）：寬度隨螢幕或父元素縮放。<span class="hl">靜態單位</span>（px、pt）：寬度固定，適合 icon 大小、按鈕最小點擊區域這類不該縮放的元素。常見寫法：<code>width: 100%; max-width: 1200px</code>——填滿螢幕但不超過版心寬度。</div>
+      <h2>知道 % 和 px 各自的使用時機，是寫好 RWD 的基本功</h2>
+
+      <img class="ref-img" src="resources/originals/relative-vs-static-units.gif" alt="相對單位與靜態單位的示意圖">
+
+      <div class="two-col" style="margin-top:14px">
+        <div>
+          <div class="cmp-card accent-card">
+            <div class="cmp-card-title">相對單位（Relative Units）</div>
+            <div class="cmp-body">
+              <b>%、vw、vh、em、rem</b><br>
+              元素寬度隨螢幕或父元素縮放。<code style="background:rgba(0,102,204,.12);padding:1px 5px;border-radius:3px;font-size:.9em">50%</code> 永遠佔螢幕一半。
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="cmp-card">
+            <div class="cmp-card-title">靜態單位（Static Units）</div>
+            <div class="cmp-body">
+              <b>px、pt</b><br>
+              元素寬度固定，不隨螢幕改變。適用於不應縮放的元素，如 icon 大小、最小點擊區域。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-box" style="margin-top:12px">
+        <strong>最大最小值：</strong><code style="background:rgba(0,102,204,.12);padding:1px 6px;border-radius:3px">width: 100%; max-width: 1200px</code> — 內容填滿螢幕但不超過 1200px，是常見的版心寫法。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 11 斷點設計 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 11 斷點設計 ───────────────────── -->
+  <section class="slide" id="s11">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">11 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">核心概念 · Breakpoints</p>
+      <div class="overline">核心概念 · Breakpoints</div>
+      <div class="divider"></div>
       <h1>斷點設計（Breakpoints）</h1>
-      <h2>什麼時候該切換版面、什麼時候讓它自己流動，是兩種不同的處理方式。</h2>
-      <img class="slide-img" src="resources/originals/breakpoints.png" alt="有斷點與無斷點兩種版面處理方式的示意圖">
-      <div class="note"><span class="warn-text">斷點不該照裝置尺寸表去設。</span>正確做法是：把瀏覽器慢慢縮小，版面「開始看起來奇怪」的那個寬度，就是斷點該放的地方——讓內容決定斷點，而不是讓 iPhone 的型號決定斷點。</div>
+      <h2>何時切換行動版、何時切換桌機版——以及如何選擇最佳時機</h2>
+
+      <img class="ref-img" src="resources/originals/breakpoints.gif" alt="有斷點與無斷點兩種版面處理方式的示意圖">
+
+      <div class="two-col" style="margin-top:14px">
+        <div>
+          <div class="cmp-card accent-card">
+            <div class="cmp-card-title">With Breakpoints（有斷點）</div>
+            <div class="cmp-body">
+              在特定寬度（如 768px）觸發版面切換，每個斷點的體驗都是針對性優化的。
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="cmp-card">
+            <div class="cmp-card-title">Without Breakpoints（無斷點）</div>
+            <div class="cmp-body">
+              使用 Flexbox Wrap 或流動網格，版面連續流動，無明顯切換點。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-box">
+        <strong>最佳斷點策略：</strong>斷點不應依照「iPhone 尺寸」來設定，而應在版面「開始看起來奇怪」的時候加斷點。讓內容決定斷點，而非裝置決定斷點。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 12 組件寫法 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 12 組件寫法 ───────────────────── -->
+  <section class="slide" id="s12">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">12 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">核心概念 · Components</p>
+      <div class="overline">核心概念 · Components</div>
+      <div class="divider"></div>
       <h1>組件寫法（Nested Components）</h1>
-      <h2>善用容器包裝，響應式元件才好控制、好維護。</h2>
-      <img class="slide-img" src="resources/originals/nested-components.png" alt="巢狀容器包裝元件的示意圖">
-      <div class="note">用一個 wrapper 容器包住相關元素，容器設 <code>position: relative</code>，子元素相對容器定位，不會被整體版面牽著跑。原則沒變：<span class="hl">icon、按鈕最小點擊區域用 px</span>；<span class="hl">欄寬、圖片最大寬度、全幅 banner 用 %</span>。</div>
-    </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
-  </section>
+      <h2>善用容器包裝，讓響應式元件更容易控制與維護</h2>
 
-  <!-- 13 字型與圖示選用 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
-    <div class="slide-body">
-      <p class="overline">字型與圖示選用</p>
-      <h1>系統字型 vs 網頁字體／點陣圖 vs 向量圖</h1>
-      <h2>設計稿裡兩個常被忽略、卻直接影響跨裝置顯示品質的細節。</h2>
-      <div class="matrix c4">
-        <div class="mini-card warn"><strong>系統字型</strong><span>Windows、Mac、iOS、Android 預設字型都不同，跨平台顯示不一致</span></div>
-        <div class="mini-card accent"><strong>網頁字體</strong><span>用 Google Fonts 等 CDN 字型，所有裝置下載同一套；行動網路要注意字重數量與載入速度</span></div>
-        <div class="mini-card warn"><strong>點陣圖</strong><span>解析度固定，放大會糊，在高密度螢幕上 icon 不清晰</span></div>
-        <div class="mini-card accent"><strong>SVG 向量圖</strong><span>任意縮放不失真，檔案通常更小，介面 icon／Logo 優先選它</span></div>
+      <img class="ref-img" style="max-height:24vh" src="resources/originals/nested-components.gif" alt="巢狀容器包裝元件的示意圖">
+
+      <div class="two-col" style="margin-top:14px">
+        <div class="cmp-card accent-card">
+          <div class="cmp-card-title">Nested（嵌套容器）</div>
+          <div class="cmp-body">
+            用 <b>wrapper container</b> 包裝相關元素。容器設定 <code style="background:rgba(0,102,204,.12);padding:1px 5px;border-radius:3px;font-size:.9em">position: relative</code>，子元素相對容器定位，不受整體版面影響。
+          </div>
+        </div>
+        <div>
+          <div class="cmp-card" style="margin-bottom:16px">
+            <div class="cmp-card-title">適合用 px 的場合</div>
+            <div class="cmp-body">
+              Icon、按鈕最小點擊區域（44px）、邊框厚度等<b>不應隨版面縮放</b>的元素，適合使用靜態單位 px，讓它們保持固定大小。
+            </div>
+          </div>
+          <div class="cmp-card">
+            <div class="cmp-card-title">適合用 % 的場合</div>
+            <div class="cmp-body">
+              版面欄位寬度、圖片最大寬度、全幅 banner 等<b>需要隨螢幕縮放</b>的元素，使用相對單位讓它們靈活流動。
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 14 Figma 響應式設計 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 13 字型 ────────────────────────── -->
+  <section class="slide" id="s13">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">13 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">Figma 應用</p>
+      <div class="overline">字型與圖示選用</div>
+      <div class="divider"></div>
+      <h1>系統字型 vs 網頁字體 / 點陣圖 vs 向量圖</h1>
+      <h2>設計稿中兩個常被忽略但影響跨裝置顯示品質的細節</h2>
+
+      <div class="two-col" style="margin-top:18px;gap:32px">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">字型選用</div>
+          <img class="ref-img" style="max-height:16vh;margin-top:0" src="resources/originals/system-fonts-vs-webfonts.gif" alt="系統字型與網頁字體的示意圖">
+          <div class="cmp-card" style="margin-top:10px;margin-bottom:10px">
+            <div class="cmp-card-title">🚫 System Fonts（系統字型）</div>
+            <div class="cmp-body">
+              系統字型僅在安裝該字型的裝置上顯示正確。Windows、Mac、iOS、Android 各有不同預設字型，跨平台呈現不一致。
+            </div>
+          </div>
+          <div class="cmp-card accent-card">
+            <div class="cmp-card-title">✅ Web Fonts（網頁字體）</div>
+            <div class="cmp-body">
+              使用 <b>Google Fonts</b> 等 CDN 字型，所有裝置都會下載並呈現相同字型。注意行動網路的載入速度，控制字重數量。
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">圖示選用</div>
+          <img class="ref-img" style="max-height:16vh;margin-top:0" src="resources/originals/vectors-vs-images.gif" alt="向量圖與點陣圖的示意圖">
+          <div class="cmp-card" style="margin-top:10px;margin-bottom:10px">
+            <div class="cmp-card-title">🚫 點陣圖（Images / PNG / JPG）</div>
+            <div class="cmp-body">
+              解析度固定，放大後失真（模糊）。在 Retina 高密度螢幕上，icon 會顯得不清晰。
+            </div>
+          </div>
+          <div class="cmp-card accent-card">
+            <div class="cmp-card-title">✅ SVG 向量圖（Vectors）</div>
+            <div class="cmp-body">
+              向量格式，任意縮放不失真。介面 icon、Logo 優先使用 SVG，檔案通常比 PNG 更小，且支援 CSS 動畫控制。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
+  </section>
+
+  <!-- ─────── 14 Figma 響應式設計 ─────────────── -->
+  <section class="slide" id="s14">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">14 / 16</span>
+    </div>
+    <div class="slide-body">
+      <div class="overline">Figma 應用</div>
+      <div class="divider"></div>
       <h1>在 Figma 設計多裝置版本</h1>
-      <h2>用 Constraints 與 Auto Layout 讓設計稿本身就反映響應式邏輯，不用另外寫說明文件。</h2>
-      <div class="matrix c3">
-        <div class="mini-card"><strong>Step 01 · 建立多個 Frame</strong><span>分別建 Mobile（375px）、Tablet（768px）、Desktop（1440px）三個 Frame，對應不同斷點</span></div>
-        <div class="mini-card"><strong>Step 02 · 設定 Constraints</strong><span>每個元素設 Left／Right／Scale，讓它在 Frame 縮放時保持相對位置關係</span></div>
-        <div class="mini-card"><strong>Step 03 · 使用 Auto Layout</strong><span>建流動元件，設定 Fill／Hug／Fixed 控制每個元素的縮放行為</span></div>
+      <h2>利用 Constraints 與 Auto Layout 讓設計稿反映響應式邏輯</h2>
+
+      <div class="two-col-3" style="margin-top:28px">
+        <div class="concept-card">
+          <div class="cc-label">Step 01</div>
+          <div class="cc-title">建立多個 Frame</div>
+          <div class="cc-body">分別建立 Mobile（375px）、Tablet（768px）、Desktop（1440px）三個 Frame，對應不同斷點。</div>
+        </div>
+        <div class="concept-card">
+          <div class="cc-label">Step 02</div>
+          <div class="cc-title">設定 Constraints</div>
+          <div class="cc-body">為每個元素設定 Left / Right / Scale 等 Constraints，使其在 Frame 縮放時保持相對位置關係。</div>
+        </div>
+        <div class="concept-card">
+          <div class="cc-label">Step 03</div>
+          <div class="cc-title">使用 Auto Layout</div>
+          <div class="cc-body">用 Auto Layout 建立流動元件，設定 Fill / Hug / Fixed 控制每個元素的縮放行為。</div>
+        </div>
       </div>
-      <div class="note"><span class="hl">設計師的責任：</span>在 Figma 裡清楚標示「這個元件在手機版怎麼變」，工程師才能照著實作對。多 Frame 設計是設計師跟工程師溝通響應式邏輯最直接的媒介。</div>
+
+      <div class="hl-box">
+        <strong>設計師的責任：</strong>在 Figma 中清楚標示「這個元件在手機版如何變化」，讓開發者能夠正確實作。Figma 的多 Frame 設計是與工程師溝通響應式邏輯的最佳媒介。
+      </div>
+      <div class="hl-box" style="margin-top:12px">
+        <strong>課堂練習：</strong><a href="https://www.figma.com/design/ALhYV4EgmwskENfL8I1Akp/響應式網站?node-id=0-1&p=f&t=BCvfoGZgVRkRDnc4-0" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;text-decoration:none">Figma 練習檔 ↗</a> 對應 Frame、Constraints 與 Auto Layout 這三個步驟。
+      </div>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-  <!-- 15 參考資源 -->
-  <section class="slide">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
+  <!-- ─────── 15 參考資源 ───────────────────── -->
+  <section class="slide" id="s15">
+    <div class="slide-head">
+      <span class="unit-pill">Unit 09</span>
+      <span class="slide-num">15 / 16</span>
+    </div>
     <div class="slide-body">
-      <p class="overline">參考資源</p>
+      <div class="overline">參考資源</div>
+      <div class="divider"></div>
       <h1>推薦工具與參考網站</h1>
-      <h2>看真實世界的響應式案例，觀察版面切換的設計邏輯。</h2>
-      <div class="res-links">
-        <a class="res-link" href="https://responsive-jp.com/" target="_blank" rel="noopener"><strong>responsive-jp.com ↗</strong><span>日本響應式設計展示網站，可切換裝置尺寸即時預覽各網站的響應式行為</span></a>
-        <a class="res-link" href="https://mediaqueri.es/" target="_blank" rel="noopener"><strong>mediaqueri.es ↗</strong><span>精選響應式設計案例集，觀察優質網站在不同寬度下的版面變化</span></a>
-        <a class="res-link" href="https://html5up.net/" target="_blank" rel="noopener"><strong>html5up.net ↗</strong><span>免費響應式 HTML5 版型下載，可直接研究原始碼學習 RWD 實作方式</span></a>
-        <a class="res-link" href="https://gs.statcounter.com/" target="_blank" rel="noopener"><strong>StatCounter Global Stats ↗</strong><span>查詢全球裝置、螢幕解析度分佈，決定斷點策略的重要參考數據</span></a>
-      </div>
-    </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
-  </section>
+      <h2>探索真實世界的響應式案例，從中觀察版面切換的設計邏輯</h2>
 
-  <!-- 16 小結 -->
-  <section class="slide dark">
-    <div class="slide-head"><span class="unit-pill">Unit 09</span><span class="slide-num"></span></div>
-    <div class="slide-body">
-      <span class="bg-n">09</span>
-      <p class="overline">本堂小結</p>
-      <h1>RWD 不只是「縮小版面」</h1>
-      <h2>而是從一開始就用「多裝置」的思維規劃設計。</h2>
-      <ul class="blist plain">
-        <li>五種版面模式：Mostly Fluid、Column Drop、Layout Shifter、Tiny Tweaks、Off Canvas</li>
-        <li>斷點策略：讓<span class="hl">內容</span>決定斷點，而不是裝置型號決定斷點</li>
-        <li>用<span class="hl">相對單位（%）</span>搭配 <span class="hl">max-width</span> 控制版面流動</li>
-        <li>表格、圖片、字型、圖示各有對應的響應式處理策略</li>
-        <li>Figma 的多 Frame + Constraints + Auto Layout 是設計端的響應式工具</li>
+      <ul class="blist" style="margin-top:32px">
+        <li data-n="1">
+          <div style="flex:1">
+            <a href="https://responsive-jp.com/" target="_blank" style="font-weight:600;color:var(--accent);text-decoration:none;margin-bottom:4px;display:inline-block">responsive-jp.com ↗</a>
+            <div style="font-size:.88em;color:var(--muted)">日本響應式設計展示網站，可切換裝置尺寸即時預覽各網站的響應式行為</div>
+          </div>
+        </li>
+        <li data-n="2">
+          <div style="flex:1">
+            <a href="https://mediaqueri.es/" target="_blank" style="font-weight:600;color:var(--accent);text-decoration:none;margin-bottom:4px;display:inline-block">mediaqueri.es ↗</a>
+            <div style="font-size:.88em;color:var(--muted)">精選響應式設計案例集，觀察優質網站在不同寬度下的版面變化</div>
+          </div>
+        </li>
+        <li data-n="3">
+          <div style="flex:1">
+            <a href="https://html5up.net/" target="_blank" style="font-weight:600;color:var(--accent);text-decoration:none;margin-bottom:4px;display:inline-block">html5up.net ↗</a>
+            <div style="font-size:.88em;color:var(--muted)">免費響應式 HTML5 版型下載，可直接研究原始碼學習 RWD 實作方式</div>
+          </div>
+        </li>
+        <li data-n="4">
+          <div style="flex:1">
+            <a href="https://gs.statcounter.com/" target="_blank" style="font-weight:600;color:var(--accent);text-decoration:none;margin-bottom:4px;display:inline-block">StatCounter Global Stats ↗</a>
+            <div style="font-size:.88em;color:var(--muted)">查詢全球裝置、螢幕解析度分佈，決定斷點策略的重要參考數據</div>
+          </div>
+        </li>
+        <li data-n="5">
+          <div style="flex:1">
+            <a href="https://blog.froont.com/9-basic-principles-of-responsive-web-design/" target="_blank" style="font-weight:600;color:var(--accent);text-decoration:none;margin-bottom:4px;display:inline-block">Froont Blog：9 Basic Principles of RWD ↗</a>
+            <div style="font-size:.88em;color:var(--muted)">本節「流動性、相對單位、斷點設計、組件寫法、字型與圖示」幾張示意圖的原始出處</div>
+          </div>
+        </li>
       </ul>
     </div>
-    <div class="slide-foot"><span class="course-label">Web 設計規範與網頁結構</span><div class="dots"></div></div>
+    <div class="slide-foot">
+      <span class="course-label">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
   </section>
 
-</div><!-- /#deck -->
+  <!-- ─────── 16 小結 ────────────────────────── -->
+  <section class="slide dark" id="s16">
+    <div class="slide-head">
+      <span class="unit-pill" style="background:rgba(255,255,255,.1);color:#5aa8ea">Unit 09</span>
+      <span class="slide-num" style="color:#555">16 / 16</span>
+    </div>
+    <div class="slide-body">
+      <div class="bg-n">12</div>
+      <div class="overline" style="color:#5aa8ea">本堂小結</div>
+      <div class="divider" style="background:#5aa8ea"></div>
+      <h1 style="color:#f5f5f7">RWD 不只是「縮小版面」</h1>
+      <h2 style="color:#86868b">而是從一開始就用「多裝置」的思維來規劃設計</h2>
 
-<div id="ctrls">
+      <ul class="blist plain" style="margin-top:36px">
+        <li style="background:rgba(255,255,255,.05);color:#e5e5ea">
+          五種版面設計模式：Mostly Fluid、Column Drop、Layout Shifter、Tiny Tweaks、Off Canvas
+        </li>
+        <li style="background:rgba(255,255,255,.05);color:#e5e5ea">
+          斷點策略：讓<span style="color:#5aa8ea;font-weight:600">內容</span>決定斷點，而非裝置型號決定斷點
+        </li>
+        <li style="background:rgba(255,255,255,.05);color:#e5e5ea">
+          使用<span style="color:#5aa8ea;font-weight:600">相對單位（%）</span>搭配<span style="color:#5aa8ea;font-weight:600"> max-width</span> 控制版面流動
+        </li>
+        <li style="background:rgba(255,255,255,.05);color:#e5e5ea">
+          表格、圖片、字型、圖示各有對應的響應式處理策略
+        </li>
+        <li style="background:rgba(255,255,255,.05);color:#e5e5ea">
+          Figma 的多 Frame + Constraints + Auto Layout 是設計端的響應式工具
+        </li>
+      </ul>
+    </div>
+    <div class="slide-foot">
+      <span class="course-label" style="color:#555">Web 設計規範與網頁結構</span>
+      <div class="dots"></div>
+    </div>
+  </section>
+
+</div><!-- /deck -->
+
+<nav id="ctrls">
   <button id="prev" aria-label="上一頁">&#8592;</button>
   <button id="next" aria-label="下一頁">&#8594;</button>
-</div>
+</nav>
 
 <script>
-(function () {
-  const slides = Array.from(document.querySelectorAll('.slide:not(.drop)'));
-  const total = slides.length;
-  const prog = document.getElementById('prog');
-  const ctrls = document.getElementById('ctrls');
-  const dotContainers = Array.from(document.querySelectorAll('.dots'));
-  let cur = 0;
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total  = slides.length;
+let cur = 0;
 
-  slides.forEach((slide, i) => {
-    const num = slide.querySelector('.slide-num');
-    if (num) num.textContent = String(i + 1).padStart(2, '0') + ' / ' + total;
-  });
+function go(n) {
+  slides[cur].classList.remove('active');
+  cur = (n + total) % total;
+  slides[cur].classList.add('active');
+  document.getElementById('prog').style.width = ((cur + 1) / total * 100) + '%';
+  buildDots();
+}
 
-  dotContainers.forEach(container => {
+function buildDots() {
+  document.querySelectorAll('.dots').forEach(wrap => {
+    wrap.innerHTML = '';
     slides.forEach((_, i) => {
-      const dot = document.createElement('span');
-      dot.className = 'dot' + (i === 0 ? ' on' : '');
-      dot.setAttribute('role', 'button');
-      dot.setAttribute('aria-label', '前往第 ' + (i + 1) + ' 頁');
-      dot.addEventListener('click', () => go(i));
-      container.appendChild(dot);
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === cur ? ' on' : '');
+      d.addEventListener('click', () => go(i));
+      wrap.appendChild(d);
     });
   });
+}
 
-  function go(n) {
-    slides[cur].classList.remove('active');
-    cur = (n + total) % total;
-    slides[cur].classList.add('active');
-    prog.style.width = ((cur + 1) / total * 100) + '%';
-    ctrls.classList.toggle('on-dark', slides[cur].classList.contains('dark'));
-    dotContainers.forEach(container => {
-      Array.from(container.children).forEach((dot, i) => dot.classList.toggle('on', i === cur));
-    });
-  }
+document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+document.getElementById('next').addEventListener('click', () => go(cur + 1));
 
-  document.getElementById('prev').addEventListener('click', () => go(cur - 1));
-  document.getElementById('next').addEventListener('click', () => go(cur + 1));
-  document.addEventListener('keydown', event => {
-    if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') {
-      event.preventDefault();
-      go(cur + 1);
-    } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
-      event.preventDefault();
-      go(cur - 1);
-    } else if (event.key === 'Home') {
-      go(0);
-    } else if (event.key === 'End') {
-      go(total - 1);
-    }
-  });
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(cur + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(cur - 1);
+});
 
-  prog.style.width = (1 / total * 100) + '%';
-  ctrls.classList.toggle('on-dark', slides[0].classList.contains('dark'));
-})();
+go(0);
 </script>
 </body>
 </html>
