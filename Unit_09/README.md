@@ -1,30 +1,86 @@
-# 單元 9：Web 設計規範與網頁結構
+# 單元 9：響應式網頁設計（RWD）
 > 對應資展時段：2026/08/10（一）09:00–12:00
-> ⚠️ 簡報 slides.html 尚未依新主題重製，待後續處理。
 
 ## 單元目標
 
-- 理解常見網頁結構、導覽模式與內容區塊的設計規範。
-- 能把 Wireframe 調整成符合 Web 使用情境的多斷點版面。
-- 掌握 RWD 的核心概念、斷點策略與常見版面轉換模式。
-- 能在 Figma 中規劃桌機、平板與手機版本的版面關係。
+- 理解響應式網頁設計（RWD）的核心概念，以及與自適應設計（AWD）的差異。
+- 掌握五種常見的 RWD 版面設計模式，能依需求選用合適的方式。
+- 了解斷點設置策略，能分辨「行動優先」與「桌機優先」的設計思路。
+- 學會響應式圖片、表格與字型的規劃原則，讓設計在各裝置上保持品質。
+- 在 Figma 設計稿中實踐多裝置版面的切換邏輯。
 
 ## 課程介紹
 
-這個單元聚焦 Web 介面。網頁設計不只是把 App 畫面放大，而是要理解瀏覽器寬度、導覽結構、內容閱讀節奏、表格與圖片在不同裝置上的處理方式。
+在多裝置普及的今天，一套設計稿需要能夠在手機、平板與桌機上都呈現良好的使用體驗。本單元將深入介紹響應式網頁設計（Responsive Web Design，RWD）的完整概念與實作規劃思路。
 
-舊課程中的 RWD 內容會移到這裡。Mostly Fluid、Column Drop、Layout Shifter、Tiny Tweaks、Off Canvas 等模式，能幫助判斷不同區塊在 viewport 改變時如何重排；Desktop First 與 Mobile First 則影響斷點規劃與設計順序。
+課程首先從五種 RWD 版面設計模式切入——Mostly Fluid（局部流動）、Column Drop（欄位下移）、Layout Shifter（區塊轉換）、Tiny Tweaks（細微調整）、Off Canvas（超出畫布）——帶領學員理解不同版面如何在不同 viewport 下流暢轉換。
 
-完成本單元後，Wireframe 會從單一尺寸變成多裝置規劃。這不是單純複製三份畫面，而是要說清楚哪些內容保留、哪些內容收合、哪些互動在手機上需要換成更適合的形式。
+接著課程將進入「斷點設置規劃」，說明如何依據裝置使用者分佈決定斷點策略，並比較 Desktop First（桌機優先）與 Mobile First（行動優先）兩種開發思路對應的 Media Query 寫法（max-width vs. min-width）。
 
-## 課程內容
+同時，本單元也涵蓋響應式設計中常被忽略的細節，包括：響應式表格的四種處理方式（隱藏欄位、水平 scroll、CSS/DIV 排版、破壞 Table 排版）、響應式圖片的裁切與縮放策略、相對單位（%）與靜態單位（px）的使用時機、max-width / min-width 的版面控制，以及為何應優先使用 Web 字體與 SVG 向量圖。
 
-- Web 頁面結構：Header、Navigation、Hero、Content Section、CTA、Footer。
-- 常見導覽：水平導覽、側欄、麵包屑、Tab、Off Canvas 選單。
-- RWD 五種模式：Mostly Fluid、Column Drop、Layout Shifter、Tiny Tweaks、Off Canvas。
-- 斷點策略：Desktop First、Mobile First、max-width / min-width 思維。
-- 響應式內容：圖片裁切、表格處理、文字長度、按鈕與點擊區域。
-- Figma 多斷點 Wireframe：桌機、平板、手機版面關係。
+課程結束後，學員將能從設計師的視角理解響應式設計的全貌，並在 Figma 中完成具備多裝置版本的設計稿規劃。
+
+---
+
+## 核心概念整理
+
+### 一、RWD 五種設計模式
+
+| 模式 | 說明 |
+| --- | --- |
+| Mostly Fluid 局部流動 | 主要以流動網格為基礎，在小螢幕上欄位垂直堆疊，大螢幕加入側邊留白 |
+| Column Drop 欄位下移 | 隨螢幕縮小，多欄版面逐步將右側欄位移至下方 |
+| Layout Shifter 區塊轉換 | 不同螢幕尺寸下整體區塊位置與順序大幅改變 |
+| Tiny Tweaks 細微調整 | 版面結構不變，僅微調字型大小、間距、圖片尺寸等細節 |
+| Off Canvas 超出畫布 | 次要內容（如導覽選單）預設隱藏在畫布外，需手動觸發才顯示 |
+
+### 二、斷點設置策略
+
+- **Desktop First（桌機優先）**：從桌機設計往下縮，Media Query 使用 `max-width`，製作順序：桌機 → 平板 → 手機
+- **Mobile First（行動優先）**：從手機設計往上擴，Media Query 使用 `min-width`，製作順序：手機 → 平板 → 桌機
+- 開始專案前，可透過 Google Analytics 查詢現有訪客裝置分佈，或利用 StatCounter 查詢市場數據，再決定斷點設置方向。
+
+### 三、響應式表格規劃
+
+1. **隱藏某些欄位**：在小螢幕上隱藏次要欄位，只保留核心資訊
+2. **Table 水平 scroll**：保持完整 Table 結構，讓使用者左右滑動查看
+3. **使用 CSS 與 DIV 排版**：將 Table 結構轉為 Flexbox/Grid 排版
+4. **破壞 Table 排版**：在行動端將每列資料重新排成獨立卡片式呈現
+
+### 四、響應式圖片規劃
+
+- **圖片裁切**：依裝置顯示不同裁切比例的圖片（Art Direction）
+- **圖片等比縮小**：設定 `max-width: 100%` 讓圖片隨容器縮放
+- **減少瀏覽器請求（request）**：合併圖檔、使用 CSS Sprite 或 SVG Icon
+- **背景圖設計**：利用 Media Query 在不同斷點切換背景圖（換行、裁切、換圖）
+
+### 五、相對單位與版面控制
+
+- **相對單位（%）**：適用於流動版面，元素寬度隨螢幕比例縮放
+- **靜態單位（px）**：適用於固定不隨版面縮放的元素，如 icon、按鈕最小點擊區域
+- **Max-width / Min-width**：設定 `width: 100%; max-width: 1200px` 可確保版面填滿螢幕但不過寬
+
+### 六、字型與圖示建議
+
+- **Web 字體優於系統字體**：系統字體無法跨裝置保持一致，Web 字體（如 Google Fonts）可適用所有裝置，但需注意行動端載入速度
+- **SVG 向量圖優於點陣圖**：SVG 無論縮放皆不失真，適合用於介面 icon 與插圖
+
+### 七、RWD vs AWD
+
+| 比較 | RWD 響應式 | AWD 自適應式 |
+| --- | --- | --- |
+| 載入方式 | 同一套 CSS 依螢幕流動調整 | 偵測裝置後載入對應版本 |
+| 過渡效果 | 平滑漸進 | 需要切換時間 |
+| 開發成本 | 較低 | 較高（需維護多版本） |
+
+---
+
+## 參考資源
+
+- 響應式設計展示：https://responsive-jp.com/
+- Media Query 工具：https://mediaqueri.es/
+- 響應式版型參考：https://html5up.net/
 
 ## 對應資展日期與時段
 
