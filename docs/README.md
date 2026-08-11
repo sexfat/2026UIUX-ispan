@@ -11,6 +11,10 @@
 | [unit-materials skill 與教材驗收腳本](spec/unit-materials-skill.md) | [spec](spec/unit-materials-skill.md) | [log](changelog/unit-materials-skill.md) | done | 2026-08-02 |
 | [Unit 06 完整教材建置（Flowchart 到 Wireframe）](spec/unit06-flow-wireframe.md) | [spec](spec/unit06-flow-wireframe.md) | [log](changelog/unit06-flow-wireframe.md) | done | 2026-08-02 |
 | [Unit 07 完整教材建置（狀態設計與 Wireflow 合成）](spec/unit07-state-wireflow.md) | [spec](spec/unit07-state-wireflow.md) | [log](changelog/unit07-state-wireflow.md) | done | 2026-08-07 |
+| [Unit 08 補充簡報：增加設計的好感度](spec/unit08-gestalt-supplement.md) | [spec](spec/unit08-gestalt-supplement.md) | [log](changelog/unit08-gestalt-supplement.md) | done | 2026-08-11 |
+| [Unit 09 完整教材建置（響應式網頁設計 RWD）](spec/unit09-rwd.md) | [spec](spec/unit09-rwd.md) | [log](changelog/unit09-rwd.md) | done | 2026-08-11 |
+| [Unit 10 完整教材建置（Mockup 精度與十大易用性）](spec/unit10-mockup-heuristics.md) | [spec](spec/unit10-mockup-heuristics.md) | [log](changelog/unit10-mockup-heuristics.md) | done | 2026-08-11 |
+| [Unit 11 APP UI 設計規範教材與自我檢核表](spec/unit11-app-ui.md) | [spec](spec/unit11-app-ui.md) | [log](changelog/unit11-app-ui.md) | done | 2026-08-11 |
 
 ## 修復紀錄
 
