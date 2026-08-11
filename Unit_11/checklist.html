@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 11 · APP 介面檢核表｜學生自我檢核</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  z-index: 200;
+}
+
+.topbar {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.09);
+  padding: 4px 11px;
+  border-radius: 8px;
+}
+
+.hero {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.overline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  align-items: center;
+}
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc {
+  max-width: var(--max-w);
+  margin: 36px auto 0;
+  padding: 26px 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.toc h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+h2.sec-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.22;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+  font-weight: 800;
+  margin: 32px 0 12px;
+}
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+em {
+  font-style: normal;
+  background: rgba(0,102,204,.09);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.hl { color: var(--accent); font-weight: 800; }
+.hl2 { color: var(--accent2); font-weight: 800; }
+.bad { color: var(--accent3); font-weight: 800; }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .88em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+
+.fig { margin: 24px 0; }
+.fig img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.fig figcaption {
+  margin-top: 10px;
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li {
+  font-size: 1rem;
+  color: #2c2c2e;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  padding-left: 26px;
+  position: relative;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: .65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,102,204,.1);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.callout {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: rgba(0,102,204,.05);
+  border: 1px solid rgba(0,102,204,.16);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.callout.green {
+  background: rgba(15,118,110,.06);
+  border-color: rgba(15,118,110,.2);
+  border-left-color: var(--accent2);
+}
+.callout.warn {
+  background: rgba(194,65,12,.06);
+  border-color: rgba(194,65,12,.2);
+  border-left-color: var(--accent3);
+}
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(0,102,204,.06);
+  border-bottom: 2px solid var(--border);
+}
+th:first-child { color: var(--muted); background: transparent; }
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #2c2c2e;
+  line-height: 1.6;
+  vertical-align: top;
+}
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.card h3 { margin: 0 0 8px; font-size: 1rem; }
+.card p { margin: 0; font-size: .93rem; color: var(--muted); line-height: 1.65; }
+
+.dia {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  margin: 22px 0;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.85;
+  color: #2c2c2e;
+  white-space: pre;
+  overflow-x: auto;
+}
+.dia .n { color: var(--accent); font-weight: 700; }
+.dia .d { color: var(--accent2); font-weight: 700; }
+.dia .x { color: var(--accent3); font-weight: 700; }
+.dia .c { color: var(--muted); }
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 22px 0;
+}
+.sw {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.sw .chip { display: block; height: 56px; }
+.sw .lbl {
+  display: block;
+  padding: 9px 11px 11px;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.sw .lbl b { display: block; font-size: .82rem; color: var(--dark); font-weight: 800; }
+
+.prompt {
+  position: relative;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 22px 22px 24px;
+  margin: 18px 0 26px;
+}
+.prompt pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: #e8e8ed;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c7c7cc;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+.copy-btn.done { color: #30d158; border-color: rgba(48,209,88,.45); }
+
+.refs {
+  max-width: var(--max-w);
+  margin: 64px auto 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.refs h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.refs h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin: 26px 0 12px;
+}
+.refs ul { list-style: none; }
+.refs li {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding-left: 18px;
+  position: relative;
+}
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav {
+  max-width: var(--max-w);
+  margin: 48px auto 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.pin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.pin-embed {
+  min-height: 360px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+.pin-embed h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+.pin-note {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.side-nav {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: calc(50% - (var(--max-w) / 2) - 258px);
+  transform: translateY(-50%);
+  width: 220px;
+  max-height: 72vh;
+  overflow-y: auto;
+  z-index: 150;
+}
+.side-nav-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding-left: 15px;
+}
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 0 7px 15px;
+  margin-left: -2px;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.side-nav a::before {
+  content: counter(sidenav, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--border);
+  flex-shrink: 0;
+}
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+  .swatches { grid-template-columns: repeat(2, 1fr); }
+  .pin-grid { grid-template-columns: 1fr; }
+  .hero { padding: 40px 0 32px; }
+}
+
+
+/* ── 檢核表 ─────────────────────────────── */
+.cl-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 14px 0 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.cl-bar-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.cl-count {
+  font-size: .92rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cl-track { flex: 1; min-width: 140px; height: 8px; border-radius: 4px; background: var(--surface); overflow: hidden; }
+.cl-fill { height: 100%; width: 0; border-radius: 4px; background: var(--accent); transition: width .3s ease, background .3s ease; }
+.cl-fill.done { background: var(--accent2); }
+.cl-msg { font-size: .86rem; color: var(--muted); }
+.cl-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.cl-btn {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0,102,204,.08);
+  border: 1px solid rgba(0,102,204,.18);
+  padding: 7px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .18s;
+}
+.cl-btn:hover { background: rgba(0,102,204,.15); }
+.cl-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cl-btn.ghost { color: var(--muted); background: transparent; border-color: var(--border); }
+.cl-btn.ghost:hover { background: var(--surface); }
+
+.cl-group { margin-top: 40px; }
+.cl-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  flex-wrap: wrap;
+}
+.cl-group-head h2 { font-size: clamp(1.1rem, 2.2vw, 1.35rem); font-weight: 800; margin: 0; }
+.cl-group-score { font-size: .8rem; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cl-group-score.done { color: var(--accent2); }
+.cl-group-ref { font-size: .78rem; color: var(--muted); margin-left: auto; }
+.cl-group-ref a { color: var(--accent); text-decoration: none; font-weight: 700; }
+.cl-group-ref a:hover { text-decoration: underline; }
+
+.cl-item {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 15px 12px 15px 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .16s;
+}
+.cl-item:hover { background: var(--surface); }
+.cl-check { position: absolute; opacity: 0; width: 0; height: 0; }
+.cl-box {
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: transparent;
+  font-size: 14px;
+  font-weight: 800;
+  transition: background .16s, border-color .16s, color .16s;
+}
+.cl-item:has(.cl-check:checked) .cl-box { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.cl-item:has(.cl-check:checked) .cl-name { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--border); }
+.cl-item:has(.cl-check:focus-visible) .cl-box { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cl-name { font-weight: 800; font-size: 1rem; line-height: 1.5; margin-bottom: 4px; }
+.cl-why { font-size: .9rem; color: var(--muted); line-height: 1.62; }
+.cl-why code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .86em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.cl-fail { display: block; margin-top: 5px; font-size: .86rem; color: var(--accent3); }
+
+.cl-out { display: none; }
+body.only-todo .cl-item:has(.cl-check:checked) { display: none; }
+body.only-todo .cl-group:has(.cl-item) .cl-out { display: block; }
+
+.cl-empty {
+  margin-top: 10px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(15,118,110,.07);
+  border: 1px solid rgba(15,118,110,.2);
+  font-size: .9rem;
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+.cl-summary {
+  margin-top: 22px;
+  padding: 20px 22px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.cl-summary h3 { margin: 0 0 8px; font-size: 1rem; }
+.cl-summary p { margin: 0 0 12px; font-size: .9rem; color: var(--muted); }
+.cl-summary textarea {
+  width: 100%;
+  min-height: 110px;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: .78rem;
+  line-height: 1.6;
+  color: var(--dark);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+@media print {
+  .topbar, .side-nav, .cl-actions, .foot-nav, #prog, .cl-summary { display: none !important; }
+  .cl-toolbar { position: static; border-bottom: 1px solid #999; }
+  .cl-item { break-inside: avoid; cursor: default; }
+  body { padding: 0; }
+}
+@media (max-width: 640px) {
+  .cl-group-ref { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<div class="topbar">
+  <a class="back-link" href="article.html">回到 Unit 11 講義</a>
+  <span class="unit-pill">Unit 11</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Self-check · Unit 11</p>
+  <h1>APP 介面檢核表</h1>
+  <p class="lead">本表共 8 組 29 項，涵蓋平台慣例、單位與畫布、安全區域、導覽、觸控與回饋、文字與表單、無障礙及交件內容，作為作業 9 交件前的自我檢核依據。每一項包含檢查依據與常見未達成情形，並標示對應的講義章節。勾選狀態儲存於瀏覽器本機，重新開啟頁面後仍會保留。</p>
+  <div class="meta">
+    <span>對應作業 9</span><span class="d"></span>
+    <span>8 組 · 29 項</span><span class="d"></span>
+    <span>勾選自動保存</span>
+  </div>
+</div>
+
+<div class="cl-toolbar">
+  <div class="cl-bar-row">
+    <span class="cl-count" id="clCount">0 / 29</span>
+    <div class="cl-track"><div class="cl-fill" id="clFill"></div></div>
+    <span class="cl-msg" id="clMsg">尚未開始檢核</span>
+  </div>
+  <div class="cl-actions">
+    <button class="cl-btn" id="btnTodo" type="button">只看未完成</button>
+    <button class="cl-btn ghost" id="btnPrint" type="button">列印 / 存成 PDF</button>
+    <button class="cl-btn ghost" id="btnReset" type="button">全部清空</button>
+  </div>
+</div>
+
+<div class="article">
+
+  <!-- A -->
+  <section class="cl-group" id="g1">
+    <div class="cl-group-head">
+      <h2>A · 平台與慣例</h2>
+      <span class="cl-group-score" data-score="g1">0 / 3</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s1">§1</a>、<a href="article.html#s2">§2</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g1" id="c101">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">說得出這個頁面是 iOS 還是 Android</div>
+        <div class="cl-why">元件語言、導覽方式與返回行為都照同一個平台走，不是兩邊各挑喜歡的混在一起。
+          <span class="cl-fail">常見未達成情形：用了 iOS 的 Tab Bar，卻配 Android 的 Floating Action Button。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g1" id="c102">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">返回方式符合該平台的預期</div>
+        <div class="cl-why">iOS 靠導覽列返回鍵與邊緣返回手勢；Android 要能配合系統返回手勢或按鍵。
+          <span class="cl-fail">常見未達成情形：Android 頁面只有右上角一個自訂的叉叉，按系統返回鍵會直接跳出 App。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g1" id="c103">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">不是把 Web 版縮小塞進手機</div>
+        <div class="cl-why">觸控沒有 hover、沒有精準游標，可點範圍、間距與資訊密度都要按行動端重新決定。
+          <span class="cl-fail">常見未達成情形：畫面上有需要 hover 才看得到的提示，或一排並列的小文字連結。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- B -->
+  <section class="cl-group" id="g2">
+    <div class="cl-group-head">
+      <h2>B · 單位與畫布</h2>
+      <span class="cl-group-score" data-score="g2">0 / 4</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s3">§3</a>、<a href="article.html#s4">§4</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g2" id="c201">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">單位的角色分得清楚</div>
+        <div class="cl-why">版面與間距：iOS 用 <code>pt</code>、Android 用 <code>dp</code>；文字：iOS 用 Dynamic Type、Android 用 <code>sp</code>。
+          <span class="cl-fail">常見未達成情形：整份稿子只講 px，說不出哪些數字會隨密度或字體設定變動。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g2" id="c202">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">沒有用 sp 去設定版面尺寸</div>
+        <div class="cl-why"><code>sp</code> 會跟著使用者的字體大小偏好縮放。拿它設 padding 或固定容器高度，開大字模式時版面比例會垮掉。
+          <span class="cl-fail">常見未達成情形：按鈕高度寫 48sp 而不是 48dp。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g2" id="c203">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">有一個主要畫布當設計基準</div>
+        <div class="cl-why">內容與元件在主要 Frame 上完成，適配靠 Auto Layout、Constraints 與 Layout Grid 的關係處理。
+          <span class="cl-fail">常見未達成情形：為五款手機各畫一張獨立畫面，改一個地方要改五次。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g2" id="c204">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">做過至少一項尺寸壓力測試</div>
+        <div class="cl-why">較小畫面、大字模式、鍵盤展開，挑一項實際套上去看版面撐不撐得住。
+          <span class="cl-fail">常見未達成情形：只有一張剛剛好的畫面，沒有任何極端情況的驗證。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- C -->
+  <section class="cl-group" id="g3">
+    <div class="cl-group-head">
+      <h2>C · 安全區域</h2>
+      <span class="cl-group-score" data-score="g3">0 / 3</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s5">§5</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g3" id="c301">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">重要內容沒有被系統區域遮到</div>
+        <div class="cl-why">文字、按鈕、表單避開相機區、Dynamic Island、圓角、Home Indicator 與狀態列。
+          <span class="cl-fail">常見未達成情形：主要行動按鈕壓在 Home Indicator 上，手指一滑就退出 App。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g3" id="c302">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">背景可以延伸，操作留在安全區內</div>
+        <div class="cl-why">背景色、照片與沉浸式媒體可以做到螢幕邊緣；關鍵操作與文字維持在可安全閱讀與點擊的位置。
+          <span class="cl-fail">常見未達成情形：為了視覺滿版，把價格與購買鍵一起推到螢幕最底部。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g3" id="c303">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">想過會改變可用空間的系統元素</div>
+        <div class="cl-why">軟體鍵盤、輸入建議列、來電與錄音提示、橫向與分割視窗都會壓縮畫面。
+          <span class="cl-fail">常見未達成情形：鍵盤一跳出來就把送出鍵蓋住，而且畫面捲不上去。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- D -->
+  <section class="cl-group" id="g4">
+    <div class="cl-group-head">
+      <h2>D · 導覽</h2>
+      <span class="cl-group-score" data-score="g4">0 / 4</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s6">§6</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g4" id="c401">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">主要目的地用對容器</div>
+        <div class="cl-why">同層級的主要目的地放 Tab Bar（iOS）或 Navigation Bar（Android）；進入詳情用 Navigation Stack；短暫任務用 Sheet 或 Dialog。
+          <span class="cl-fail">常見未達成情形：用 Dialog 當主要導覽，使用者關掉之後不知道怎麼回去。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g4" id="c402">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">目前位置看得出來</div>
+        <div class="cl-why">選取與未選取狀態在顏色、填色或形狀上有穩定差異，而且不是只靠顏色分辨。
+          <span class="cl-fail">常見未達成情形：五個 Tab 圖示長得一樣，只有顏色深淺差一點點。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g4" id="c403">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">圖示與文字一起表達目的地</div>
+        <div class="cl-why">只放圖示會讓人用猜的，尤其是抽象概念的分頁。
+          <span class="cl-fail">常見未達成情形：底部五顆沒有文字的圖示，其中兩顆意思很接近。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g4" id="c404">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">Tab 沒有拿來放一次性動作</div>
+        <div class="cl-why">Tab 用來切換目的地。建立內容、掃描、發文這類動作屬於另一種操作，不該佔一個分頁位置。
+          <span class="cl-fail">常見未達成情形：把「新增」做成第三個 Tab，點下去卻是跳出一個表單。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- E -->
+  <section class="cl-group" id="g5">
+    <div class="cl-group-head">
+      <h2>E · 觸控與回饋</h2>
+      <span class="cl-group-score" data-score="g5">0 / 5</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s7">§7</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g5" id="c501">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">觸控目標達到平台建議尺寸</div>
+        <div class="cl-why">iOS 建議 <code>44 × 44 pt</code>，Android 至少 <code>48 × 48 dp</code>。
+          <span class="cl-fail">常見未達成情形：右上角的關閉鍵只有 20 × 20，手指按三次才中一次。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g5" id="c502">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">可點範圍可以大於可見圖示</div>
+        <div class="cl-why">24 pt／dp 的圖示放在較大的透明可點區裡，視覺維持精緻，誤觸率降低。
+          <span class="cl-fail">常見未達成情形：為了讓按鈕好按，直接把圖示畫成 48px，看起來很笨重。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g5" id="c503">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">相鄰控制項之間留了間距</div>
+        <div class="cl-why">兩個目標貼在一起，就算各自夠大也還是會按錯。
+          <span class="cl-fail">常見未達成情形：列表每一列右側的「編輯」與「刪除」緊貼在一起。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g5" id="c504">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">手勢不是唯一入口</div>
+        <div class="cl-why">Swipe、長按、拖曳能加速熟練操作，但第一次使用的人看不到。重要功能要另外有看得見的入口。
+          <span class="cl-fail">常見未達成情形：刪除只能左滑，畫面上沒有任何提示。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g5" id="c505">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">按下之後的狀態與結果分支完整</div>
+        <div class="cl-why">Default → Pressed（已接收）→ Loading（處理中），最後依結果進入 Success（成功與下一步）或 Error（問題與恢復方式）。
+          <span class="cl-fail">常見未達成情形：只畫了一般狀態，按下去之後畫面完全沒有變化。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- F -->
+  <section class="cl-group" id="g6">
+    <div class="cl-group-head">
+      <h2>F · 文字與表單</h2>
+      <span class="cl-group-score" data-score="g6">0 / 4</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s8">§8</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g6" id="c601">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">大字模式不會破版</div>
+        <div class="cl-why">元件高度、換行與間距要能跟著字級一起長大。
+          <span class="cl-fail">常見未達成情形：固定高度切掉第二行、兩顆按鈕在同一列互相擠壓、重要文字被省略號吃掉。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g6" id="c602">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">欄位有持續可辨識的標籤或說明</div>
+        <div class="cl-why">placeholder 不作為唯一標籤；固定標籤、浮動標籤或與欄位明確關聯的說明，在輸入後仍能辨識欄位用途。
+          <span class="cl-fail">常見未達成情形：表單五格都只有灰字提示，填到第三格已經忘記第一格填了什麼。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g6" id="c603">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">鍵盤展開後的版面有想過</div>
+        <div class="cl-why">鍵盤會吃掉大半個畫面。焦點欄位要上移、主要操作要還按得到、鍵盤要收得掉。
+          <span class="cl-fail">常見未達成情形：Mockup 只有鍵盤收起來的樣子，沒有任何輸入中的畫面。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g6" id="c604">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">錯誤訊息貼近欄位且說得出怎麼改</div>
+        <div class="cl-why">訊息要指出哪一格錯、為什麼錯、要改成什麼。
+          <span class="cl-fail">常見未達成情形：只把欄位框線變紅，或頁首寫一句「資料有誤」。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- G -->
+  <section class="cl-group" id="g7">
+    <div class="cl-group-head">
+      <h2>G · 無障礙</h2>
+      <span class="cl-group-score" data-score="g7">0 / 3</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s9">§9</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g7" id="c701">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">文字與必要介面元素的對比達到 WCAG 2.2 AA</div>
+        <div class="cl-why">一般文字至少 <code>4.5:1</code>；至少 18 pt 的一般文字或 14 pt 的粗體文字，以及理解內容或操作所需的圖示、控制項邊界與狀態指示，至少 <code>3:1</code>。以檢測工具實測，不以目視判斷。
+          <span class="cl-fail">常見未達成情形：淺灰字壓在白底上，或文字直接壓在照片上沒有遮罩。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g7" id="c702">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">狀態不只依賴顏色</div>
+        <div class="cl-why">錯誤、完成、選取都要另外有文字或圖示，色盲使用者才分得出來。
+          <span class="cl-fail">常見未達成情形：紅框代表錯、綠框代表對，旁邊沒有任何文字。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g7" id="c703">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">互動元件有可存取名稱，閱讀順序合理</div>
+        <div class="cl-why">純圖示按鈕在設計規格中標示可存取名稱、角色與狀態；輔助技術的閱讀順序與視覺順序一致。
+          <span class="cl-fail">常見未達成情形：純圖示按鈕只有視覺圖形，沒有可交付實作的可存取名稱；閱讀順序也未標示或驗證。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <!-- H -->
+  <section class="cl-group" id="g8">
+    <div class="cl-group-head">
+      <h2>H · 交件檢查</h2>
+      <span class="cl-group-score" data-score="g8">0 / 3</span>
+      <span class="cl-group-ref">講義 <a href="article.html#s10">§10</a></span>
+    </div>
+    <p class="cl-empty cl-out">本組項目均已通過</p>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g8" id="c801">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">系統區域在稿子上標示得出來</div>
+        <div class="cl-why">用 Layout Grid 或輔助框線把狀態列、安全區域、導覽與底部手勢區標出來，別人才驗得了。
+          <span class="cl-fail">常見未達成情形：畫面很漂亮，但看不出哪裡是安全區域邊界。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g8" id="c802">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">至少一組主要元件做成 Component 與 Variants</div>
+        <div class="cl-why">狀態集中在一個元件裡管理，改一次主色所有頁面一起變。
+          <span class="cl-fail">常見未達成情形：五種按鈕狀態是五個各自獨立的圖層，複製貼上做出來的。</span></div>
+      </div>
+    </label>
+
+    <label class="cl-item">
+      <input type="checkbox" class="cl-check" data-g="g8" id="c803">
+      <span class="cl-box">✓</span>
+      <div>
+        <div class="cl-name">適配規則有交代</div>
+        <div class="cl-why">小畫面、大字模式、鍵盤展開，至少挑一項做成補充 Frame 或寫成版面註記。
+          <span class="cl-fail">常見未達成情形：只交一張主要頁面，沒有任何說明版面在其他情況怎麼變。</span></div>
+      </div>
+    </label>
+  </section>
+
+  <div class="cl-summary">
+    <h3>檢核結果摘要</h3>
+    <p>以下摘要依勾選狀態即時更新，可複製至 Figma 說明區塊或作業繳交欄位，作為自我檢核的紀錄。</p>
+    <textarea id="clOut" readonly></textarea>
+    <div class="cl-actions">
+      <button class="cl-btn" id="btnCopy" type="button">複製結果</button>
+    </div>
+  </div>
+
+</div><!-- /.article -->
+
+<div class="foot-nav">
+  <a href="article.html">Unit 11 講義</a>
+  <a href="slides.html">Unit 11 簡報</a>
+  <a href="article.html#s10">作業 9 交件內容</a>
+  <a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">Apple HIG</a>
+  <a href="https://m3.material.io/" target="_blank" rel="noopener">Material Design 3</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  var prog = document.getElementById('prog');
+  function updateProgress() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  var KEY = 'unit11-app-checklist';
+  var checks = Array.prototype.slice.call(document.querySelectorAll('.cl-check'));
+  var total = checks.length;
+  var fill = document.getElementById('clFill');
+  var count = document.getElementById('clCount');
+  var msg = document.getElementById('clMsg');
+  var out = document.getElementById('clOut');
+
+  function load() {
+    var saved;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { saved = []; }
+    if (!Array.isArray(saved)) saved = [];
+    checks.forEach(function (cb) { cb.checked = saved.indexOf(cb.id) !== -1; });
+  }
+  function save() {
+    var ids = checks.filter(function (cb) { return cb.checked; }).map(function (cb) { return cb.id; });
+    try { localStorage.setItem(KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+
+  function buildSummary(done) {
+    var lines = ['APP 介面檢核表（Unit 11）　通過 ' + done + ' / ' + total + ' 項'];
+    Array.prototype.forEach.call(document.querySelectorAll('.cl-group'), function (group) {
+      var title = group.querySelector('h2').textContent.trim();
+      var items = Array.prototype.slice.call(group.querySelectorAll('.cl-check'));
+      var todo = items.filter(function (cb) { return !cb.checked; });
+      if (todo.length === 0) {
+        lines.push('[v] ' + title + '：均已通過');
+      } else {
+        lines.push('[ ] ' + title + '：尚有 ' + todo.length + ' 項未通過');
+        todo.forEach(function (cb) {
+          lines.push('     - ' + cb.parentNode.querySelector('.cl-name').textContent.trim());
+        });
+      }
+    });
+    return lines.join('\n');
+  }
+
+  function update() {
+    var done = checks.filter(function (cb) { return cb.checked; }).length;
+    fill.style.width = (done / total * 100) + '%';
+    fill.classList.toggle('done', done === total);
+    count.textContent = done + ' / ' + total;
+    msg.textContent = done === 0 ? '尚未開始檢核'
+      : done === total ? '全部項目均已通過'
+      : '尚有 ' + (total - done) + ' 項未通過';
+
+    Array.prototype.forEach.call(document.querySelectorAll('.cl-group-score'), function (el) {
+      var g = el.getAttribute('data-score');
+      var items = checks.filter(function (cb) { return cb.getAttribute('data-g') === g; });
+      var n = items.filter(function (cb) { return cb.checked; }).length;
+      el.textContent = n + ' / ' + items.length;
+      el.classList.toggle('done', n === items.length);
+    });
+
+    out.value = buildSummary(done);
+    save();
+  }
+
+  checks.forEach(function (cb) { cb.addEventListener('change', update); });
+
+  document.getElementById('btnTodo').addEventListener('click', function () {
+    document.body.classList.toggle('only-todo');
+    this.classList.toggle('on');
+    this.textContent = document.body.classList.contains('only-todo') ? '顯示全部' : '只看未完成';
+  });
+  document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
+  document.getElementById('btnReset').addEventListener('click', function () {
+    if (!window.confirm('此操作將清除全部勾選狀態，且無法復原。是否繼續？')) return;
+    checks.forEach(function (cb) { cb.checked = false; });
+    update();
+  });
+  document.getElementById('btnCopy').addEventListener('click', function () {
+    var btn = this;
+    navigator.clipboard.writeText(out.value).then(function () {
+      btn.textContent = '已複製';
+      setTimeout(function () { btn.textContent = '複製結果'; }, 1400);
+    }, function () {
+      out.select();
+      btn.textContent = '請按 Cmd/Ctrl + C';
+      setTimeout(function () { btn.textContent = '複製結果'; }, 2200);
+    });
+  });
+
+  load();
+  update();
+})();
+</script>
+</body>
+</html>
