@@ -403,12 +403,29 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-body">
       <p class="cover-eyebrow">Dynamic type and font scaling</p>
       <h2>文字規格包含縮放後的版面行為</h2>
-      <div class="type-stack">
-        <div class="type-sample"><b>Title</b><span>付款資訊</span><code>semantic style</code></div>
-        <div class="type-sample"><b>Body</b><span>訂單將寄送至預設地址</span><code>17pt / 16sp</code></div>
-        <div class="type-sample"><b>Large text</b><span style="font-size:50px">訂單將寄送至預設地址</span><code>font scaling</code></div>
+      <div class="grid-2" style="align-items:start;gap:44px">
+        <div>
+          <div class="type-stack" style="margin-top:8px">
+            <div class="type-sample"><b>Title</b><span>付款資訊</span><code>semantic style</code></div>
+            <div class="type-sample"><b>Body</b><span>訂單將寄送至預設地址</span><code>17pt / 16sp</code></div>
+            <div class="type-sample"><b>Large text</b><span style="font-size:50px">訂單將寄送至預設地址</span><code>font scaling</code></div>
+          </div>
+        </div>
+        <div>
+          <table class="comparison" style="margin-top:8px">
+            <thead><tr><th>iOS 標籤</th><th>字級</th><th>粗細</th></tr></thead>
+            <tbody>
+              <tr><td>大標題</td><td>34pt</td><td>Bold／Regular</td></tr>
+              <tr><td>標題</td><td>28pt</td><td>Bold／Regular</td></tr>
+              <tr><td>正文</td><td>17pt</td><td>Regular</td></tr>
+              <tr><td>副標題</td><td>15pt</td><td>Regular</td></tr>
+              <tr><td>註釋</td><td>13pt</td><td>Regular</td></tr>
+            </tbody>
+          </table>
+          <div class="formula" style="margin-top:22px;font-size:24px">行高 ＝ 字級 × 1.2 ～ 1.4　　邊距 上下 8–16pt／左右 16–20pt</div>
+        </div>
       </div>
-      <p class="cover-sub" style="margin-top:30px">固定高度、單行截斷與過密的水平排列，在大字模式下最容易失效。</p>
+      <p class="cover-sub" style="margin-top:26px">字級表是理解階層的參考，實際套用仍以語意樣式為準——把數字鎖死，Dynamic Type 就失效了。固定高度、單行截斷與過密的水平排列，在大字模式下最容易失效。</p>
     </div>
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
