@@ -719,6 +719,12 @@ h2 {
   .dot { width: 4px; height: 4px; }
   .dot.on { width: 12px; }
 }
+
+/* 封面回到課程總覽 */
+.to-index { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: currentColor;
+            opacity: .55; text-decoration: underline; text-underline-offset: 3px;
+            transition: opacity .2s; }
+.to-index:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -730,7 +736,7 @@ h2 {
   <!-- ─── Slide 1 · Cover ─────────────────── -->
   <div class="slide active">
     <div class="slide-head">
-      <span class="unit-pill">Unit 08</span>
+      <span style="display:inline-flex;align-items:center;gap:10px"><span class="unit-pill">Unit 08</span><a class="to-index" href="../index.html" title="回到課程總覽">↩ 課程總覽</a></span>
       <span class="slide-num">01 / 22</span>
     </div>
     <div class="slide-body">

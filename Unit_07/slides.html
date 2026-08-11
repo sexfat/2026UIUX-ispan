@@ -564,6 +564,12 @@ h2 {
 .slide.dark .wf .ph { color: #a1a1a6; border-color: #48484a; }
 .slide.dark .wf .ph b { color: #f5f5f7; }
 .slide.dark .wf .ph em { color: #58a6ff; }
+
+/* 封面回到課程總覽 */
+.to-index { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: currentColor;
+            opacity: .55; text-decoration: underline; text-underline-offset: 3px;
+            transition: opacity .2s; }
+.to-index:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -574,7 +580,7 @@ h2 {
 
   <!-- 01 Cover -->
   <section class="slide active">
-    <div class="slide-head"><span class="unit-pill">Unit 07</span><span class="slide-num"></span></div>
+    <div class="slide-head"><span style="display:inline-flex;align-items:center;gap:10px"><span class="unit-pill">Unit 07</span><a class="to-index" href="../index.html" title="回到課程總覽">↩ 課程總覽</a></span><span class="slide-num"></span></div>
     <div class="slide-body">
       <div class="cover-eyebrow">UI 設計實作課程 · 2026</div>
       <h1 class="cover-title">介面設計流程（下）<br>Wireframe 實作延伸</h1>

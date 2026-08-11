@@ -781,6 +781,12 @@ h2 {
 }
 .ref-cred a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .ref-cred a:hover { text-decoration: underline; }
+
+/* 封面回到課程總覽 */
+.to-index { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: currentColor;
+            opacity: .55; text-decoration: underline; text-underline-offset: 3px;
+            transition: opacity .2s; }
+.to-index:hover { opacity: 1; }
 </style>
 </head>
 <body>
@@ -792,7 +798,7 @@ h2 {
   <!-- ─────── 01 COVER ─────────────────────── -->
   <section class="slide active" id="s1">
     <div class="slide-head">
-      <span class="unit-pill">Unit 09</span>
+      <span style="display:inline-flex;align-items:center;gap:10px"><span class="unit-pill">Unit 09</span><a class="to-index" href="../index.html" title="回到課程總覽">↩ 課程總覽</a></span>
       <span class="slide-num">01 / 16</span>
     </div>
     <div class="slide-body">
