@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 11 · 設計指南是建議，上架規範是規定</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 200; }
+
+.topbar { max-width: var(--max-w); margin: 0 auto; padding: 24px 0 0; display: flex; align-items: center; justify-content: space-between; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: .04em; }
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 8px; }
+
+.hero { max-width: var(--max-w); margin: 0 auto; padding: 56px 0 40px; border-bottom: 1px solid var(--border); }
+.overline { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; font-size: 12px; color: var(--muted); align-items: center; }
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc { max-width: var(--max-w); margin: 36px auto 0; padding: 26px 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.toc h2 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before { content: counter(toc, decimal-leading-zero); font-size: .72rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 3px; }
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; }
+h2.sec-title { font-size: clamp(1.5rem, 3.2vw, 2.1rem); font-weight: 800; line-height: 1.22; margin-bottom: 20px; }
+h3 { font-size: clamp(1.05rem, 2.2vw, 1.28rem); font-weight: 800; margin: 32px 0 12px; }
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+code { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: .88em; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; }
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li { font-size: 1rem; color: #2c2c2e; line-height: 1.7; margin-bottom: 12px; padding-left: 26px; position: relative; }
+ul.bullets li::before { content: ''; position: absolute; left: 6px; top: .65em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before { content: counter(step); position: absolute; left: 0; top: 1px; width: 24px; height: 24px; border-radius: 50%; background: rgba(0,102,204,.1); color: var(--accent); font-size: .78rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+.callout { margin: 24px 0; padding: 18px 20px; background: rgba(0,102,204,.05); border: 1px solid rgba(0,102,204,.16); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; font-size: .95rem; line-height: 1.7; color: var(--dark); }
+.callout.warn { background: rgba(194,65,12,.06); border-color: rgba(194,65,12,.2); border-left-color: var(--accent3); }
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.06); border-bottom: 2px solid var(--border); }
+th:first-child { color: var(--muted); background: transparent; }
+td { padding: 13px 16px; border-bottom: 1px solid var(--border); color: #2c2c2e; line-height: 1.6; vertical-align: top; }
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.refs { max-width: var(--max-w); margin: 64px auto 0; padding-top: 32px; border-top: 1px solid var(--border); }
+.refs h2 { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.refs ul { list-style: none; }
+.refs li { font-size: .9rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; padding-left: 18px; position: relative; }
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav { max-width: var(--max-w); margin: 48px auto 0; display: flex; gap: 12px; flex-wrap: wrap; }
+.foot-nav a { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--accent); background: rgba(0,102,204,.08); border: 1px solid rgba(0,102,204,.18); padding: 10px 18px; border-radius: 8px; text-decoration: none; }
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav { display: none; position: fixed; top: 50%; left: calc(50% - (var(--max-w) / 2) - 258px); transform: translateY(-50%); width: 220px; max-height: 72vh; overflow-y: auto; z-index: 150; }
+.side-nav-label { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-left: 15px; }
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a { display: flex; align-items: baseline; gap: 8px; font-size: .82rem; line-height: 1.45; color: var(--muted); text-decoration: none; padding: 7px 0 7px 15px; margin-left: -2px; border-left: 2px solid transparent; transition: color .15s, border-color .15s; }
+.side-nav a::before { content: counter(sidenav, decimal-leading-zero); font-size: .68rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--border); flex-shrink: 0; }
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">遵守程度：從不一定到必須</a></li>
+    <li><a href="#s2">70% 平台習慣＋30% 品牌</a></li>
+    <li><a href="#s3">平台行為要拆到多細</a></li>
+    <li><a href="#s4">HIG／Material 不等於上架規範</a></li>
+    <li><a href="#s5">Figma Design System 資料夾建議</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="article.html#s2">回到講義</a>
+  <span class="unit-pill">Unit 11</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Industry Practice</p>
+  <h1>設計指南是建議，<br>上架規範是規定</h1>
+  <p class="lead">講義第 2 節提過這個判斷的濃縮版；這頁是完整版，多了平台行為要拆到多細、以及 Figma Design System 的資料夾建議兩塊內容。</p>
+  <div class="meta"><span>對應講義 §2 平台規範</span><span class="d"></span><span>作業 9：Figma APP 介面頁面</span></div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">遵守程度：從不一定到必須</a></li>
+    <li><a href="#s2">70% 平台習慣＋30% 品牌</a></li>
+    <li><a href="#s3">平台行為要拆到多細</a></li>
+    <li><a href="#s4">HIG／Material 不等於上架規範</a></li>
+    <li><a href="#s5">Figma Design System 資料夾建議</a></li>
+  </ol>
+</div>
+
+<div class="article">
+  <section class="section" id="s1">
+    <p class="sec-num">Compliance · 01</p>
+    <h2 class="sec-title">設計指南不是法律：哪些接近必須遵守，哪些可以自訂</h2>
+    <p>HIG 與 Material Design 是「最佳實務」，不是強制規範。你可以做自己的 Design System、自己的 Button、Navigation、Card、Modal，不需要把 APP 做得像 Apple 或 Google 的官方 APP。但不是每一項的自由度都一樣——愈接近「作業系統實際控制的行為」，愈沒有自訂空間。</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>遵守程度</th><th>為什麼</th></tr></thead>
+      <tbody>
+        <tr><td>視覺風格（色彩、字體）</td><td>不一定</td><td>可以有自己的品牌風格與 Design System</td></tr>
+        <tr><td>Button／Card／Modal 樣式</td><td>不一定</td><td>元件外觀可以自訂，不必照搬官方長相</td></tr>
+        <tr><td>Navigation 邏輯</td><td>強烈建議</td><td>違反平台慣例會直接墊高學習成本</td></tr>
+        <tr><td>Back 行為</td><td>強烈建議（Android 尤其）</td><td>不應該蓋過系統返回手勢或按鍵的邏輯</td></tr>
+        <tr><td>Touch Target</td><td>強烈建議</td><td>太小直接影響可用性，不是風格選擇</td></tr>
+        <tr><td>Keyboard 行為</td><td>強烈建議</td><td>表單與輸入框的鍵盤處理尤其重要</td></tr>
+        <tr><td>Safe Area</td><td>幾乎必須</td><td>不遵守會被瀏海、Dynamic Island、系統列實際遮住</td></tr>
+        <tr><td>Accessibility</td><td>非常建議</td><td>部分市場或產品類型甚至涉及法規</td></tr>
+        <tr><td>Permission（相機、定位、通知）</td><td>必須</td><td>由作業系統把關，不是設計上的選擇</td></tr>
+        <tr><td>Privacy</td><td>必須</td><td>上架審查會實際檢查</td></tr>
+        <tr><td>App Store／Google Play 上架政策</td><td>必須</td><td>不符合可能直接無法上架</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">Design System · 02</p>
+    <h2 class="sec-title">業界常見做法：70% 平台習慣＋30% 品牌</h2>
+    <p>把 Design System 拆成三層，前兩層可以高度共用，第三層依平台調整：</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>層級</th><th>內容</th><th>跨平台能不能共用</th></tr></thead>
+      <tbody>
+        <tr><td>Brand Layer</td><td>色彩、字體、圖示風格、圓角、間距</td><td>高度共用</td></tr>
+        <tr><td>Product Component</td><td>Button、Card、Form、List、Modal</td><td>高度共用</td></tr>
+        <tr><td>Platform Behavior</td><td>Navigation、Back、Permission、系統元件慣例</td><td>依平台各自調整</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>前兩層決定「這是不是同一個品牌」，第三層決定「使用者用得順不順手」。這也是 Flutter、React Native 這類跨平台框架常見的思考方式：不是做兩套完全不同的 UI，而是共用 Design System，但保留平台原生行為。</p>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">Platform Behavior · 03</p>
+    <h2 class="sec-title">平台行為要拆到多細</h2>
+    <p>iOS 使用者習慣導覽列的 <code>← Back</code> 返回鍵，以及 Profile、Settings 這類熟悉的入口。Android 使用者除了這些，還多了系統層級的手勢或按鍵返回。如果自己發明「右滑下一頁、左滑開選單、下滑返回」，介面雖然有創意，但使用者得重新學一套操作方式——UX 很可能直接變成一場密室逃脫。</p>
+    <p>「Platform Behavior」這一層實際攤開來，兩個平台各自包含這些子項：</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>iOS</th><th>Android</th></tr></thead>
+      <tbody>
+        <tr><td>Navigation</td><td>Navigation</td></tr>
+        <tr><td>Modal</td><td>Bottom Sheet</td></tr>
+        <tr><td>Picker</td><td>Back Behavior</td></tr>
+        <tr><td>Permission</td><td>Permission</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Navigation 與 Permission 兩個平台都有，但實際元件和操作邏輯不同；iOS 的 Modal 對到 Android 更接近 Bottom Sheet 的用法，iOS 交給系統 Picker 處理的情境，Android 常常要自己處理 Back Behavior。專題選定一個平台後，這張表就是「這個平台的行為清單要對照哪些項目」的檢查依據。</p>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">Guideline vs. Policy · 04</p>
+    <h2 class="sec-title">HIG／Material 不等於上架審查規範</h2>
+    <p>這兩件事很容易混在一起，但決定的事情完全不同：</p>
+    <div class="callout"><p><strong>HIG／Material Design：</strong>建議「怎麼設計比較像一個好用的 APP」。沒有完全遵守，通常還是可以上架。</p></div>
+    <div class="callout warn"><p><strong>App Store Review Guidelines／Google Play Policy：</strong>規定「什麼 APP 可以上架」。違反可能直接被拒絕上架，跟設計好不好看無關。</p></div>
+    <p>實際做專題或商業專案時，優先順序建議是：</p>
+    <ol class="steps">
+      <li><strong>上架政策與 OS 技術限制</strong>：Permission、Privacy 這類由系統把關的項目。</li>
+      <li><strong>Accessibility</strong>：對比、觸控範圍、替代文字等無障礙基本盤。</li>
+      <li><strong>Platform Behavior</strong>：Navigation、Back、Safe Area、Touch Target 等平台慣例。</li>
+      <li><strong>Product UX</strong>：資訊架構與操作流程是否清楚好用。</li>
+      <li><strong>Brand Style</strong>：色彩、字體與視覺風格。</li>
+    </ol>
+    <p>而不是「先把所有畫面照 HIG 畫一遍」——上架規範與可用性基本盤，比有沒有完全照著設計指南做更重要。</p>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">Figma Structure · 05</p>
+    <h2 class="sec-title">Figma Design System 資料夾建議</h2>
+    <p>如果你是 UI/UX Designer，Figma 檔案可以直接照這三層＋一個平台分支去建：</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>分類</th><th>內容</th></tr></thead>
+      <tbody>
+        <tr><td>Foundation</td><td>Color、Typography、Spacing、Icon——跨平台共用的設計語言</td></tr>
+        <tr><td>Components</td><td>Button、Card、Form、Modal——跨平台共用的元件庫</td></tr>
+        <tr><td>Patterns</td><td>常見的元件組合用法與版面模式</td></tr>
+        <tr><td>Platform → iOS</td><td>Navigation、Modal、Picker、Permission</td></tr>
+        <tr><td>Platform → Android</td><td>Navigation、Bottom Sheet、Back Behavior、Permission</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>這樣工程端也會很清楚：哪些元件共用、哪些是平台差異。對 APP UI 開發來說，這通常比「到底有沒有遵守 guideline」更實際。</p>
+  </section>
+</div>
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li>本頁整理自業界實務討論（非官方文件逐條引用），提醒設計指南與上架審查規範是兩件不同的事，講義第 2 節有濃縮版並連回本頁。</li>
+    <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank" rel="noopener">App Store Review Guidelines</a>：Apple 官方上架審查規範。</li>
+    <li><a href="https://play.google/developer-content-policy/" target="_blank" rel="noopener">Google Play Developer Policy Center</a>：Google 官方上架政策。</li>
+    <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">Apple Human Interface Guidelines</a>：設計建議，非上架規定。</li>
+    <li><a href="https://m3.material.io/" target="_blank" rel="noopener">Material Design 3</a>：設計建議，非上架規定。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="article.html#s2">講義 §2 平台規範</a>
+  <a href="slides.html">Unit 11 簡報</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+</script>
+</body>
+</html>

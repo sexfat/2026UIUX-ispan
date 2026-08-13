@@ -190,6 +190,8 @@ code {
   color: var(--muted);
   line-height: 1.65;
 }
+.fig figcaption a { color: var(--accent); text-decoration: none; white-space: nowrap; }
+.fig figcaption a:hover { text-decoration: underline; }
 
 ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
 ul.bullets li, ol.steps li {
@@ -521,6 +523,17 @@ tr:last-child td { border-bottom: none; }
   .unit-figure, .target-row { grid-template-columns: 1fr; }
   .unit-arrow { transform: rotate(90deg); }
 }
+
+.term-btn { font: inherit; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; border-bottom: 1px dotted var(--accent); }
+.term-btn:hover { border-bottom-style: solid; }
+.term-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(29,29,31,.5); z-index: 300; align-items: center; justify-content: center; padding: 24px; }
+.term-modal-overlay.open { display: flex; }
+.term-modal { background: #fff; border-radius: 14px; max-width: 480px; width: 100%; padding: 30px 32px; box-shadow: 0 24px 60px rgba(0,0,0,.28); position: relative; }
+.term-modal h3 { margin: 0 0 14px; font-size: 1.2rem; font-weight: 800; }
+.term-modal p { font-size: .95rem; color: #2c2c2e; margin-bottom: 12px; line-height: 1.7; }
+.term-modal p:last-child { margin-bottom: 0; }
+.term-close { position: absolute; top: 16px; right: 16px; width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--surface); cursor: pointer; font-size: 16px; line-height: 1; color: var(--muted); }
+.term-close:hover { background: var(--border); }
 </style>
 </head>
 <body>
@@ -590,7 +603,7 @@ tr:last-child td { border-bottom: none; }
     <h2 class="sec-title">兩個平台，共同解決清楚、可用與一致</h2>
     <p>Apple Human Interface Guidelines 與 Material Design 都在處理資訊層級、可操作性、適配與無障礙；差異主要出現在元件語言、導覽方式與系統整合。</p>
     <div class="cards">
-      <div class="card"><h3 class="platform-title"><span class="platform-dot">iOS</span>Human Interface Guidelines</h3><p>內容清楚、系統整合、熟悉的返回方式、Safe Area、Dynamic Type 與 Apple 平台元件。</p></div>
+      <div class="card"><h3 class="platform-title"><span class="platform-dot">iOS</span>Human Interface Guidelines</h3><p>內容清楚、系統整合、熟悉的返回方式、Safe Area、<button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button> 與 Apple 平台元件。</p></div>
       <div class="card"><h3 class="platform-title"><span class="platform-dot android">A</span>Material Design</h3><p>可適配的元件系統、視窗尺寸類別、dp／sp、Navigation Bar／Rail／Drawer 與 Material 主題。</p></div>
     </div>
     <div class="tbl-wrap">
@@ -600,11 +613,15 @@ tr:last-child td { border-bottom: none; }
         <tr><td>主要導覽</td><td>Tab Bar、Navigation Stack</td><td>Navigation Bar、Rail、Drawer</td></tr>
         <tr><td>返回</td><td>導覽列返回、邊緣返回手勢</td><td>系統返回手勢／按鍵、App Bar 導覽</td></tr>
         <tr><td>尺寸單位</td><td>pt；圖像資源 @2x、@3x</td><td>dp；文字 sp；密度資源桶</td></tr>
-        <tr><td>文字縮放</td><td>Dynamic Type 與語意文字樣式</td><td>sp 與系統字體縮放</td></tr>
+        <tr><td>文字縮放</td><td><button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button> 與語意文字樣式</td><td>sp 與系統字體縮放</td></tr>
         <tr><td>設計資源</td><td>Apple Design Resources</td><td>Material 3 Design Kit</td></tr>
       </tbody>
     </table>
     </div>
+
+    <h3>設計指南是建議，上架規範是規定</h3>
+    <p>HIG 與 Material Design 是「最佳實務」，不是強制規範——你可以做自己的 Design System，不需要把 APP 做得像 Apple 或 Google 的官方 APP。但自由度不是每一項都一樣：視覺風格、元件樣式可以自訂；Navigation、Back 行為、Touch Target 強烈建議遵守平台慣例；Safe Area、Permission、Privacy 與上架政策則幾乎沒有自訂空間。業界常見做法是「70% 平台習慣＋30% 品牌」：色彩、字體、元件外觀可以高度共用，但操作行為要尊重 OS。更重要的是，<strong>HIG／Material Design 是設計建議，App Store Review Guidelines／Google Play Policy 才是上架規定</strong>——沒完全照 HIG 畫，通常還是能上架；違反上架政策，可能直接被拒絕。</p>
+    <div class="callout"><p><strong>完整版：</strong>遵守程度分級表、三層 Design System 拆解、iOS／Android 平台行為要拆到多細、Figma Design System 資料夾建議，見<a href="guideline-vs-policy.html">〈設計指南是建議，上架規範是規定〉</a>。</p></div>
   </section>
 
   <section class="section" id="s3">
@@ -633,7 +650,7 @@ tr:last-child td { border-bottom: none; }
       <thead><tr><th>項目</th><th>iOS</th><th>Android</th></tr></thead>
       <tbody>
         <tr><td>版面與間距</td><td>pt</td><td>dp</td></tr>
-        <tr><td>文字</td><td>pt + Dynamic Type</td><td>sp</td></tr>
+        <tr><td>文字</td><td>pt + <button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button></td><td>sp</td></tr>
         <tr><td>圖示</td><td>向量或 @2x／@3x 點陣圖</td><td>向量或密度資源桶</td></tr>
         <tr><td>實體顯示</td><td>px</td><td>px</td></tr>
       </tbody>
@@ -654,6 +671,12 @@ tr:last-child td { border-bottom: none; }
     </table>
     </div>
     <p>iOS 對應 @1x／@2x／@3x：24 pt 圖示分別輸出 24 px、48 px、72 px。Android 的換算公式為 <strong>px = dp × (裝置 dpi ÷ 160)</strong>，160 dpi 是基準密度（mdpi）。</p>
+    <h3>在 Figma 裡，這些單位怎麼對應</h3>
+    <p>Figma 畫布本身只有 px 一種單位；pt、dp、sp 是設計師腦中的換算，不是 Figma 的實際單位。</p>
+    <figure class="fig">
+      <img src="resources/unit-mapping-diagram.png" alt="px、pt、dp、sp、dpi 五個單位的說明，以及在 Figma 裡的對應方式，附 16sp 乘以 1.2 倍縮放等於 19.2px 的試算範例">
+      <figcaption>pt 與 dp 在 Figma 畫布上直接當 px 用；sp 需要自己算過縮放倍率再填數字，Figma 不會自動處理文字縮放。<a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI?node-id=12-2" target="_blank" rel="noopener">在 Figma 查看</a></figcaption>
+    </figure>
   </section>
 
   <section class="section" id="s4">
@@ -691,7 +714,7 @@ tr:last-child td { border-bottom: none; }
     <p>Safe Area 避免重要內容被相機區、Dynamic Island、圓角、Home Indicator、系統列或其他介面遮擋。不同裝置、方向與系統狀態會改變 inset，因此固定背誦單一頂部或底部高度並不可靠。</p>
     <figure class="fig">
       <img src="resources/safe-area-diagram.png" alt="以 iPhone 16/15 Pro 393×852pt 畫布等比例繪製的安全區域示意圖，標示頂部安全邊距 59pt、底部安全邊距 34pt、左右邊距 16pt">
-      <figcaption>以 393×852pt（iPhone 16/15 Pro）等比例繪製；頂部畫的是 Dynamic Island 機型的 59pt（瀏海機型較淺，約 47pt），底部與左右邊距對所有全螢幕機型一致。</figcaption>
+      <figcaption>以 393×852pt（iPhone 16/15 Pro）等比例繪製；頂部畫的是 Dynamic Island 機型的 59pt（瀏海機型較淺，約 47pt），底部與左右邊距對所有全螢幕機型一致。<a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI?node-id=1-2" target="_blank" rel="noopener">在 Figma 查看</a></figcaption>
     </figure>
     <h3>可延伸到安全區域外的內容</h3>
     <p>背景色、照片或沉浸式媒體可以延伸到螢幕邊緣；文字、按鈕、表單與其他關鍵操作仍維持在可安全閱讀與操作的位置。</p>
@@ -743,7 +766,7 @@ tr:last-child td { border-bottom: none; }
     <p>Tab Bar 標準高度是 49pt；在有 Home Indicator 的全螢幕機型上，底部還要再加 34pt 的安全區，總高度約 83pt。圖示建議 24–28pt，文字 10–11pt，背景多半用半透明毛玻璃（System Thin Material）讓底下內容捲動時隱約透出。</p>
     <figure class="fig">
       <img src="resources/tabbar-spec-diagram.png" alt="Tab Bar 剖面圖，標示標準高度 49pt 與底部安全區 34pt 疊加後的總高度">
-      <figcaption>49pt 的列本身不含安全區；實際占用的畫面高度要把底部安全區一起算進去。</figcaption>
+      <figcaption>49pt 的列本身不含安全區；實際占用的畫面高度要把底部安全區一起算進去。<a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI?node-id=1-8" target="_blank" rel="noopener">在 Figma 查看</a></figcaption>
     </figure>
   </section>
 
@@ -757,7 +780,7 @@ tr:last-child td { border-bottom: none; }
     <p>觸控目標可以大於可見圖示。24 pt／dp 的圖示放在較大的透明可點擊區域中，既能維持視覺精緻度，也能降低誤觸。相鄰控制項之間的間距同樣重要。</p>
     <figure class="fig">
       <img src="resources/touch-target-diagram.png" alt="24pt 圖示與 44×44pt 建議觸控熱區的尺寸對照，附最小熱區、按鈕文字與 Android 對照數字">
-      <figcaption>圖示可以維持 24pt 的視覺尺寸，實際可點擊範圍仍要撐到 44×44pt。</figcaption>
+      <figcaption>圖示可以維持 24pt 的視覺尺寸，實際可點擊範圍仍要撐到 44×44pt。<a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI?node-id=1-5" target="_blank" rel="noopener">在 Figma 查看</a></figcaption>
     </figure>
     <h3>手勢不是唯一入口</h3>
     <p>Swipe、長按、拖曳與邊緣返回能提高熟練操作的速度，但不容易被第一次使用的人發現。重要功能同時具備可見入口或無障礙 action，流程才不會依賴猜測。</p>
@@ -774,7 +797,7 @@ tr:last-child td { border-bottom: none; }
     <p class="sec-num">Type and Forms · 08</p>
     <h2 class="sec-title">文字與表單需要容納系統設定和鍵盤</h2>
     <h3>語意文字樣式比固定字級更完整</h3>
-    <p>標題、內文、說明與標籤透過語意樣式建立層級。iOS 的 Dynamic Type 與 Android 的 sp 會回應字體大小設定，因此元件高度、換行和間距也需要一起成長。</p>
+    <p>標題、內文、說明與標籤透過語意樣式建立層級。iOS 的 <button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button> 與 Android 的 sp 會回應字體大小設定，因此元件高度、換行和間距也需要一起成長。</p>
     <div class="callout warn"><p><strong>大字模式常見破損：</strong>固定高度切掉第二行、兩個按鈕在同一列互相擠壓、重要文字被省略號取代、文字變大但行高仍固定。</p></div>
 
     <h3>iOS 的標籤類型與字級規格</h3>
@@ -795,7 +818,7 @@ tr:last-child td { border-bottom: none; }
         </tbody>
       </table>
     </div>
-    <div class="callout"><p><strong>這張表的用法：</strong>它是理解 iOS 字級階層的參考，不是拿來寫死的清單。實際套用時仍以語意樣式為準——把「正文」對應到 Body 這個語意層級，讓系統依使用者的字體設定去調整實際尺寸。若把 17pt 直接鎖成固定值，Dynamic Type 就失效了，前面提的大字模式破損也會跟著出現。</p></div>
+    <div class="callout"><p><strong>這張表的用法：</strong>它是理解 iOS 字級階層的參考，不是拿來寫死的清單。實際套用時仍以語意樣式為準——把「正文」對應到 Body 這個語意層級，讓系統依使用者的字體設定去調整實際尺寸。若把 17pt 直接鎖成固定值，<button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button> 就失效了，前面提的大字模式破損也會跟著出現。</p></div>
 
     <h3>Android 的字級規格</h3>
     <p>Android 使用系統字體 <strong>Roboto</strong>（多語言則搭配 <strong>Noto</strong>），字級單位是 sp，對應 Material Design 的角色分類：</p>
@@ -965,12 +988,14 @@ tr:last-child td { border-bottom: none; }
         <li><a href="https://developer.android.com/training/multiscreen/screendensities?hl=zh-tw" target="_blank" rel="noopener">支援不同的像素密度</a>：mdpi～xxxhdpi 密度分級與資源輸出（中文版）。</li>
         <li><a href="https://fonts.google.com/specimen/Roboto" target="_blank" rel="noopener">Roboto</a>：Android 系統字體下載。</li>
         <li><a href="https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder" target="_blank" rel="noopener">Material Theme Builder</a>：Figma 外掛，產生 Material 配色。</li>
+        <li><strong>Pixels to DP/Sp Converter</strong>：Figma 外掛，協助換算 dp／sp 與 px；來源資料只給了外掛名稱，請在 Figma 社群搜尋確認後再安裝。</li>
         <li><a href="https://www.figma.com/community/file/1164313362327941158" target="_blank" rel="noopener">What's New in Material Design</a>：Figma 社群檔案，Material 更新整理。</li>
         <li><a href="https://www.w3.org/WAI/WCAG22/quickref/" target="_blank" rel="noopener">WCAG 2.2 Quick Reference</a>：現行無障礙檢核。</li>
         <li><a href="https://www.getstark.co/for-designers/" target="_blank" rel="noopener">Stark</a>：對比度與無障礙檢查的 Figma 外掛與工具組。</li>
         <li>Stark 與 Material Theme Builder 兩個外掛在本單元作業裡怎麼安裝、怎麼用，見 <a href="tools-stark-material.html">操作指南</a>。</li>
         <li><a href="https://mobbin.com" target="_blank" rel="noopener">Mobbin</a>：App UI 截圖庫，可比對同款 App 在 iOS／Android 上的介面差異。</li>
-        <li>本單元基礎資料：<code>resources/App 設計.pdf</code>（iPhone 機型尺寸表，對應第 4 節；安全區邊距數字，對應第 5 節）、<code>resources/sp-dp.md</code>（dp／sp 的定義與使用場景，對應第 3 節）、<code>resources/常見標籤類型.md</code>（iOS 標籤類型、SF 字級表、行高與邊距，對應第 8 節）、<code>resources/參考資料.md</code> 與 <code>resources/參考資料html/</code>（官方連結、Android 字級表、圖示輸出換算、Tab Bar 規格與雙平台對照，對應第 3、6、8、11 節與本清單）、<code>README.md</code>。第 5、6、7 節的示意圖依本單元數字繪製於 Figma，圖檔存於 <code>resources/safe-area-diagram.png</code>、<code>resources/touch-target-diagram.png</code>、<code>resources/tabbar-spec-diagram.png</code>。</li>
+        <li>本單元基礎資料：<code>resources/App 設計.pdf</code>（iPhone 機型尺寸表，對應第 4 節；安全區邊距數字，對應第 5 節）、<code>resources/sp-dp.md</code>（dp／sp 的定義與使用場景，對應第 3 節）、<code>resources/常見標籤類型.md</code>（iOS 標籤類型、SF 字級表、行高與邊距，對應第 8 節）、<code>resources/參考資料.md</code> 與 <code>resources/參考資料html/</code>（官方連結、Android 字級表、圖示輸出換算、Tab Bar 規格與雙平台對照，對應第 3、6、8、11 節與本清單）、<code>README.md</code>。第 3、5、6、7 節的示意圖依本單元數字繪製於 <a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI" target="_blank" rel="noopener">Figma 原始檔</a>，圖檔存於 <code>resources/unit-mapping-diagram.png</code>、<code>resources/safe-area-diagram.png</code>、<code>resources/touch-target-diagram.png</code>、<code>resources/tabbar-spec-diagram.png</code>。第 3 節的 Figma 單位對應與 SP 縮放試算取自 <code>resources/參考資料html/</code> 內「px、pt、ppi、dpi、dp、sp 名詞解釋」子頁；該頁另列的裝置畫布尺寸與 <code>App 設計.pdf</code> 的機型尺寸表數字不一致（iPhone 14 Pro 兩份寫法不同），因此未採用，以 <code>App 設計.pdf</code> 第 4 節既有數字為準。</li>
+        <li>第 2 節「設計指南是建議，上架規範是規定」整理自業界實務討論（非官方文件逐條引用），提醒設計指南與上架審查規範是兩件不同的事；完整版見 <a href="guideline-vs-policy.html">guideline-vs-policy.html</a>。</li>
       </ul>
     </div>
 
@@ -980,6 +1005,16 @@ tr:last-child td { border-bottom: none; }
   <a href="../Unit_10/article.html">Unit 10 講義</a>
   <a href="../index.html">課程總覽</a>
   <a href="checklist.html">APP 介面檢核表（可勾選）</a>
+</div>
+
+<div class="term-modal-overlay" id="termModalOverlay" role="dialog" aria-modal="true" aria-labelledby="termModalTitle">
+  <div class="term-modal">
+    <button type="button" class="term-close" id="termModalClose" aria-label="關閉">✕</button>
+    <h3 id="termModalTitle">Dynamic Type</h3>
+    <p>Dynamic Type 是 Apple 在 iOS 7（2013）推出的字級縮放機制，使用者可以在「設定 → 輔助使用 → 顯示與文字大小」自由調整全系統的文字大小。</p>
+    <p>支援這個機制的 APP 有三個好處：<strong>自動配合</strong>——文字隨系統設定自動放大縮小；<strong>視覺無障礙</strong>——視力不好的使用者不用辛苦看小字；<strong>保持排版</strong>——介面元件跟著文字一起彈性調整，不會維持原本的小版面。</p>
+    <p>開發時不寫死字級數字，而是套用系統預設的語意樣式（例如 <code>.body</code>、<code>.title</code>），文字大小交給系統依使用者設定換算；再搭配 Auto Layout，才不會在字放大後跑版或被切斷。把字級寫死、或沒用 Auto Layout，正是「大字模式常見破損」的根本原因。</p>
+  </div>
 </div>
 
 <script>
@@ -1037,6 +1072,19 @@ tr:last-child td { border-bottom: none; }
       }
     });
   });
+})();
+
+(function () {
+  const overlay = document.getElementById('termModalOverlay');
+  const closeBtn = document.getElementById('termModalClose');
+  if (!overlay || !closeBtn) return;
+  function close() { overlay.classList.remove('open'); }
+  document.querySelectorAll('.term-btn[data-modal="dynamic-type"]').forEach(btn => {
+    btn.addEventListener('click', () => overlay.classList.add('open'));
+  });
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 })();
 </script>
 <script async defer src="https://assets.pinterest.com/js/pinit.js"></script>

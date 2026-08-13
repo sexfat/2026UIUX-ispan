@@ -241,3 +241,40 @@ Tab Bar 卡片 card.resize(520, 820) 固定高度；table 5 列實際需要
 - `Unit_11/resources/touch-target-diagram.png`（覆蓋，僅調整卡片高度模式，圖案本身原本比例已正確）
 - `Unit_11/resources/tabbar-spec-diagram.png`（覆蓋）
 - `Unit_11/article.html` — 第 5 節圖片 alt／figcaption 文字更新，說明比例尺與 59pt 取值依據
+
+### 5. Unit_11 第 2 節缺少「設計指南 vs. 上架規範」的業界實務框架
+**狀態：** 已修復
+**問題：** 第 2 節只比較 iOS／Android 的元件與導覽差異，沒有講「HIG／Material 是建議還是規定」「哪些可以自訂、哪些幾乎不能碰」，學生容易誤以為所有畫面都要照著官方指南畫。使用者提供一段業界實務討論（涵蓋遵守程度分級、70% 平台習慣＋30% 品牌的三層 Design System、HIG 與上架審查規範的差異、優先順序），要求整理進教材。
+**原因：** 原教材內容全部溯源自 `resources/App 設計.pdf` 與相關參考資料，這些來源只講「怎麼做」，沒有講「做到什麼程度算合格、哪些是法規等級的硬性要求」這個實務判斷角度。
+**修正：** 於 `article.html` 第 2 節新增三個小節：①遵守程度表（視覺風格「不一定」到 Permission／Privacy／上架政策「必須」的 11 項分級）②70% 平台習慣＋30% 品牌的三層 Design System（Brand Layer／Product Component／Platform Behavior）③HIG／Material 不等於上架審查規範，附優先順序清單。內容依課程口吻改寫，原文的 ASCII 樹狀圖改成表格；`.refs` 標明此段落整理自業界實務討論、非官方文件逐條引用。`slides.html` 在投影片 04 後插入新的第 05 張「設計指南是建議，上架政策是規定」，後續投影片 `data-screen-label` 全部順移 +1（06→23），已用 Python 腳本以精確字串比對重新編號，避免正則誤傷。跑過 `validate.py Unit_11` 全部通過（講義維持 11 節、投影片 22→23 張）。
+**影響範圍：**
+- `Unit_11/article.html` — 第 2 節新增三個小節、參考資料來源標注
+- `Unit_11/slides.html` — 新增投影片 05，後續 18 張投影片 `data-screen-label` 重新編號
+
+### 6. Unit_11 補上單位對應圖與 Dynamic Type 名詞彈窗
+**狀態：** 已修復
+**問題：** ①「px、pt、ppi、dpi、dp、sp 名詞解釋」子頁裡的 Figma 單位對應表與 SP 縮放試算範例還沒用進教材。②講義與簡報裡出現 7 處「Dynamic Type」，都只是提到名詞，沒有解釋是什麼，學生得自己查。
+**修正：**
+1. 在 Figma 同一檔案（`LU76FDo4H2sNFsOO8KQuJI`）新增第 4 張卡片「單位對應表」，含 px/pt/dp/sp/dpi 五列對應說明與「16sp × 1.2 = 19.2px」試算範例，匯出為 `resources/unit-mapping-diagram.png`，嵌入講義第 3 節。參考資料清單補上 Pixels to DP/Sp Converter 外掛（來源只給名稱沒給網址，已在條目中註明要自行至 Figma 社群搜尋確認）。同時記錄該子頁列的裝置畫布尺寸與 `App 設計.pdf` 對不上（iPhone 14 Pro 兩份寫法不同），故未採用。
+2. 新增可點擊的「Dynamic Type」名詞按鈕（`.term-btn`）與彈窗（`.term-modal-overlay`），點擊後彈出說明（語意樣式、`UIFontMetrics`、寫死字級等於關閉 Dynamic Type）。講義 5 處、簡報 2 處全部改成按鈕觸發彈窗；彈窗本身文字保持純文字，避免遞迴變成按鈕（第一次全域字串取代時誤把彈窗自己的標題與內文也換成按鈕，已修正為只轉換內文引用處）。簡報版另外在既有的鍵盤導覽 handler 加了守門：彈窗開啟時方向鍵／空白鍵不會繼續翻頁，只有 Esc 或點背景可關閉。
+**影響範圍：**
+- Figma 檔案 `LU76FDo4H2sNFsOO8KQuJI` — 新增第 4 張卡片
+- `Unit_11/resources/unit-mapping-diagram.png`（新增）
+- `Unit_11/article.html` — 第 3 節新增小節與圖片、參考資料清單、新增 term-modal CSS／HTML／JS、5 處 Dynamic Type 改按鈕
+- `Unit_11/slides.html` — 新增 term-modal CSS／HTML／JS、鍵盤導覽加彈窗守門、2 處 Dynamic Type 改按鈕
+
+### 7. Unit_11 業界實務內容拆成獨立頁、Dynamic Type 彈窗補正確資訊、Figma 連結補齊、簡報樣式對標
+**狀態：** 已修復
+**問題：** ①第 2 節塞了三個小節後偏長，使用者要求另開一頁放完整版，且要補上原本沒收錄的「平台行為要拆到多細」（iOS Navigation/Modal/Picker/Permission vs Android Navigation/Bottom Sheet/Back Behavior/Permission）與「Figma Design System 資料夾建議」兩塊。②Dynamic Type 彈窗內容不夠準確，使用者補充：iOS 7（2013）推出、三個好處（自動配合／視覺無障礙／保持排版）、開發者用語意樣式 .body/.title＋Auto Layout。③之前做的 Figma 示意板連結沒有放進講義、簡報、首頁。④新增的投影片 05 用了 `.plain-list` 條列，跟同類比較投影片（04、07、12 等）慣用的單段落 `.panel p` 風格不一致。
+**修正：**
+1. 新增 `Unit_11/guideline-vs-policy.html`（沿用標準版型），含 5 節：遵守程度表、70/30 Design System、平台行為拆解（新內容）、HIG vs 上架規範、Figma 資料夾建議（新內容）。第 2 節改成一段濃縮摘要＋連到新頁的 callout，`.refs` 同步更新出處。
+2. 講義與簡報的 Dynamic Type 彈窗內容改寫為三段：推出時間與調整入口、三個好處、開發者實作方式（語意樣式＋Auto Layout），拿掉不夠貼近設計學生的 `UIFontMetrics` 技術詞。
+3. Figma 示意板連結（`https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI`）補進：`index.html` Unit 11 卡片新增第 4 個按鈕；講義 4 張圖的 figcaption 各自加上對應 node-id 深連結；講義參考資料清單與簡報 Resources 投影片各加一條全檔連結。
+4. 投影片 05 的兩個 `.panel` 從 `.plain-list` 條列改成單段落 `<p>`，對齊 04、07、12 等既有比較型投影片的視覺語言。
+跑過 `validate.py Unit_11` 全綠（講義 11 節、投影片 23 張不變），`guideline-vs-policy.html` 通過 skill 內建 HTML parser 檢查（無未閉合標籤、無重複 id）。App Store／Google Play 官方連結用 curl 驗證過是有效頁面（分別檢查標題確認內容相符，非隨意猜測網址）。
+**影響範圍：**
+- `Unit_11/guideline-vs-policy.html`（新增）
+- `Unit_11/article.html` — 第 2 節精簡＋連結、4 張圖 figcaption 加 Figma 深連結、Dynamic Type 彈窗內容改寫、參考資料清單更新
+- `Unit_11/slides.html` — 投影片 05 改回單段落樣式、Dynamic Type 彈窗內容改寫、Resources 投影片新增 2 條連結
+- `Unit_11/README.md` — 教材入口新增 2 條
+- `index.html` — Unit 11 卡片新增 Figma 連結按鈕

@@ -7,6 +7,8 @@
 - [完整講義](article.html)
 - [APP 介面檢核表](checklist.html) — 8 組 29 項，交件前自我檢核，勾選結果可複製進作業說明
 - [Stark 與 Material Theme Builder 操作指南](tools-stark-material.html) — 對比度檢查與 Material 配色兩個 Figma 外掛的安裝與使用步驟
+- [設計指南是建議，上架規範是規定](guideline-vs-policy.html) — 遵守程度分級、70/30 Design System、平台行為拆解、Figma 資料夾建議
+- [Unit 11 示意板（Figma）](https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI) — Safe Area、觸控目標、Tab Bar、單位對應四張原始檔
 
 ## 單元目標
 

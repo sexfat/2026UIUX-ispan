@@ -175,6 +175,20 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
             opacity: .55; text-decoration: underline; text-underline-offset: 3px;
             transition: opacity .2s; }
 .to-index:hover { opacity: 1; }
+
+/* 名詞說明彈窗 */
+.term-btn { font: inherit; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; border-bottom: 2px dotted var(--accent); }
+.dark .term-btn, .dark .term-btn:hover { color: #58a6ff; border-bottom-color: #58a6ff; }
+.term-btn:hover { border-bottom-style: solid; }
+.term-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(20,20,22,.6); z-index: 500; align-items: center; justify-content: center; padding: 40px; }
+.term-modal-overlay.open { display: flex; }
+.term-modal { background: #fff; border-radius: 20px; max-width: 640px; width: 100%; padding: 48px 52px; box-shadow: 0 30px 80px rgba(0,0,0,.35); position: relative; color: var(--dark); }
+.term-modal h3 { margin: 0 0 20px; font-size: 34px; font-weight: 800; }
+.term-modal p { font-size: 23px; color: #2c2c2e; margin-bottom: 16px; line-height: 1.6; }
+.term-modal p:last-child { margin-bottom: 0; }
+.term-modal code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; background: var(--surface); border: 1px solid var(--border); padding: 1px 7px; border-radius: 5px; }
+.term-close { position: absolute; top: 22px; right: 22px; width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--surface); cursor: pointer; font-size: 20px; line-height: 1; color: var(--muted); }
+.term-close:hover { background: var(--border); }
 </style>
 </head>
 <body>
@@ -236,14 +250,28 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
       <p class="cover-eyebrow">Same goal, different conventions</p>
       <h2>共同目標一致，介面慣例不同</h2>
       <div class="grid-2">
-        <div class="panel platform"><div class="platform-mark ios">iOS</div><div><h3>Human Interface Guidelines</h3><ul class="plain-list"><li>清楚的層級與內容優先</li><li>系統導覽與返回手勢</li><li>Safe Area 與 Dynamic Type</li></ul></div></div>
+        <div class="panel platform"><div class="platform-mark ios">iOS</div><div><h3>Human Interface Guidelines</h3><ul class="plain-list"><li>清楚的層級與內容優先</li><li>系統導覽與返回手勢</li><li>Safe Area 與 <button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button></li></ul></div></div>
         <div class="panel platform"><div class="platform-mark and">A</div><div><h3>Material Design</h3><ul class="plain-list"><li>可適配的元件與版面系統</li><li>Navigation Bar、Rail 與 Drawer</li><li>dp、sp 與視窗尺寸類別</li></ul></div></div>
       </div>
     </div>
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide dark" data-screen-label="05 邏輯單位與物理像素">
+  <section class="slide dark" data-screen-label="05 設計指南不是上架規定">
+    <div class="slide-head"><span class="unit-pill">Practice</span><span class="slide-num"></span></div>
+    <div class="slide-body">
+      <p class="cover-eyebrow">Guideline vs. Store Policy</p>
+      <h2>設計指南是建議，上架政策是規定</h2>
+      <div class="grid-2">
+        <div class="panel"><h3>HIG／Material Design</h3><p>教「怎麼設計比較像好用的 APP」；沒有全部照做，通常還是能上架，色彩、字體、元件外觀都可以自訂。</p></div>
+        <div class="panel"><h3>App Store／Google Play 政策</h3><p>規定「什麼 APP 可以上架」；違反可能直接被拒絕上架，Permission、Privacy 由系統把關，不是設計上的選擇。</p></div>
+      </div>
+      <p class="cover-sub" style="margin-top:28px">優先順序：<strong>上架政策／OS 技術限制 → Accessibility → Platform Behavior → Product UX → Brand Style</strong>，而不是先把所有畫面照 HIG 畫一遍。</p>
+    </div>
+    <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
+  </section>
+
+  <section class="slide dark" data-screen-label="06 邏輯單位與物理像素">
     <div class="slide-head"><span class="unit-pill">Units</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Logical size vs. physical pixels</p>
@@ -257,7 +285,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="06 iOS 的 pt 與倍率">
+  <section class="slide" data-screen-label="07 iOS 的 pt 與倍率">
     <div class="slide-head"><span class="unit-pill">iOS Units</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Point-based layout</p>
@@ -272,7 +300,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="07 畫布是基準不是唯一尺寸">
+  <section class="slide" data-screen-label="08 畫布是基準不是唯一尺寸">
     <div class="slide-head"><span class="unit-pill">Canvas</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Adaptive canvas</p>
@@ -290,7 +318,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="08 Safe Area 保留可操作空間">
+  <section class="slide" data-screen-label="09 Safe Area 保留可操作空間">
     <div class="slide-head"><span class="unit-pill">Safe Area</span><span class="slide-num"></span></div>
     <div class="slide-body phone-stage">
       <div>
@@ -307,7 +335,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="09 觸控目標大於視覺圖示">
+  <section class="slide" data-screen-label="10 觸控目標大於視覺圖示">
     <div class="slide-head"><span class="unit-pill">Touch</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Hit target</p>
@@ -321,7 +349,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide dark" data-screen-label="10 導覽呈現資訊架構">
+  <section class="slide dark" data-screen-label="11 導覽呈現資訊架構">
     <div class="slide-head"><span class="unit-pill">Navigation</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Information architecture in motion</p>
@@ -337,7 +365,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="11 iOS Tab Bar">
+  <section class="slide" data-screen-label="12 iOS Tab Bar">
     <div class="slide-head"><span class="unit-pill">iOS Navigation</span><span class="slide-num"></span></div>
     <div class="slide-body phone-stage">
       <div>
@@ -350,7 +378,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide android" data-screen-label="12 Android 的 dp 與 sp">
+  <section class="slide android" data-screen-label="13 Android 的 dp 與 sp">
     <div class="slide-head"><span class="unit-pill">Android Units</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Density-independent sizing</p>
@@ -364,7 +392,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide android" data-screen-label="13 Android 密度與資源">
+  <section class="slide android" data-screen-label="14 Android 密度與資源">
     <div class="slide-head"><span class="unit-pill">Android Density</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Density buckets</p>
@@ -380,7 +408,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide android" data-screen-label="14 Android 導覽依空間變化">
+  <section class="slide android" data-screen-label="15 Android 導覽依空間變化">
     <div class="slide-head"><span class="unit-pill">Android Navigation</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Adaptive navigation</p>
@@ -398,7 +426,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="15 文字系統需要回應縮放">
+  <section class="slide" data-screen-label="16 文字系統需要回應縮放">
     <div class="slide-head"><span class="unit-pill">Typography</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Dynamic type and font scaling</p>
@@ -425,12 +453,12 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
           <div class="formula" style="margin-top:22px;font-size:24px">行高 ＝ 字級 × 1.2 ～ 1.4　　邊距 上下 8–16pt／左右 16–20pt</div>
         </div>
       </div>
-      <p class="cover-sub" style="margin-top:26px">字級表是理解階層的參考，實際套用仍以語意樣式為準——把數字鎖死，Dynamic Type 就失效了。固定高度、單行截斷與過密的水平排列，在大字模式下最容易失效。</p>
+      <p class="cover-sub" style="margin-top:26px">字級表是理解階層的參考，實際套用仍以語意樣式為準——把數字鎖死，<button type="button" class="term-btn" data-modal="dynamic-type">Dynamic Type</button> 就失效了。固定高度、單行截斷與過密的水平排列，在大字模式下最容易失效。</p>
     </div>
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide dark" data-screen-label="16 表單包含系統鍵盤情境">
+  <section class="slide dark" data-screen-label="17 表單包含系統鍵盤情境">
     <div class="slide-head"><span class="unit-pill">Forms</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Keyboard-aware layout</p>
@@ -445,7 +473,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="17 手勢需要可發現的替代方式">
+  <section class="slide" data-screen-label="18 手勢需要可發現的替代方式">
     <div class="slide-head"><span class="unit-pill">Gestures</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Discoverability</p>
@@ -459,7 +487,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="18 狀態回饋連接操作與結果">
+  <section class="slide" data-screen-label="19 狀態回饋連接操作與結果">
     <div class="slide-head"><span class="unit-pill">Feedback</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">System status</p>
@@ -475,7 +503,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide dark" data-screen-label="19 無障礙是版面規則">
+  <section class="slide dark" data-screen-label="20 無障礙是版面規則">
     <div class="slide-head"><span class="unit-pill">Accessibility</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Perceivable · operable · understandable · robust</p>
@@ -490,7 +518,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="20 APP 介面檢核">
+  <section class="slide" data-screen-label="21 APP 介面檢核">
     <div class="slide-head"><span class="unit-pill">Self-check</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Interface checklist</p>
@@ -507,7 +535,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide" data-screen-label="21 作業 9 APP 介面">
+  <section class="slide" data-screen-label="22 作業 9 APP 介面">
     <div class="slide-head"><span class="unit-pill">Assignment 09</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Figma deliverable</p>
@@ -525,7 +553,7 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
     <div class="slide-foot"><span class="course-label">APP UI 設計規範</span><div class="dots"></div></div>
   </section>
 
-  <section class="slide dark" data-screen-label="22 資源與講義">
+  <section class="slide dark" data-screen-label="23 資源與講義">
     <div class="slide-head"><span class="unit-pill">Resources</span><span class="slide-num"></span></div>
     <div class="slide-body">
       <p class="cover-eyebrow">Official references</p>
@@ -538,6 +566,8 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
         <a href="https://developer.android.com/design/ui/mobile" target="_blank" rel="noopener"><strong>Android Mobile UI</strong><span>Android 版面、單位、導覽與無障礙文件。</span></a>
         <a href="https://www.w3.org/WAI/WCAG22/quickref/" target="_blank" rel="noopener"><strong>WCAG 2.2 Quick Reference</strong><span>對比、替代文字、鍵盤與操作標準。</span></a>
         <a href="https://mobbin.com" target="_blank" rel="noopener"><strong>Mobbin</strong><span>App UI 截圖庫，比對同款 App 在 iOS／Android 的介面差異。</span></a>
+        <a href="https://www.figma.com/design/LU76FDo4H2sNFsOO8KQuJI" target="_blank" rel="noopener"><strong>Unit 11 示意板（Figma）</strong><span>Safe Area、觸控目標、Tab Bar、單位對應四張原始檔。</span></a>
+        <a href="guideline-vs-policy.html"><strong>設計指南是建議，上架規範是規定</strong><span>遵守程度分級、70/30 Design System、平台行為拆解、Figma 資料夾建議。</span></a>
         <a href="article.html#s11"><strong>Unit 11 完整講義</strong><span>平台比較、尺寸單位、元件情境、雙平台對照總表與 APP 檢核表。</span></a>
       </div>
       <p class="source-note">課程基礎資料：resources/App 設計.pdf、resources/sp-dp.md、resources/參考資料.md、README.md。完整參考連結見講義「參考資料」。</p>
@@ -548,6 +578,17 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
 </div>
 </main>
 <nav id="ctrls" aria-label="簡報導覽"><button id="prev" type="button" aria-label="上一頁">←</button><button id="next" type="button" aria-label="下一頁">→</button></nav>
+
+<div class="term-modal-overlay" id="termModalOverlay" role="dialog" aria-modal="true" aria-labelledby="termModalTitle">
+  <div class="term-modal">
+    <button type="button" class="term-close" id="termModalClose" aria-label="關閉">✕</button>
+    <h3 id="termModalTitle">Dynamic Type</h3>
+    <p>Dynamic Type 是 Apple 在 iOS 7（2013）推出的字級縮放機制，使用者可以在「設定 → 輔助使用 → 顯示與文字大小」自由調整全系統的文字大小。</p>
+    <p>支援這個機制的 APP 有三個好處：<strong>自動配合</strong>——文字隨系統設定自動放大縮小；<strong>視覺無障礙</strong>——視力不好的使用者不用辛苦看小字；<strong>保持排版</strong>——介面元件跟著文字一起彈性調整。</p>
+    <p>開發時套用系統預設的語意樣式（例如 <code>.body</code>、<code>.title</code>），再搭配 Auto Layout，才不會在字放大後跑版或被切斷。</p>
+  </div>
+</div>
+
 <script>
 (function () {
   const deck = document.getElementById('deck');
@@ -596,6 +637,8 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
   document.getElementById('prev').addEventListener('click', () => show(current - 1));
   document.getElementById('next').addEventListener('click', () => show(current + 1));
   document.addEventListener('keydown', event => {
+    const termModal = document.getElementById('termModalOverlay');
+    if (termModal && termModal.classList.contains('open')) return;
     if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') { event.preventDefault(); show(current + 1); }
     if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); show(current - 1); }
     if (event.key === 'Home') show(0);
@@ -604,6 +647,19 @@ h3 { margin-bottom: 12px; font-size: 29px; line-height: 1.25; }
   window.addEventListener('resize', fitDeck);
   fitDeck();
   show(current);
+})();
+
+(function () {
+  const overlay = document.getElementById('termModalOverlay');
+  const closeBtn = document.getElementById('termModalClose');
+  if (!overlay || !closeBtn) return;
+  function close() { overlay.classList.remove('open'); }
+  document.querySelectorAll('.term-btn[data-modal="dynamic-type"]').forEach(btn => {
+    btn.addEventListener('click', () => overlay.classList.add('open'));
+  });
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 })();
 </script>
 </body>
