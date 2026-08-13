@@ -24,6 +24,7 @@ Unit 11「APP UI 設計規範」的簡報與講義由另一個工作階段獨立
 - `Unit_11/article.html`：標準 CSS、`side-nav`、`refs`、`sec-title`、`tbl-wrap`、標準 JS。
 - `Unit_11/checklist.html`：8 組 29 項互動檢核表（新增）。
 - `Unit_11/README.md`、`index.html`：教材入口與卡片三入口。
+- `Unit_11/tools-stark-material.html`：Stark／Material Theme Builder 兩個 Figma 外掛的安裝與操作指南（新增，2026-08-14）。
 
 ## 不在範圍內
 
@@ -40,3 +41,4 @@ Unit 11「APP UI 設計規範」的簡報與講義由另一個工作階段獨立
 - [x] 檢核表 8 組分母與實際項數一致，10 個講義錨點全部有效
 - [x] 檢核表無使用但未定義的 class，JS 通過 `node --check`
 - [x] `validate.py Unit_11` 全綠
+- [x] `tools-stark-material.html` 結構通過 skill 內建的 HTML parser 檢查（無未閉合標籤、無重複 id）

@@ -53,3 +53,21 @@
 `Unit_11/resources/常見標籤類型.md` 與 `sp-dp.md` 內容完全重複，見 [future/maintain.md](../../future/maintain.md) 2026-08-11 第 4 筆，狀態未修復。
 
 `Unit_11/resources/App 設計.pdf` 有 3.1 MB，是本單元的來源依據所以依溯源原則保留。若日後 repo 大小成為問題，這是第一個可以考慮抽出的檔案。
+
+---
+
+## 2026-08-14 — Stark／Material Theme Builder 操作指南
+
+**新增檔案：**
+- `Unit_11/tools-stark-material.html` — Figma 外掛操作指南（新增）
+- `Unit_11/README.md`、`article.html`、`checklist.html` — 加入口連結
+
+**實作說明：**
+
+用戶指定這兩個工具（Stark、Material Theme Builder）在講義「參考資料」清單裡已經有連結，但只是列出來，沒有教怎麼在作業裡實際用。新頁面延用 `article.html` 的標準版型（`:root` 色票、`side-nav`、`toc`、`refs`），內容分兩塊：Stark 的安裝與對比度檢查步驟（對應講義 §9 的 WCAG 門檻）、Material Theme Builder 的安裝與配色產生步驟（對應講義 §2 的 Material Design 3，僅 Android 專題適用）。用戶要求「操作導向」而非純導覽介紹，且明確不需要另外畫示意圖——文字步驟＋官方連結即可，因為外掛介面截圖無法保證跟畫面同步，页面裡也加了一則提醒。
+
+檢核表 G 組第 1 項（對比度）與講義參考資料清單的 Stark／Material Theme Builder 條目都加了回連結，形成雙向可達。
+
+**已知問題 / 備註：**
+
+頁面裡的操作步驟（選單路徑、按鈕名稱）依 Figma 與兩個外掛目前普遍已知的操作邏輯撰寫，未附即時截圖；外掛介面更新後可能需要校對，頁面內已加提醒。

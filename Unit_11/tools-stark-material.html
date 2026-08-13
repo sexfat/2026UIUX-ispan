@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 11 · Stark 與 Material Theme Builder 操作指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fbfbfd;
+  --dark: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0066cc;
+  --accent2: #0f766e;
+  --accent3: #c2410c;
+  --surface: #f5f5f7;
+  --border: #d2d2d7;
+  --code-bg: #1d1d1f;
+  --max-w: 760px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 24px 96px;
+  line-height: 1.75;
+}
+
+#prog { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 200; }
+
+.topbar { max-width: var(--max-w); margin: 0 auto; padding: 24px 0 0; display: flex; align-items: center; justify-content: space-between; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; letter-spacing: .04em; }
+.back-link:hover { opacity: .75; }
+.back-link::before { content: '←'; }
+.unit-pill { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.09); padding: 4px 11px; border-radius: 8px; }
+
+.hero { max-width: var(--max-w); margin: 0 auto; padding: 56px 0 40px; border-bottom: 1px solid var(--border); }
+.overline { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
+.hero .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
+.hero .meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; font-size: 12px; color: var(--muted); align-items: center; }
+.hero .meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+
+.toc { max-width: var(--max-w); margin: 36px auto 0; padding: 26px 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.toc h2 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.toc ol { list-style: none; counter-reset: toc; columns: 2; column-gap: 32px; }
+.toc li { counter-increment: toc; margin-bottom: 10px; break-inside: avoid; }
+.toc a { font-size: .92rem; color: var(--dark); text-decoration: none; display: flex; gap: 10px; }
+.toc a:hover { color: var(--accent); }
+.toc a::before { content: counter(toc, decimal-leading-zero); font-size: .72rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; padding-top: 3px; }
+
+.article { max-width: var(--max-w); margin: 0 auto; }
+.section { padding-top: 56px; }
+.sec-num { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; }
+h2.sec-title { font-size: clamp(1.5rem, 3.2vw, 2.1rem); font-weight: 800; line-height: 1.22; margin-bottom: 20px; }
+h3 { font-size: clamp(1.05rem, 2.2vw, 1.28rem); font-weight: 800; margin: 32px 0 12px; }
+p { font-size: 1rem; color: #2c2c2e; margin-bottom: 16px; }
+strong { font-weight: 800; color: var(--dark); }
+.hl { color: var(--accent); font-weight: 800; }
+code { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: .88em; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; }
+
+ul.bullets, ol.steps { margin: 4px 0 20px; padding-left: 0; list-style: none; }
+ul.bullets li, ol.steps li { font-size: 1rem; color: #2c2c2e; line-height: 1.7; margin-bottom: 12px; padding-left: 26px; position: relative; }
+ul.bullets li::before { content: ''; position: absolute; left: 6px; top: .65em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+ol.steps { counter-reset: step; }
+ol.steps li { counter-increment: step; padding-left: 38px; }
+ol.steps li::before { content: counter(step); position: absolute; left: 0; top: 1px; width: 24px; height: 24px; border-radius: 50%; background: rgba(0,102,204,.1); color: var(--accent); font-size: .78rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+.callout { margin: 24px 0; padding: 18px 20px; background: rgba(0,102,204,.05); border: 1px solid rgba(0,102,204,.16); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; font-size: .95rem; line-height: 1.7; color: var(--dark); }
+.callout.green { background: rgba(15,118,110,.06); border-color: rgba(15,118,110,.2); border-left-color: var(--accent2); }
+.callout.warn { background: rgba(194,65,12,.06); border-color: rgba(194,65,12,.2); border-left-color: var(--accent3); }
+
+.tbl-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; min-width: 560px; }
+th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); background: rgba(0,102,204,.06); border-bottom: 2px solid var(--border); }
+th:first-child { color: var(--muted); background: transparent; }
+td { padding: 13px 16px; border-bottom: 1px solid var(--border); color: #2c2c2e; line-height: 1.6; vertical-align: top; }
+td:first-child { font-weight: 800; color: var(--muted); font-size: .9em; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+.card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+.card h3 { margin: 0 0 8px; font-size: 1rem; }
+.card p { margin: 0; font-size: .93rem; color: var(--muted); line-height: 1.65; }
+
+.refs { max-width: var(--max-w); margin: 64px auto 0; padding-top: 32px; border-top: 1px solid var(--border); }
+.refs h2 { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.refs ul { list-style: none; }
+.refs li { font-size: .9rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; padding-left: 18px; position: relative; }
+.refs li::before { content: '-'; position: absolute; left: 0; color: var(--border); }
+.refs a { color: var(--accent); text-decoration: none; }
+.refs a:hover { text-decoration: underline; }
+
+.foot-nav { max-width: var(--max-w); margin: 48px auto 0; display: flex; gap: 12px; flex-wrap: wrap; }
+.foot-nav a { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--accent); background: rgba(0,102,204,.08); border: 1px solid rgba(0,102,204,.18); padding: 10px 18px; border-radius: 8px; text-decoration: none; }
+.foot-nav a:hover { background: rgba(0,102,204,.14); }
+.foot-nav a::after { content: '↗'; font-size: 11px; opacity: .8; }
+
+.side-nav { display: none; position: fixed; top: 50%; left: calc(50% - (var(--max-w) / 2) - 258px); transform: translateY(-50%); width: 220px; max-height: 72vh; overflow-y: auto; z-index: 150; }
+.side-nav-label { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-left: 15px; }
+.side-nav ol { list-style: none; counter-reset: sidenav; border-left: 2px solid var(--border); }
+.side-nav li { counter-increment: sidenav; }
+.side-nav a { display: flex; align-items: baseline; gap: 8px; font-size: .82rem; line-height: 1.45; color: var(--muted); text-decoration: none; padding: 7px 0 7px 15px; margin-left: -2px; border-left: 2px solid transparent; transition: color .15s, border-color .15s; }
+.side-nav a::before { content: counter(sidenav, decimal-leading-zero); font-size: .68rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--border); flex-shrink: 0; }
+.side-nav a:hover { color: var(--dark); }
+.side-nav a.active { color: var(--accent); font-weight: 700; border-left-color: var(--accent); }
+.side-nav a.active::before { color: var(--accent); }
+
+@media (min-width: 1400px) { .side-nav { display: block; } }
+
+@media (max-width: 768px) {
+  body { padding-left: 18px; padding-right: 18px; }
+  .toc ol { columns: 1; }
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav class="side-nav" aria-label="大綱導覽">
+  <p class="side-nav-label">大綱</p>
+  <ol>
+    <li><a href="#s1">這兩個工具解決什麼問題</a></li>
+    <li><a href="#s2">Stark：安裝與啟用</a></li>
+    <li><a href="#s3">Stark：檢查對比度</a></li>
+    <li><a href="#s4">Material Theme Builder：安裝與啟用</a></li>
+    <li><a href="#s5">Material Theme Builder：產生配色</a></li>
+  </ol>
+</nav>
+
+<div class="topbar">
+  <a class="back-link" href="article.html">回到講義</a>
+  <span class="unit-pill">Unit 11</span>
+</div>
+
+<div class="hero">
+  <p class="overline">Figma Plugin Guide</p>
+  <h1>Stark 與 Material Theme Builder<br>操作指南</h1>
+  <p class="lead">這兩個外掛都列在講義的「參考資料」裡，這頁教怎麼在作業 9 的 Figma 檔案裡實際用起來：Stark 檢查對比度是否過關，Material Theme Builder 產生 Android 專題要用的 Material 配色。</p>
+  <div class="meta"><span>對應講義 §9 無障礙與對比</span><span class="d"></span><span>對應講義 §2 平台規範</span><span class="d"></span><span>作業 9：Figma APP 介面頁面</span></div>
+</div>
+
+<div class="toc">
+  <h2>目錄</h2>
+  <ol>
+    <li><a href="#s1">這兩個工具解決什麼問題</a></li>
+    <li><a href="#s2">Stark：安裝與啟用</a></li>
+    <li><a href="#s3">Stark：檢查對比度</a></li>
+    <li><a href="#s4">Material Theme Builder：安裝與啟用</a></li>
+    <li><a href="#s5">Material Theme Builder：產生配色</a></li>
+  </ol>
+</div>
+
+<div class="article">
+  <section class="section" id="s1">
+    <p class="sec-num">Overview · 01</p>
+    <h2 class="sec-title">一個檢查對比度，一個產生配色</h2>
+    <p>兩個工具都是免費的 Figma 外掛，處理的是不同階段的問題：</p>
+    <div class="cards">
+      <div class="card"><h3>Stark</h3><p>在畫面畫好之後檢查：文字跟背景的對比度夠不夠、色盲模擬下還看不看得清楚。對應講義 §9 的 WCAG 2.2 門檻（一般文字 4.5:1、大字或圖示 3:1）。</p></div>
+      <div class="card"><h3>Material Theme Builder</h3><p>在畫面開始前先產生：輸入一個品牌色，自動算出 Material Design 3 的完整配色角色（Primary、Secondary、Container…）。專題選 Android 平台時才需要。</p></div>
+    </div>
+    <div class="callout"><p><strong>兩個都不是必修工具。</strong>手動調色、手動算對比度一樣可以交作業；這兩個外掛的價值是把「算對比度」「配出一整組協調的顏色」這兩件耗時的事自動化，讓時間留給版面判斷。</p></div>
+  </section>
+
+  <section class="section" id="s2">
+    <p class="sec-num">Stark Setup · 02</p>
+    <h2 class="sec-title">Stark：安裝與啟用</h2>
+    <ol class="steps">
+      <li>在 Figma 裡打開你的作業 9 檔案，上方選單找 <strong>Resources</strong>（或按 <code>Shift + I</code>）。</li>
+      <li>切到 <strong>Plugins</strong> 分頁，搜尋 <code>Stark</code>，選官方這一個（作者是 Stark Accessibility Suite）。</li>
+      <li>點 <strong>Run</strong> 第一次執行後，Stark 會出現在右側面板；之後可以直接從 <strong>Resources → Plugins → Stark</strong> 開啟，不用重新搜尋。</li>
+      <li>免費版就能做對比度檢查與色盲模擬，這是本單元用得到的部分；付費功能（如自動修復建議）不是必要項目。</li>
+    </ol>
+    <div class="callout warn"><p><strong>外掛介面會隨版本更新。</strong>以下步驟講的是操作邏輯，實際選單文字若跟畫面對不上，以 Stark 外掛內建的引導為準。</p></div>
+  </section>
+
+  <section class="section" id="s3">
+    <p class="sec-num">Stark Usage · 03</p>
+    <h2 class="sec-title">Stark：檢查對比度</h2>
+    <ol class="steps">
+      <li><strong>選取要檢查的物件</strong>：通常是一段文字圖層，加上它下面的背景圖層（兩個一起選）。</li>
+      <li><strong>開啟 Contrast Checker</strong>：在 Stark 面板裡選對比度檢查功能，它會讀出選取物件的文字色與背景色，算出對比度數值。</li>
+      <li><strong>對照講義 §9 的門檻</strong>：一般文字要 ≥ 4.5:1；18pt 以上的大字或粗體 14pt 以上、以及圖示與控制邊界只要 ≥ 3:1。Stark 會直接標示這組顏色是否通過 AA／AAA。</li>
+      <li><strong>沒通過就調整</strong>：Stark 通常可以微調文字色或背景色，即時看對比度數值變化，調到通過門檻為止。</li>
+      <li><strong>色盲模擬</strong>：Stark 也能模擬幾種常見色盲類型下的畫面，用來檢查「狀態只靠顏色分辨」這類問題（對應講義 §9「狀態不只依賴顏色」）。</li>
+    </ol>
+    <div class="callout"><p><strong>放進檢核表：</strong>用 Stark 跑過的畫面，可以直接對照 <a href="checklist.html">APP 介面檢核表</a> G 組「無障礙」的對比度項目打勾，勾選結果可以直接複製進作業說明。</p></div>
+  </section>
+
+  <section class="section" id="s4">
+    <p class="sec-num">Material Theme Builder Setup · 04</p>
+    <h2 class="sec-title">Material Theme Builder：安裝與啟用</h2>
+    <ol class="steps">
+      <li>同樣從 <strong>Resources</strong>（<code>Shift + I</code>）→ <strong>Plugins</strong>，搜尋 <code>Material Theme Builder</code>，選 Google 官方發布的版本。</li>
+      <li>點 <strong>Run</strong> 執行，外掛會在右側面板打開一個配色產生介面。</li>
+      <li>這個外掛只在 Android／Material Design 專題時需要；iOS 專題沿用 HIG 的系統色即可，不必安裝。</li>
+    </ol>
+  </section>
+
+  <section class="section" id="s5">
+    <p class="sec-num">Material Theme Builder Usage · 05</p>
+    <h2 class="sec-title">Material Theme Builder：產生配色</h2>
+    <ol class="steps">
+      <li><strong>選一個品牌色（Source Color）</strong>：通常是 Logo 主色或最能代表產品的一個顏色，貼上色碼。</li>
+      <li><strong>產生色板</strong>：外掛會依這個色自動算出 Material Design 3 的完整角色，包含 Primary／Secondary／Tertiary，以及每個角色對應的 Container、On-Primary 等文字色。</li>
+      <li><strong>檢查明暗兩套主題</strong>：Material 3 預設同時給 Light／Dark 兩組數值，確認兩套在你的畫面上都好讀。</li>
+      <li><strong>套用到 Figma 變數或色票</strong>：外掛通常能把整組顏色匯出成 Figma Variables 或 Color Styles，之後畫面直接套用這些變數，換色只要改一個 Source Color。</li>
+    </ol>
+    <div class="callout green"><p><strong>為什麼不要手動配色：</strong>Material 3 的角色系統（Primary/Secondary/Container…）彼此有固定的對比關係，手動配容易配出視覺上好看、但 Primary 文字疊在 Primary 背景上對比不足的組合。用外掛產生可以保證這組關係本來就成立，對應講義 §9 的對比門檻。</p></div>
+  </section>
+</div>
+
+<div class="refs">
+  <h2>參考資料</h2>
+  <ul>
+    <li><a href="https://www.getstark.co/for-designers/" target="_blank" rel="noopener">Stark</a>：對比度檢查、色盲模擬與無障礙工具組官方頁面。</li>
+    <li><a href="https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder" target="_blank" rel="noopener">Material Theme Builder</a>：Figma 社群外掛頁面。</li>
+    <li><a href="https://m3.material.io/styles/color/system/overview" target="_blank" rel="noopener">M3 Color System</a>：Material Design 3 官方色彩角色說明。</li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/quickref/" target="_blank" rel="noopener">WCAG 2.2 Quick Reference</a>：本頁對比度門檻的依據，對應講義 §9。</li>
+  </ul>
+</div>
+
+<div class="foot-nav">
+  <a href="article.html#s9">講義 §9 無障礙與對比</a>
+  <a href="checklist.html">APP 介面檢核表</a>
+  <a href="../index.html">回到課程總覽</a>
+</div>
+
+<script>
+(function () {
+  const prog = document.getElementById('prog');
+  function updateProgress() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? window.scrollY / max * 100 : 0;
+    prog.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+})();
+
+(function () {
+  const nav = document.querySelector('.side-nav');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  const linkFor = new Map(sections.map((sec, i) => [sec, links[i]]));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = linkFor.get(entry.target);
+      if (!link) return;
+      links.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+</script>
+</body>
+</html>

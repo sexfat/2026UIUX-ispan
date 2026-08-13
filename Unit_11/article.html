@@ -506,16 +506,6 @@ tr:last-child td { border-bottom: none; }
 .unit-block b { display: block; font-size: 30px; }
 .unit-block span { color: var(--muted); font-size: 13px; }
 .unit-arrow { color: var(--muted); font-size: 26px; }
-.phone-demo { width: min(100%, 420px); aspect-ratio: 393 / 852; margin: 28px auto; border: 10px solid var(--dark); border-radius: 46px; background: #fff; position: relative; overflow: hidden; }
-.phone-demo::before { content: ""; position: absolute; z-index: 4; top: 11px; left: 50%; width: 112px; height: 28px; transform: translateX(-50%); border-radius: 18px; background: var(--dark); }
-.phone-head { height: 124px; padding: 64px 24px 0; border-bottom: 1px solid var(--border); font-size: 20px; font-weight: 800; }
-.phone-content { padding: 24px; }
-.fake-line { height: 12px; margin-bottom: 12px; border-radius: 2px; background: #e5e7e9; }
-.fake-line.short { width: 62%; }
-.fake-card { height: 130px; margin: 20px 0; border: 1px solid #dfe1e4; border-radius: 10px; background: #eff2f4; }
-.safe { position: absolute; left: 0; right: 0; z-index: 3; color: var(--accent); background: rgba(0,102,204,.14); border-color: var(--accent); border-style: dashed; font-size: 12px; font-weight: 800; }
-.safe.top { top: 0; height: 66px; padding: 42px 14px 0; border-width: 0 0 2px; text-align: right; }
-.safe.bottom { bottom: 0; height: 42px; padding: 5px 14px 0; border-width: 2px 0 0; text-align: right; }
 .target-row { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 28px 0 46px; text-align: center; }
 .target { width: 150px; height: 150px; display: grid; place-items: center; margin: 0 auto 18px; border: 2px dashed currentColor; border-radius: 7px; color: var(--accent); }
 .target.android { color: var(--accent2); }
@@ -548,6 +538,7 @@ tr:last-child td { border-bottom: none; }
     <li><a href="#s8">文字、表單與鍵盤</a></li>
     <li><a href="#s9">無障礙與對比</a></li>
     <li><a href="#s10">作業 9 與介面檢核</a></li>
+    <li><a href="#s11">iOS × Android 對照總表</a></li>
   </ol>
 </nav>
 
@@ -576,6 +567,7 @@ tr:last-child td { border-bottom: none; }
     <li><a href="#s8">文字、表單與鍵盤</a></li>
     <li><a href="#s9">無障礙與對比</a></li>
     <li><a href="#s10">作業 9 與介面檢核</a></li>
+    <li><a href="#s11">iOS × Android 對照總表</a></li>
   </ol>
 </div>
 
@@ -647,12 +639,43 @@ tr:last-child td { border-bottom: none; }
       </tbody>
     </table>
     </div>
+    <h3>圖示資源輸出換算</h3>
+    <p>同一個邏輯尺寸的圖示，依平台密度分級輸出不同的實體像素。以 24 dp／pt 的圖示為例：</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>Android 密度分級</th><th>縮放倍率</th><th>24 dp 圖示輸出</th></tr></thead>
+      <tbody>
+        <tr><td>mdpi</td><td>1x</td><td>24 px</td></tr>
+        <tr><td>hdpi</td><td>1.5x</td><td>36 px</td></tr>
+        <tr><td>xhdpi</td><td>2x</td><td>48 px</td></tr>
+        <tr><td>xxhdpi</td><td>3x</td><td>72 px</td></tr>
+        <tr><td>xxxhdpi</td><td>4x</td><td>96 px</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>iOS 對應 @1x／@2x／@3x：24 pt 圖示分別輸出 24 px、48 px、72 px。Android 的換算公式為 <strong>px = dp × (裝置 dpi ÷ 160)</strong>，160 dpi 是基準密度（mdpi）。</p>
   </section>
 
   <section class="section" id="s4">
     <p class="sec-num">Canvas · 04</p>
     <h2 class="sec-title">畫布尺寸是測試起點，適配規則才是設計成果</h2>
-    <p>裝置型號與尺寸會持續更新。教材中的裝置表可以協助理解倍率與畫布差異，但專題不需要為每一款手機建立獨立畫面。主要畫布搭配尺寸驗證，更能呈現真正的版面規則。</p>
+    <p>裝置型號與尺寸會持續更新。下表協助理解倍率與畫布差異，但專題不需要為每一款手機建立獨立畫面。主要畫布搭配尺寸驗證，更能呈現真正的版面規則。</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>機型系列</th><th>螢幕吋數</th><th>邏輯尺寸（pt）</th><th>物理像素（px）</th><th>倍率</th></tr></thead>
+      <tbody>
+        <tr><td>iPhone 17 Pro Max</td><td>6.9"</td><td>440 × 956</td><td>1320 × 2868</td><td>@3x</td></tr>
+        <tr><td>iPhone 17 / 17 Pro</td><td>6.3"</td><td>402 × 874</td><td>1206 × 2622</td><td>@3x</td></tr>
+        <tr><td>iPhone Air</td><td>6.5"</td><td>420 × 912</td><td>1260 × 2736</td><td>@3x</td></tr>
+        <tr><td>iPhone 16 Pro Max</td><td>6.9"</td><td>440 × 956</td><td>1320 × 2868</td><td>@3x</td></tr>
+        <tr><td>iPhone 16 Pro</td><td>6.3"</td><td>402 × 874</td><td>1206 × 2622</td><td>@3x</td></tr>
+        <tr><td>iPhone 16 / 15 / 14 Pro</td><td>6.1"</td><td>393 × 852</td><td>1179 × 2556</td><td>@3x</td></tr>
+        <tr><td>iPhone 16 Plus / 15 Plus</td><td>6.7"</td><td>430 × 932</td><td>1290 × 2796</td><td>@3x</td></tr>
+        <tr><td>iPhone 14 / 13 / 12</td><td>6.1"</td><td>390 × 844</td><td>1170 × 2532</td><td>@3x</td></tr>
+        <tr><td>iPhone SE（第 3 代）</td><td>4.7"</td><td>375 × 667</td><td>750 × 1334</td><td>@2x</td></tr>
+      </tbody>
+    </table>
+    </div>
     <ol class="steps">
       <li><strong>主要基準</strong>：依產品目標裝置建立主要 Figma Frame，內容與元件在此完成。</li>
       <li><strong>較小畫面</strong>：最長文字、鍵盤展開、底部操作區與捲動內容形成壓力測試。</li>
@@ -666,12 +689,10 @@ tr:last-child td { border-bottom: none; }
     <p class="sec-num">Safe Area · 05</p>
     <h2 class="sec-title">Safe Area 不是固定數字，而是系統提供的可用區域</h2>
     <p>Safe Area 避免重要內容被相機區、Dynamic Island、圓角、Home Indicator、系統列或其他介面遮擋。不同裝置、方向與系統狀態會改變 inset，因此固定背誦單一頂部或底部高度並不可靠。</p>
-    <div class="phone-demo" aria-hidden="true">
-      <div class="safe top">TOP SAFE AREA</div>
-      <div class="phone-head">行程詳情</div>
-      <div class="phone-content"><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-card"></div><div class="fake-line"></div><div class="fake-line short"></div><div class="fake-card"></div></div>
-      <div class="safe bottom">BOTTOM SAFE AREA</div>
-    </div>
+    <figure class="fig">
+      <img src="resources/safe-area-diagram.png" alt="以 iPhone 16/15 Pro 393×852pt 畫布等比例繪製的安全區域示意圖，標示頂部安全邊距 59pt、底部安全邊距 34pt、左右邊距 16pt">
+      <figcaption>以 393×852pt（iPhone 16/15 Pro）等比例繪製；頂部畫的是 Dynamic Island 機型的 59pt（瀏海機型較淺，約 47pt），底部與左右邊距對所有全螢幕機型一致。</figcaption>
+    </figure>
     <h3>可延伸到安全區域外的內容</h3>
     <p>背景色、照片或沉浸式媒體可以延伸到螢幕邊緣；文字、按鈕、表單與其他關鍵操作仍維持在可安全閱讀與操作的位置。</p>
     <h3>會改變可用空間的系統元素</h3>
@@ -681,6 +702,19 @@ tr:last-child td { border-bottom: none; }
       <li>來電、錄音、定位、熱點等系統狀態提示。</li>
       <li>橫向、分割視窗、平板多工與可調整視窗。</li>
     </ul>
+    <h3>常見的安全區邊距參考值</h3>
+    <p>畫 Figma 輔助線時，可以先用這組邊距框出安全區域範圍，再依實際裝置測試微調：</p>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>位置</th><th>邊距</th><th>對應系統元素</th></tr></thead>
+      <tbody>
+        <tr><td>頂部</td><td>47pt–59pt</td><td>狀態列、瀏海或 Dynamic Island（依機型而異）</td></tr>
+        <tr><td>底部</td><td>34pt</td><td>Home Indicator 手勢橫槓</td></tr>
+        <tr><td>左右</td><td>16pt</td><td>螢幕邊緣，與 iOS 內建 App 的預設邊距一致</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><p><strong>這組數字的用法：</strong>它是畫輔助線的起始值，不是要背下來的固定答案。實際專案仍以 Figma 裝置框架自動產生的 Safe Area 為準——換機型、轉橫向或系統狀態改變時，實際 inset 會跟著變。</p></div>
   </section>
 
   <section class="section" id="s6">
@@ -705,6 +739,12 @@ tr:last-child td { border-bottom: none; }
       <li>Tab 用於切換目的地；建立內容、掃描或發文等一次性動作屬於另一種操作。</li>
       <li>深層頁面的底部導覽是否保留，取決於資訊架構與內容空間，不只取決於畫面美觀。</li>
     </ul>
+    <h3>Tab Bar 的高度與安全區疊加</h3>
+    <p>Tab Bar 標準高度是 49pt；在有 Home Indicator 的全螢幕機型上，底部還要再加 34pt 的安全區，總高度約 83pt。圖示建議 24–28pt，文字 10–11pt，背景多半用半透明毛玻璃（System Thin Material）讓底下內容捲動時隱約透出。</p>
+    <figure class="fig">
+      <img src="resources/tabbar-spec-diagram.png" alt="Tab Bar 剖面圖，標示標準高度 49pt 與底部安全區 34pt 疊加後的總高度">
+      <figcaption>49pt 的列本身不含安全區；實際占用的畫面高度要把底部安全區一起算進去。</figcaption>
+    </figure>
   </section>
 
   <section class="section" id="s7">
@@ -715,6 +755,10 @@ tr:last-child td { border-bottom: none; }
       <div><div class="target android"><i>A</i></div><strong>Android：至少 48 × 48 dp 觸控目標</strong></div>
     </div>
     <p>觸控目標可以大於可見圖示。24 pt／dp 的圖示放在較大的透明可點擊區域中，既能維持視覺精緻度，也能降低誤觸。相鄰控制項之間的間距同樣重要。</p>
+    <figure class="fig">
+      <img src="resources/touch-target-diagram.png" alt="24pt 圖示與 44×44pt 建議觸控熱區的尺寸對照，附最小熱區、按鈕文字與 Android 對照數字">
+      <figcaption>圖示可以維持 24pt 的視覺尺寸，實際可點擊範圍仍要撐到 44×44pt。</figcaption>
+    </figure>
     <h3>手勢不是唯一入口</h3>
     <p>Swipe、長按、拖曳與邊緣返回能提高熟練操作的速度，但不容易被第一次使用的人發現。重要功能同時具備可見入口或無障礙 action，流程才不會依賴猜測。</p>
     <h3>按下之後的狀態與結果分支</h3>
@@ -752,6 +796,24 @@ tr:last-child td { border-bottom: none; }
       </table>
     </div>
     <div class="callout"><p><strong>這張表的用法：</strong>它是理解 iOS 字級階層的參考，不是拿來寫死的清單。實際套用時仍以語意樣式為準——把「正文」對應到 Body 這個語意層級，讓系統依使用者的字體設定去調整實際尺寸。若把 17pt 直接鎖成固定值，Dynamic Type 就失效了，前面提的大字模式破損也會跟著出現。</p></div>
+
+    <h3>Android 的字級規格</h3>
+    <p>Android 使用系統字體 <strong>Roboto</strong>（多語言則搭配 <strong>Noto</strong>），字級單位是 sp，對應 Material Design 的角色分類：</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>角色</th><th>字級</th><th>粗細</th><th>使用場合</th></tr></thead>
+        <tbody>
+          <tr><td>顯示文字（Display）</td><td>34sp</td><td>Regular／Bold</td><td>大型標題或重點內容的強調展示</td></tr>
+          <tr><td>頁面標題（Headline）</td><td>24sp</td><td>Regular／Bold</td><td>頁面主標題</td></tr>
+          <tr><td>子標題（Subhead）</td><td>16sp</td><td>Regular</td><td>次要標題</td></tr>
+          <tr><td>正文（Body）</td><td>14sp</td><td>Regular</td><td>主內容文字，例如段落描述</td></tr>
+          <tr><td>按鈕文字（Button）</td><td>14sp</td><td>Medium</td><td>按鈕上的文字</td></tr>
+          <tr><td>說明文字（Caption）</td><td>12sp</td><td>Regular</td><td>小型標籤或輔助性內容</td></tr>
+          <tr><td>註腳（Overline）</td><td>10sp</td><td>Regular</td><td>非常小的輔助文字</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn"><p><strong>可讀性下限：</strong>正文最小不低於 iOS 11pt／Android 12sp；行距維持在字級的 1.2–1.5 倍；按鈕文字至少 iOS 17pt／Android 14sp，確保小螢幕上仍好點擊。</p></div>
 
     <h3>行高、對齊與邊距</h3>
     <ul class="bullets">
@@ -819,19 +881,96 @@ tr:last-child td { border-bottom: none; }
       <div class="check"><span class="box"></span><div><b>無障礙</b><span>對比、語意、替代操作與閱讀順序可被驗證。</span></div></div>
     </div>
 </section>
+
+  <section class="section" id="s11">
+    <p class="sec-num">Comparison · 11</p>
+    <h2 class="sec-title">iOS 與 Android 規範對照總表</h2>
+    <p>前面各節分別講了單位、字體、觸控與導覽的判斷邏輯；這裡把兩個平台的官方數字並排整理，作為交件前快速核對用。</p>
+    <h3>基本單位與螢幕規格</h3>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>iOS（HIG）</th><th>Android（Material Design 3）</th></tr></thead>
+      <tbody>
+        <tr><td>邏輯單位</td><td>pt（Point）</td><td>dp（Density-independent pixel）</td></tr>
+        <tr><td>文字單位</td><td>pt</td><td>sp（Scale-independent pixel）</td></tr>
+        <tr><td>設計畫布（1x）</td><td>393 × 852 pt（iPhone 16 / 15 Pro）</td><td>360 × 800 dp（Standard Android）</td></tr>
+        <tr><td>主流倍率</td><td>@2x、@3x</td><td>mdpi、hdpi、xhdpi…（常見為 @2x、@3x）</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>文字與字體</h3>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>iOS（San Francisco）</th><th>Android（Roboto／Google Sans）</th></tr></thead>
+      <tbody>
+        <tr><td>大標題（H1）</td><td>34pt（Large Title）</td><td>32sp（Headline Medium）</td></tr>
+        <tr><td>內文（Body）</td><td>17pt（iOS 標準基準字級）</td><td>16sp（Body Large）</td></tr>
+        <tr><td>輔助文字</td><td>11pt–13pt（Caption）</td><td>12sp（Label Medium）</td></tr>
+        <tr><td>行高設定</td><td>系統自動處理，強調垂直節奏</td><td>嚴格遵守 4dp 的倍數網格</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>按鈕與觸控規格</h3>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>iOS（HIG）</th><th>Android（Material 3）</th></tr></thead>
+      <tbody>
+        <tr><td>最小觸控熱區</td><td>44 × 44 pt</td><td>48 × 48 dp</td></tr>
+        <tr><td>常見按鈕高度</td><td>44pt–50pt</td><td>40dp（S）、48dp（M）、56dp（L）</td></tr>
+        <tr><td>按鈕圓角</td><td>偏好連續圓角（Squircle），樣式較簡約</td><td>提供 Elevated、Filled、Outlined 多種層級</td></tr>
+        <tr><td>文字大小／粗細</td><td>通常 16–17pt／Semibold</td><td>預設 14sp／Medium（有時全大寫）</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>版面與空間</h3>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>iOS（HIG）</th><th>Android（Material 3）</th></tr></thead>
+      <tbody>
+        <tr><td>標準左右邊距</td><td>16pt</td><td>16dp</td></tr>
+        <tr><td>網格系統</td><td>較彈性，強調視覺平衡</td><td>嚴格遵守 8dp Grid（間距與尺寸皆為 8 的倍數）</td></tr>
+        <tr><td>特殊區域</td><td>需考慮動態島（Dynamic Island）避讓</td><td>需考慮多樣化的螢幕開孔與虛擬導航列</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>導航與互動慣例</h3>
+    <div class="tbl-wrap">
+      <table>
+      <thead><tr><th>項目</th><th>iOS（HIG）</th><th>Android（Material 3）</th></tr></thead>
+      <tbody>
+        <tr><td>主要導航列</td><td>Tab Bar（底部，最多 5 個標籤）</td><td>Navigation Bar（底部，通常帶藥丸型選取框）</td></tr>
+        <tr><td>返回機制</td><td>左上角返回鍵＋螢幕左邊緣右滑手勢</td><td>系統層級返回手勢（兩側向內滑）＋箭頭 Icon</td></tr>
+        <tr><td>浮動動作按鈕</td><td>較少見，主要動作通常放右上或底部</td><td>FAB（Floating Action Button）位於右下角</td></tr>
+        <tr><td>選單／彈窗</td><td>Action Sheet（底部圓角浮起）</td><td>Bottom Sheet（貼齊底部，層次感強）</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><p><strong>這張總表的用法：</strong>拿來對照兩個平台「同一件事的官方預設值」，不是要在單一專案裡混用兩套數字。專題選定 iOS 或 Android 其中一個平台後，仍以該平台前面各節的判斷邏輯為準。</p></div>
+  </section>
 </div><!-- /.article -->
 
 <div class="refs">
       <h2>參考資料</h2>
   <h3>來源與延伸</h3>
       <ul>
-        <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">Apple Human Interface Guidelines</a>：Layout、Accessibility、Navigation、Typography。</li>
-        <li><a href="https://developer.apple.com/design/resources/" target="_blank" rel="noopener">Apple Design Resources</a>：Apple 平台 UI Kit 與設計資源。</li>
+        <li><a href="https://developer.apple.com/design/human-interface-guidelines/" target="_blank" rel="noopener">Apple Human Interface Guidelines</a>：Layout、Accessibility、Navigation、Typography（英文版）。</li>
+        <li><a href="https://developer.apple.com/cn/design/human-interface-guidelines" target="_blank" rel="noopener">人机界面指南</a>：HIG 中文版。</li>
+        <li><a href="https://developer.apple.com/design/human-interface-guidelines/layout" target="_blank" rel="noopener">HIG · Layout</a>／<a href="https://developer.apple.com/design/human-interface-guidelines/buttons" target="_blank" rel="noopener">HIG · Buttons</a>：安全區域、邊距與按鈕層級的官方章節。</li>
+        <li><a href="https://developer.apple.com/design/resources/#ios-apps" target="_blank" rel="noopener">Apple Design Resources</a>：Apple 平台 UI Kit 與設計資源。</li>
+        <li><a href="https://www.figma.com/@apple" target="_blank" rel="noopener">Figma @apple</a>：Apple 官方 Figma 社群帳號。</li>
         <li><a href="https://m3.material.io/" target="_blank" rel="noopener">Material Design 3</a>：Foundations、Components 與 Adaptive Design。</li>
-        <li><a href="https://developer.android.com/design/ui/mobile" target="_blank" rel="noopener">Android Mobile UI</a>：版面、單位、導覽與無障礙。</li>
+        <li><a href="https://m3.material.io/components" target="_blank" rel="noopener">M3 Components</a>：Buttons、Cards、Navigation bar 的元件規格。</li>
+        <li><a href="https://developer.android.com/design/ui/mobile?hl=zh-tw" target="_blank" rel="noopener">Android Mobile UI</a>：版面、單位、導覽與無障礙（中文版）。</li>
         <li><a href="https://developer.android.com/design/ui/mobile/guides/layout-and-content/grids-and-units" target="_blank" rel="noopener">Android Grids and Units</a>：dp、sp 與密度。</li>
+        <li><a href="https://developer.android.com/training/multiscreen/screendensities?hl=zh-tw" target="_blank" rel="noopener">支援不同的像素密度</a>：mdpi～xxxhdpi 密度分級與資源輸出（中文版）。</li>
+        <li><a href="https://fonts.google.com/specimen/Roboto" target="_blank" rel="noopener">Roboto</a>：Android 系統字體下載。</li>
+        <li><a href="https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder" target="_blank" rel="noopener">Material Theme Builder</a>：Figma 外掛，產生 Material 配色。</li>
+        <li><a href="https://www.figma.com/community/file/1164313362327941158" target="_blank" rel="noopener">What's New in Material Design</a>：Figma 社群檔案，Material 更新整理。</li>
         <li><a href="https://www.w3.org/WAI/WCAG22/quickref/" target="_blank" rel="noopener">WCAG 2.2 Quick Reference</a>：現行無障礙檢核。</li>
-        <li>本單元基礎資料：<code>resources/App 設計.pdf</code>、<code>resources/sp-dp.md</code>（dp／sp 的定義與使用場景，對應第 3 節）、<code>resources/常見標籤類型.md</code>（iOS 標籤類型、SF 字級表、行高與邊距，對應第 8 節）、<code>README.md</code>。</li>
+        <li><a href="https://www.getstark.co/for-designers/" target="_blank" rel="noopener">Stark</a>：對比度與無障礙檢查的 Figma 外掛與工具組。</li>
+        <li>Stark 與 Material Theme Builder 兩個外掛在本單元作業裡怎麼安裝、怎麼用，見 <a href="tools-stark-material.html">操作指南</a>。</li>
+        <li><a href="https://mobbin.com" target="_blank" rel="noopener">Mobbin</a>：App UI 截圖庫，可比對同款 App 在 iOS／Android 上的介面差異。</li>
+        <li>本單元基礎資料：<code>resources/App 設計.pdf</code>（iPhone 機型尺寸表，對應第 4 節；安全區邊距數字，對應第 5 節）、<code>resources/sp-dp.md</code>（dp／sp 的定義與使用場景，對應第 3 節）、<code>resources/常見標籤類型.md</code>（iOS 標籤類型、SF 字級表、行高與邊距，對應第 8 節）、<code>resources/參考資料.md</code> 與 <code>resources/參考資料html/</code>（官方連結、Android 字級表、圖示輸出換算、Tab Bar 規格與雙平台對照，對應第 3、6、8、11 節與本清單）、<code>README.md</code>。第 5、6、7 節的示意圖依本單元數字繪製於 Figma，圖檔存於 <code>resources/safe-area-diagram.png</code>、<code>resources/touch-target-diagram.png</code>、<code>resources/tabbar-spec-diagram.png</code>。</li>
       </ul>
     </div>
 

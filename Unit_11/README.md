@@ -6,6 +6,7 @@
 - [課程簡報](slides.html)
 - [完整講義](article.html)
 - [APP 介面檢核表](checklist.html) — 8 組 29 項，交件前自我檢核，勾選結果可複製進作業說明
+- [Stark 與 Material Theme Builder 操作指南](tools-stark-material.html) — 對比度檢查與 Material 配色兩個 Figma 外掛的安裝與使用步驟
 
 ## 單元目標
 

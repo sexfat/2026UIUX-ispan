@@ -1,0 +1,837 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>App 設計Plus + (1)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+/* For default-background callouts, render the border outline. */
+.callout.block-color-default_background {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+/*
+ * Toggles and callouts hold arbitrary content, so they can easily be taller
+ * than a page. They must stay breakable: avoiding breaks inside them makes
+ * Chromium push the whole block onto the next page, which leaves the previous
+ * page mostly empty before every long toggle.
+ */
+details,
+aside {
+	margin: 1.25em 0;
+}
+
+/* Keep a toggle's title on the same page as the start of its content. */
+summary {
+	page-break-after: avoid;
+	break-after: avoid;
+}
+
+/*
+ * Toggle headings render as <h1/h2/h3 style="display:inline-block"> inside
+ * <summary>. Without this reset, the heading's margin-top pushes it below the
+ * ::marker (▼), so the triangle and the title appear on separate lines.
+ */
+summary h1,
+summary h2,
+summary h3,
+summary h4 {
+	margin-top: 0;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding-inline: 0.125rem;
+	padding-block: 0.375rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+/*
+ * Render emoji icons using a ::before pseudo-element to keep the glyph
+ * out of the DOM textContent traversal. This avoids double-rendering icons
+ * in callouts and page titles.
+ * NOTE(slim/html-export-pseudo-icons): I can't tagref this because it will
+ * flag as a duplicate tag after codegen.
+ */
+.icon[data-emoji]::before {
+	content: attr(data-emoji);
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	margin-right: 0.4em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.tab {
+	margin: 1.25em 0;
+	padding-inline: 1rem;
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style><style>@import url('https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex-swap.min.css')</style></head><body><article id="8fee3e05-9dcd-82c5-b89f-0127d0f5c3f1" class="page sans"><header><h1 class="page-title" dir="auto">App 設計Plus + (1)</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><p id="f19e3e05-9dcd-82e9-8a61-81fd28e1dd47" class="" dir="auto"><strong>課程資源<br/><br/>中文版HIG </strong></p><figure id="508e3e05-9dcd-822d-b316-01ee88b8ecd2" dir="ltr"><a href="https://developer.apple.com/cn/design/human-interface-guidelines" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">人机界面指南 | Apple Developer Documentation</div><div class="bookmark-description">《人机界面指南》包含可帮助你为任何 Apple 平台设计优秀使用体验的指南和最佳实践。</div></div><div class="bookmark-href"><img src="https://developer.apple.com/favicon.ico" class="icon bookmark-icon"/>https://developer.apple.com/cn/design/human-interface-guidelines</div></div><img src="https://docs.developer.apple.com/tutorials/developer-og.jpg" class="bookmark-image"/></a></figure><p id="701e3e05-9dcd-8319-b036-01a31d231519" class="" dir="auto">
+</p><p id="ff9e3e05-9dcd-82d7-b254-8118bf306e30" class="" dir="auto"><strong>英文版HIG</strong></p><figure id="aaee3e05-9dcd-8272-92d1-01885b0fd14d" dir="ltr"><a href="https://developer.apple.com/design/human-interface-guidelines" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Human Interface Guidelines | Apple Developer Documentation</div><div class="bookmark-description">The HIG contains guidance and best practices that can help you design a great experience for any Apple platform.</div></div><div class="bookmark-href"><img src="https://developer.apple.com/favicon.ico" class="icon bookmark-icon"/>https://developer.apple.com/design/human-interface-guidelines</div></div><img src="https://docs.developer.apple.com/tutorials/developer-og.jpg" class="bookmark-image"/></a></figure><p id="1f4e3e05-9dcd-834c-b358-811683c436fc" class="" dir="auto">
+</p><p id="4bde3e05-9dcd-83e3-9df9-812f4c2dedad" class="" dir="auto"><strong>Figma  @apple  </strong></p><figure id="d96e3e05-9dcd-831a-a483-010c8562a758" dir="ltr"><a href="https://www.figma.com/@apple" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title"></div></div><div class="bookmark-href">https://www.figma.com/@apple</div></div></a></figure><figure id="172e3e05-9dcd-8269-af05-81aa9d98286d" dir="ltr"><a href="https://developer.apple.com/design/resources/#ios-apps" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Apple Design Resources</div><div class="bookmark-description">Design apps quickly by using Sketch and Photoshop templates, plug-ins, and preconfigured UI elements.</div></div><div class="bookmark-href"><img src="https://developer.apple.com/favicon.ico" class="icon bookmark-icon"/>https://developer.apple.com/design/resources/#ios-apps</div></div><img src="https://developer.apple.com/news/images/og/design-resources-hero-og.jpg" class="bookmark-image"/></a></figure><h1 id="471e3e05-9dcd-8343-ac91-014e8961839c" class="" dir="auto">首先要先了解的是IOS <strong>螢幕尺寸</strong></h1><h3 id="32ee3e05-9dcd-8362-b748-01b53f9dedd7" class="" dir="auto">如何區分 iOS 的邏輯單位與物理像素？（註一）</h3><p id="483e3e05-9dcd-82ba-9897-81b56734f686" class="" dir="auto"><strong>邏輯單位 (pt) ：</strong>是給人與設計師看的（確保大小一致）<br/><strong>物理像素 (px) ：</strong>是給螢幕硬體看的（確保畫質細緻）<br/></p><p id="540e3e05-9dcd-8316-b587-8187e2033a3d" class="" dir="auto">
+</p><h2 id="c29e3e05-9dcd-83c5-9d02-01aac6af9b97" class="" dir="auto"><strong>1. 點（Points, pt）</strong></h2><ul id="7e2e3e05-9dcd-83f0-a338-01d5d5c246e4" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>定義</strong>：點是<strong>iOS介面設計中使用的邏輯單位</strong>。</li></ul><ul id="0bee3e05-9dcd-83ee-a938-81ec317bf9f4" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>換算關係</strong>：<ul id="796e3e05-9dcd-83e6-a441-815c6752b7c2" class="bulleted-list" dir="auto"><li style="list-style-type:circle">在原始iPhone（163 PPI）上，1 pt = 1 px。</li></ul><ul id="cf5e3e05-9dcd-825c-b790-012a3ec2b712" class="bulleted-list" dir="auto"><li style="list-style-type:circle">在Retina螢幕（326 PPI）上，1 pt = 2 px。</li></ul><ul id="c38e3e05-9dcd-826c-8a4d-0148e0f86e7a" class="bulleted-list" dir="auto"><li style="list-style-type:circle">在更高解析度的裝置（如401 PPI的iPhone 6 Plus）上，1 pt = 3 px</li></ul></li></ul><h2 id="a71e3e05-9dcd-8274-a25a-81ee9b7a2dcf" class="" dir="auto"><strong>2. 像素（Pixels, px）</strong></h2><ul id="01de3e05-9dcd-82ed-ab92-8126c71e21f8" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>定義</strong>：像素是物理螢幕的基本單位。在應用程式中，所有的圖形和介面元素最終都會以像素形式顯示。</li></ul><ul id="00ee3e05-9dcd-831f-80c2-81d454d86ec3" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>計算</strong>：像素數可以通過裝置的解析度和點數來計算。例如，一個具有375 x 667 pt 解析度的裝置，其像素解析度為750 x 1334 px（@2x）</li></ul><h2 id="e2ee3e05-9dcd-8381-bc7c-8186a8d8f654" class="" dir="auto"><strong>3. 每英吋像素數（Pixels Per Inch, PPI）</strong></h2><ul id="df6e3e05-9dcd-8235-81b4-81b591e0d83b" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>定義</strong>：PPI是描述螢幕像素密度的單位，表示每英吋顯示區域內包含的像素數量。<br/>PPI越高，圖像越清晰。</li></ul><ul id="a1fe3e05-9dcd-8314-b822-8185f3e75086" class="bulleted-list" dir="auto"><li style="list-style-type:disc">範例：iPhone 8的PPI為326，而iPhone 6 Plus的PPI約為401</li></ul><p id="5d1e3e05-9dcd-83f0-8b84-015806e8c576" class="" dir="auto">
+</p><h1 id="e43e3e05-9dcd-8284-a19c-81469e66115a" class="" dir="auto"><strong>每英吋所有的像素就是PPI</strong></h1><figure id="6a2e3e05-9dcd-8225-9283-819c2ac8c3af" class="image" data-notion-image="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/image.png" dir="ltr"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/image.png"><img style="width:763.9921875px" src="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/image.png"/></a></figure><p id="eb9e3e05-9dcd-83bc-87c3-81b76c9a1c6d" class="" dir="auto">
+</p><p id="db6e3e05-9dcd-8211-ab82-81f631684cb1" class="" dir="auto"><mark class="highlight-gray" data-notion-highlight="gray">Pixels 是我們可以在顯示器上的最小單位，特定螢幕尺寸可以容納的Pixels越多，PPI就會越高，內容會越清晰。Point 是獨立的測量單位，根據螢幕像素密度，一個point可以包含多個pixel。</mark></p><p id="8ffe3e05-9dcd-83fb-b46d-81016dd9c802" class="" dir="auto">
+</p><p id="7e7e3e05-9dcd-832b-9e0e-81b3d1989f08" class="" dir="auto">
+</p><h3 id="7c0e3e05-9dcd-8261-b917-0142ceddc29a" class="" dir="auto">（註一）為什麼會有這兩種單位？（邏輯單位與物理像素）</h3><p id="3b4e3e05-9dcd-8222-b62d-01f9f55185ec" class="" dir="auto">在早期的螢幕（例如 iPhone 3GS 以前），<strong>1 pt = 1 px</strong>。<br/>當時的螢幕顆粒很粗，設計師畫一個 10x10 px 的方塊，螢幕就亮 10x10 個點。</p><p id="672e3e05-9dcd-837a-8d87-81b2a1c0ee55" class="" dir="auto"><strong>但後來發生了「Retina (視網膜)」革命：</strong><br/>螢幕技術進步了，廠商在原本只有 1 顆像素的空間裡，塞進了 4 顆（2x2）、甚至 9 顆（3x3）像素，讓畫面變得非常細緻。</p><p id="feae3e05-9dcd-8297-b863-8103b6d56a30" class="" dir="auto">這時候產生了一個問題：</p><p id="886e3e05-9dcd-8215-bfd3-819332092c0a" class="" dir="auto">如果設計師還是用 px 來設定按鈕大小，在舊手機上按鈕是 44px（手指好按），但在高解析度的新手機上，44px 會變得像芝麻一樣小，因為新螢幕的像素太密集了！</p><h3 id="5f5e3e05-9dcd-82fb-b9d1-818e11673869" class="" dir="auto"><strong>解決方案：</strong></h3><p id="57be3e05-9dcd-8221-b929-812937345b65" class="" dir="auto">Apple 創造了一個<strong>虛擬單位</strong>，叫做 <strong>Point (pt)</strong>。<br/>無論螢幕密度如何，<strong>1pt 在人類眼中看起來的物理尺寸（約 1/163 英吋）應該要差不多大</strong>。</p><p id="1a1e3e05-9dcd-837e-8180-81537b6c0b09" class="" dir="auto">
+</p><p id="215e3e05-9dcd-83b4-a782-01370bf5ca8f" class="" dir="auto">
+</p><p id="760e3e05-9dcd-8307-85dc-0138d5187244" class="" dir="auto">
+</p><h3 id="be2e3e05-9dcd-8342-934b-01fc3032274f" class="" dir="auto">目前 IOS 尺寸分辨率</h3><table id="f3fe3e05-9dcd-83b2-af12-81d3803a224a" class="simple-table" dir="ltr"><tbody><tr id="dc3e3e05-9dcd-837a-b5ad-01224c4cba0b" dir="ltr"><td id="eArP" class=""><strong>機型系列</strong></td><td id="\gT_" class=""><strong>螢幕吋數</strong></td><td id="{|_b" class=""><strong>邏輯尺寸 (設計用 pt)</strong></td><td id="V]YC" class=""><strong>物理像素 (螢幕 px)</strong></td><td id="eoxz" class=""><strong>倍率</strong></td></tr><tr id="d56e3e05-9dcd-823f-92bd-0116b5c47716" dir="ltr"><td id="eArP" class=""><strong>iPhone 17 Pro Max</strong></td><td id="\gT_" class="">6.9&quot;</td><td id="{|_b" class=""><strong>440 x 956</strong></td><td id="V]YC" class="">1320 x 2868</td><td id="eoxz" class="">@3x</td></tr><tr id="5c0e3e05-9dcd-82f0-81ed-81c304e5a452" dir="ltr"><td id="eArP" class=""><strong>iPhone 17 / 17 Pro</strong></td><td id="\gT_" class="">6.3&quot;</td><td id="{|_b" class=""><strong>402 x 874</strong></td><td id="V]YC" class="">1206 x 2622</td><td id="eoxz" class="">@3x</td></tr><tr id="262e3e05-9dcd-824b-b722-81f9185d29fc" dir="ltr"><td id="eArP" class=""><strong>iPhone Air (全新)</strong></td><td id="\gT_" class="">6.5&quot;</td><td id="{|_b" class=""><strong>420 x 912</strong></td><td id="V]YC" class="">1260 x 2736</td><td id="eoxz" class="">@3x</td></tr><tr id="1e5e3e05-9dcd-82ff-b56e-011e946a176c" dir="ltr"><td id="eArP" class=""><strong>iPhone 16 Pro Max</strong></td><td id="\gT_" class="">6.9&quot;</td><td id="{|_b" class=""><strong>440 x 956</strong></td><td id="V]YC" class="">1320 x 2868</td><td id="eoxz" class="">@3x</td></tr><tr id="157e3e05-9dcd-83ad-abe5-014f54f2ae1c" dir="ltr"><td id="eArP" class=""><strong>iPhone 16 Pro</strong></td><td id="\gT_" class="">6.3&quot;</td><td id="{|_b" class=""><strong>402 x 874</strong></td><td id="V]YC" class="">1206 x 2622</td><td id="eoxz" class="">@3x</td></tr><tr id="119e3e05-9dcd-8398-a68a-01f495ca183d" dir="ltr"><td id="eArP" class=""><strong>iPhone 16 / 15 / 14 Pro</strong></td><td id="\gT_" class="">6.1&quot;</td><td id="{|_b" class=""><strong>393 x 852</strong></td><td id="V]YC" class="">1179 x 2556</td><td id="eoxz" class="">@3x</td></tr><tr id="195e3e05-9dcd-8217-80b7-81aeb02d655d" dir="ltr"><td id="eArP" class=""><strong>iPhone 16 Plus / 15 Plus</strong></td><td id="\gT_" class="">6.7&quot;</td><td id="{|_b" class=""><strong>430 x 932</strong></td><td id="V]YC" class="">1290 x 2796</td><td id="eoxz" class="">@3x</td></tr><tr id="573e3e05-9dcd-83c7-82b6-81e399b47569" dir="ltr"><td id="eArP" class=""><strong>iPhone 14 / 13 / 12</strong></td><td id="\gT_" class="">6.1&quot;</td><td id="{|_b" class=""><strong>390 x 844</strong></td><td id="V]YC" class="">1170 x 2532</td><td id="eoxz" class="">@3x</td></tr><tr id="02fe3e05-9dcd-8283-b011-01c953917cb9" dir="ltr"><td id="eArP" class=""><strong>iPhone SE (3rd gen)</strong></td><td id="\gT_" class="">4.7&quot;</td><td id="{|_b" class=""><strong>375 x 667</strong></td><td id="V]YC" class="">750 x 1334</td><td id="eoxz" class="">@2x</td></tr></tbody></table><p id="b7fe3e05-9dcd-833c-912e-01bb59540aef" class="" dir="auto">
+</p><h1 id="fd0e3e05-9dcd-833f-8281-01a2dfb2d207" class="" dir="auto">設計師該如何選擇「畫布尺寸」？</h1><h3 id="b9ce3e05-9dcd-8395-90ae-0158cd7aa10d" class="" dir="auto">1. 使用以下 <strong>「基準規格」</strong>：</h3><p id="69de3e05-9dcd-82f5-ac43-81ed505e49f8" class="" dir="auto">
+</p><p id="15fe3e05-9dcd-822f-86b1-0179f5e145a8" class="" dir="auto"><strong>  主流開發基準：393 x 852 pt (iPhone 16/15)</strong></p><ul id="d66e3e05-9dcd-82b1-a957-81ed27d4614e" class="bulleted-list" dir="auto"><li style="list-style-type:disc">這是目前最通用的尺寸。如果你在這個尺寸下設計，向上適應到 Pro Max 或向下相容到舊款 6.1 吋，版面都不太會崩潰。</li></ul><p id="3c4e3e05-9dcd-8283-8a80-816d5e468542" class="" dir="auto"><strong>   大螢幕基準：440 x 956 pt (iPhone 17/16 Pro Max)</strong><div class="indented"><ul id="de7e3e05-9dcd-83b6-ac2f-812c131abf35" class="bulleted-list" dir="auto"><li style="list-style-type:disc">如果你的 App 屬於影音或閱讀類，需要考慮極端大螢幕的排版，可以加畫這個規格。</li></ul></div></p><p id="358e3e05-9dcd-82e4-9394-81cfb23a7cd1" class="" dir="auto"><strong>   最小相容基準：375 x 667 pt (iPhone SE)</strong><div class="indented"><ul id="692e3e05-9dcd-834b-8a40-01a21ca9c847" class="bulleted-list" dir="auto"><li style="list-style-type:disc">如果產品有大量長輩用戶或預算受限地區用戶，需檢查這個「矮胖」的螢幕是否會讓內容被切掉。</li></ul></div></p><p id="023e3e05-9dcd-8230-b970-01cbbf3164fb" class="" dir="auto">
+</p><h3 id="3a0e3e05-9dcd-821e-bc99-81b1877949c1" class="" dir="auto"><strong>2. 遵循邏輯單位設計</strong></h3><ul id="daee3e05-9dcd-833b-abbc-01da25828440" class="bulleted-list" dir="auto"><li style="list-style-type:disc">在畫布上，直接以 Figma 的 px 作為 pt 進行設計，這樣可以模擬邏輯分辨率的大小。</li></ul><ul id="a2fe3e05-9dcd-82a8-b51d-01818c55bea3" class="bulleted-list" dir="auto"><li style="list-style-type:disc">使用 Figma 的網格工具來確保元素的對齊和比例一致。</li></ul><p id="969e3e05-9dcd-82dd-b5ec-81e2f7a8c74b" class="" dir="auto"><br/></p><h3 id="49de3e05-9dcd-83f3-a133-818ad616be04" class="" dir="auto"><strong>3. 導出資源</strong></h3><ul id="310e3e05-9dcd-83ab-a39e-81a45d8c6745" class="bulleted-list" dir="auto"><li style="list-style-type:disc">在導出時，根據設備的像素密度導出資源：<ul id="03ee3e05-9dcd-82eb-801c-014df91a2113" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Retina 屏幕（2x）：導出尺寸為設計尺寸的 2 倍。</li></ul><ul id="a1ce3e05-9dcd-824f-ad19-018e02ac627b" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Super Retina 屏幕（3x）：導出尺寸為設計尺寸的 3 倍。</li></ul><ul id="a77e3e05-9dcd-8277-9e7b-8175ae856db1" class="bulleted-list" dir="auto"><li style="list-style-type:circle">Figma 導出設置中，選擇 @1x、@2x、@3x 的倍率。<br/><br/></li></ul></li></ul><h3 id="0d3e3e05-9dcd-825e-a959-811120c55e8b" class="" dir="auto"><strong>4. 使用 Auto Layout與 Constraint 和 Resizing 項目</strong></h3><p id="fb4e3e05-9dcd-83db-a21d-8157f8f97e68" class="" dir="auto">確保當設備尺寸發生變化時，UI 元素能正確適配。</p><p id="7cce3e05-9dcd-82ba-893a-01b126e76e5a" class="" dir="auto">
+</p><p id="f24e3e05-9dcd-8208-862f-81b2fd7b22d5" class="" dir="auto">
+</p><h3 id="e0ce3e05-9dcd-8233-8557-81a8b44e0c7c" class="" dir="auto"><strong>5. 使用安全區域（Safe Area）：</strong></h3><ul id="f82e3e05-9dcd-833c-a8f5-81631a1f0a98" class="bulleted-list" dir="auto"><li style="list-style-type:disc">iOS 設計安全區域來避免被「瀏海」或「底部手勢區域」遮擋。</li></ul><ul id="890e3e05-9dcd-836b-aedc-01765b1ca1fa" class="bulleted-list" dir="auto"><li style="list-style-type:disc">UI 元素應保持在安全區域內。</li></ul><p id="beae3e05-9dcd-83bc-bca6-81cff03f6ce5" class="" dir="auto"><mark class="highlight-blue" data-notion-highlight="blue">備註： </mark><mark class="highlight-blue" data-notion-highlight="blue"><strong>加入輔助線</strong></mark><mark class="highlight-blue" data-notion-highlight="blue">：可以通過加入輔助線來標記安全區域的邊界。通常，頂部和底部的安全區域邊距分別為47pt ~ 59pt 和34pt (避開 Home Indicator 橫槓)。<br/><br/>左右兩邊的邊距通常設定為： 16pt   <br/>( iOS 的內建 App（如設定、郵件）與 Material Design 3 的預設邊距都是 16pt。 )</mark></p><p id="5dde3e05-9dcd-8295-80ec-0193008180c4" class="" dir="auto">
+</p><p id="160e3e05-9dcd-8269-af6b-01dfe3a0d98a" class="" dir="auto">                           </p><h3 id="d43e3e05-9dcd-83d3-a455-01810744a9e1" class="" dir="auto"><strong>6. 按鈕的觸控區域至少為 44pt x 44pt （長寬大小）</strong></h3><p id="bb6e3e05-9dcd-83bc-958a-01b968654e3d" class="" dir="auto">
+</p><h2 id="d39e3e05-9dcd-820e-8160-81c6b4ffa378" class="" dir="auto">文字設定</h2><p id="9d0e3e05-9dcd-8265-83f4-013466c3b711" class="" dir="auto">
+</p><p id="aabe3e05-9dcd-8212-8e55-81e4b335b7d0" class="" dir="auto">文字設定（英文版）</p><figure id="fc8e3e05-9dcd-83f5-b1cd-8124c8a56b23" dir="ltr"><a href="https://developer.apple.com/design/human-interface-guidelines/typography" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Typography | Apple Developer Documentation</div><div class="bookmark-description">Your typographic choices can help you display legible text, convey an information hierarchy, communicate important content, and express your brand or style.</div></div><div class="bookmark-href"><img src="https://developer.apple.com/favicon.ico" class="icon bookmark-icon"/>https://developer.apple.com/design/human-interface-guidelines/typography</div></div><img src="https://docs.developer.apple.com/tutorials/developer-og.jpg" class="bookmark-image"/></a></figure><p id="037e3e05-9dcd-8208-b828-81bc61460bf9" class="" dir="auto">
+</p><p id="454e3e05-9dcd-837b-812f-01cc55481b1b" class="" dir="auto">文字設定（中文版）</p><figure id="193e3e05-9dcd-82cc-8d33-018d5543537d" dir="ltr"><a href="https://developer.apple.com/cn/design/human-interface-guidelines/typography" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">字体排印 | Apple Developer Documentation</div><div class="bookmark-description">你选择的字体排印方式有助于显示清晰易读的文本、传达信息层级结构、传递重要内容，以及宣传你的品牌或风格。</div></div><div class="bookmark-href"><img src="https://developer.apple.com/favicon.ico" class="icon bookmark-icon"/>https://developer.apple.com/cn/design/human-interface-guidelines/typography</div></div><img src="https://docs.developer.apple.com/tutorials/developer-og.jpg" class="bookmark-image"/></a></figure><p id="f22e3e05-9dcd-83f7-bec7-01078b41827e" class="" dir="auto">
+</p><p id="f6fe3e05-9dcd-82bb-ad93-014a03654944" class="" dir="auto">文字設定細節</p><figure id="e1ae3e05-9dcd-82b3-9481-81b7de477540" class="link-to-page"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/%E5%B8%B8%E8%A6%8B%E6%A8%99%E7%B1%A4%E9%A1%9E%E5%9E%8B%20e1ae3e059dcd82b3948181b7de477540.html" data-notion-page-id="e1ae3e05-9dcd-82b3-9481-81b7de477540" data-notion-space-id="61db219c-41ba-44c5-9a6e-f661c4b25a33">常見標籤類型</a></figure><p id="f98e3e05-9dcd-82a1-9082-01ff5efb8611" class="" dir="auto">
+</p><p id="622e3e05-9dcd-82dc-997a-01ac30ac084e" class="" dir="auto">
+</p><p id="f15e3e05-9dcd-8320-997b-01e474664d53" class="" dir="auto">
+</p><h2 id="9c4e3e05-9dcd-82d9-84b4-01bcb09a532c" class="" dir="auto"><strong>Tab Bar（標籤列）</strong>，iOS App 最核心的導航元件</h2><h3 id="45ce3e05-9dcd-838d-8609-81d9bdf162ea" class="" dir="auto">1. 基本規格與尺寸</h3><p id="504e3e05-9dcd-8223-a2e6-01e8c0ff2ef1" class="" dir="auto">在 Figma 設計時，請遵循以下標準數值（以 1x / pt 為單位）：</p><ul id="883e3e05-9dcd-82f4-b0f1-81ca4e7e8f4e" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>標準高度</strong>：通常為 <strong>49pt</strong>（不含 Safe Area）。在現代全螢幕 iPhone（如 iPhone 16）上，加上底部的 Safe Area，總高度通常約為 <strong>83pt</strong>。</li></ul><ul id="31ee3e05-9dcd-8256-b2ae-8120ef2853d7" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>圖示尺寸</strong>：建議在 <strong>24x24 pt</strong> 至 <strong>28x28 pt</strong> 的範圍內。</li></ul><ul id="bb9e3e05-9dcd-825a-803d-012013377fbb" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>文字大小</strong>：通常使用 <strong>10pt - 11pt</strong>，字重為 Regular 或 Medium。</li></ul><ul id="e05e3e05-9dcd-821e-bc9a-0131163e146a" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>背景效果</strong>：iOS 規範建議使用「半透明毛玻璃效果」(System Thin Material)，讓後方的內容在捲動時隱約透出。</li></ul><hr id="336e3e05-9dcd-8393-b636-816238613eeb" dir="auto"/><h3 id="30ce3e05-9dcd-8307-ada7-81b524d1d090" class="" dir="auto">2. 數量與標籤規範</h3><ul id="186e3e05-9dcd-8256-b4b7-014500727d53" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>數量限制</strong>：建議維持在 <strong>2 到 5 個</strong> 標籤之間。<ul id="64ee3e05-9dcd-83d1-b6ef-01f99edde082" class="bulleted-list" dir="auto"><li style="list-style-type:circle">超過 5 個：在 iPhone 上會變得很擁擠，難以點擊。若功能過多，第 5 個標籤應設為「更多 (More)」，點擊後以列表顯示。</li></ul></li></ul><ul id="6c8e3e05-9dcd-82b1-bde4-019e140bed08" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>固定顯示</strong>：Tab Bar 應該在 App 的主要層級中全程出現。當使用者進入更深層的子頁面時，通常會隱藏 Tab Bar（Hides Bottom Bar on Push）以釋放閱讀空間。</li></ul><ul id="6a7e3e05-9dcd-8387-b3bf-8134f5718ecd" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>不要用於動作</strong>：Tab Bar 僅用於「切換頁面」，不應該用來觸發功能（例如：點擊中間的 Tab 彈出「發文」視窗，這在 iOS 中通常會使用不同的設計模式或 Floating Action Button，雖然現在有些 App 會打破此例）。</li></ul><hr id="2e4e3e05-9dcd-821e-b0da-012f780f7bac" dir="auto"/><h3 id="c47e3e05-9dcd-836c-a804-0149922298b3" class="" dir="auto">3. 視覺狀態與回饋</h3><p id="fc0e3e05-9dcd-834f-90f0-01b4b89e7c88" class="" dir="auto">iOS 的 Tab Bar 透過圖示與顏色的變化來讓使用者知道「現在在哪裡」：</p><ol type="1" id="6c5e3e05-9dcd-8378-9554-814582f91c89" class="numbered-list" start="1" dir="auto"><li><strong>選中狀態 (Selected)</strong>：<ul id="cc6e3e05-9dcd-8322-82e2-010f431662b4" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>顏色</strong>：通常使用 App 的標籤色（Tint Color），如藍色或品牌色。</li></ul><ul id="905e3e05-9dcd-8389-8a91-0189976bbc4a" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>圖示</strong>：iOS 慣例是選中時將圖示變為 <strong>「實心 (Filled)」</strong>。</li></ul></li></ol><ol type="1" id="238e3e05-9dcd-8390-adab-019f6a608f80" class="numbered-list" start="2" dir="auto"><li><strong>未選中狀態 (Unselected)</strong>：<ul id="a1de3e05-9dcd-8236-adef-811ce83f9d34" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>顏色</strong>：通常為灰色。</li></ul><ul id="722e3e05-9dcd-821e-b5eb-8196f327a273" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>圖示</strong>：使用 <strong>「線性 (Outline / Glyph)」</strong> 樣式。</li></ul></li></ol><hr id="e20e3e05-9dcd-82c1-8541-81618e0868c4" dir="auto"/><h3 id="764e3e05-9dcd-8289-be75-816e13cf2570" class="" dir="auto">4.  圖示與文字的搭配</h3><ul id="df1e3e05-9dcd-821c-90c2-81672c3d07b9" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>圖示 + 文字</strong>：這是最推薦的做法，對使用者最直觀。</li></ul><ul id="2ede3e05-9dcd-8326-8256-0166d99bc3ce" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>僅圖示</strong>：除非你的 App 只有 2-3 個功能且圖示極其易懂，否則不建議。</li></ul><ul id="f83e3e05-9dcd-83ff-8cd5-813ef7e3073c" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>徽章 (Badges)</strong>：可以在圖示右上角顯示紅色的小圓點或數字（例如：未讀訊息數），這也是 iOS 的原生規範。</li></ul><p id="5aae3e05-9dcd-8287-b3e1-0191ce82e1c0" class="" dir="auto"><br/></p><h1 id="a78e3e05-9dcd-822f-9a1f-0198cda64435" class="" dir="auto">Android 設計基礎</h1><p id="d5ee3e05-9dcd-83f3-9d94-815e21f09b15" class="" dir="auto">
+</p><h3 id="754e3e05-9dcd-8203-b581-81993bc6ad75" class="" dir="auto">規範</h3><figure id="9fde3e05-9dcd-826b-bc59-81b87a6e4ca2" dir="ltr"><a href="https://m3.material.io/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Material Design</div><div class="bookmark-description">Build beautiful, usable products faster. Material Design is an adaptable system—backed by open-source code—that helps teams build high quality digital experiences.</div></div><div class="bookmark-href"><img src="https://m3.material.io/static/assets/m3-favicon.ico" class="icon bookmark-icon"/>https://m3.material.io/</div></div><img src="https://m3.material.io/static/assets/m3-social.jpg" class="bookmark-image"/></a></figure><figure id="f7ce3e05-9dcd-8332-8936-0194d7311017" dir="ltr"><a href="https://developer.android.com/design/ui/mobile?hl=zh-tw" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">行動裝置 | 使用者介面設計      |  Mobile  |  Android Developers</div><div class="bookmark-description">探索適用於所有 Android 裝置的最新應用程式開發工具、平台更新、訓練課程以及開發人員說明文件。</div></div><div class="bookmark-href"><img src="https://www.gstatic.com/devrel-devsite/prod/vafe2e13ca17bb026e70df42a2ead1c8192750e86a12923a88eda839025dabf95/android/images/touchicon-180.png" class="icon bookmark-icon"/>https://developer.android.com/design/ui/mobile?hl=zh-tw</div></div><img src="https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw" class="bookmark-image"/></a></figure><p id="3ace3e05-9dcd-8384-939f-01e4d0bf80c2" class="" dir="auto">
+</p><p id="1efe3e05-9dcd-8278-ac19-0111c2b473d8" class="" dir="auto"><strong>What’s New in Material Design</strong></p><figure id="31be3e05-9dcd-832b-b5a7-8171a257b23a" dir="ltr"><a href="https://www.figma.com/community/file/1164313362327941158" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title"></div></div><div class="bookmark-href">https://www.figma.com/community/file/1164313362327941158</div></div></a></figure><p id="383e3e05-9dcd-8260-b1d3-012181a6e0cc" class="" dir="auto">
+</p><h3 id="f64e3e05-9dcd-8234-8648-813944fea6ce" class="" dir="auto">螢幕尺寸問題</h3><figure id="842e3e05-9dcd-82ca-a5be-818e21cfb8b6" dir="ltr"><a href="https://developer.android.com/training/multiscreen/screendensities?hl=zh-tw" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">支援不同的像素密度  |  Android Developers</div><div class="bookmark-description">Android 裝置不僅有不同的螢幕大小，包括手機、平板電腦、電視、
+等等，但也具有不同像素大小的螢幕。一
+裝置的每英寸像素數可能為 160 像素，另一部裝置則可容納 480 像素。
+顯示相同的像素只要不考慮在
+可能會調整為
+以免造成圖像模糊不清
+大小不正確</div></div><div class="bookmark-href"><img src="https://www.gstatic.com/devrel-devsite/prod/vda41147226ae308b24384f785d31d739107d2716272d99cd11c490ff3892954d/android/images/touchicon-180.png" class="icon bookmark-icon"/>https://developer.android.com/training/multiscreen/screendensities?hl=zh-tw</div></div><img src="https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw" class="bookmark-image"/></a></figure><figure id="afee3e05-9dcd-83a1-b469-81aa6c5ff12f" class="link-to-page"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/SP%20%E8%88%87%20DP%20%E7%9A%84%E5%B7%AE%E7%95%B0%20afee3e059dcd83a1b46981aa6c5ff12f.html" data-notion-page-id="afee3e05-9dcd-83a1-b469-81aa6c5ff12f" data-notion-space-id="61db219c-41ba-44c5-9a6e-f661c4b25a33">SP 與 DP 的差異</a></figure><p id="2b5e3e05-9dcd-8316-9256-81feda26f363" class="" dir="auto">
+</p><p id="d6be3e05-9dcd-83aa-833d-8103ca6812b4" class="" dir="auto">
+</p><ul id="274e3e05-9dcd-8372-8c0e-01610b74d6e0" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>mdpi（1x）</strong>：直接使用設計尺寸。</li></ul><ul id="090e3e05-9dcd-83cf-a968-81e170a8e56c" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>hdpi（1.5x）</strong>：設計尺寸的 1.5 倍。</li></ul><ul id="b91e3e05-9dcd-8202-b364-01fc1e83f72a" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>xhdpi（2x）</strong>：設計尺寸的 2 倍。</li></ul><ul id="5ece3e05-9dcd-82f2-976b-815008b851ad" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>xxhdpi（3x）</strong>：設計尺寸的 3 倍。</li></ul><ul id="4a7e3e05-9dcd-8392-acc9-01febcb3f359" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>xxxhdpi（4x）</strong>：設計尺寸的 4 倍。<strong><br/><br/><br/><br/><br/>系統字體</strong></li></ul><ul id="4f8e3e05-9dcd-83ef-afd4-01dfbfdba0b3" class="bulleted-list" dir="auto"><li style="list-style-type:disc">iOS: San Francisco</li></ul><ul id="873e3e05-9dcd-8357-847c-01ca8966d049" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Android: Roboto</li></ul><p id="04ce3e05-9dcd-83aa-b2ff-019b5560d648" class="" dir="auto">
+</p><h3 id="d2ee3e05-9dcd-8338-99d9-819bff9a2d14" class="" dir="auto">字體下載<br/><a href="https://fonts.google.com/specimen/Roboto">https://fonts.google.com/specimen/Roboto</a></h3><p id="91fe3e05-9dcd-82c7-b042-01a956979b63" class="" dir="auto">
+</p><h1 id="5d1e3e05-9dcd-838b-9603-017e0a1eed9d" class="" dir="auto">Figma Plugin 套件推薦</h1><p id="e70e3e05-9dcd-828d-9599-01f827e840cf" class="" dir="auto">
+</p><h3 id="45ce3e05-9dcd-82a0-b345-81deb903181a" class="" dir="auto"><strong>Material Theme Builder</strong></h3><figure id="c67e3e05-9dcd-8352-bd91-0141a0a4ca88" dir="ltr"><a href="https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title"></div></div><div class="bookmark-href">https://www.figma.com/community/plugin/1034969338659738588/material-theme-builder</div></div></a></figure><p id="63ce3e05-9dcd-8303-aff8-019c7c8457e0" class="" dir="auto"><br/></p><h3 id="efde3e05-9dcd-830a-9bbc-8130d7b6f8e1" class="" dir="auto">檢查對比度工具</h3><ul id="c81e3e05-9dcd-8324-b2a1-811f7e1ae25d" class="bulleted-list" dir="auto"><li style="list-style-type:disc">確保小字體（如 16px 正文）與背景顏色的對比至少為 <strong>4.5:1</strong>。</li></ul><ul id="7d5e3e05-9dcd-8216-b85f-01f0cbaf3b13" class="bulleted-list" dir="auto"><li style="list-style-type:disc">對於標題或大字體（如 18px），可接受 <strong>3:1</strong> 的較低對比度。<br/></li></ul><figure id="05ee3e05-9dcd-822e-8909-0105d279db16" dir="ltr"><a href="https://www.getstark.co/for-designers/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Stark: The suite of integrated accessibility tools for your product design and development team</div><div class="bookmark-description">The suite of integrated accessibility tools for your product design and development team • Making the world’s products accessible.</div></div><div class="bookmark-href"><img src="https://www.getstark.co/favicon.ico" class="icon bookmark-icon"/>https://www.getstark.co/for-designers/</div></div></a></figure><p id="afae3e05-9dcd-8208-8a1b-81deede30ed7" class="" dir="auto">
+</p><h2 id="1cae3e05-9dcd-82af-a173-01fbdfcc12f6" class="" dir="auto">何謂APCA 規範與WCAG 規範<br/></h2><p id="264e3e05-9dcd-82de-a890-81b5f4697f34" class="" dir="auto"><strong>WCAG 概述</strong></p><p id="ba1e3e05-9dcd-8224-8ba8-01f3572ab414" class="" dir="auto">WCAG（Web Content Accessibility Guidelines）2.1/2.2 分 A/AA/AAA 等級，適用於 App UI。</p><p id="71ee3e05-9dcd-8265-b93c-0138f3dfc777" class="" dir="auto">核心原則為 POUR：可感知（對比度 ≥4.5:1 正常文字，≥3:1 大文字）、可操作（觸控目標 ≥44pt/48dp）、可理解、穩健。</p><p id="302e3e05-9dcd-83eb-a167-01861ae9aebb" class="" dir="auto">手機 App 須提供替代文字、支援螢幕閱讀器，並避免自動播放音訊。</p><p id="34fe3e05-9dcd-828b-a2e2-8154f2ee7806" class="" dir="auto"><strong><br/>APCA 概述</strong></p><p id="0cce3e05-9dcd-83be-bf65-818a333a5ca5" class="" dir="auto">APCA（Accessible Perceptual Contrast Algorithm）是 WCAG 對比度公式的升級版，2023 年提出，取代舊 Delta E 模型。</p><p id="ab7e3e05-9dcd-83d3-aa3d-018096f32045" class="" dir="auto">計算基於人類視覺感知（S-LAB-LCh），閾值如 60 AxC（類似 AA 級），更準確處理深色模式和漸變。</p><p id="2c2e3e05-9dcd-8336-a79d-8142182ce73a" class="" dir="auto">優點：提升現代顯示器（如 OLED）準確性，但尚未成 WCAG 正式標準。</p><p id="aaee3e05-9dcd-83cd-b28e-016817ee47bd" class="" dir="auto"><strong><br/>比較與應用</strong></p><table id="1d5e3e05-9dcd-82f4-bfb6-81842e01f8ac" class="simple-table" dir="ltr"><thead class="simple-table-header"><tr id="9a6e3e05-9dcd-82e4-941c-8172d2368f2b" dir="ltr"><th id="Wf?h" class="simple-table-header-color simple-table-header"><strong>項目</strong></th><th id="w;Sv" class="simple-table-header-color simple-table-header" style="width:276.9921875px"><strong>WCAG</strong></th><th id="P\|`" class="simple-table-header-color simple-table-header" style="width:296.0078125px"><strong>APCA</strong></th></tr></thead><tbody><tr id="3ede3e05-9dcd-82c3-8ed7-81680439b893" dir="ltr"><td id="Wf?h" class="">公式</td><td id="w;Sv" class="" style="width:276.9921875px">相對亮度 (4.5:1)</td><td id="P\|`" class="" style="width:296.0078125px">感知對比 (60 AxC)</td></tr><tr id="c57e3e05-9dcd-8347-81c2-81f0341cc551" dir="ltr"><td id="Wf?h" class="">優點</td><td id="w;Sv" class="" style="width:276.9921875px">廣泛支援、法律依據</td><td id="P\|`" class="" style="width:296.0078125px">視覺準確、深色模式佳</td></tr><tr id="452e3e05-9dcd-8311-a88d-81ec99a477e4" dir="ltr"><td id="Wf?h" class="">缺點</td><td id="w;Sv" class="" style="width:276.9921875px">忽略色相/螢幕差異</td><td id="P\|`" class="" style="width:296.0078125px">工具支援少、轉換複雜</td></tr><tr id="eeee3e05-9dcd-8396-8fe9-01cdc4180bfb" dir="ltr"><td id="Wf?h" class="">App 建議</td><td id="w;Sv" class="" style="width:276.9921875px">驗證工具如 WAVE</td><td id="P\|`" class="" style="width:296.0078125px">測試工具如 APCA Calc</td></tr></tbody></table><p id="c35e3e05-9dcd-835f-a097-8126b780d730" class="" dir="auto">App 設計優先 WCAG AA 合規，逐步導入 APCA 以優化對比。</p><p id="26fe3e05-9dcd-8261-a896-014ad9e9e76b" class="" dir="auto">
+</p><p id="afde3e05-9dcd-824c-a6b5-016b39a6f7c1" class="" dir="auto">
+</p><p id="284e3e05-9dcd-835a-80a8-01c10afe48ba" class="" dir="auto">
+</p><hr id="84ee3e05-9dcd-8381-9c36-011c2865c820" dir="auto"/><p id="d03e3e05-9dcd-82f8-a205-813ef06b465f" class="" dir="auto">
+</p><h2 id="5c3e3e05-9dcd-8345-8d1b-81185fabdc0c" class="" dir="auto">平台之間的點擊目標大小也有所不同</h2><ul id="7bae3e05-9dcd-8369-a5d8-813b56548b41" class="bulleted-list" dir="auto"><li style="list-style-type:disc">iOS = 44 x 44pt 或 59 x 59px</li></ul><ul id="c63e3e05-9dcd-8252-a570-8172419db1eb" class="bulleted-list" dir="auto"><li style="list-style-type:disc">Android = 48 x 48dp 或 48 x 48px<br/></li></ul><figure id="6b3e3e05-9dcd-8225-a98c-8150a13eefbb" class="link-to-page"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/px%E3%80%81pt%E3%80%81ppi%E3%80%81dpi%E3%80%81dp%E3%80%81sp%20%E5%90%8D%E8%A9%9E%E8%A7%A3%E9%87%8B%206b3e3e059dcd8225a98c8150a13eefbb.html" data-notion-page-id="6b3e3e05-9dcd-8225-a98c-8150a13eefbb" data-notion-space-id="61db219c-41ba-44c5-9a6e-f661c4b25a33">px、pt、ppi、dpi、dp、sp 名詞解釋</a></figure><figure id="063e3e05-9dcd-838c-8fc9-0124636a6224" class="link-to-page"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/iOS%20%E5%92%8C%20Android%20%E6%96%87%E5%AD%97%E5%A4%A7%E5%B0%8F%E8%A6%8F%E7%AF%84%20063e3e059dcd838c8fc90124636a6224.html" data-notion-page-id="063e3e05-9dcd-838c-8fc9-0124636a6224" data-notion-space-id="61db219c-41ba-44c5-9a6e-f661c4b25a33">iOS 和 Android 文字大小規範</a></figure><figure id="482e3e05-9dcd-8240-ade8-817606294697" class="link-to-page"><a href="App%20%E8%A8%AD%E8%A8%88Plus%20+%20(1)/iOS%20%E8%88%87%20Android%20%E8%A8%AD%E8%A8%88%E8%A6%8F%E7%AF%84%E6%AF%94%E8%BC%83%20482e3e059dcd8240ade8817606294697.html" data-notion-page-id="482e3e05-9dcd-8240-ade8-817606294697" data-notion-space-id="61db219c-41ba-44c5-9a6e-f661c4b25a33">iOS 與 Android 設計規範比較</a></figure><h1 id="2f3e3e05-9dcd-8325-9f05-81160bdaa003" class="" dir="auto">設計自我檢查表</h1><p id="213e3e05-9dcd-8218-b208-81b0b16a2f67" class="" dir="auto"><a href="https://app.notion.com/p/App-UI-Self-Checklist-2f4e3e059dcd801dbf9dc7e3c0a37c8e?pvs=21">Self-Checklist</a></p><p id="1eee3e05-9dcd-8287-bf3f-010c8083139a" class="" dir="auto">
+</p><h1 id="6d7e3e05-9dcd-839f-8f5b-81d07b217a03" class="" dir="auto">課後延伸建議</h1><p id="d5ee3e05-9dcd-8260-8172-816c8b861a06" class="" dir="auto"><strong>1. 推薦閱讀章節</strong></p><ul id="588e3e05-9dcd-83c4-91b2-8169b3f3ca45" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>iOS Human Interface Guidelines:</strong><ul id="59de3e05-9dcd-8299-8187-8175e84de158" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><a href="https://developer.apple.com/design/human-interface-guidelines/layout">Layout</a> :  理解安全區域 (Safe Area) 與邊距。</li></ul><ul id="d8fe3e05-9dcd-836b-b675-815c416e0b0d" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><a href="https://developer.apple.com/design/human-interface-guidelines/buttons">Buttons</a> : 學習 iOS 的按鈕層級與樣式。</li></ul></li></ul><ul id="ac8e3e05-9dcd-839f-a050-81d1672fc1fd" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Material Design 3:</strong><ul id="793e3e05-9dcd-8207-9edb-818fd96a7344" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><a href="https://m3.material.io/components">M3 Components</a>: 直接看 Buttons, Cards, Navigation bar 怎麼做。</li></ul><ul id="c04e3e05-9dcd-8304-80ab-81cbc89f26e4" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><a href="https://www.google.com/search?q=https://m3.material.io/styles/color/the-color-system/color-roles&amp;authuser=1">Color System</a>: 進階學習，了解 Material 獨特的配色邏輯（Primary, Secondary, Container）。</li></ul></li></ul><p id="552e3e05-9dcd-83de-b702-813990cb8cec" class="" dir="auto"><strong>2. 自學資源與練習：</strong></p><ul id="270e3e05-9dcd-83b6-a14a-81f1159f40d5" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong><a href="https://mobbin.com">Mobbin (網站)</a></strong><strong>:</strong> 全球最大的 App UI 截圖庫。<ul id="5e3e3e05-9dcd-8218-bf04-8187d0f2ac49" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><em>練習法：</em> 每天上去看一個 iOS 和一個 Android 的同款 App（例如 Uber），比較他們介面有哪裡不同。</li></ul></li></ul><ul id="d63e3e05-9dcd-8334-be4e-01740b70a3c8" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Figma Community (資源):</strong> 搜尋 &quot;iOS 18 UI Kit&quot; 或 &quot;Material 3 Design Kit&quot;。<ul id="acce3e05-9dcd-838c-817e-81da58ed7f67" class="bulleted-list" dir="auto"><li style="list-style-type:circle"><em>練習法：</em> 下載官方 Kit，直接拆解裡面的 Component 怎麼設定 Auto Layout。</li></ul></li></ul><ul id="a8be3e05-9dcd-82f4-a095-81165abcc80e" class="bulleted-list" dir="auto"><li style="list-style-type:disc"><strong>Material.io (</strong><strong><a href="https://m3.material.io/">官方網站</a></strong><strong>):</strong><ul id="211e3e05-9dcd-82d7-b7b5-01efa3f570cd" class="bulleted-list" dir="auto"><li style="list-style-type:circle">裡面有 &quot;Develop&quot; 分頁，雖然是給工程師看，但設計師可以去玩玩看它的 &quot;Builder&quot; 工具，體驗動態配色的感覺。</li></ul></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
