@@ -278,3 +278,35 @@ Tab Bar 卡片 card.resize(520, 820) 固定高度；table 5 列實際需要
 - `Unit_11/slides.html` — 投影片 05 改回單段落樣式、Dynamic Type 彈窗內容改寫、Resources 投影片新增 2 條連結
 - `Unit_11/README.md` — 教材入口新增 2 條
 - `index.html` — Unit 11 卡片新增 Figma 連結按鈕
+
+### 8. Unit_11 簡報第 10 頁觸控目標標籤文字跟框線重疊
+**狀態：** 已修復
+**問題：** 第 10 頁「視覺圖示可以小，觸控範圍需要足夠大」的兩個觸控目標方框，下方標籤文字（「iOS：44 × 44 pt 建議控制尺寸」）跟方框的虛線邊框重疊，看起來像被劃掉一樣。
+**原因：** `.target strong { position: absolute; bottom: -50px; ... }` 用固定負值把標籤釘在方框下方 50px 處，這個距離只夠容納一行文字。實際標籤文字在 290px 寬度、24px 字級下會換成兩行，兩行文字的總高度超過 50px，導致文字區塊往上溢出、疊到方框底邊。
+**佐證：**
+```
+用 headless Chrome 把 slides.html 複製一份、強制 JS 的 current = 9（第 10 頁）
+後截圖，畫面清楚顯示「iOS：44 × 44 pt 建議控制」那一行文字壓在方框底邊虛線上。
+```
+**修正：** 把 `.target strong` 的定位從 `bottom: -50px`（固定負值，只適用單行文字）改成 `top: 100%; margin-top: 18px;`（相對方框底部往下推固定間距，不管文字換成幾行都會自動避開方框），並補上 `line-height: 1.35` 讓兩行文字間距一致。改完用同樣的 headless Chrome 流程重新截圖確認文字完全落在方框下方、不再重疊。跑過 `validate.py Unit_11` 全綠。
+**影響範圍：**
+- `Unit_11/slides.html` — `.target strong` CSS 定位方式
+
+### 9. Unit_11 簡報字體與字級跟 Unit 9/10 不一致
+**狀態：** 已修復
+**問題：** 使用者指出簡報文字大小、左上角 unit-pill 的樣式風格都要跟 Unit 9/10 一樣。查證後發現不只是字級數字不同，是兩套底層架構：Unit 9/10 用響應式版面（`#deck{width:100%;height:100vh}`、字級用 `clamp()`、字體 Inter），Unit 11 用固定 1920×1080 畫布＋JS 縮放（`fitDeck()`）、字級寫死 px、字體 `"Avenir Next"` 且沒載入 Google Fonts（非 Mac 裝置會直接 fallback 成系統字體）。
+**原因：** `future/maintain.md` 舊紀錄顯示 Unit 11 改版時「已經跟用戶確認過維持固定畫布，不改響應式」，當時只對過色票，沒對過字體與字級。
+**佐證：**
+```
+Unit 10: .unit-pill{font-size:11px} .slide-num{12px} .course-label{11px}
+         .cover-eyebrow{12px} h1(clamp max)=56.8px cover-title(clamp max)=80px
+         .blist li(clamp max)=17.28px .stat b(clamp max)=52.8px
+Unit 11（改前）: .unit-pill{16px} .slide-num{16px} .course-label{15px}
+         .cover-eyebrow{22px} h1=76px .plain-list li=27px .panel p=25px .metric b=46px
+→ 小型 UI 文字（pill/label/eyebrow/內文）比 Unit 10 大 35–80%；
+  大標題級（h1/h2）本來就跟 Unit 10 的 clamp() 上限很接近，不需要大改
+```
+**修正：** 這次選擇「只換字體＋依 Unit 10 的 clamp() 上限調整字級比例，保留固定 1920×1080 畫布」（用戶明確選這個做法，不做整套響應式重建，避免手機示意圖、Safe Area 等平台示意圖比例又跑掉）。載入 Google Fonts Inter 並把 `font-family` 換成與 Unit 10 相同的 `'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif`；22 條字級規則依 Unit 10 對應角色調整（pill/slide-num/course-label/cover-eyebrow/comparison th 等小型 UI 文字降到 11–17px、cover-sub 與 panel/plain-list 等內文降到 17–20px、metric b 大數字反而從 46px 提高到 53px 對齊 Unit 10 的 `.stat b` 上限），headline 級的 h1/h2 只做小幅微調。手機模擬畫面內部文字（status/appbar/tab 等）與示意圖裝飾文字不動，避免牽動版面比例。改完用 headless Chrome 對第 1、10、16 頁截圖比對，確認 pill／eyebrow／內文都變小、標題仍維持大字重、換行與間距正常。跑過 `validate.py Unit_11` 全綠。
+**已知限制：** 只調了字級數字，沒有連動調整每張投影片的 margin/padding（例如 `.cover-eyebrow` 原本搭配大字級設計的間距）；文字變小後部分投影片可能留白略多，屬於已知取捨，之後如需要可以再個別微調版面間距。
+**影響範圍：**
+- `Unit_11/slides.html` — `<head>` 補 Google Fonts Inter 連結、`font-family` 換成 Inter、22 條字級規則調整
